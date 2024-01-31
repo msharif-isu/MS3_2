@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">AndroidExample</string>
+    <string name="front_page_text">Welcome to my app!</string>
+    <string name="fun_button_text">Press me!</string>
+</resources>
