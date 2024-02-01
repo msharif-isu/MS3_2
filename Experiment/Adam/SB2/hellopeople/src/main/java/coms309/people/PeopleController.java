@@ -106,6 +106,19 @@ public class PeopleController {
         return firstName + " has been reported";
     }
 
+    //gets report list
+    @GetMapping("/reported")
+    public @ResponseBody ArrayList<String> getAllreported() {
+        return reportList;
+    }
+
+    //Post report on person
+    @PostMapping("/report")
+    public @ResponseBody String createPerson(@RequestBody String name) {
+        System.out.println(name);
+        reportList.add(name);
+        return name + " has been reported";
+    }
     //Bans person
     @DeleteMapping("/ban/{firstName}")
     public @ResponseBody String ban(@PathVariable String firstName) {
