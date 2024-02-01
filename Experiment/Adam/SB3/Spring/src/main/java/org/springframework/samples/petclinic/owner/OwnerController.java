@@ -54,10 +54,12 @@ class OwnerController {
         Owners o2 = new Owners(2, "Jane", "Doe", "Its a secret", "you wish");
         Owners o3 = new Owners(3, "Some", "Pleb", "Right next to the Library", "515-345-41213");
         Owners o4 = new Owners(4, "Chad", "Champion", "Reddit memes corner", "420-420-4200");
+        Owners o5 = new Owners(5, "Adam", "Lee", "Somewhere", "no");
         ownersRepository.save(o1);
         ownersRepository.save(o2);
         ownersRepository.save(o3);
         ownersRepository.save(o4);
+        ownersRepository.save(o5);
         return "Successfully created dummy data";
     }
 
