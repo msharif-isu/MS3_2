@@ -9,11 +9,24 @@ class WelcomeController {
 
     @GetMapping("/")
     public String welcome() {
-        return "Hello and welcome to COMS 309 muhahaha I've figured it out";
+        return "My name is Raphael and this is a welcome page to start with the hello world";
     }
 
-    @GetMapping("/{name}")
-    public String welcome(@PathVariable String name) {
-        return "Hello and welcome to COMS 309: you type your nmae btw " + name;
+    @GetMapping("/{input}")
+    public String welcome(@PathVariable String input) {
+        if (input.contentEquals("rock")) {
+            return "paper you lose";
+        }
+        else if (input.contentEquals("paper")) {
+            return "scissors you lose";
+        }
+        else if (input.contentEquals("scissors")) {
+            return "rock you lose";
+        }
+        else {
+            return "you don't know how to play the game";
+        }
+
+
     }
 }

@@ -35,7 +35,7 @@ public class PeopleController {
     // in this case because of @ResponseBody
     // Note: To LIST, we use the GET method
     @GetMapping("/people")
-    public  HashMap<String,Person> getAllPersons() {
+    public @ResponseBody HashMap<String,Person> getAllPersons() {
         return peopleList;
     }
 
@@ -46,9 +46,10 @@ public class PeopleController {
     // in this case because of @ResponseBody
     // Note: To CREATE we use POST method
     @PostMapping("/people")
-    public  String createPerson(Person person) {
+    public @ResponseBody String createPerson(@RequestBody Person person) {
         System.out.println(person);
         peopleList.put(person.getFirstName(), person);
+        peopleList.put(person.getTitle(), person);
         return "New person "+ person.getFirstName() + " Saved";
     }
 
@@ -59,10 +60,19 @@ public class PeopleController {
     // in this case because of @ResponseBody
     // Note: To READ we use GET method
     @GetMapping("/people/{firstName}")
-    public Person getPerson(@PathVariable String firstName) {
+    public @ResponseBody Person getPerson(@PathVariable String firstName) {
         Person p = peopleList.get(firstName);
         return p;
     }
+
+    /*
+    @GetMapping("/people/{title}")
+    public @ResponseBody Person getTitle(@PathVariable String title) {
+        Person pq = peopleList.get(title);
+        return pq;
+    }
+*/
+
 
     // THIS IS THE UPDATE OPERATION
     // We extract the person from the HashMap and modify it.
@@ -72,21 +82,43 @@ public class PeopleController {
     // in this case because of @ResponseBody
     // Note: To UPDATE we use PUT method
     @PutMapping("/people/{firstName}")
-    public Person updatePerson(@PathVariable String firstName, Person p) {
+    public @ResponseBody Person updatePerson(@PathVariable String firstName, @RequestBody Person p) {
         peopleList.replace(firstName, p);
         return peopleList.get(firstName);
     }
+
+
 
     // THIS IS THE DELETE OPERATION
     // Springboot gets the PATHVARIABLE from the URL
     // We return the entire list -- converted to JSON
     // in this case because of @ResponseBody
     // Note: To DELETE we use delete method
-    
+
     @DeleteMapping("/people/{firstName}")
-    public HashMap<String, Person> deletePerson(@PathVariable String firstName) {
+    public @ResponseBody HashMap<String, Person> deleteFirstName(@PathVariable String firstName) {
         peopleList.remove(firstName);
         return peopleList;
     }
+
+
+
+
+
+
+/*
+    @PutMapping("/people/{title}")
+    public @ResponseBody Person updateTitle(@PathVariable String title, @RequestBody Person p) {
+        peopleList.replace(title, p);
+        return peopleList.get(title);
+    }
+    @DeleteMapping("/people/{title}")
+    public @ResponseBody HashMap<String, Person> deleteTitle(@PathVariable String title) {
+        peopleList.remove(title);
+        return peopleList;
+    }
+ */
+
+
 }
 

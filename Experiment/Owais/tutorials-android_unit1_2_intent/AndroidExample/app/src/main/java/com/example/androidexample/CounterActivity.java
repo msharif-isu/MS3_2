@@ -2,6 +2,7 @@ package com.example.androidexample;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -12,6 +13,7 @@ public class CounterActivity extends AppCompatActivity {
     private TextView resultTxt; // text for results
     private Button btn0, btn1, btn2, btn3, btn4, btn5, btn6, btn7, btn8, btn9; // numbers for calculator
     private Button btnAdd, btnSubtract, btnMultiply, btnDivide, btnEquals, btnClear; // other operations for calculator
+    private Button backBtn;
 
     private StringBuilder currentInput = new StringBuilder();
     private double operand1 = 0;
@@ -23,6 +25,7 @@ public class CounterActivity extends AppCompatActivity {
         setContentView(R.layout.activity_counter);
 
         // initialize UI elements
+        backBtn = findViewById(R.id.counter_back_btn);
         resultTxt = findViewById(R.id.number);
         btn0 = findViewById(R.id.button0);
         btn1 = findViewById(R.id.button1);
@@ -61,6 +64,17 @@ public class CounterActivity extends AppCompatActivity {
         btn7.setOnClickListener(numberClickListener);
         btn8.setOnClickListener(numberClickListener);
         btn9.setOnClickListener(numberClickListener);
+
+        /* when back btn is pressed, switch back to MainActivity */
+        backBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(CounterActivity.this, MainActivity.class);
+                //intent.putExtra("NUM", String.valueOf(counter));  // key-value to pass to the MainActivity
+                startActivity(intent);
+            }
+        });
+
 
         // Set OnClickListener for operator buttons
         View.OnClickListener operatorClickListener = new View.OnClickListener() {
@@ -106,6 +120,7 @@ public class CounterActivity extends AppCompatActivity {
         resultTxt.setText(currentInput.toString());
     }
 
+
     // Does the math based on the given parameters.
     private double performOperation(double operand1, double operand2, String operator) {
         switch (operator) {
@@ -125,5 +140,7 @@ public class CounterActivity extends AppCompatActivity {
             default:
                 return operand2;
         }
+
     }
+
 }
