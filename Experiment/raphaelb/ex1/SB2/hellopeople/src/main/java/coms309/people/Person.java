@@ -11,6 +11,8 @@ public class Person {
 
     private String firstName;
 
+    private String title;
+
     private String lastName;
 
     private String address;
@@ -21,11 +23,12 @@ public class Person {
         
     }
 
-    public Person(String firstName, String lastName, String address, String telephone){
+    public Person(String firstName, String lastName, String address, String telephone, String title){
         this.firstName = firstName;
         this.lastName = lastName;
         this.address = address;
         this.telephone = telephone;
+        this.title = title;
     }
 
     public String getFirstName() {
@@ -34,6 +37,14 @@ public class Person {
 
     public void setFirstName(String firstName) {
         this.firstName = firstName;
+    }
+
+    public String getTitle() {
+        return this.title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public String getLastName() {
@@ -62,7 +73,8 @@ public class Person {
 
     @Override
     public String toString() {
-        return firstName + " " 
+        return firstName + " "
+                + title + " "
                + lastName + " "
                + address + " "
                + telephone;
