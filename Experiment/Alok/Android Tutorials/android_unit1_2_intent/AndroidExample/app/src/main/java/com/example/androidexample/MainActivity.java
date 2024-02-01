@@ -14,6 +14,7 @@ public class MainActivity extends AppCompatActivity {
 
     private TextView messageText;     // define message textview variable
     private Button counterButton;     // define counter button variable
+    private Button shopButton;        // define shop button variable
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,13 +24,14 @@ public class MainActivity extends AppCompatActivity {
         /* initialize UI elements */
         messageText = findViewById(R.id.main_msg_txt);      // link to message textview in the Main activity XML
         counterButton = findViewById(R.id.main_counter_btn);// link to counter button in the Main activity XML
+        shopButton = findViewById(R.id.main_shop_btn);      // link to shop button in the Main activity XML
 
         /* extract data passed into this activity from another activity */
         Bundle extras = getIntent().getExtras();
         if(extras == null) {
             messageText.setText("Intent Example");
         } else {
-            String number = extras.getString("NUM");  // this will come from LoginActivity
+            String number = extras.getString("NUM");  // this will come from CounterActivity
             messageText.setText("The number was " + number);
         }
 
@@ -40,6 +42,18 @@ public class MainActivity extends AppCompatActivity {
 
                 /* when counter button is pressed, use intent to switch to Counter Activity */
                 Intent intent = new Intent(MainActivity.this, CounterActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        /* switch to ShopActivity on button press */
+        shopButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, ShopActivity.class);
+                if (extras != null) {
+                    intent.putExtra("NUM", extras.getString("NUM"));  // key-value to pass to the MainActivity
+                }
                 startActivity(intent);
             }
         });

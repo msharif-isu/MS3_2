@@ -53,6 +53,5 @@ public class CounterActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
     }
 }
