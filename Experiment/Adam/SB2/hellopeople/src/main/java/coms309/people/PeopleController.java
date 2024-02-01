@@ -88,5 +88,14 @@ public class PeopleController {
         peopleList.remove(firstName);
         return peopleList;
     }
+
+    //Get persons phone number if you know their name
+    @GetMapping("/people/{firstName}/phone")
+    public String getPhone(@PathVariable String firstName){
+        Person p = peopleList.get(firstName);
+        String phone = p.getTelephone();
+        return p.getFirstName() + "'s Phone number is " + phone;
+
+    }
 }
 
