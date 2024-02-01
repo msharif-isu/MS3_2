@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -35,11 +36,30 @@ public class LoginActivity extends AppCompatActivity {
                 String username = usernameEditText.getText().toString();
                 String password = passwordEditText.getText().toString();
 
-                /* when login button is pressed, use intent to switch to Login Activity */
-                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                intent.putExtra("USERNAME", username);  // key-value to pass to the MainActivity
-                intent.putExtra("PASSWORD", password);  // key-value to pass to the MainActivity
-                startActivity(intent);  // go to MainActivity with the key-value data
+                /* Check for blank input fields */
+                if (username.equals("")) {
+                    Toast.makeText(getApplicationContext(), "Please enter username", Toast.LENGTH_LONG).show();
+                } else if (password.equals("")) {
+                    Toast.makeText(getApplicationContext(), "Please enter password", Toast.LENGTH_LONG).show();
+                } else {
+                    /* Pull user data from signup activity */
+                    Bundle extras = getIntent().getExtras();
+
+                    /* If we have signed up with a username and password recently, check for login credentials */
+                    if (extras != null) {
+                        if (username.equals(extras.getString("USERNAME")) && password.equals(extras.getString("PASSWORD"))) {
+                            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                            intent.putExtra("USERNAME", username);  // key-value to pass to the MainActivity
+                            intent.putExtra("PASSWORD", password);  // key-value to pass to the MainActivity
+                            startActivity(intent);  // go to MainActivity with the key-value data
+                        } else {
+                            Toast.makeText(getApplicationContext(), "Incorrect username or password", Toast.LENGTH_LONG).show();
+                        }
+                    } else {
+                        /* No signup exists, so reject login attempt */
+                        Toast.makeText(getApplicationContext(), "Incorrect username or password", Toast.LENGTH_LONG).show();
+                    }
+                }
             }
         });
 
