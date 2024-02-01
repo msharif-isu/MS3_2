@@ -42,19 +42,14 @@ class OwnerController {
 
     private final Logger logger = LoggerFactory.getLogger(OwnerController.class);
 
-    @RequestMapping(method = RequestMethod.POST, path = "/owners/new")
-    public String saveOwner(Owners owner) {
-        ownersRepository.save(owner);
-        return "New Owner "+ owner.getFirstName() + " Saved";
-    }
      // function just to create dummy data
-    @RequestMapping(method = RequestMethod.GET, path = "/owner/create")
+    @RequestMapping(method = RequestMethod.GET, path = "/trivia/populate")
     public String createDummyData() {
-        Owners o1 = new Owners(1, "John", "Doe", "404 Not found", "some numbers");
-        Owners o2 = new Owners(2, "Jane", "Doe", "Its a secret", "you wish");
-        Owners o3 = new Owners(3, "Some", "Pleb", "Right next to the Library", "515-345-41213");
-        Owners o4 = new Owners(4, "Chad", "Champion", "Reddit memes corner", "420-420-4200");
-        Owners o5 = new Owners (5, "Raphael", "Bruce", "nuh uh", "33333-3333");
+        Owners o1 = new Owners(1, "History", "Who was the first US President?", "George Washington");
+        Owners o2 = new Owners(2, "Philosophy", "Who was the first Philosopher?", "Thales of Miletus");
+        Owners o3 = new Owners(3, "Art", "Who painted the Mona Lisa?", "Leonardo DaVinci");
+        Owners o4 = new Owners(4, "Music", "What instrument has a first and a second in the orchestra?", "Violin");
+        Owners o5 = new Owners (5, "Mythology", "Who was the hero in the Ulster Cycle?", "Cu Chulainn");
         ownersRepository.save(o1);
         ownersRepository.save(o2);
         ownersRepository.save(o3);
@@ -63,7 +58,7 @@ class OwnerController {
         return "Successfully created dummy data";
     }
 
-    @RequestMapping(method = RequestMethod.GET, path = "/owners")
+    @RequestMapping(method = RequestMethod.GET, path = "/{category}")
     public List<Owners> getAllOwners() {
         logger.info("Entered into Controller Layer");
         List<Owners> results = ownersRepository.findAll();
@@ -71,11 +66,31 @@ class OwnerController {
         return results;
     }
 
-    @RequestMapping(method = RequestMethod.GET, path = "/owners/{ownerId}")
+    @RequestMapping(method = RequestMethod.GET, path = "/trivia/{ownerId}")
     public Optional<Owners> findOwnerById(@PathVariable("ownerId") int id) {
         logger.info("Entered into Controller Layer");
         Optional<Owners> results = ownersRepository.findById(id);
         return results;
     }
+
+    @RequestMapping(method = RequestMethod.GET, path = "/trivia/{ownerId}/q")
+    public String getQuestion(@PathVariable("ownerId") int id) {
+        Owners o7 = ownersRepository.getReferenceById(id);
+
+        String s = "You got the category " + o7.getCategories();
+        String r = s + " and the question was: " + o7.getQuestions();
+        return r;
+    }
+
+    @RequestMapping(method = RequestMethod.GET, path = "/trivia/{ownerId}/a")
+    public String getAnswer(@PathVariable("ownerId") int id) {
+
+        Owners o7 = ownersRepository.getReferenceById(id);
+        String s = "You got the category " + o7.getCategories();
+        String r = s + " and the answer was: " + o7.getAnswers();
+        return r;
+    }
+
+
 
 }
