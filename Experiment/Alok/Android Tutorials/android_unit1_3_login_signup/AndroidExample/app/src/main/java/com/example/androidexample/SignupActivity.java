@@ -16,6 +16,7 @@ public class SignupActivity extends AppCompatActivity {
     private EditText confirmEditText;   // define confirm edittext variable
     private Button loginButton;         // define login button variable
     private Button signupButton;        // define signup button variable
+    private Bundle userDataPass = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +37,10 @@ public class SignupActivity extends AppCompatActivity {
 
                 /* when login button is pressed, use intent to switch to Login Activity */
                 Intent intent = new Intent(SignupActivity.this, LoginActivity.class);
+                if (userDataPass != null) {
+                    intent.putExtra("USERNAME", userDataPass.getString("USERNAME"));
+                    intent.putExtra("PASSWORD", userDataPass.getString("PASSWORD"));
+                }
                 startActivity(intent);  // go to LoginActivity
             }
         });
@@ -52,6 +57,8 @@ public class SignupActivity extends AppCompatActivity {
 
                 if (password.equals(confirm)){
                     Toast.makeText(getApplicationContext(), "Signing up", Toast.LENGTH_LONG).show();
+                    userDataPass.putString("USERNAME", username);
+                    userDataPass.putString("PASSWORD", password);
                 }
                 else {
                     Toast.makeText(getApplicationContext(), "Password don't match", Toast.LENGTH_LONG).show();
