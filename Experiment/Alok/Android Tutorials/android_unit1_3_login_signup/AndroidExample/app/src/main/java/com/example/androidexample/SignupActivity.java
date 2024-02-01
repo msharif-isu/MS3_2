@@ -16,6 +16,7 @@ public class SignupActivity extends AppCompatActivity {
     private EditText confirmEditText;   // define confirm edittext variable
     private Button loginButton;         // define login button variable
     private Button signupButton;        // define signup button variable
+    private Bundle userDataPass = new Bundle();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,9 +34,12 @@ public class SignupActivity extends AppCompatActivity {
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 /* when login button is pressed, use intent to switch to Login Activity */
                 Intent intent = new Intent(SignupActivity.this, LoginActivity.class);
+                if (!userDataPass.isEmpty()) {
+                    intent.putExtra("USERNAME", userDataPass.getString("USERNAME"));
+                    intent.putExtra("PASSWORD", userDataPass.getString("PASSWORD"));
+                }
                 startActivity(intent);  // go to LoginActivity
             }
         });
@@ -51,6 +55,8 @@ public class SignupActivity extends AppCompatActivity {
                 String confirm = confirmEditText.getText().toString();
 
                 if (password.equals(confirm)){
+                    userDataPass.putString("USERNAME", username);
+                    userDataPass.putString("PASSWORD", password);
                     Toast.makeText(getApplicationContext(), "Signing up", Toast.LENGTH_LONG).show();
                 }
                 else {

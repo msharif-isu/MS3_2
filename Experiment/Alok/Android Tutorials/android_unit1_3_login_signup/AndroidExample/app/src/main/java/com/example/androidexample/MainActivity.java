@@ -16,6 +16,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView usernameText;  // define username textview variable
     private Button loginButton;     // define login button variable
     private Button signupButton;    // define signup button variable
+    private Button logoutButton;    // define logout button variable
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,17 +28,20 @@ public class MainActivity extends AppCompatActivity {
         usernameText = findViewById(R.id.main_username_txt);// link to username textview in the Main activity XML
         loginButton = findViewById(R.id.main_login_btn);    // link to login button in the Main activity XML
         signupButton = findViewById(R.id.main_signup_btn);  // link to signup button in the Main activity XML
+        logoutButton = findViewById(R.id.main_logout_btn);  // link to logout button in the Main activity XML
 
         /* extract data passed into this activity from another activity */
         Bundle extras = getIntent().getExtras();
         if(extras == null) {
             messageText.setText("Home Page");
             usernameText.setVisibility(View.INVISIBLE);             // set username text invisible initially
+            logoutButton.setVisibility(View.INVISIBLE);             // hide logout button when not logged in
         } else {
             messageText.setText("Welcome");
             usernameText.setText(extras.getString("USERNAME")); // this will come from LoginActivity
             loginButton.setVisibility(View.INVISIBLE);              // set login button invisible
             signupButton.setVisibility(View.INVISIBLE);             // set signup button invisible
+            logoutButton.setVisibility(View.VISIBLE);               // reveal logout button when logged in
         }
 
         /* click listener on login button pressed */
@@ -58,6 +62,15 @@ public class MainActivity extends AppCompatActivity {
 
                 /* when signup button is pressed, use intent to switch to Signup Activity */
                 Intent intent = new Intent(MainActivity.this, SignupActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        logoutButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                /* Enters the MainActivity again but without username or password data*/
+                Intent intent = new Intent(MainActivity.this, MainActivity.class);
                 startActivity(intent);
             }
         });
