@@ -37,7 +37,7 @@ import org.springframework.core.style.ToStringCreator;
  * @Modified By Vivek Bengre
  */
 @Entity
-@Table(name = "owners")
+@Table(name = "trivia")
 public class Owners {
 
     @Id
@@ -46,32 +46,28 @@ public class Owners {
     @NotFound(action = NotFoundAction.IGNORE)
     private Integer id;
 
-    @Column(name = "first_name")
+    @Column(name = "categories")
     @NotFound(action = NotFoundAction.IGNORE)
-    private String firstName;
+    private String categories;
 
-    @Column(name = "last_name")
+    @Column(name = "questions")
     @NotFound(action = NotFoundAction.IGNORE)
-    private String lastName;
+    private String questions;
 
-    @Column(name = "address")
+    @Column(name = "answers")
     @NotFound(action = NotFoundAction.IGNORE)
-    private String address;
+    private String answers;
 
-    @Column(name = "telephone")
-    @NotFound(action = NotFoundAction.IGNORE)
-    private String telephone;
 
     public Owners(){
         
     }
 
-    public Owners(int id, String firstName, String lastName, String address, String telephone){
+    public Owners(int id, String categories, String questions, String answers){
         this.id = id;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.address = address;
-        this.telephone = telephone;
+        this.categories = categories;
+        this.questions = questions;
+        this.answers = answers;
     }
 
     public Integer getId() {
@@ -82,51 +78,39 @@ public class Owners {
         this.id = id;
     }
 
-    public boolean isNew() {
-        return this.id == null;
+
+    public String getCategories() {
+        return this.categories;
     }
 
-    public String getFirstName() {
-        return this.firstName;
+    public void setCategories(String categories) {
+        this.categories = categories;
     }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
+    public String getQuestions() {
+        return this.questions;
     }
 
-    public String getLastName() {
-        return this.lastName;
+    public void setQuestions(String questions) {
+        this.questions = questions;
     }
 
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
+    public String getAnswers() {
+        return this.answers;
     }
 
-    public String getAddress() {
-        return this.address;
+    public void setAnswers(String answers) {
+        this.answers = answers;
     }
 
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    public String getTelephone() {
-        return this.telephone;
-    }
-
-    public void setTelephone(String telephone) {
-        this.telephone = telephone;
-    }
 
     @Override
     public String toString() {
         return new ToStringCreator(this)
 
                 .append("id", this.getId())
-                .append("new", this.isNew())
-                .append("lastName", this.getLastName())
-                .append("firstName", this.getFirstName())
-                .append("address", this.address)
-                .append("telephone", this.telephone).toString();
+                .append("questions", this.getQuestions())
+                .append("categories", this.getCategories())
+                .append("answers", this.getAnswers()).toString();
     }
 }

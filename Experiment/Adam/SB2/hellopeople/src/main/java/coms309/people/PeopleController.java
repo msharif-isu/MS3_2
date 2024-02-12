@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.PathVariable;
 
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
@@ -24,6 +25,7 @@ public class PeopleController {
     // Note that there is only ONE instance of PeopleController in 
     // Springboot system.
     HashMap<String, Person> peopleList = new  HashMap<>();
+    ArrayList<String> reportList = new ArrayList<>();
 
     //CRUDL (create/read/update/delete/list)
     // use POST, GET, PUT, DELETE, GET methods for CRUDL
@@ -88,5 +90,42 @@ public class PeopleController {
         peopleList.remove(firstName);
         return peopleList;
     }
+
+    //Get persons phone number if you know their name
+    @GetMapping("/people/{firstName}/phone")
+    public String getPhone(@PathVariable String firstName){
+        Person p = peopleList.get(firstName);
+        String phone = p.getTelephone();
+        return p.getFirstName() + "'s Phone number is " + phone;
+    }
+
+    //Reports person on List
+    @GetMapping("/report/{firstName}")
+    public @ResponseBody String report(@PathVariable String firstName) {
+        reportList.add(firstName);
+        return firstName + " has been reported";
+    }
+
+    //gets report list
+    @GetMapping("/reported")
+    public @ResponseBody ArrayList<String> getAllreported() {
+        return reportList;
+    }
+
+    //Post report on person
+    @PostMapping("/report")
+    public @ResponseBody String createPerson(@RequestBody String name) {
+        System.out.println(name);
+        reportList.add(name);
+        return name + " has been reported";
+    }
+    //Bans person
+    @DeleteMapping("/ban/{firstName}")
+    public @ResponseBody String ban(@PathVariable String firstName) {
+        System.out.println(firstName);
+        peopleList.remove(firstName);
+        return firstName + " has been banned";
+    }
+
 }
 
