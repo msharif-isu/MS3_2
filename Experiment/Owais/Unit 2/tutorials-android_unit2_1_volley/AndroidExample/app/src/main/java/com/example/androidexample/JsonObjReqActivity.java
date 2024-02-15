@@ -25,7 +25,7 @@ public class JsonObjReqActivity extends AppCompatActivity {
     private Button btnJsonObjReq;
     private TextView msgResponse;
 
-    private static final String URL_JSON_OBJECT = "https://jsonplaceholder.typicode.com/users/1";
+    private static final String URL_JSON_OBJECT = "http://10.0.2.2:8080/owners/4";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
