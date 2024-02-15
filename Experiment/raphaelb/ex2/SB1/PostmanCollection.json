@@ -1,0 +1,337 @@
+{
+	"info": {
+		"_postman_id": "b26b9822-2eb3-4784-97d1-50fbdd9a4c74",
+		"name": "ex2",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "32598490"
+	},
+	"item": [
+		{
+			"name": "SB1",
+			"item": [
+				{
+					"name": "Post",
+					"item": [
+						{
+							"name": "No Laptop User Creation",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n\"name\" : \"John\",\r\n\"email\"  : \"johndoe@somemail.com\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:8080/users",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"users"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "User Creation",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n\"name\" : \"John\",\r\n\"email\"  : \"johndoe@somemail.com\",\r\n\"laptop\"   : {\r\n    \"cpuClock\" : \"2.3\",\r\n    \"cpuCores\"  : \"4\",\r\n    \"ram\"   : \"8\",\r\n    \"manufacturer\" : \"Hp\",\r\n    \"cost\" : \"600\"\r\n    }\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:8080/users",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"users"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Laptop Creation",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n\"cpuClock\" : \"1.7\",\r\n\"cpuCores\"  : \"4\",\r\n\"ram\"   : \"4\",\r\n\"manufacturer\" : \"apple\",\r\n\"cost\" : \"1000000\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:8080/laptops",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"laptops"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Get",
+					"item": [
+						{
+							"name": "Laptop Get",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n\"name\" : \"John\",\r\n\"email\"  : \"johndoe@somemail.com\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:8080/laptops/1",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"laptops",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "User list",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n\"name\" : \"John\",\r\n\"email\"  : \"johndoe@somemail.com\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:8080/users/1",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"users",
+										"1"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "List",
+					"item": [
+						{
+							"name": "Laptop List",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n\"name\" : \"John\",\r\n\"email\"  : \"johndoe@somemail.com\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:8080/laptops",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"laptops"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "User list",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n\"name\" : \"John\",\r\n\"email\"  : \"johndoe@somemail.com\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:8080/users",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"users"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Update",
+					"item": [
+						{
+							"name": "Laptop update",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n\"cpuClock\" : \"2.7\",\r\n\"cpuCores\"  : \"4\",\r\n\"ram\"   : \"4\",\r\n\"manufacturer\" : \"apple\",\r\n\"cost\" : \"2000000\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:8080/laptops/1",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"laptops",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "New Request Copy",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n\"id\" : \"5\",\r\n\"cpuClock\" : \"3.3\",\r\n\"cpuCores\"  : \"8\",\r\n\"ram\"   : \"16\",\r\n\"manufacturer\" : \"new Laptop\",\r\n\"cost\" : \"1000\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:8080/users/1",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"users",
+										"1"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Delete",
+					"item": [
+						{
+							"name": "Laptop Deletion",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "localhost:8080/laptops/1",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"laptops",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "User Deletion",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "localhost:8080/users/1",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"users",
+										"1"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		}
+	]
+}
