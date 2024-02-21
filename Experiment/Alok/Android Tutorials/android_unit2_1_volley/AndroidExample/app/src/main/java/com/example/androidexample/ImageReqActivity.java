@@ -10,16 +10,23 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageRequest;
+import com.android.volley.toolbox.StringRequest;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class ImageReqActivity extends AppCompatActivity {
 
     private Button btnImageReq;
     private ImageView imageView;
 
-    public static final String URL_IMAGE = "http://sharding.org/outgoing/temp/testimg3.jpg";
+    public static final String URL_IMAGE = "https://47de868e-39ce-4710-a979-60d5051a5022.mock.pstmn.io/q1/image";
+
+    public static String imageURL = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,8 +38,35 @@ public class ImageReqActivity extends AppCompatActivity {
 
         btnImageReq.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {makeImageRequest();}
+            public void onClick(View v) {getImageURL();}
         });
+    }
+
+    private void getImageURL() {
+        StringRequest urlRequest = new StringRequest(
+            Request.Method.GET,
+            URL_IMAGE,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        // Handle the successful response here
+                        Log.d("Volley Response", response);
+                        System.out.println("Hi");
+                        imageURL = response;
+                        makeImageRequest();
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // Handle any errors that occur during the request
+                        Log.e("Volley Error", error.toString());
+                    }
+                }
+        );
+
+        // Adding request to request queue
+        VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(urlRequest);
     }
 
     /**
@@ -41,7 +75,7 @@ public class ImageReqActivity extends AppCompatActivity {
     private void makeImageRequest() {
 
         ImageRequest imageRequest = new ImageRequest(
-            URL_IMAGE,
+            imageURL,
             new Response.Listener<Bitmap>() {
                 @Override
                 public void onResponse(Bitmap response) {
