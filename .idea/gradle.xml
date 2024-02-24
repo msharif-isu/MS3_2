@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="GradleMigrationSettings" migrationVersion="1" />
+  <component name="GradleSettings">
+    <option name="linkedExternalProjectsSettings">
+      <GradleProjectSettings>
+        <option name="externalProjectPath" value="$PROJECT_DIR$/Experiment/Alok/Android Tutorials/android_unit1_1_helloworld/AndroidExample" />
+        <option name="gradleJvm" value="jbr-17" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$/Experiment/Alok/Android Tutorials/android_unit1_1_helloworld/AndroidExample" />
+            <option value="$PROJECT_DIR$/Experiment/Alok/Android Tutorials/android_unit1_1_helloworld/AndroidExample/app" />
+          </set>
+        </option>
+      </GradleProjectSettings>
+      <GradleProjectSettings>
+        <option name="externalProjectPath" value="$PROJECT_DIR$/Experiment/Alok/Android Tutorials/android_unit1_2_intent/AndroidExample" />
+        <option name="gradleJvm" value="jbr-17" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$/Experiment/Alok/Android Tutorials/android_unit1_2_intent/AndroidExample" />
+            <option value="$PROJECT_DIR$/Experiment/Alok/Android Tutorials/android_unit1_2_intent/AndroidExample/app" />
+          </set>
+        </option>
+      </GradleProjectSettings>
+      <GradleProjectSettings>
+        <option name="externalProjectPath" value="$PROJECT_DIR$/Experiment/Alok/Android Tutorials/android_unit1_3_login_signup/AndroidExample" />
+        <option name="gradleJvm" value="jbr-17" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$/Experiment/Alok/Android Tutorials/android_unit1_3_login_signup/AndroidExample" />
+            <option value="$PROJECT_DIR$/Experiment/Alok/Android Tutorials/android_unit1_3_login_signup/AndroidExample/app" />
+          </set>
+        </option>
+      </GradleProjectSettings>
+      <GradleProjectSettings>
+        <option name="externalProjectPath" value="$PROJECT_DIR$/Experiment/Alok/Android Tutorials/android_unit2_1_volley/AndroidExample" />
+        <option name="gradleJvm" value="jbr-17" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$/Experiment/Alok/Android Tutorials/android_unit2_1_volley/AndroidExample" />
+            <option value="$PROJECT_DIR$/Experiment/Alok/Android Tutorials/android_unit2_1_volley/AndroidExample/app" />
+          </set>
+        </option>
+      </GradleProjectSettings>
+      <GradleProjectSettings>
+        <option name="externalProjectPath" value="$PROJECT_DIR$/Experiment/Alok/Android Tutorials/android_unit2_2_volley/AndroidExample" />
+        <option name="gradleJvm" value="jbr-17" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$/Experiment/Alok/Android Tutorials/android_unit2_2_volley/AndroidExample" />
+            <option value="$PROJECT_DIR$/Experiment/Alok/Android Tutorials/android_unit2_2_volley/AndroidExample/app" />
+          </set>
+        </option>
+      </GradleProjectSettings>
+      <GradleProjectSettings>
+        <option name="externalProjectPath" value="$PROJECT_DIR$/Experiment/Alok/Android Tutorials/android_unit2_3_volley/AndroidExample" />
+        <option name="gradleJvm" value="jbr-17" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$/Experiment/Alok/Android Tutorials/android_unit2_3_volley/AndroidExample" />
+            <option value="$PROJECT_DIR$/Experiment/Alok/Android Tutorials/android_unit2_3_volley/AndroidExample/app" />
+          </set>
+        </option>
+      </GradleProjectSettings>
+      <GradleProjectSettings>
+        <option name="externalProjectPath" value="$PROJECT_DIR$/Experiment/Owais/Unit 1/tutorials-android_unit1_1_helloworld/AndroidExample" />
+        <option name="gradleJvm" value="jbr-17" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$/Experiment/Owais/Unit 1/tutorials-android_unit1_1_helloworld/AndroidExample" />
+            <option value="$PROJECT_DIR$/Experiment/Owais/Unit 1/tutorials-android_unit1_1_helloworld/AndroidExample/app" />
+          </set>
+        </option>
+      </GradleProjectSettings>
+      <GradleProjectSettings>
+        <option name="externalProjectPath" value="$PROJECT_DIR$/Experiment/Owais/Unit 1/tutorials-android_unit1_2_intent/AndroidExample" />
+        <option name="gradleJvm" value="jbr-17" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$/Experiment/Owais/Unit 1/tutorials-android_unit1_2_intent/AndroidExample" />
+            <option value="$PROJECT_DIR$/Experiment/Owais/Unit 1/tutorials-android_unit1_2_intent/AndroidExample/app" />
+          </set>
+        </option>
+      </GradleProjectSettings>
+      <GradleProjectSettings>
+        <option name="externalProjectPath" value="$PROJECT_DIR$/Experiment/Owais/Unit 1/tutorials-android_unit1_3_login_signup/AndroidExample" />
+        <option name="gradleJvm" value="jbr-17" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$/Experiment/Owais/Unit 1/tutorials-android_unit1_3_login_signup/AndroidExample" />
+            <option value="$PROJECT_DIR$/Experiment/Owais/Unit 1/tutorials-android_unit1_3_login_signup/AndroidExample/app" />
+          </set>
+        </option>
+      </GradleProjectSettings>
+      <GradleProjectSettings>
+        <option name="externalProjectPath" value="$PROJECT_DIR$/Experiment/Owais/Unit 2/tutorials-android_unit2_1_volley/AndroidExample" />
+        <option name="gradleJvm" value="jbr-17" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$/Experiment/Owais/Unit 2/tutorials-android_unit2_1_volley/AndroidExample" />
+            <option value="$PROJECT_DIR$/Experiment/Owais/Unit 2/tutorials-android_unit2_1_volley/AndroidExample/app" />
+          </set>
+        </option>
+      </GradleProjectSettings>
+      <GradleProjectSettings>
+        <option name="externalProjectPath" value="$PROJECT_DIR$/Experiment/Owais/Unit 2/tutorials-android_unit2_2_volley/AndroidExample" />
+        <option name="gradleJvm" value="jbr-17" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$/Experiment/Owais/Unit 2/tutorials-android_unit2_2_volley/AndroidExample" />
+            <option value="$PROJECT_DIR$/Experiment/Owais/Unit 2/tutorials-android_unit2_2_volley/AndroidExample/app" />
+          </set>
+        </option>
+      </GradleProjectSettings>
+      <GradleProjectSettings>
+        <option name="externalProjectPath" value="$PROJECT_DIR$/Experiment/Owais/Unit 2/tutorials-android_unit2_3_volley/AndroidExample" />
+        <option name="gradleJvm" value="jbr-17" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$/Experiment/Owais/Unit 2/tutorials-android_unit2_3_volley/AndroidExample" />
+            <option value="$PROJECT_DIR$/Experiment/Owais/Unit 2/tutorials-android_unit2_3_volley/AndroidExample/app" />
+          </set>
+        </option>
+      </GradleProjectSettings>
+      <GradleProjectSettings>
+        <option name="externalProjectPath" value="$PROJECT_DIR$/Experiment/Owais/tutorials-android_unit1_1_helloworld/AndroidExample" />
+        <option name="gradleJvm" value="jbr-17" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$/Experiment/Owais/tutorials-android_unit1_1_helloworld/AndroidExample" />
+            <option value="$PROJECT_DIR$/Experiment/Owais/tutorials-android_unit1_1_helloworld/AndroidExample/app" />
+          </set>
+        </option>
+      </GradleProjectSettings>
+      <GradleProjectSettings>
+        <option name="externalProjectPath" value="$PROJECT_DIR$/Experiment/Owais/tutorials-android_unit1_2_intent/AndroidExample" />
+        <option name="gradleJvm" value="jbr-17" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$/Experiment/Owais/tutorials-android_unit1_2_intent/AndroidExample" />
+            <option value="$PROJECT_DIR$/Experiment/Owais/tutorials-android_unit1_2_intent/AndroidExample/app" />
+          </set>
+        </option>
+      </GradleProjectSettings>
+      <GradleProjectSettings>
+        <option name="externalProjectPath" value="$PROJECT_DIR$/Experiment/Owais/tutorials-android_unit1_3_login_signup/AndroidExample" />
+        <option name="gradleJvm" value="jbr-17" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$/Experiment/Owais/tutorials-android_unit1_3_login_signup/AndroidExample" />
+            <option value="$PROJECT_DIR$/Experiment/Owais/tutorials-android_unit1_3_login_signup/AndroidExample/app" />
+          </set>
+        </option>
+      </GradleProjectSettings>
+    </option>
+  </component>
+</project>
