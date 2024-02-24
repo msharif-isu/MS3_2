@@ -1,9 +1,11 @@
 package com.example.androidexample;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.Request;
@@ -13,26 +15,23 @@ import com.android.volley.toolbox.JsonArrayRequest;
 
 import org.json.JSONArray;
 
-import java.util.HashMap;
-import java.util.Map;
-
 public class LeaderboardActivity extends AppCompatActivity {
 
     //TODO Add in server to request from
     private final static String SERVER_URL = "";
     private JSONArray leaderboardData;
-
     private boolean attemptedLeaderboardRefresh = false;
+
+    private RecyclerView recyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_leaderboard);
-
-        RecyclerView recyclerView = findViewById(R.id.leaderboard_list);
-
         makeLeaderboardRequest();
-        recyclerView.setAdapter(new LeaderboardAdapter(leaderboardData));
+
+        recyclerView = findViewById(R.id.leaderboard_list);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
 
     public void makeLeaderboardRequest() {
@@ -44,6 +43,7 @@ public class LeaderboardActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(JSONArray response) {
                         leaderboardData = response;
+                        recyclerView.setAdapter(new LeaderboardAdapter(leaderboardData));
                     }
                 },
                 new Response.ErrorListener() {
