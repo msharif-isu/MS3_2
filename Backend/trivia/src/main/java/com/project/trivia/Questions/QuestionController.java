@@ -1,14 +1,9 @@
 package com.project.trivia.Questions;
-import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 public class QuestionController {
@@ -27,5 +22,28 @@ public class QuestionController {
     @GetMapping(path = "/question/{id}")
     Question getQuestionById( @PathVariable int id){
         return questionRepository.findById(id);
+    }
+
+    @PostMapping(path = "/questions")
+    String createQuestion(@RequestBody Question question){
+        if (question == null)
+            return failure;
+        questionRepository.save(question);
+        return success;
+    }
+
+    @PutMapping("/users/{id}")
+    Question updateUser(@PathVariable int id, @RequestBody Question request){
+        Question question = questionRepository.findById(id);
+        if(question == null)
+            return null;
+        questionRepository.save(request);
+        return questionRepository.findById(id);
+    }
+
+    @DeleteMapping(path = "/users/{id}")
+    String deleteUser(@PathVariable int id){
+        questionRepository.deleteById(id);
+        return success;
     }
 }
