@@ -10,10 +10,13 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 public class LeaderboardAdapter extends RecyclerView.Adapter<LeaderboardAdapter.ViewHolder> {
 
     private JSONArray localDataSet;
+
+    public LeaderboardEnum time_frame;
 
     /**
      * Provide a reference to the type of views that you are using
@@ -46,8 +49,9 @@ public class LeaderboardAdapter extends RecyclerView.Adapter<LeaderboardAdapter.
      * @param dataSet JSONArray containing the data to populate views to be used
      * by RecyclerView
      */
-    public LeaderboardAdapter(JSONArray dataSet) {
+    public LeaderboardAdapter(JSONArray dataSet, LeaderboardEnum time_frame) {
         localDataSet = dataSet;
+        this.time_frame = time_frame;
     }
 
     // Create new views (invoked by the layout manager)
@@ -64,10 +68,32 @@ public class LeaderboardAdapter extends RecyclerView.Adapter<LeaderboardAdapter.
     // Replace the contents of a view (invoked by the layout manager)
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, final int position) {
-        //TODO Properly set UI elements to display data
         try {
-            viewHolder.getUserNameView().setText(localDataSet.getString(position));
-            viewHolder.getPointsView().setText(localDataSet.getString(position));
+            JSONObject userData = localDataSet.getJSONObject(position);
+            viewHolder.getUserNameView().setText(userData.getString("id"));
+
+            String points = "";
+            switch (time_frame) {
+                case DAILY:
+                    points = userData.getString("userPoints");
+                    break;
+                case WEEKLY:
+                    points = userData.getString("weeklyPoints");
+                    break;
+                case MONTHLY:
+                    points = userData.getString("monthlyPoints");
+                    break;
+                case YEARLY:
+                    points = userData.getString("yearlyPoints");
+                    break;
+                case LIFETIME:
+                    points = userData.getString("lifetimePoints");
+                    break;
+                default:
+                    return;
+            }
+            viewHolder.getPointsView().setText(points);
+
         } catch (JSONException e) {
             throw new RuntimeException(e);
         }

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="leaderboard_list_height">32dp</dimen>
+    <dimen name="leaderboard_button_text_size">10sp</dimen>
     <dimen name="title_text_size">30sp</dimen>
 </resources>
