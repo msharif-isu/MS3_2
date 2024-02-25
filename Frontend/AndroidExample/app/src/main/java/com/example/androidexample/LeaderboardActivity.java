@@ -1,7 +1,6 @@
 package com.example.androidexample;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -29,17 +28,17 @@ public class LeaderboardActivity extends AppCompatActivity {
     private Button monthlyButton;
     private Button yearlyButton;
     private Button lifetimeButton;
-    private LeaderboardEnum time_frame = LeaderboardEnum.DAILY;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_leaderboard);
-        makeLeaderboardRequest();
 
+        // Setup leaderboard list UI
         recyclerView = findViewById(R.id.leaderboard_list);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
+        // Set buttons to change the type of points displayed
         dailyButton = findViewById(R.id.daily_button);
         weeklyButton = findViewById(R.id.weekly_button);
         monthlyButton = findViewById(R.id.monthly_button);
@@ -49,44 +48,52 @@ public class LeaderboardActivity extends AppCompatActivity {
         dailyButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                leaderboardAdapter.time_frame = LeaderboardEnum.DAILY;
-                leaderboardAdapter.notifyDataSetChanged();
+                if (leaderboardAdapter != null) {
+                    leaderboardAdapter.time_frame = LeaderboardTimeFrameEnum.DAILY;
+                    leaderboardAdapter.notifyDataSetChanged();
+                }
             }
         });
         weeklyButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                leaderboardAdapter.time_frame = LeaderboardEnum.WEEKLY;
-                leaderboardAdapter.notifyDataSetChanged();
-
+                if (leaderboardAdapter != null) {
+                    leaderboardAdapter.time_frame = LeaderboardTimeFrameEnum.WEEKLY;
+                    leaderboardAdapter.notifyDataSetChanged();
+                }
             }
         });
         monthlyButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                leaderboardAdapter.time_frame = LeaderboardEnum.MONTHLY;
-                leaderboardAdapter.notifyDataSetChanged();
-
+                if (leaderboardAdapter != null) {
+                    leaderboardAdapter.time_frame = LeaderboardTimeFrameEnum.MONTHLY;
+                    leaderboardAdapter.notifyDataSetChanged();
+                }
             }
         });
         yearlyButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                leaderboardAdapter.time_frame = LeaderboardEnum.YEARLY;
-                leaderboardAdapter.notifyDataSetChanged();
-
+                if (leaderboardAdapter != null) {
+                    leaderboardAdapter.time_frame = LeaderboardTimeFrameEnum.YEARLY;
+                    leaderboardAdapter.notifyDataSetChanged();
+                }
             }
         });
         lifetimeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                leaderboardAdapter.time_frame = LeaderboardEnum.LIFETIME;
-                leaderboardAdapter.notifyDataSetChanged();
-
+                if (leaderboardAdapter != null) {
+                    leaderboardAdapter.time_frame = LeaderboardTimeFrameEnum.LIFETIME;
+                    leaderboardAdapter.notifyDataSetChanged();
+                }
             }
         });
-    }
 
+        // Get leaderboard data
+        makeLeaderboardRequest();
+    }
     public void makeLeaderboardRequest() {
         JsonArrayRequest leaderboardRequest = new JsonArrayRequest(
                 Request.Method.GET,
@@ -96,7 +103,7 @@ public class LeaderboardActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(JSONArray response) {
                         leaderboardData = response;
-                        leaderboardAdapter = new LeaderboardAdapter(leaderboardData, LeaderboardEnum.DAILY);
+                        leaderboardAdapter = new LeaderboardAdapter(leaderboardData, LeaderboardTimeFrameEnum.DAILY);
                         recyclerView.setAdapter(leaderboardAdapter);
                     }
                 },

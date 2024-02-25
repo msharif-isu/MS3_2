@@ -14,9 +14,14 @@ import org.json.JSONObject;
 
 public class LeaderboardAdapter extends RecyclerView.Adapter<LeaderboardAdapter.ViewHolder> {
 
-    private JSONArray localDataSet;
-
-    public LeaderboardEnum time_frame;
+    /**
+     * The JSONArray pulled from the database containing the leaderboard data
+     */
+    private JSONArray leaderboardDataSet;
+    /**
+     * Keeps track of the type of points to display
+     */
+    public LeaderboardTimeFrameEnum time_frame;
 
     /**
      * Provide a reference to the type of views that you are using
@@ -49,8 +54,8 @@ public class LeaderboardAdapter extends RecyclerView.Adapter<LeaderboardAdapter.
      * @param dataSet JSONArray containing the data to populate views to be used
      * by RecyclerView
      */
-    public LeaderboardAdapter(JSONArray dataSet, LeaderboardEnum time_frame) {
-        localDataSet = dataSet;
+    public LeaderboardAdapter(JSONArray dataSet, LeaderboardTimeFrameEnum time_frame) {
+        leaderboardDataSet = dataSet;
         this.time_frame = time_frame;
     }
 
@@ -69,7 +74,7 @@ public class LeaderboardAdapter extends RecyclerView.Adapter<LeaderboardAdapter.
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, final int position) {
         try {
-            JSONObject userData = localDataSet.getJSONObject(position);
+            JSONObject userData = leaderboardDataSet.getJSONObject(position);
             viewHolder.getUserNameView().setText(userData.getString("id"));
 
             String points = "";
@@ -102,6 +107,6 @@ public class LeaderboardAdapter extends RecyclerView.Adapter<LeaderboardAdapter.
     // Return the size of your dataset (invoked by the layout manager)
     @Override
     public int getItemCount() {
-        return localDataSet.length();
+        return leaderboardDataSet.length();
     }
 }
