@@ -15,7 +15,7 @@ public class QuestionApplication {
     }
 
     @Bean
-    CommandLineRunner initUser(QuestionRepository questionRepository) {
+    CommandLineRunner initQuestion(QuestionRepository questionRepository) {
         return args -> {
             Question q1 = new Question("Who is the coolest?", "Raphael", "not a question");
             Question q2 = new Question("Who is the 2nd coolest?", "Also Raphael", "not a question");
