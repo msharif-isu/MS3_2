@@ -17,11 +17,11 @@ public class User {
 
     private long points;
 
-    public User(String username, String password, String email, long points) {
+    public User(String username, String password, String email) {
         this.username = username;
         this.password = password;
         this.email = email;
-        this.points = 0;
+        points = 0;
     }
 
     public User() {
