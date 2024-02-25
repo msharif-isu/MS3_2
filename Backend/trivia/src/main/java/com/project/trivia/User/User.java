@@ -21,7 +21,7 @@ public class User {
         this.username = username;
         this.password = password;
         this.email = email;
-        this.points = points;
+        this.points = 0;
     }
 
     public User() {

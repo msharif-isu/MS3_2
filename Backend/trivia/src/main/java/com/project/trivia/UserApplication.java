@@ -16,7 +16,7 @@ public class UserApplication {
     @Bean
     CommandLineRunner initUser(UserRepository userRepository) {
         return args -> {
-            User user1 = new User("aloks", "password123", "aloks@iastate.edu", 10);
+            User user1 = new User("alok", "password123", "aloks@iastate.edu", 10);
             userRepository.save(user1);
 
         };
