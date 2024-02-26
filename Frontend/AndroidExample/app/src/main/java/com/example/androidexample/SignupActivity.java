@@ -8,12 +8,15 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+import android.util.Patterns;
+
 
 public class SignupActivity extends AppCompatActivity {
 
     private EditText usernameEditText;  // define username edittext variable
     private EditText passwordEditText;  // define password edittext variable
     private EditText confirmEditText;   // define confirm edittext variable
+    private EditText emailEditText;   // define confirm edittext variable
     private Button loginButton;         // define login button variable
     private Button signupButton;        // define signup button variable
 
@@ -26,6 +29,7 @@ public class SignupActivity extends AppCompatActivity {
         usernameEditText = findViewById(R.id.signup_username_edt);  // link to username edtext in the Signup activity XML
         passwordEditText = findViewById(R.id.signup_password_edt);  // link to password edtext in the Signup activity XML
         confirmEditText = findViewById(R.id.signup_confirm_edt);    // link to confirm edtext in the Signup activity XML
+        emailEditText = findViewById(R.id.signup_email_edt);
         loginButton = findViewById(R.id.signup_login_btn);    // link to login button in the Signup activity XML
         signupButton = findViewById(R.id.signup_signup_btn);  // link to signup button in the Signup activity XML
 
@@ -46,9 +50,22 @@ public class SignupActivity extends AppCompatActivity {
             public void onClick(View v) {
 
                 /* grab strings from user inputs */
+                String email = emailEditText.getText().toString();
                 String username = usernameEditText.getText().toString();
                 String password = passwordEditText.getText().toString();
                 String confirm = confirmEditText.getText().toString();
+
+                if (isValidEmail(email)) {
+                    if (password.equals(confirm)){
+                        Toast.makeText(getApplicationContext(), "Signing up", Toast.LENGTH_LONG).show();
+                        // Proceed with your signup process here
+                    }
+                    else {
+                        Toast.makeText(getApplicationContext(), "Password don't match", Toast.LENGTH_LONG).show();
+                    }
+                } else {
+                    emailEditText.setError("Enter a valid email address");
+                }
 
                 if (password.equals(confirm)){
                     Toast.makeText(getApplicationContext(), "Signing up", Toast.LENGTH_LONG).show();
@@ -58,5 +75,9 @@ public class SignupActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    private boolean isValidEmail(String email) {
+        return Patterns.EMAIL_ADDRESS.matcher(email).matches();
     }
 }
