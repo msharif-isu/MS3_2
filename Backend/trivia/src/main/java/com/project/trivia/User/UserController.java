@@ -5,7 +5,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 public class UserController {
@@ -70,10 +69,10 @@ public class UserController {
     public ArrayList<Integer> getIdByPassword(@PathVariable String password) {
         List<User> users = userRepository.findAllByPassword(password);
         ArrayList<Integer> passwordIds = new ArrayList<>();
+
         for (User user : users) {
             passwordIds.add(user.getId());
         }
         return passwordIds;
     }
-
 }
