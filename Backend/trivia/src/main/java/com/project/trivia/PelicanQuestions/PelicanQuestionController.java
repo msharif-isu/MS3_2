@@ -1,6 +1,5 @@
 package com.project.trivia.PelicanQuestions;
 
-import com.project.trivia.Questions.Question;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,17 +16,17 @@ public class PelicanQuestionController {
 
 
     @GetMapping(path = "/pelican")
-    List<PelicanQuestions> getAllUser() {
+    List<PelicanQuestion> getAllUser() {
         return pelicanQuestionRepository.findAll();
     }
 
     @GetMapping(path = "/pQuestion/{id}")
-    PelicanQuestions getQuestionById(@PathVariable int id){
+    PelicanQuestion getQuestionById(@PathVariable int id){
         return pelicanQuestionRepository.findById(id);
     }
 
     @PostMapping(path = "/pQuestion")
-    String createQuestion(@RequestBody PelicanQuestions question){
+    String createQuestion(@RequestBody PelicanQuestion question){
         if (question == null)
             return failure;
         pelicanQuestionRepository.save(question);

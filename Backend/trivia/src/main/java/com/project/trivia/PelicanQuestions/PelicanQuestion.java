@@ -6,7 +6,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
 @Entity
-public class PelicanQuestions {
+public class PelicanQuestion {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,7 +18,7 @@ public class PelicanQuestions {
     private String second;
     private String third;
 
-    public PelicanQuestions(String question, String answer, String questionType, String first, String second, String third) {
+    public PelicanQuestion(String question, String answer, String questionType, String first, String second, String third) {
         this.question = question;
         this.answer = answer;
         this.questionType = questionType;
