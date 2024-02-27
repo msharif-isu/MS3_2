@@ -34,15 +34,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) {
         int id = v.getId();
         if (id == R.id.btnStringRequest) {
-            startActivity(new Intent(MainActivity.this, StringReqActivity.class));
+            startActivity(new Intent(MainActivity.this, LeaderboardActivity.class));
         } else if (id == R.id.btnJsonObjRequest) {
-            startActivity(new Intent(MainActivity.this, JsonObjReqActivity.class));
+            startActivity(new Intent(MainActivity.this, LeaderboardActivity.class));
         } else if (id == R.id.btnJsonArrRequest) {
-            startActivity(new Intent(MainActivity.this, JsonArrReqActivity.class));
+            startActivity(new Intent(MainActivity.this, LeaderboardActivity.class));
         } else if (id == R.id.btnImageRequest) {
-            startActivity(new Intent(MainActivity.this, ImageReqActivity.class));
+<<<<<<< Frontend/AndroidExample/app/src/main/java/com/example/androidexample/MainActivity.java
+            startActivity(new Intent(MainActivity.this, LeaderboardActivity.class));
         } else if (id == R.id.btnLogin) {
             startActivity(new Intent(MainActivity.this, LoginActivity.class));
+=======
+            startActivity(new Intent(MainActivity.this, LeaderboardActivity.class));
+>>>>>>> Frontend/AndroidExample/app/src/main/java/com/example/androidexample/MainActivity.java
         }
     }
 }
