@@ -9,7 +9,7 @@ import android.widget.Button;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private Button strBtn, jsonObjBtn, jsonArrBtn, imgBtn;
+    private Button strBtn, jsonObjBtn, jsonArrBtn, imgBtn, loginBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,12 +20,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         jsonObjBtn = findViewById(R.id.btnJsonObjRequest);
         jsonArrBtn = findViewById(R.id.btnJsonArrRequest);
         imgBtn = findViewById(R.id.btnImageRequest);
+        loginBtn = findViewById(R.id.btnLogin);
 
         /* button click listeners */
         strBtn.setOnClickListener(this);
         jsonObjBtn.setOnClickListener(this);
         jsonArrBtn.setOnClickListener(this);
         imgBtn.setOnClickListener(this);
+        loginBtn.setOnClickListener(this);
     }
 
     @Override
@@ -38,7 +40,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         } else if (id == R.id.btnJsonArrRequest) {
             startActivity(new Intent(MainActivity.this, LeaderboardActivity.class));
         } else if (id == R.id.btnImageRequest) {
+<<<<<<< Frontend/AndroidExample/app/src/main/java/com/example/androidexample/MainActivity.java
             startActivity(new Intent(MainActivity.this, LeaderboardActivity.class));
+        } else if (id == R.id.btnLogin) {
+            startActivity(new Intent(MainActivity.this, LoginActivity.class));
+=======
+            startActivity(new Intent(MainActivity.this, LeaderboardActivity.class));
+>>>>>>> Frontend/AndroidExample/app/src/main/java/com/example/androidexample/MainActivity.java
         }
     }
 }
