@@ -43,7 +43,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             startActivity(new Intent(MainActivity.this, LeaderboardActivity.class));
         } else if (id == R.id.btnLogin) {
             startActivity(new Intent(MainActivity.this, LoginActivity.class));
-            startActivity(new Intent(MainActivity.this, LeaderboardActivity.class));
         }
     }
 }
