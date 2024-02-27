@@ -36,8 +36,8 @@ public class LoginActivity extends AppCompatActivity {
 
         usernameEditText = findViewById(R.id.login_username_edt);
         passwordEditText = findViewById(R.id.login_password_edt);
-        loginButton = findViewById(R.id.login_login_btn);
-        signupButton = findViewById(R.id.login_signup_btn);
+        loginButton = findViewById(R.id.login_btn);
+        signupButton = findViewById(R.id.signup_btn);
 
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -87,7 +87,6 @@ public class LoginActivity extends AppCompatActivity {
                     public void onResponse(String response) {
                         // Handle successful response
                         int usernameId = Integer.parseInt(response);
-                        // This gives you the username ID, you can use it as needed
                         // I pass it over to the password method, which will compare
                         // the two ids.
                         getPasswordIds(usernameId, password);
