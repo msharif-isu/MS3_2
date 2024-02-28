@@ -18,13 +18,17 @@ public class PelicanQuestion {
     private String second;
     private String third;
 
-    public PelicanQuestion(String question, String answer, String questionType, String first, String second, String third) {
+    public PelicanQuestion(String question, String answer, String questionType) {
         this.question = question;
         this.answer = answer;
         this.questionType = questionType;
-        this.first = "";
-        this.second = "";
-        this.third = "";
+        first = "";
+        second = "";
+        third = "";
+    }
+
+    public PelicanQuestion() {
+
     }
 
     public String getFirst() {

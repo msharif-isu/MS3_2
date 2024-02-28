@@ -14,13 +14,13 @@ public class QuestionApplication {
         SpringApplication.run(com.project.trivia.QuestionApplication.class, args);
     }
 
-    @Bean
-    CommandLineRunner initUser(QuestionRepository questionRepository) {
-        return args -> {
-            Question q1 = new Question("Who is the coolest?", "Raphael", "not a question");
-            Question q2 = new Question("Who is the 2nd coolest?", "Also Raphael", "not a question");
-            questionRepository.save(q1);
-            questionRepository.save(q2);
-        };
-    }
+//    @Bean
+//    CommandLineRunner initUser(QuestionRepository questionRepository) {
+//        return args -> {
+//            Question q1 = new Question("Who is the coolest?", "Raphael", "not a question");
+//            Question q2 = new Question("Who is the 2nd coolest?", "Also Raphael", "not a question");
+//            questionRepository.save(q1);
+//            questionRepository.save(q2);
+//        };
+//    }
 }
