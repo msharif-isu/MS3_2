@@ -21,7 +21,7 @@ public class PelicanQuestionController {
         return pelicanQuestionRepository.findAll();
     }
 
-    @GetMapping(path = "/puestion/{id}")
+    @GetMapping(path = "/pelican/{id}")
     PelicanQuestion getQuestionById(@PathVariable int id){
         return pelicanQuestionRepository.findById(id);
     }
@@ -73,9 +73,32 @@ public class PelicanQuestionController {
         return pickedQuestions;
     }
 
-    @PutMapping(path = "/Correct/{loggedInUser}")
-    public String placement(@PathVariable String loggedInUser){
-        return success;
+    @PutMapping(path = "/correct/{id}/{loggedInUser}")
+    public PelicanQuestion placement(@PathVariable int id, @PathVariable String loggedInUser){
+        PelicanQuestion anwseredQuestion = pelicanQuestionRepository.findById(id);
+        if(Objects.equals(pelicanQuestionRepository.findById(id).getFirst(), "")){
+            pelicanQuestionRepository.findById(id).setFirst(loggedInUser);
+        }else if (Objects.equals(pelicanQuestionRepository.findById(id).getSecond(), "")){
+            pelicanQuestionRepository.findById(id).setSecond(loggedInUser);
+        }else if (Objects.equals(pelicanQuestionRepository.findById(id).getThird(), "")){
+            pelicanQuestionRepository.findById(id).setThird(loggedInUser);
+        }
+
+        pelicanQuestionRepository.save(anwseredQuestion);
+
+        return pelicanQuestionRepository.findById(id);
+    }
+
+    @PutMapping(path = "/reset")
+    public PelicanQuestion resetPlacement(@PathVariable int id){
+        PelicanQuestion anwseredQuestion = pelicanQuestionRepository.findById(id);
+        pelicanQuestionRepository.findById(id).setFirst("");
+        pelicanQuestionRepository.findById(id).setSecond("");
+        pelicanQuestionRepository.findById(id).setThird("");
+
+        pelicanQuestionRepository.save(anwseredQuestion);
+
+        return pelicanQuestionRepository.findById(id);
     }
 
 
