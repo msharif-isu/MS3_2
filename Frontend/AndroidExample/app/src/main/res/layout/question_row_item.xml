@@ -6,7 +6,7 @@
     android:layout_height="@dimen/question_set_list_height">
 
     <ImageButton
-        android:id="@+id/edit_toggle_button"
+        android:id="@+id/question_row_edit_toggle_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
@@ -17,7 +17,7 @@
         app:srcCompat="@android:drawable/ic_menu_edit" />
 
     <TextView
-        android:id="@+id/question_number"
+        android:id="@+id/question_row_question_number"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
@@ -28,7 +28,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:id="@+id/answer_input"
+        android:id="@+id/question_row_answer_input"
         android:layout_width="372dp"
         android:layout_height="75dp"
         android:layout_marginStart="20dp"
@@ -43,7 +43,7 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <EditText
-        android:id="@+id/question_input"
+        android:id="@+id/question_row_question_input"
         android:layout_width="372dp"
         android:layout_height="75dp"
         android:layout_marginStart="20dp"
@@ -52,27 +52,27 @@
         android:editable="false"
         android:ems="10"
         android:inputType="text"
-        app:layout_constraintBottom_toTopOf="@+id/answer_text"
+        app:layout_constraintBottom_toTopOf="@+id/question_row_answer_text"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
-        android:id="@+id/answer_text"
+        android:id="@+id/question_row_answer_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
         android:text="Answer:"
-        app:layout_constraintBottom_toTopOf="@+id/answer_input"
+        app:layout_constraintBottom_toTopOf="@+id/question_row_answer_input"
         app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
-        android:id="@+id/question_text"
+        android:id="@+id/question_row_question_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
         android:text="Question:"
-        app:layout_constraintBottom_toTopOf="@+id/question_input"
+        app:layout_constraintBottom_toTopOf="@+id/question_row_question_input"
         app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
