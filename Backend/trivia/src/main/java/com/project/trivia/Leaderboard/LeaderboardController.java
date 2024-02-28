@@ -29,16 +29,29 @@ public class LeaderboardController {
         return leaderboardRepository.findById(id);
     }
 
-    @PostMapping(path = "/addpoints/{id}/{amount}")
+    @PostMapping(path = "/leaderboard/addpoints/{id}/{amount}")
     String addPoints(@PathVariable int id, @PathVariable int amount){
-        Leaderboard lb = getLeaderboardById(id);
-        lb.setUserPoints(lb.getUserPoints() + amount);
-        lb.setWeeklyPoints(lb.getWeeklyPoints() + amount);
-        lb.setMonthlyPoints(lb.getMonthlyPoints() + amount);
-        lb.setYearlyPoints(lb.getYearlyPoints() + amount);
-        lb.setLifetimePoints(lb.getLifetimePoints() + amount);
+        Leaderboard lb1 = getLeaderboardById(id);
+        lb1.setUserPoints(lb1.getUserPoints() + amount);
+        lb1.setWeeklyPoints(lb1.getWeeklyPoints() + amount);
+        lb1.setMonthlyPoints(lb1.getMonthlyPoints() + amount);
+        lb1.setYearlyPoints(lb1.getYearlyPoints() + amount);
+        lb1.setLifetimePoints(lb1.getLifetimePoints() + amount);
 
-        leaderboardRepository.save(lb);
+        leaderboardRepository.save(lb1);
+        return success;
+    }
+
+    @PutMapping(path = "/leaderboard/{id}/{amount}")
+    String changePoints(@PathVariable int id, @PathVariable int amount) {
+        Leaderboard lb2 = getLeaderboardById(id);
+        lb2.setUserPoints(lb2.getUserPoints() + amount);
+        lb2.setWeeklyPoints(lb2.getWeeklyPoints() + amount);
+        lb2.setMonthlyPoints(lb2.getMonthlyPoints() + amount);
+        lb2.setYearlyPoints(lb2.getYearlyPoints() + amount);
+        lb2.setLifetimePoints(lb2.getLifetimePoints() + amount);
+        
+        leaderboardRepository.save(lb2);
         return success;
     }
 
