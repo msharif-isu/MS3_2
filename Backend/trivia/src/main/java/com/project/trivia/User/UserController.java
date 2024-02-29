@@ -52,6 +52,17 @@ public class UserController {
     }
 
 
+    //Gives user points
+    @PutMapping(path = "/users/{username}/{points}")
+    public User givePoints(@PathVariable String username , @PathVariable int points){
+        User user = userRepository.findByUsername(username);
+        if(user == null)
+            return null;
+        user.setPoints((int) (user.getPoints() + points));
+        userRepository.save(user);
+        return user;
+    }
+
     //Temp way to get id of username passowrd
 
     @GetMapping(path = "/users/getIdByUsername/{username}")
