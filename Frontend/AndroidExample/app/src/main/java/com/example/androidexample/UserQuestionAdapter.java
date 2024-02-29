@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -38,6 +39,7 @@ public class UserQuestionAdapter extends RecyclerView.Adapter<UserQuestionAdapte
         private final EditText question;
         private final EditText answer;
         private final ImageButton editButton;
+        private final TextView questionNumber;
 
         public ViewHolder(View view) {
             super(view);
@@ -45,6 +47,7 @@ public class UserQuestionAdapter extends RecyclerView.Adapter<UserQuestionAdapte
             question = view.findViewById(R.id.question_row_question_input);
             answer = view.findViewById(R.id.question_row_answer_input);
             editButton = view.findViewById(R.id.question_row_edit_toggle_button);
+            questionNumber = view.findViewById(R.id.question_row_question_number);
         }
 
         public TextView getQuestionView() {
@@ -54,6 +57,7 @@ public class UserQuestionAdapter extends RecyclerView.Adapter<UserQuestionAdapte
             return answer;
         }
         public ImageButton getEditButton() { return editButton; }
+        public TextView getQuestionNumber() { return questionNumber; }
     }
 
     /**
@@ -86,6 +90,7 @@ public class UserQuestionAdapter extends RecyclerView.Adapter<UserQuestionAdapte
             JSONObject userData = questionsDataSet.getJSONObject(position);
             viewHolder.getQuestionView().setText(userData.getString("question"));
             viewHolder.getAnswerView().setText(userData.getString("answer"));
+            viewHolder.getQuestionNumber().setText("#" + (position + 1));
             viewHolder.getEditButton().setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -108,7 +113,7 @@ public class UserQuestionAdapter extends RecyclerView.Adapter<UserQuestionAdapte
     public void makeEditQuestionRequest(String question, String answer, int position) throws JSONException {
         JsonObjectRequest questionsRequest = new JsonObjectRequest(
                 Request.Method.PUT,
-                String.format("%s/question/1", SERVER_URL),
+                String.format("%s/question/%d", SERVER_URL, position+1),
                 new JSONObject() {
                     {
                         put("question", question);
@@ -119,7 +124,7 @@ public class UserQuestionAdapter extends RecyclerView.Adapter<UserQuestionAdapte
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        notifyItemChanged(position);
+                        Toast.makeText(context, "Question edited", Toast.LENGTH_SHORT).show();
                     }
                 },
                 new Response.ErrorListener() {
