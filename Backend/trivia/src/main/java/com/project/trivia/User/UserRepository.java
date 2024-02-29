@@ -1,5 +1,6 @@
 package com.project.trivia.User;
 
+import org.hibernate.sql.ast.tree.predicate.BooleanExpressionPredicate;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,7 +18,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     List<User> findAllByPassword(String password);
 
-    Boolean existsByUsername(String username);
+    boolean existsByUsername(String username);
 
 }
 
