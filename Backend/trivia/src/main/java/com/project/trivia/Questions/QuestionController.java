@@ -20,6 +20,11 @@ public class QuestionController {
         return questionRepository.findById(id);
     }
 
+    @GetMapping(path = "/question")
+    List<Question> getAllQuestion() {
+        return questionRepository.findAll();
+    }
+
     @PostMapping(path = "/question")
     String createQuestion(@RequestBody Question question){
         if (question == null)

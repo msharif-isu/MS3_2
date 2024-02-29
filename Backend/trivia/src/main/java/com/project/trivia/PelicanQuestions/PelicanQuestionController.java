@@ -22,12 +22,12 @@ public class PelicanQuestionController {
     }
 
     @GetMapping(path = "/pelican/{id}")
-    PelicanQuestion getQuestionById(@PathVariable int id){
+    PelicanQuestion getPuestionById(@PathVariable int id){
         return pelicanQuestionRepository.findById(id);
     }
 
     @PostMapping(path = "/puestion")
-    String createQuestion(@RequestBody PelicanQuestion question){
+    String createPuestion(@RequestBody PelicanQuestion question){
         if (question == null)
             return failure;
         pelicanQuestionRepository.save(question);
