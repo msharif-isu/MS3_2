@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ExternalStorageConfigurationManager" enabled="true" />
+  <component name="FrameworkDetectionExcludesConfiguration">
+    <file type="web" url="file://$PROJECT_DIR$/Experiment/Alok/Android Tutorials/android_unit1_1_helloworld/AndroidExample" />
+    <file type="web" url="file://$PROJECT_DIR$/Experiment/Alok/Android Tutorials/android_unit1_2_intent/AndroidExample" />
+    <file type="web" url="file://$PROJECT_DIR$/Experiment/Alok/Android Tutorials/android_unit1_3_login_signup/AndroidExample" />
+    <file type="web" url="file://$PROJECT_DIR$/Experiment/Alok/Android Tutorials/android_unit2_1_volley/AndroidExample" />
+    <file type="web" url="file://$PROJECT_DIR$/Experiment/Alok/Android Tutorials/android_unit2_2_volley/AndroidExample" />
+    <file type="web" url="file://$PROJECT_DIR$/Experiment/Owais/tutorials-android_unit1_1_helloworld/AndroidExample" />
+    <file type="web" url="file://$PROJECT_DIR$/Experiment/Owais/tutorials-android_unit1_3_login_signup/AndroidExample" />
+    <file type="web" url="file://$PROJECT_DIR$/Experiment/Owais/Unit 1/tutorials-android_unit1_1_helloworld/AndroidExample" />
+    <file type="web" url="file://$PROJECT_DIR$/Experiment/Owais/Unit 1/tutorials-android_unit1_3_login_signup/AndroidExample" />
+    <file type="web" url="file://$PROJECT_DIR$/Experiment/Owais/Unit 2/tutorials-android_unit2_2_volley/AndroidExample" />
+    <file type="web" url="file://$PROJECT_DIR$/Experiment/Owais/Unit 2/tutorials-android_unit2_3_volley/AndroidExample" />
+  </component>
+  <component name="MavenProjectsManager">
+    <option name="originalFiles">
+      <list>
+        <option value="$PROJECT_DIR$/Backend/trivia/pom.xml" />
+        <option value="$PROJECT_DIR$/Experiment/Adam/SB1/helloworld/pom.xml" />
+        <option value="$PROJECT_DIR$/Experiment/Adam/SB2/hellopeople/pom.xml" />
+        <option value="$PROJECT_DIR$/Experiment/Adam/SB3/Spring/pom.xml" />
+        <option value="$PROJECT_DIR$/Experiment/Adam/VMtest/helloworld/pom.xml" />
+        <option value="$PROJECT_DIR$/Experiment/Adam/helloworld/pom.xml" />
+        <option value="$PROJECT_DIR$/Experiment/Alok/Springboot Tutorials/springboot_unit1_1_helloworld/helloworld/pom.xml" />
+        <option value="$PROJECT_DIR$/Experiment/Alok/Springboot Tutorials/springboot_unit1_2_hellopeople/hellopeople/pom.xml" />
+        <option value="$PROJECT_DIR$/Experiment/Alok/Springboot Tutorials/springboot_unit1_3_petclinic_example/Spring/pom.xml" />
+        <option value="$PROJECT_DIR$/Experiment/Alok/Virtual Machine Testing/helloworld/pom.xml" />
+        <option value="$PROJECT_DIR$/Experiment/raphaelb/ex1/SB1/helloworld/pom.xml" />
+        <option value="$PROJECT_DIR$/Experiment/raphaelb/ex1/SB2/hellopeople/pom.xml" />
+        <option value="$PROJECT_DIR$/Experiment/raphaelb/ex1/SB3/Spring/pom.xml" />
+        <option value="$PROJECT_DIR$/Experiment/raphaelb/ex1/tutorials-springboot_unit1_1_helloworld/helloworld/pom.xml" />
+        <option value="$PROJECT_DIR$/Experiment/raphaelb/ex1/tutorials-springboot_unit1_2_hellopeople/hellopeople/pom.xml" />
+        <option value="$PROJECT_DIR$/Experiment/raphaelb/ex1/tutorials-springboot_unit1_3_petclinic_example/Spring/pom.xml" />
+        <option value="$PROJECT_DIR$/Experiment/raphaelb/ex2/SB1/springboot_example/pom.xml" />
+      </list>
+    </option>
+  </component>
+  <component name="ProjectRootManager" version="2" project-jdk-name="21" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/out" />
+  </component>
+</project>
