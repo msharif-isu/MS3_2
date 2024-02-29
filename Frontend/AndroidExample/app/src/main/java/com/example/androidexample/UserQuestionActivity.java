@@ -22,7 +22,7 @@ import org.json.JSONObject;
 
 public class UserQuestionActivity extends AppCompatActivity {
 
-    private final static String SERVER_URL = "http://195.35.14.120:8082";
+    private final static String SERVER_URL = "http://coms-309-034.class.las.iastate.edu:8080";
 
     private boolean attemptedQuestionRefresh = false;
     private RecyclerView questionList;
