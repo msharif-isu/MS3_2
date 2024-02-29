@@ -42,7 +42,9 @@ public class QuestionController {
         Question question = questionRepository.findById(id);
         if(question == null)
             return null;
-        questionRepository.save(request);
+        question.setQuestion(request.getQuestion());
+        question.setAnswer(request.getAnswer());
+        question.setQuestionType(request.getQuestionType());
         return questionRepository.findById(id);
     }
 }
