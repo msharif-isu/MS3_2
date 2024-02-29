@@ -35,7 +35,6 @@ public class SinglePlayerQuestionActivity extends AppCompatActivity {
     private long timeLeftInMillis;
     private int currentQuestionIndex = 0;
     private int correctAnswers = 0;
-
     private int usernameId;
 
     //this exists because the server decided to stop working :)
@@ -46,6 +45,7 @@ public class SinglePlayerQuestionActivity extends AppCompatActivity {
     private List<Integer> questionIds = new ArrayList<>();
     private static final long COUNTDOWN_TIME = 60000; // 60 seconds
 
+    //Timer will keep going without this and screen will randomly change.
     protected void onPause() {
         super.onPause();
         if (countDownTimer != null) {
@@ -58,7 +58,6 @@ public class SinglePlayerQuestionActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_question_singleplayer);
 
-        // Initialize views
         usernameTextView = findViewById(R.id.usernametext);
         questionTextView = findViewById(R.id.question);
         pointsTextView = findViewById(R.id.points);
@@ -66,7 +65,7 @@ public class SinglePlayerQuestionActivity extends AppCompatActivity {
         answerBoxEditText = findViewById(R.id.answer_box);
         submitButton = findViewById(R.id.submit_button);
 
-        pointsTextView.setText("Points: 0"); // TODO: this will be updated to pull points based on username
+        pointsTextView.setText("Points: 0");
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
@@ -83,7 +82,6 @@ public class SinglePlayerQuestionActivity extends AppCompatActivity {
         // Start countdown timer
         startCountDown();
 
-        // Set OnClickListener for the submit button
         submitButton.setOnClickListener(view -> {
             String userAnswer = answerBoxEditText.getText().toString();
             handleSubmitButtonClick();
@@ -117,7 +115,9 @@ public class SinglePlayerQuestionActivity extends AppCompatActivity {
         }
     }
 
-    // Method to fetch question IDs from the backend
+    /**
+     * Method to fetch question IDs from the backend
+     */
     private void fetchQuestionIds() {
         RequestQueue queue = Volley.newRequestQueue(this);
         String url = backendUrl + "getPuestions";
@@ -142,16 +142,15 @@ public class SinglePlayerQuestionActivity extends AppCompatActivity {
                         Toast.makeText(SinglePlayerQuestionActivity.this, "Failed to fetch question IDs", Toast.LENGTH_SHORT).show();
                     }
                 });
-
-        // Add the request to the RequestQueue
         queue.add(jsonArrayRequest);
     }
 
-    // Method to fetch question details by ID from the backend
+    /**
+     * Method to fetch question details by ID from the backend
+     */
     private void fetchQuestionDetails(int questionId) {
-        // Initialize Volley request queue
         RequestQueue queue = Volley.newRequestQueue(this);
-        String url = backendUrl + "pelican/" + questionId; // Replace with  backend URL
+        String url = backendUrl + "pelican/" + questionId;
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null,
                 new Response.Listener<JSONObject>() {
                     @Override
@@ -174,8 +173,6 @@ public class SinglePlayerQuestionActivity extends AppCompatActivity {
                         Toast.makeText(SinglePlayerQuestionActivity.this, "Failed to fetch question details", Toast.LENGTH_SHORT).show();
                     }
                 });
-
-        // Add the request to the RequestQueue
         queue.add(jsonObjectRequest);
     }
 
@@ -202,7 +199,9 @@ public class SinglePlayerQuestionActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    // Method to start countdown timer
+    /**
+     * Method to start countdown timer
+     */
     private void startCountDown() {
         countDownTimer = new CountDownTimer(COUNTDOWN_TIME, 1000) {
             @Override
@@ -220,7 +219,9 @@ public class SinglePlayerQuestionActivity extends AppCompatActivity {
         }.start();
     }
 
-    // Method to update countdown text
+    /**
+     * Method to update countdown text
+     */
     private void updateCountDownText() {
         int seconds = (int) (timeLeftInMillis / 1000);
         String timeLeftFormatted = String.format("%02d", seconds);
@@ -246,7 +247,8 @@ public class SinglePlayerQuestionActivity extends AppCompatActivity {
 
     /**
      * Sends the user based on the question that the user got correct.
-     * @param id question id
+     *
+     * @param id       question id
      * @param username current user's username
      */
     private void sendCorrectAnswer(int id, String username) {

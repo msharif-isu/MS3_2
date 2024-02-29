@@ -67,11 +67,8 @@ public class ResultsActivity extends AppCompatActivity {
     }
 
     private void givePoints(String username, int points) {
-        // Instantiate the RequestQueue.
         RequestQueue queue = Volley.newRequestQueue(this);
         String url = backendUrl + "users/" + username + "/" + points;
-
-        // Request a JSON object response from the provided URL.
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.PUT, url, null,
                 new Response.Listener<JSONObject>() {
                     @Override
@@ -89,8 +86,6 @@ public class ResultsActivity extends AppCompatActivity {
                 Toast.makeText(ResultsActivity.this, "Failed to update points", Toast.LENGTH_SHORT).show();
             }
         });
-
-        // Add the request to the RequestQueue.
         queue.add(jsonObjectRequest);
     }
 

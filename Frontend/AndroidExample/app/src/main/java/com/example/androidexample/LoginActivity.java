@@ -67,7 +67,6 @@ public class LoginActivity extends AppCompatActivity {
      * @param password
      */
     private void loginRequest(final String username, final String password) {
-        // Call getIdByUsername to get the username ID
         getUsernameId(username, password);
     }
 
