@@ -1,4 +1,5 @@
 package com.example.androidexample;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -28,6 +29,9 @@ public class SignupActivity extends AppCompatActivity {
     private Button loginButton;
     private Button signupButton;
 
+    private String backendUrl = "http://10.0.2.2:8080/users";
+    //change to "http://coms-309-034.class.las.iastate.edu:8080/users/"
+    //or to "http://10.0.2.2:8080/users"
     private RequestQueue requestQueue;
 
     @Override
@@ -60,7 +64,7 @@ public class SignupActivity extends AppCompatActivity {
                 String password = passwordEditText.getText().toString();
                 String confirm = confirmEditText.getText().toString();
                 if (isValidEmail(email)) {
-                    if (password.equals(confirm)){
+                    if (password.equals(confirm)) {
                         Toast.makeText(getApplicationContext(), "Signing up", Toast.LENGTH_LONG).show();
                         sendSignupRequest(username, password, email);
                     } else {
@@ -78,7 +82,7 @@ public class SignupActivity extends AppCompatActivity {
     }
 
     private void sendSignupRequest(String username, String password, String email) {
-        String url = "http://coms-309-034.class.las.iastate.edu:8080/users";
+        String url = backendUrl;
 
         JSONObject jsonObject = new JSONObject();
         try {

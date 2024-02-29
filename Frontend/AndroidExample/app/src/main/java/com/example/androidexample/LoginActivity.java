@@ -25,9 +25,12 @@ import java.util.ArrayList;
 public class LoginActivity extends AppCompatActivity {
 
     private EditText usernameEditText;
+
+    private String username;
     private EditText passwordEditText;
     private Button loginButton;
     private Button signupButton;
+    private String backendUrl = "http://10.0.2.2:8080/users/"; //change to "http://coms-309-034.class.las.iastate.edu:8080/users/"
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,7 +45,7 @@ public class LoginActivity extends AppCompatActivity {
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String username = usernameEditText.getText().toString();
+                username = usernameEditText.getText().toString();
                 String password = passwordEditText.getText().toString();
                 loginRequest(username, password);
             }
@@ -64,7 +67,6 @@ public class LoginActivity extends AppCompatActivity {
      * @param password
      */
     private void loginRequest(final String username, final String password) {
-        // Call getIdByUsername to get the username ID
         getUsernameId(username, password);
     }
 
@@ -78,7 +80,7 @@ public class LoginActivity extends AppCompatActivity {
         // create the RequestQueue.
         RequestQueue queue = Volley.newRequestQueue(this);
         // This is the server. This can be changed in case backend is modified.
-        String url = "http://coms-309-034.class.las.iastate.edu:8080/users/getIdByUsername/" + username;
+        String url = backendUrl + "getIdByUsername/" + username;
 
         // Request a string response from the provided URL.
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
@@ -112,7 +114,7 @@ public class LoginActivity extends AppCompatActivity {
     private void getPasswordIds(final int usernameId, final String password) {
         // Create the RequestQueue.
         RequestQueue queue = Volley.newRequestQueue(this);
-        String url = "http://coms-309-034.class.las.iastate.edu:8080/users/getIdByPassword/" + password;
+        String url = backendUrl + "getIdByPassword/" + password;
 
         // Request a string response from the provided URL.
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url, null,
@@ -132,7 +134,9 @@ public class LoginActivity extends AppCompatActivity {
                                 // Login successful
                                 // Redirects to another activity but I will probably change this
                                 // To redirect to the main menu when it is implemented.
-                                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                                Intent intent = new Intent(LoginActivity.this, SinglePlayerQuestionActivity.class);
+                                intent.putExtra("USERNAME", username);
+                                intent.putExtra("USERID", usernameId);
                                 startActivity(intent);
                             } else {
                                 // Login failed

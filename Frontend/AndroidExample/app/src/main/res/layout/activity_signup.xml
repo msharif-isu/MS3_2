@@ -73,7 +73,7 @@
 
 
     <TextView
-        android:id="@+id/textView4"
+        android:id="@+id/usernametext"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="1dp"
@@ -95,7 +95,7 @@
         android:inputType="textPassword"
         app:layout_constraintBottom_toTopOf="@+id/signup_confirm_edt"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/textView4"
+        app:layout_constraintStart_toEndOf="@+id/usernametext"
         app:layout_constraintTop_toBottomOf="@+id/signup_username_edt"></EditText>
 
 
