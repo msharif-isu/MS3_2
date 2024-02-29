@@ -38,7 +38,7 @@ public class SinglePlayerQuestionActivity extends AppCompatActivity {
     private int usernameId;
 
     //this exists because the server decided to stop working :)
-    private String backendUrl = "http://10.0.2.2:8080/";
+    private String backendUrl = "http://coms-309-034.class.las.iastate.edu:8080/";
     private String questionCorrectAnswer;
 
     private String username;
