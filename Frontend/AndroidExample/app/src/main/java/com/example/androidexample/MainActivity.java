@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         } else if (id == R.id.btnJsonArrRequest) {
             startActivity(new Intent(MainActivity.this, LeaderboardActivity.class));
         } else if (id == R.id.btnImageRequest) {
-            startActivity(new Intent(MainActivity.this, LeaderboardActivity.class));
+            startActivity(new Intent(MainActivity.this, UserQuestionActivity.class));
         } else if (id == R.id.btnLogin) {
             startActivity(new Intent(MainActivity.this, LoginActivity.class));
         }
