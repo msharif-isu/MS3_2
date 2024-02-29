@@ -45,7 +45,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         } else if (id == R.id.btnImageRequest) {
             startActivity(new Intent(MainActivity.this, ImageReqActivity.class));
         } else if (id == R.id.btnQuestionSinglePlayer) {
-            startActivity(new Intent(MainActivity.this, SinglePlayerQuestionActivity.class));
+            startActivity(new Intent(MainActivity.this, LoginActivity.class));
         }
     }
 }
