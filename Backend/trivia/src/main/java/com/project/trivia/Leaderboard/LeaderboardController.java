@@ -1,6 +1,7 @@
 package com.project.trivia.Leaderboard;
 import java.util.List;
 
+import com.project.trivia.Questions.Question;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,7 +30,7 @@ public class LeaderboardController {
         return leaderboardRepository.findById(id);
     }
 
-    @PostMapping(path = "/leaderboard/addpoints/{id}/{amount}")
+    @GetMapping(path = "/leaderboard/addpoints/{id}/{amount}")
     String addPoints(@PathVariable int id, @PathVariable int amount){
         Leaderboard lb1 = getLeaderboardById(id);
         lb1.setUserPoints(lb1.getUserPoints() + amount);
@@ -42,17 +43,26 @@ public class LeaderboardController {
         return success;
     }
 
-    @PutMapping(path = "/leaderboard/{id}/{amount}")
-    String changePoints(@PathVariable int id, @PathVariable int amount) {
-        Leaderboard lb2 = getLeaderboardById(id);
-        lb2.setUserPoints(lb2.getUserPoints() + amount);
-        lb2.setWeeklyPoints(lb2.getWeeklyPoints() + amount);
-        lb2.setMonthlyPoints(lb2.getMonthlyPoints() + amount);
-        lb2.setYearlyPoints(lb2.getYearlyPoints() + amount);
-        lb2.setLifetimePoints(lb2.getLifetimePoints() + amount);
-        
-        leaderboardRepository.save(lb2);
+    @PostMapping(path = "/leaderboard")
+    String createLeaderboardUser(@RequestBody Leaderboard lb){
+        if (lb == null)
+            return failure;
+        leaderboardRepository.save(lb);
         return success;
+    }
+
+    @PutMapping(path = "/leaderboard/{id}")
+    Leaderboard changePoints(@PathVariable int id, @RequestBody Leaderboard request) {
+        Leaderboard lb = leaderboardRepository.findById(id);
+        if (lb == null)
+            return null;
+        lb.setName(request.getName());
+        lb.setUserPoints(request.getUserPoints());
+        lb.setWeeklyPoints(request.getWeeklyPoints());
+        lb.setMonthlyPoints(request.getMonthlyPoints());
+        lb.setYearlyPoints(request.getYearlyPoints());
+        lb.setLifetimePoints(request.getLifetimePoints());
+        return leaderboardRepository.findById(id);
     }
 
 }

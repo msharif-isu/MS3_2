@@ -22,8 +22,8 @@ public class TriviaApplication {
 	@Bean
 	CommandLineRunner initLeaderboard(LeaderboardRepository leaderboardRepository) {
 		return args -> {
-			Leaderboard lb1 = new Leaderboard(100, 200, 400, 1000, 2000);
-			Leaderboard lb2 = new Leaderboard(0, 0, 1000, 5000, 100000);
+			Leaderboard lb1 = new Leaderboard(100, 200, 400, 1000, 2000, "Alok");
+			Leaderboard lb2 = new Leaderboard(0, 0, 1000, 5000, 100000, "Raphael");
 			leaderboardRepository.save(lb1);
 			leaderboardRepository.save(lb2);
 		};
