@@ -36,6 +36,8 @@ public class SinglePlayerQuestionActivity extends AppCompatActivity {
     private int currentQuestionIndex = 0;
     private int correctAnswers = 0;
 
+    private int usernameId;
+
     //this exists because the server decided to stop working :)
     private String backendUrl = "http://10.0.2.2:8080/";
     private String questionCorrectAnswer;
@@ -43,6 +45,13 @@ public class SinglePlayerQuestionActivity extends AppCompatActivity {
     private String username;
     private List<Integer> questionIds = new ArrayList<>();
     private static final long COUNTDOWN_TIME = 60000; // 60 seconds
+
+    protected void onPause() {
+        super.onPause();
+        if (countDownTimer != null) {
+            countDownTimer.cancel();
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +71,7 @@ public class SinglePlayerQuestionActivity extends AppCompatActivity {
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             username = extras.getString("USERNAME");
+            usernameId = extras.getInt("USERID");
             usernameTextView.setText(username); // this will come from LoginActivity
         } else {
             usernameTextView.setText("Not logged in");
@@ -186,6 +196,7 @@ public class SinglePlayerQuestionActivity extends AppCompatActivity {
         Toast.makeText(getApplicationContext(), "Quiz Finished! Correct Answers: " + correctAnswers, Toast.LENGTH_LONG).show();
         Intent intent = new Intent(SinglePlayerQuestionActivity.this, ResultsActivity.class);
         intent.putExtra("USERNAME", username);
+        intent.putExtra("USERID", usernameId);
         intent.putExtra("POINTS", correctAnswers * 100);
         intent.putExtra("CORRECTANSWERS", correctAnswers);
         startActivity(intent);

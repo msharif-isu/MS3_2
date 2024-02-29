@@ -137,6 +137,7 @@ public class LoginActivity extends AppCompatActivity {
                                 // To redirect to the main menu when it is implemented.
                                 Intent intent = new Intent(LoginActivity.this, SinglePlayerQuestionActivity.class);
                                 intent.putExtra("USERNAME", username);
+                                intent.putExtra("USERID", usernameId);
                                 startActivity(intent);
                             } else {
                                 // Login failed
