@@ -16,12 +16,14 @@ public class Leaderboard {
     private int monthlyPoints;
     private int yearlyPoints;
     private int lifetimePoints;
-    public Leaderboard(int userPoints, int weeklyPoints, int monthlyPoints, int yearlyPoints, int lifetimePoints) {
+    private String name;
+    public Leaderboard(int userPoints, int weeklyPoints, int monthlyPoints, int yearlyPoints, int lifetimePoints, String name) {
         this.userPoints = userPoints;
         this.weeklyPoints = weeklyPoints;
         this.monthlyPoints = monthlyPoints;
         this.yearlyPoints = yearlyPoints;
         this.lifetimePoints = lifetimePoints;
+        this.name = name;
     }
     public Leaderboard() {};
 
@@ -71,5 +73,13 @@ public class Leaderboard {
 
     public void setLifetimePoints(int lifetimePoints) {
         this.lifetimePoints = lifetimePoints;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }
