@@ -18,7 +18,7 @@ import org.json.JSONArray;
 
 public class LeaderboardActivity extends AppCompatActivity {
 
-    private final static String SERVER_URL = "http://coms-309-034.class.las.iastate.edu:8080/leaderboard";
+    private final static String SERVER_URL = "http://195.35.14.120:8082/leaderboard";
     private JSONArray leaderboardData;
     private boolean attemptedLeaderboardRefresh = false;
     private RecyclerView recyclerView;

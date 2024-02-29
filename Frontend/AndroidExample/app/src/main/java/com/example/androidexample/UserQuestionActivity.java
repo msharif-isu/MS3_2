@@ -2,6 +2,8 @@ package com.example.androidexample;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -20,11 +22,12 @@ import org.json.JSONObject;
 
 public class UserQuestionActivity extends AppCompatActivity {
 
-    private final static String SERVER_URL = "http://coms-309-034.class.las.iastate.edu:8080";
+    private final static String SERVER_URL = "http://195.35.14.120:8082";
 
     private boolean attemptedQuestionRefresh = false;
     private RecyclerView questionList;
     private UserQuestionAdapter questionAdapter;
+    private ImageButton addQuestionButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,18 +38,31 @@ public class UserQuestionActivity extends AppCompatActivity {
         questionList = findViewById(R.id.user_question_question_list);
         questionList.setLayoutManager(new LinearLayoutManager(this));
 
+        addQuestionButton = findViewById(R.id.user_question_add_question_button);
+
+        addQuestionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                try {
+                    addBlankQuestion();
+                } catch (JSONException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        });
+
         makeQuestionsRequest();
     }
 
     private void makeQuestionsRequest() {
         JsonArrayRequest questionsRequest = new JsonArrayRequest(
                 Request.Method.GET,
-                String.format("%s/question", SERVER_URL),
+                String.format("%s/question/1", SERVER_URL),
                 null,
                 new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
-                        questionAdapter = new UserQuestionAdapter(response);
+                        questionAdapter = new UserQuestionAdapter(response, SERVER_URL, getApplicationContext());
                         questionList.setAdapter(questionAdapter);
                     }
                 },
@@ -66,34 +82,33 @@ public class UserQuestionActivity extends AppCompatActivity {
 
         VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(questionsRequest);
     }
-
-    private void makeEditQuestionRequest(String question, String answer) throws JSONException {
+    private void addBlankQuestion() throws JSONException {
         JsonObjectRequest questionsRequest = new JsonObjectRequest(
-                Request.Method.PUT,
-                String.format("%s/question/1", SERVER_URL),
-                new JSONObject() {
+                Request.Method.POST,
+                String.format("%s/question", SERVER_URL),
+            new JSONObject() {
                     {
-                        put("question", question);
-                        put("answer", answer);
-                        put("questionType", "Berries");
+                        put("question", "");
+                        put("answer", "");
+                        put("questionType", "");
                     }
                 },
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-
+                        if (questionAdapter != null) {
+                            questionAdapter.notifyItemInserted(questionAdapter.getItemCount());
+                        }
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-
+                        Toast.makeText(getApplicationContext(), "Failed to add question", Toast.LENGTH_SHORT).show();
                     }
                 }
         );
-    }
 
-    private void addBlankQuestion() {
-
+        VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(questionsRequest);
     }
 }
