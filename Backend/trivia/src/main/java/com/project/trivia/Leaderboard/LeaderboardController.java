@@ -30,7 +30,7 @@ public class LeaderboardController {
         return leaderboardRepository.findById(id);
     }
 
-    @GetMapping(path = "/leaderboard/addpoints/{id}/{amount}")
+    @PostMapping(path = "/leaderboard/addpoints/{id}/{amount}")
     String addPoints(@PathVariable int id, @PathVariable int amount){
         Leaderboard lb1 = getLeaderboardById(id);
         lb1.setUserPoints(lb1.getUserPoints() + amount);
