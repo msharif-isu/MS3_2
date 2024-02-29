@@ -1,18 +1,14 @@
-package com.project.trivia;
-
-import com.project.trivia.PelicanQuestions.PelicanQuestion;
-import com.project.trivia.PelicanQuestions.PelicanQuestionRepository;
-import org.springframework.boot.CommandLineRunner;
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.Bean;
-
-@SpringBootApplication
-public class PelicanApplicaiton {
-    public static void main(String[] args) {
-        SpringApplication.run(com.project.trivia.PelicanApplicaiton.class, args);
-    }
-
+//package com.project.trivia;
+//
+//import org.springframework.boot.SpringApplication;
+//import org.springframework.boot.autoconfigure.SpringBootApplication;
+//
+//@SpringBootApplication
+//public class PelicanApplicaiton {
+//    public static void main(String[] args) {
+//        SpringApplication.run(com.project.trivia.PelicanApplicaiton.class, args);
+//    }
+//
 
 //    @Bean
 //    CommandLineRunner initUser(PelicanQuestionRepository pepository) {
@@ -33,4 +29,4 @@ public class PelicanApplicaiton {
 //            pepository.save(pq6);
 //        };
 //    }
-}
+//}

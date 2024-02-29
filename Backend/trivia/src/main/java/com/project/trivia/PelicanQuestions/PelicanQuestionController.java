@@ -89,7 +89,7 @@ public class PelicanQuestionController {
         return pelicanQuestionRepository.findById(id);
     }
 
-    @PutMapping(path = "/reset")
+    @PutMapping(path = "/reset/{id}")
     public PelicanQuestion resetPlacement(@PathVariable int id){
         PelicanQuestion anwseredQuestion = pelicanQuestionRepository.findById(id);
         pelicanQuestionRepository.findById(id).setFirst("");
