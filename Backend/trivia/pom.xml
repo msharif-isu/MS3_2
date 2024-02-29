@@ -39,12 +39,6 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
-		<dependency>
-			<groupId>coms309</groupId>
-			<artifactId>onetoone</artifactId>
-			<version>1.0.0</version>
-			<scope>compile</scope>
-		</dependency>
 	</dependencies>
 	<build>
 		<plugins>
