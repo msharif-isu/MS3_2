@@ -1,6 +1,7 @@
 package com.example.androidexample;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -151,13 +152,13 @@ public class LeaderboardActivity extends AppCompatActivity {
     public void addPointsToUserID(int id, int pointsToAdd) {
         JsonObjectRequest pointsAddition = new JsonObjectRequest(
                 Request.Method.POST,
-                String.format("%s/addpoints/%d/%d", SERVER_URL, id, pointsToAdd),
+                String.format("%s/leaderboard/addpoints/%d/%d", SERVER_URL, id, pointsToAdd),
                 null,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
                         if (leaderboardAdapter != null) {
-                            leaderboardAdapter.notifyDataSetChanged();
+                            makeLeaderboardRequest();
                         }
                         Toast.makeText(getApplicationContext(), "Points added", Toast.LENGTH_SHORT).show();
                     }
@@ -169,5 +170,7 @@ public class LeaderboardActivity extends AppCompatActivity {
                     }
                 }
         );
+
+        VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(pointsAddition);
     }
 }

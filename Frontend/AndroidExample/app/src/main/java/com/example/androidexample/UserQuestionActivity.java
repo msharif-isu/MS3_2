@@ -57,7 +57,7 @@ public class UserQuestionActivity extends AppCompatActivity {
     private void makeQuestionsRequest() {
         JsonArrayRequest questionsRequest = new JsonArrayRequest(
                 Request.Method.GET,
-                String.format("%s/question/1", SERVER_URL),
+                String.format("%s/question", SERVER_URL),
                 null,
                 new Response.Listener<JSONArray>() {
                     @Override
@@ -96,9 +96,7 @@ public class UserQuestionActivity extends AppCompatActivity {
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        if (questionAdapter != null) {
-                            questionAdapter.notifyItemInserted(questionAdapter.getItemCount());
-                        }
+                        makeQuestionsRequest();
                     }
                 },
                 new Response.ErrorListener() {

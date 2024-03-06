@@ -39,11 +39,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         } else if (id == R.id.btnJsonObjRequest) {
             startActivity(new Intent(MainActivity.this, JsonObjReqActivity.class));
         } else if (id == R.id.btnJsonArrRequest) {
-            startActivity(new Intent(MainActivity.this, JsonArrReqActivity.class));
+            startActivity(new Intent(MainActivity.this, UserQuestionActivity.class));
         } else if (id == R.id.btnImageRequest) {
-            startActivity(new Intent(MainActivity.this, ImageReqActivity.class));
-        } else if (id == R.id.btnImageRequest) {
-            startActivity(new Intent(MainActivity.this, ImageReqActivity.class));
+            startActivity(new Intent(MainActivity.this, LeaderboardActivity.class));
         } else if (id == R.id.btnQuestionSinglePlayer) {
             startActivity(new Intent(MainActivity.this, LoginActivity.class));
         }
