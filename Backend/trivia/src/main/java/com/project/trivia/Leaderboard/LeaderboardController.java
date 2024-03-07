@@ -31,7 +31,7 @@ public class LeaderboardController {
     }
 
     @PostMapping(path = "/leaderboard/addpoints/{id}/{amount}")
-    String addPoints(@PathVariable int id, @PathVariable int amount){
+    Leaderboard addPoints(@PathVariable int id, @PathVariable int amount){
         Leaderboard lb1 = getLeaderboardById(id);
         lb1.setUserPoints(lb1.getUserPoints() + amount);
         lb1.setWeeklyPoints(lb1.getWeeklyPoints() + amount);
@@ -39,16 +39,12 @@ public class LeaderboardController {
         lb1.setYearlyPoints(lb1.getYearlyPoints() + amount);
         lb1.setLifetimePoints(lb1.getLifetimePoints() + amount);
 
-        leaderboardRepository.save(lb1);
-        return success;
+        return leaderboardRepository.save(lb1);
     }
 
     @PostMapping(path = "/leaderboard")
-    String createLeaderboardUser(@RequestBody Leaderboard lb){
-        if (lb == null)
-            return failure;
-        leaderboardRepository.save(lb);
-        return success;
+    Leaderboard createLeaderboardUser(@RequestBody Leaderboard lb){
+        return leaderboardRepository.save(lb);
     }
 
     @PutMapping(path = "/leaderboard/{id}")
@@ -63,6 +59,12 @@ public class LeaderboardController {
         lb.setYearlyPoints(request.getYearlyPoints());
         lb.setLifetimePoints(request.getLifetimePoints());
         return leaderboardRepository.findById(id);
+    }
+
+    @DeleteMapping("/lb/delete/{id}")
+    String deleteLeaderboardUser(@PathVariable int id) {
+        leaderboardRepository.deleteById(id);
+        return success;
     }
 
 }

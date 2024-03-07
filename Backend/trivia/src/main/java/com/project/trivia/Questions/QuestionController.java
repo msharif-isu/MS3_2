@@ -26,11 +26,8 @@ public class QuestionController {
     }
 
     @PostMapping(path = "/question")
-    String createQuestion(@RequestBody Question question){
-        if (question == null)
-            return failure;
-        questionRepository.save(question);
-        return success;
+    Question createQuestion(@RequestBody Question question){
+        return questionRepository.save(question);
     }
 
     @PutMapping("/question/{id}")
@@ -42,5 +39,11 @@ public class QuestionController {
         question.setAnswer(request.getAnswer());
         question.setQuestionType(request.getQuestionType());
         return questionRepository.findById(id);
+    }
+
+    @DeleteMapping("/q/delete/{id}")
+    String deleteQuestion(@PathVariable int id) {
+        questionRepository.deleteById(id);
+        return success;
     }
 }
