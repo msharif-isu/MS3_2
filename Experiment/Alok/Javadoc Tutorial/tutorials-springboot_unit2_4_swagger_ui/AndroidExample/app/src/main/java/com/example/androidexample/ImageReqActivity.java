@@ -14,6 +14,9 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageRequest;
 
+/**
+ * The activity responsible for handling the ImageRequest Screen
+ */
 public class ImageReqActivity extends AppCompatActivity {
 
     private Button btnImageReq;
