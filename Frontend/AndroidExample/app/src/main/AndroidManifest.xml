@@ -52,5 +52,8 @@
         <activity
             android:name=".ResultsActivity"
             android:exported="false" />
+        <activity
+            android:name=".MultiplayerActivity"
+            android:exported="false" />
     </application>
 </manifest>
