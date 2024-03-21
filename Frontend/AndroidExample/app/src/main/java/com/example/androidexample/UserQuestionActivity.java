@@ -20,6 +20,12 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * The activity responsible for the user question screen's functionality
+ */
 public class UserQuestionActivity extends AppCompatActivity {
 
     private final static String SERVER_URL = "http://coms-309-034.class.las.iastate.edu:8080";
@@ -39,7 +45,6 @@ public class UserQuestionActivity extends AppCompatActivity {
         questionList.setLayoutManager(new LinearLayoutManager(this));
 
         addQuestionButton = findViewById(R.id.user_question_add_question_button);
-
         addQuestionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -54,6 +59,9 @@ public class UserQuestionActivity extends AppCompatActivity {
         makeQuestionsRequest();
     }
 
+    /**
+     * Makes a request to the server to get user questions
+     */
     private void makeQuestionsRequest() {
         JsonArrayRequest questionsRequest = new JsonArrayRequest(
                 Request.Method.GET,
@@ -62,7 +70,21 @@ public class UserQuestionActivity extends AppCompatActivity {
                 new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
-                        questionAdapter = new UserQuestionAdapter(response, SERVER_URL, getApplicationContext());
+                        List<UserQuestionListItem> dataSet = new ArrayList<>();
+                        for (int i = 0; i < response.length(); i++) {
+                            try {
+                                JSONObject questionData = response.getJSONObject(i);
+                                int id = questionData.getInt("id");
+                                String question = questionData.getString("question");
+                                String answer = questionData.getString("answer");
+                                String questionType = questionData.getString("questionType");
+                                dataSet.add(new UserQuestionListItem(id, question, answer, questionType));
+                            } catch (JSONException e) {
+                                throw new RuntimeException(e);
+                            }
+                        }
+
+                        questionAdapter = new UserQuestionAdapter(getApplicationContext(), SERVER_URL, dataSet);
                         questionList.setAdapter(questionAdapter);
                     }
                 },
@@ -82,6 +104,11 @@ public class UserQuestionActivity extends AppCompatActivity {
 
         VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(questionsRequest);
     }
+
+    /**
+     * Makes a request to the server to add a blank question
+     * @throws JSONException
+     */
     private void addBlankQuestion() throws JSONException {
         JsonObjectRequest questionsRequest = new JsonObjectRequest(
                 Request.Method.POST,

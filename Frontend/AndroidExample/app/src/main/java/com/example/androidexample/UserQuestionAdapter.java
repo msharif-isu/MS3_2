@@ -21,19 +21,29 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.List;
+
+/**
+ * An adapter to generate the list items for the user question screen
+ */
 public class UserQuestionAdapter extends RecyclerView.Adapter<UserQuestionAdapter.ViewHolder> {
 
     /**
-     * The JSONArray pulled from the database containing the question data
+     * An array of UserQuestionListItems to pull data from
      */
-    private JSONArray questionsDataSet;
+    private List<UserQuestionListItem> questionsDataSet;
 
+    /**
+     * The url of the server to send responses to
+     */
     private final String SERVER_URL;
+    /**
+     * Context of application that this adapter is used in
+     */
     private final Context context;
 
     /**
-     * Provide a reference to the type of views that you are using
-     * (custom ViewHolder)
+     * A class to reference the views to edit in the user question screen
      */
     public static class ViewHolder extends RecyclerView.ViewHolder {
         private final EditText question;
@@ -66,10 +76,10 @@ public class UserQuestionAdapter extends RecyclerView.Adapter<UserQuestionAdapte
      * @param dataSet JSONArray containing the data to populate views to be used
      * by RecyclerView
      */
-    public UserQuestionAdapter(JSONArray dataSet, String SERVER_URL, Context context) {
-        questionsDataSet = dataSet;
-        this.SERVER_URL = SERVER_URL;
+    public UserQuestionAdapter(Context context, String SERVER_URL, List<UserQuestionListItem> dataSet) {
         this.context = context;
+        this.SERVER_URL = SERVER_URL;
+        questionsDataSet = dataSet;
     }
 
     // Create new views (invoked by the layout manager)
@@ -86,34 +96,40 @@ public class UserQuestionAdapter extends RecyclerView.Adapter<UserQuestionAdapte
     // Replace the contents of a view (invoked by the layout manager)
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, final int position) {
-        try {
-            JSONObject userData = questionsDataSet.getJSONObject(position);
-            viewHolder.getQuestionView().setText(userData.getString("question"));
-            viewHolder.getAnswerView().setText(userData.getString("answer"));
-            viewHolder.getQuestionNumber().setText("#" + (position + 1));
-            viewHolder.getEditButton().setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    try {
-                        makeEditQuestionRequest(
-                                viewHolder.getQuestionView().getText().toString(),
-                                viewHolder.getAnswerView().getText().toString(),
-                                position
-                        );
-                    } catch (JSONException e) {
-                        throw new RuntimeException(e);
-                    }
+        UserQuestionListItem userData = questionsDataSet.get(position);
+        viewHolder.getQuestionView().setText(userData.getQuestion());
+        viewHolder.getAnswerView().setText(userData.getAnswer());
+        viewHolder.getQuestionNumber().setText(String.format("#%d", position + 1));
+
+        // If user wants to edit a question,
+        // use the text from the TextViews to send a edit request
+        viewHolder.getEditButton().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                try {
+                    makeEditQuestionRequest(
+                            viewHolder.getQuestionView().getText().toString(),
+                            viewHolder.getAnswerView().getText().toString(),
+                            userData.getId()
+                    );
+                } catch (JSONException e) {
+                    throw new RuntimeException(e);
                 }
-            });
-        } catch (JSONException e) {
-            throw new RuntimeException(e);
-        }
+            }
+        });
     }
 
-    public void makeEditQuestionRequest(String question, String answer, int position) throws JSONException {
+    /**
+     * Makes a request to the server to edit a question
+     * @param question - question
+     * @param answer - answer to question
+     * @param id - id of question
+     * @throws JSONException
+     */
+    private void makeEditQuestionRequest(String question, String answer, int id) throws JSONException {
         JsonObjectRequest questionsRequest = new JsonObjectRequest(
                 Request.Method.PUT,
-                String.format("%s/question/%d", SERVER_URL, position+1),
+                String.format("%s/question/%d", SERVER_URL, id),
                 new JSONObject() {
                     {
                         put("question", question);
@@ -141,6 +157,6 @@ public class UserQuestionAdapter extends RecyclerView.Adapter<UserQuestionAdapte
     // Return the size of your dataset (invoked by the layout manager)
     @Override
     public int getItemCount() {
-        return questionsDataSet.length();
+        return questionsDataSet.size();
     }
 }
