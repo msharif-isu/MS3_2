@@ -50,10 +50,10 @@
             signupButton = findViewById(R.id.signup_btn);
 
             sharedPreferences = getSharedPreferences("loginPrefs", Context.MODE_PRIVATE);
-            username = sharedPreferences.getString("username", "");
 
             // Check if user already logged in
             if (sharedPreferences.contains("username")) {
+                String username = sharedPreferences.getString("username", "");
                 proceedToNextActivity(username);
             }
 
@@ -63,7 +63,7 @@
                     String username = usernameEditText.getText().toString();
                     String password = passwordEditText.getText().toString();
                     //For debugging, will remove later.
-                    //Toast.makeText(LoginActivity.this, "username: " + username, Toast.LENGTH_SHORT).show();
+                    Log.d("LoginActivity", "Username: " + username + ", Password: " + password);
                     loginRequest(username, password);
                 }
             });
@@ -108,7 +108,7 @@
                             int usernameId = Integer.parseInt(response);
                             // I pass it over to the password method, which will compare
                             // the two ids.
-                            getPasswordIds(usernameId, password, username);
+                            getPasswordIds(usernameId, password);
                         }
                     }, new Response.ErrorListener() {
                 @Override
@@ -128,7 +128,7 @@
          * @param usernameId
          * @param password
          */
-        private void getPasswordIds(final int usernameId, final String password, final String username) {
+        private void getPasswordIds(final int usernameId, final String password) {
             // Create the RequestQueue.
             RequestQueue queue = Volley.newRequestQueue(this);
             String url = backendUrl + "getIdByPassword/" + password;
@@ -149,6 +149,11 @@
                                 // Compare password IDs with username ID
                                 if (passwordIds.contains(usernameId)) {
                                     // Login successful
+                                    // Save username and password in SharedPreferences
+                                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                                    editor.putString("username", username);
+                                    editor.putString("password", password);
+                                    editor.apply();
                                     // Redirects to another activity but I will probably change this
                                     // To redirect to the main menu when it is implemented.
                                     proceedToNextActivity(username);
@@ -177,15 +182,14 @@
             // Save username in SharedPreferences
             SharedPreferences prefs = getSharedPreferences("UserData", MODE_PRIVATE);
             SharedPreferences.Editor editor = prefs.edit();
-            editor.putString("USERNAME", username);
-            //Toast.makeText(LoginActivity.this, "username: " + username, Toast.LENGTH_SHORT).show();
+            editor.putString("username", username);
             editor.commit();
 
-            // Redirects to MainActivity and pass the username as an extra
+            // Redirects to another activity but I will probably change this
+            // To redirect to the main menu when it is implemented.
             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
             intent.putExtra("USERNAME", username);
             startActivity(intent);
             finish(); // Finish LoginActivity so user can't go back to it using back button
         }
-
     }
