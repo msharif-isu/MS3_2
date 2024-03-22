@@ -14,7 +14,7 @@ import android.widget.Toast;
 import org.java_websocket.handshake.ServerHandshake;
 import org.w3c.dom.Text;
 
-public class MainActivity extends AppCompatActivity implements WebSocketListener{
+public class MainActivity extends AppCompatActivity implements WebSocketListener {
 
     private String BASE_URL = "ws://10.0.2.2:8080/chat/";
 
@@ -46,7 +46,6 @@ public class MainActivity extends AppCompatActivity implements WebSocketListener
         /* send button listener */
         sendBtn.setOnClickListener(v -> {
             try {
-
                 // send message
                 WebSocketManager.getInstance().sendMessage(msgEtx.getText().toString());
             } catch (Exception e) {
@@ -66,7 +65,7 @@ public class MainActivity extends AppCompatActivity implements WebSocketListener
          */
         runOnUiThread(() -> {
             String s = msgTv.getText().toString();
-            msgTv.setText(s + "\n"+message);
+            msgTv.setText(s + "\n" + message);
         });
     }
 
@@ -80,8 +79,10 @@ public class MainActivity extends AppCompatActivity implements WebSocketListener
     }
 
     @Override
-    public void onWebSocketOpen(ServerHandshake handshakedata) {}
+    public void onWebSocketOpen(ServerHandshake handshakedata) {
+    }   
 
     @Override
-    public void onWebSocketError(Exception ex) {}
+    public void onWebSocketError(Exception ex) {
+    }
 }
