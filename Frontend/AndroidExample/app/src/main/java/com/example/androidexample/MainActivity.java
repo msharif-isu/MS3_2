@@ -8,15 +8,18 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     private Button strBtn, jsonObjBtn, jsonArrBtn, imgBtn, questionBtn;
 
+    private String username;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        SharedPreferences sharedPreferences = getSharedPreferences("UserData", MODE_PRIVATE);
-        String username = sharedPreferences.getString("username", "");
+        SharedPreferences prefs = getSharedPreferences("UserData", MODE_PRIVATE);
+        username = prefs.getString("USERNAME","");
         Log.d("MainActivity", "Username from SharedPreferences: " + username);
 
         super.onCreate(savedInstanceState);
@@ -41,6 +44,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (username != null) {
             // Username exists in SharedPreferences, show btnStringRequest
             strBtn.setVisibility(View.VISIBLE);
+            Toast.makeText(MainActivity.this, "Welcome " + username, Toast.LENGTH_SHORT).show();
+
         } else {
             // Username does not exist in SharedPreferences, hide btnStringRequest
             strBtn.setVisibility(View.GONE);
