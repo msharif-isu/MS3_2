@@ -42,7 +42,7 @@ public class QuestionSocket {
     private static Map < Session, String > sessionUsernameMap = new Hashtable < > ();
     private static Map < String, Session > usernameSessionMap = new Hashtable < > ();
 
-    private static int randInt = 0;
+    private static int randInt = 1;
 
     // server side logger
     private final Logger logger = LoggerFactory.getLogger(QuestionSocket.class);
@@ -208,7 +208,7 @@ public class QuestionSocket {
     }
 
     private void randomize() {
-        long amount = questRepo.count();
-        randInt = (int)(Math.random()*amount);
+        long amount = questRepo.count()-1;
+        randInt = (int)(Math.random()*amount)+1;
     }
 }
