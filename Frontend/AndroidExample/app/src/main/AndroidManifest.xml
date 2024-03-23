@@ -56,5 +56,9 @@
         <activity
             android:name=".ResultsActivity"
             android:exported="false" />
+
+        <service
+            android:enabled="true"
+            android:name="com.example.androidexample.LeaderboardWebSocketService" />
     </application>
 </manifest>

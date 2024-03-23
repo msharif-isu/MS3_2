@@ -64,5 +64,4 @@ public class LeaderboardController {
         lb.setLifetimePoints(request.getLifetimePoints());
         return leaderboardRepository.findById(id);
     }
-
 }

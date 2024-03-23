@@ -7,6 +7,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+import java.util.Random;
+
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     private Button strBtn, jsonObjBtn, jsonArrBtn, imgBtn, questionBtn;
@@ -41,7 +43,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         } else if (id == R.id.btnJsonArrRequest) {
             startActivity(new Intent(MainActivity.this, UserQuestionActivity.class));
         } else if (id == R.id.btnImageRequest) {
-            startActivity(new Intent(MainActivity.this, LeaderboardActivity.class));
+
+            Intent serviceIntent = new Intent(MainActivity.this, LeaderboardWebSocketService.class);
+            serviceIntent.setAction("CONNECT");
+            serviceIntent.putExtra("key", "leaderboard");
+            serviceIntent.putExtra("url", "ws://10.0.2.2:8080/leaderboard/1010");
+            startService(serviceIntent);
+
+            Intent intent = new Intent(MainActivity.this, LeaderboardActivity.class);
+            startActivity(intent);
         } else if (id == R.id.btnQuestionSinglePlayer) {
             startActivity(new Intent(MainActivity.this, LoginActivity.class));
         }

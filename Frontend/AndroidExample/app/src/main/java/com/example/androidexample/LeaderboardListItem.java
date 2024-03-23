@@ -1,11 +1,12 @@
 package com.example.androidexample;
 
+import java.io.Serializable;
 import java.util.HashMap;
 
 /**
  * A class to represent a user's points in the leaderboard list
  */
-public class LeaderboardListItem {
+public class LeaderboardListItem implements Serializable {
     /**
      * User id
      */
