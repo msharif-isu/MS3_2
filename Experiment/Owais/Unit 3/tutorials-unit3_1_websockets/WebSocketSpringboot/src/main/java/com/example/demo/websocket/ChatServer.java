@@ -67,7 +67,7 @@ public class ChatServer {
             usernameSessionMap.put(username, session);
 
             // send to the user joining in
-            sendMessageToPArticularUser(username, "Welcome to the chat server, "+username);
+            sendMessageToPArticularUser(username, "Welcome to the game room, "+username);
 
             // send to everyone in the chat
             broadcast("User: " + username + " has Joined the Game Lobby");

@@ -67,7 +67,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (id == R.id.btnStringRequest) {
             startActivity(new Intent(MainActivity.this, MultiplayerActivity.class));
         } else if (id == R.id.btnJsonObjRequest) {
-            startActivity(new Intent(MainActivity.this, JsonObjReqActivity.class));
+            startActivity(new Intent(MainActivity.this, SinglePlayerQuestionActivity.class));
         } else if (id == R.id.btnJsonArrRequest) {
             startActivity(new Intent(MainActivity.this, UserQuestionActivity.class));
         } else if (id == R.id.btnImageRequest) {
