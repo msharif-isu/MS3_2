@@ -55,11 +55,11 @@ public class ChatServer {
         logger.info("[onOpen] " + username);
 
         // Handle the case of a duplicate username
-        if (usernameSessionMap.containsKey(username)) {
-            session.getBasicRemote().sendText("Username already exists");
-            session.close();
-        }
-        else {
+//        if (usernameSessionMap.containsKey(username)) {
+//            session.getBasicRemote().sendText("Username already exists");
+//            session.close();
+//        }
+//        else {
             // map current session with username
             sessionUsernameMap.put(session, username);
 
@@ -70,8 +70,8 @@ public class ChatServer {
             sendMessageToPArticularUser(username, "Welcome to the chat server, "+username);
 
             // send to everyone in the chat
-            broadcast("User: " + username + " has Joined the Chat");
-        }
+            broadcast("User: " + username + " has Joined the Game Lobby");
+//        }
     }
 
     /**
