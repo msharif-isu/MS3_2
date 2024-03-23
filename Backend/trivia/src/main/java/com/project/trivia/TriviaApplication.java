@@ -23,7 +23,9 @@ import org.springframework.context.annotation.ComponentScan;
 public class TriviaApplication {
 
 	public static void main(String[] args) {
+
 		SpringApplication.run(TriviaApplication.class, args);
+
 	}	
 
 }

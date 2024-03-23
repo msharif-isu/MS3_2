@@ -2,10 +2,7 @@ package com.project.trivia.websocket.Leaderboard;
 
 import com.project.trivia.Leaderboard.Leaderboard;
 import com.project.trivia.Leaderboard.LeaderboardRepository;
-import jakarta.websocket.OnClose;
-import jakarta.websocket.OnError;
-import jakarta.websocket.OnOpen;
-import jakarta.websocket.Session;
+import jakarta.websocket.*;
 import jakarta.websocket.server.PathParam;
 import jakarta.websocket.server.ServerEndpoint;
 import org.slf4j.Logger;
@@ -28,8 +25,8 @@ public class LeaderboardServer {
 
     // Store all socket session and their corresponding username
     // Two maps for the ease of retrieval by key
-    private static Map < Session, String > sessionUsernameMap = new Hashtable < > ();
-    private static Map < String, Session > usernameSessionMap = new Hashtable < > ();
+    private static Map <Session, String> sessionUsernameMap = new Hashtable <>();
+    private static Map <String, Session> usernameSessionMap = new Hashtable <>();
 
     // server side logger
     private final Logger logger = LoggerFactory.getLogger(LeaderboardServer.class);
@@ -58,7 +55,7 @@ public class LeaderboardServer {
             usernameSessionMap.put(username, session);
 
             // send to the user joining in
-            sendLeaderboardData(username);
+            sendLeaderboardData(sessionUsernameMap.get(session));
         }
     }
 
@@ -73,12 +70,14 @@ public class LeaderboardServer {
         // get the username from session-username mapping
         String username = sessionUsernameMap.get(session);
 
-        // server side log
-        logger.info("[onClose] " + username);
+        if (username != null) {
+            // server side log
+            logger.info("[onClose] " + username);
 
-        // remove user from memory mappings
-        sessionUsernameMap.remove(session);
-        usernameSessionMap.remove(username);
+            // remove user from memory mappings
+            sessionUsernameMap.remove(session);
+            usernameSessionMap.remove(username);
+        }
     }
 
     /**
@@ -97,12 +96,37 @@ public class LeaderboardServer {
         logger.info("[onError]" + username + ": " + throwable.getMessage());
     }
 
+    @OnMessage
+    public void onMessage(Session session, String message) {
+        System.out.println("Received message: " + message);
+    }
+
     /**
-     * Sends the leaderboard data to a specific user in the chat (DM).
+     * Sends the leaderboard data to a specific client
      *
      * @param username The username of the recipient.
      */
     private void sendLeaderboardData(String username) {
+        try {
+            usernameSessionMap.get(username).getBasicRemote().sendText(getLeaderboardData());
+            logger.info("Sent leaderboard data to " + username);
+        } catch (IOException e) {
+            logger.info("[DM Exception] " + e.getMessage());
+        }
+    }
+
+    /**
+     * Sends leaderboard data to all connected clients
+     */
+    public void broadcastLeaderboardData() {
+        broadcast(getLeaderboardData());
+    }
+
+    /**
+     * Returns the current leaderboard data as a single string
+     * @return leaderboard data as a String
+     */
+    private String getLeaderboardData() {
         List<Leaderboard> leaderboardData = leaderboardRepository.findAll();
 
         // convert the list to a string
@@ -118,13 +142,21 @@ public class LeaderboardServer {
             }
         }
 
-        String message = sb.toString();
+        return sb.toString();
+    }
 
-        try {
-            usernameSessionMap.get(username).getBasicRemote().sendText(message);
-            logger.info("Sent leaderboard data to " + username);
-        } catch (IOException e) {
-            logger.info("[DM Exception] " + e.getMessage());
-        }
+    /**
+     * Broadcasts a message to all users in the chat.
+     *
+     * @param message The message to be broadcasted to all users.
+     */
+    private void broadcast(String message) {
+        sessionUsernameMap.forEach((session, username) -> {
+            try {
+                session.getBasicRemote().sendText(message);
+            } catch (IOException e) {
+                logger.info("[Broadcast Exception] " + e.getMessage());
+            }
+        });
     }
 }

@@ -31,7 +31,7 @@ public class LeaderboardController {
     }
 
     @PostMapping(path = "/leaderboard/addpoints/{id}/{amount}")
-    String addPoints(@PathVariable int id, @PathVariable int amount){
+    String addPoints(@PathVariable int id, @PathVariable int amount) {
         Leaderboard lb1 = getLeaderboardById(id);
         lb1.setUserPoints(lb1.getUserPoints() + amount);
         lb1.setWeeklyPoints(lb1.getWeeklyPoints() + amount);
@@ -40,6 +40,7 @@ public class LeaderboardController {
         lb1.setLifetimePoints(lb1.getLifetimePoints() + amount);
 
         leaderboardRepository.save(lb1);
+
         return success;
     }
 
