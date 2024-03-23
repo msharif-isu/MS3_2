@@ -18,12 +18,15 @@ import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.HashMap;
 
 public class LeaderboardActivity extends AppCompatActivity {
 
-    private final static String SERVER_URL = "http://coms-309-034.class.las.iastate.edu:8080";
-    private JSONArray leaderboardData;
+    private final static String SERVER_URL = "http://10.0.2.2:8080";
     private boolean attemptedLeaderboardRefresh = false;
     private RecyclerView recyclerView;
     private LeaderboardAdapter leaderboardAdapter;
@@ -51,6 +54,7 @@ public class LeaderboardActivity extends AppCompatActivity {
         monthlyButton = findViewById(R.id.monthly_button);
         yearlyButton = findViewById(R.id.yearly_button);
         lifetimeButton = findViewById(R.id.lifetime_button);
+
         addPointsButton = findViewById(R.id.add_points_button);
         idInputField = findViewById(R.id.id_input_field);
         pointsInputField = findViewById(R.id.points_input_field);
@@ -128,7 +132,24 @@ public class LeaderboardActivity extends AppCompatActivity {
                 new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
-                        leaderboardData = response;
+                        ArrayList<LeaderboardListItem> leaderboardData = new ArrayList<>();
+                        for (int i = 0; i < response.length(); i++) {
+                            try {
+                                JSONObject jsonData = response.getJSONObject(i);
+                                HashMap<LeaderboardTimeFrameEnum, Integer> points = new HashMap<>();
+
+                                points.put(LeaderboardTimeFrameEnum.DAILY, jsonData.getInt("userPoints"));
+                                points.put(LeaderboardTimeFrameEnum.WEEKLY, jsonData.getInt("weeklyPoints"));
+                                points.put(LeaderboardTimeFrameEnum.MONTHLY, jsonData.getInt("monthlyPoints"));
+                                points.put(LeaderboardTimeFrameEnum.YEARLY, jsonData.getInt("yearlyPoints"));
+                                points.put(LeaderboardTimeFrameEnum.LIFETIME, jsonData.getInt("lifetimePoints"));
+
+                                leaderboardData.add(new LeaderboardListItem(jsonData.getInt("id"), points));
+                            } catch (JSONException e) {
+                                throw new RuntimeException(e);
+                            }
+                        }
+
                         leaderboardAdapter = new LeaderboardAdapter(leaderboardData, LeaderboardTimeFrameEnum.DAILY);
                         recyclerView.setAdapter(leaderboardAdapter);
                     }
@@ -136,6 +157,7 @@ public class LeaderboardActivity extends AppCompatActivity {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
+                        Log.d("VolleyError", error.toString());
                         if (!attemptedLeaderboardRefresh) {
                             Toast.makeText(getApplicationContext(), "Leaderboard failed to load, reattempting to get data from server", Toast.LENGTH_LONG).show();
                             makeLeaderboardRequest();
