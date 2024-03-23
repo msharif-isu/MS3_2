@@ -1,0 +1,10 @@
+#Thu Mar 21 13:52:11 CDT 2024
+base.0=C\:\\Users\\rapra\\ms312\\ms3_2\\Experiment\\raphaelb\\demo3\\4th\\tutorials-unit3_1_websockets\\WebSocketAndorid\\app\\build\\intermediates\\dex\\debug\\mergeExtDexDebug\\classes.dex
+base.1=C\:\\Users\\rapra\\ms312\\ms3_2\\Experiment\\raphaelb\\demo3\\4th\\tutorials-unit3_1_websockets\\WebSocketAndorid\\app\\build\\intermediates\\dex\\debug\\mergeProjectDexDebug\\0\\classes.dex
+base.2=C\:\\Users\\rapra\\ms312\\ms3_2\\Experiment\\raphaelb\\demo3\\4th\\tutorials-unit3_1_websockets\\WebSocketAndorid\\app\\build\\intermediates\\dex\\debug\\mergeProjectDexDebug\\8\\classes.dex
+path.0=classes.dex
+path.1=0/classes.dex
+path.2=8/classes.dex
+renamed.0=classes.dex
+renamed.1=classes2.dex
+renamed.2=classes3.dex
