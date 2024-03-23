@@ -13,11 +13,26 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
+
 import org.java_websocket.handshake.ServerHandshake;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MultiplayerActivity extends AppCompatActivity implements WebSocketListener {
 
@@ -27,7 +42,14 @@ public class MultiplayerActivity extends AppCompatActivity implements WebSocketL
     private int userPoints = 0;
     private TextView msgTv;
     TextView pointsTextView;
+
+    //TODO PROPER QUESTION IMPLEMENTAITON FOR MULTIPLAYER
+    private List<Integer> questionIds = new ArrayList<>();
+    private String backendUrl = "http://10.0.2.2:8081/";
+    private int currentQuestionIndex = 0;
     private String questionCorrectAnswer = "Joe Biden";
+    TextView questionTextView;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,11 +59,11 @@ public class MultiplayerActivity extends AppCompatActivity implements WebSocketL
         //get username to connect to websocket
         SharedPreferences sharedPreferences = getSharedPreferences("UserData", MODE_PRIVATE);
         String username = sharedPreferences.getString("USERNAME", "");
-        Log.d("MainActivity", "Username from SharedPreferences: " + username);
-        Toast.makeText(MultiplayerActivity.this, "Welcome " + username, Toast.LENGTH_SHORT).show();
+//        Log.d("MainActivity", "Username from SharedPreferences: " + username);
+//        Toast.makeText(MultiplayerActivity.this, "Welcome " + username, Toast.LENGTH_SHORT).show();
 
         // Find views by their IDs
-        TextView questionTextView = findViewById(R.id.question);
+        questionTextView = findViewById(R.id.question);
         pointsTextView = findViewById(R.id.points);
         EditText answerEditText = findViewById(R.id.answer_box);
         Button submitButton = findViewById(R.id.submit_button);
@@ -49,17 +71,17 @@ public class MultiplayerActivity extends AppCompatActivity implements WebSocketL
         msgTv = findViewById(R.id.tx1);
 
         // Set initial time in minutes
-        int timeInMinutes = 1;
-        timeLeftInMillis = timeInMinutes * 60 * 1000; // 10 minutes
+        int timeInMinutes = 10;
+        timeLeftInMillis = timeInMinutes * 60 * 1000;
         startCountDownTimer();
 
-        //Todo add question support from database. not used for websocket.
+        fetchQuestionIds();
+
+
+        //Todo add question support from database. Also add point support using database for multiple user support
         questionTextView.setText("Who is the current president of the United States?");
         pointsTextView.setText("Points: " + userPoints);
         answerEditText.setHint("Please Answer Here");
-        submitButton.setOnClickListener(view -> {
-            // Handle submit button click
-        });
         msgTv.setText("User answers will appear here:\n");
 
         //automatically connect to websocket based on username.
@@ -67,8 +89,6 @@ public class MultiplayerActivity extends AppCompatActivity implements WebSocketL
         //todo if username is blank, give error.
         String serverUrl = chatUrl + username;
 
-        //TODO questions page. For now i am using one question
-        String backendUrl = "http://10.0.2.2:8081/users/";
 
         // Establish WebSocket connection and set listener
         WebSocketManager.getInstance().connectWebSocket(serverUrl);
@@ -81,6 +101,7 @@ public class MultiplayerActivity extends AppCompatActivity implements WebSocketL
             } catch (Exception e) {
                 Log.d("ExceptionSendMessage:", e.getMessage().toString());
             }
+            answerEditText.setText("");
         });
     }
 
@@ -165,4 +186,67 @@ public class MultiplayerActivity extends AppCompatActivity implements WebSocketL
     public void onWebSocketError(Exception ex) {
 
     }
+
+
+    private void fetchQuestionIds() {
+        RequestQueue queue = Volley.newRequestQueue(this);
+        String url = backendUrl + "getPuestions";
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url, null,
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        try {
+                            for (int i = 0; i < response.length(); i++) {
+                                questionIds.add(response.getInt(i));
+                            }
+                            showNextQuestion();
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // Handle error
+                        Toast.makeText(MultiplayerActivity.this, "Failed to fetch question IDs", Toast.LENGTH_SHORT).show();
+                    }
+                });
+        queue.add(jsonArrayRequest);
+    }
+
+    private void showNextQuestion() {
+        //answerBoxEditText.setText("");
+        int questionId = questionIds.get(currentQuestionIndex);
+        fetchQuestionDetails(questionId);
+    }
+
+    private void fetchQuestionDetails(int questionId) {
+        RequestQueue queue = Volley.newRequestQueue(this);
+        String url = backendUrl + "pelican/" + questionId;
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            // Parse the JSON response to get question details
+                            String question = response.getString("question");
+                            questionCorrectAnswer = response.getString("answer");
+                            // Display the question
+                            questionTextView.setText(question);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // Handle error
+                        Toast.makeText(MultiplayerActivity.this, "Failed to fetch question details", Toast.LENGTH_SHORT).show();
+                    }
+                });
+        queue.add(jsonObjectRequest);
+    }
+
 }
