@@ -8,25 +8,28 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
-import java.util.Hashtable;
-import java.util.Map;
+import java.util.*;
 
-@ServerEndpoint("/chat/{username}")
+@ServerEndpoint("/chat/{roomID}/{username}")
 @Component
 public class Chat {
 
-    private static Map<Session, String > sessionUsernameMap = new Hashtable< >();
-    private static Map < String, Session > usernameSessionMap = new Hashtable < > ();
+    private static Map<Session, String> sessionUsernameMap = new Hashtable<>();
+    private static Map<String, Session> usernameSessionMap = new Hashtable<>();
+
+    // Map roomID to sessions
+    private static Map<Long, List<Session>> roomSessionsMap = new HashMap<>();
     private final Logger logger = LoggerFactory.getLogger(Chat.class);
 
     /**
      * This method is called when a new WebSocket connection is established.
      *
-     * @param session represents the WebSocket session for the connected user.
+     * @param session  represents the WebSocket session for the connected user.
      * @param username username specified in path parameter.
+     * @param id       the id the room that the user is trying to join
      */
     @OnOpen
-    public void onOpen(Session session, @PathParam("username") String username) throws IOException {
+    public void onOpen(Session session, @PathParam("username") String username, @PathParam("roomID") Long id) throws IOException {
 
         // server side log
         logger.info("[onOpen] " + username);
@@ -35,20 +38,28 @@ public class Chat {
         if (usernameSessionMap.containsKey(username)) {
             session.getBasicRemote().sendText("Username already exists");
             session.close();
+            return;
         }
-        else {
-            // map current session with username
-            sessionUsernameMap.put(session, username);
 
-            // map current username with session
-            usernameSessionMap.put(username, session);
+        // map current session with username
+        sessionUsernameMap.put(session, username);
 
-            // send to the user joining in
-            sendMessageToPArticularUser(username, "Welcome to the chat server, "+username);
+        // map current username with session
+        usernameSessionMap.put(username, session);
 
-            // send to everyone in the chat
-            broadcast("User: " + username + " has Joined the Chat");
+        // add session to room
+        List<Session> sessionsInRoom = roomSessionsMap.get(id);
+        if (sessionsInRoom == null) {
+            sessionsInRoom = new ArrayList<>();
+            roomSessionsMap.put(id, sessionsInRoom);
         }
+        sessionsInRoom.add(session);
+
+        // send to the user joining in
+        sendMessageToPArticularUser(username, "Welcome to room " + id + " " + username);
+
+        // send to everyone in the chat
+        broadcastToRoom(id, "User: " + username + " has Joined room " + id);
     }
 
     /**
@@ -58,7 +69,7 @@ public class Chat {
      * @param message The message received from the client.
      */
     @OnMessage
-    public void onMessage(Session session, String message) throws IOException {
+    public void onMessage(Session session, String message, @PathParam("roomID") Long id) throws IOException {
 
         // get the username by session
         String username = sessionUsernameMap.get(session);
@@ -70,7 +81,7 @@ public class Chat {
         if (message.startsWith("@")) {
 
             // split by space
-            String[] split_msg =  message.split("\\s+");
+            String[] split_msg = message.split("\\s+");
 
             // Combine the rest of message
             StringBuilder actualMessageBuilder = new StringBuilder();
@@ -80,10 +91,9 @@ public class Chat {
             String destUserName = split_msg[0].substring(1);    //@username and get rid of @
             String actualMessage = actualMessageBuilder.toString();
             sendMessageToPArticularUser(destUserName, "[DM from " + username + "]: " + actualMessage);
-            sendMessageToPArticularUser(username, "[DM from " + username + "]: " + actualMessage);
-        }
-        else { // Message to whole chat
-            broadcast(username + ": " + message);
+            sendMessageToPArticularUser(username, "[DM to " + destUserName + "]: " + actualMessage);
+        } else { // Message to whole chat
+            broadcastToRoom(id, username + ": " + message);
         }
     }
 
@@ -93,7 +103,7 @@ public class Chat {
      * @param session The WebSocket session that is being closed.
      */
     @OnClose
-    public void onClose(Session session) throws IOException {
+    public void onClose(Session session, @PathParam("roomID") Long id) throws IOException {
 
         // get the username from session-username mapping
         String username = sessionUsernameMap.get(session);
@@ -105,8 +115,17 @@ public class Chat {
         sessionUsernameMap.remove(session);
         usernameSessionMap.remove(username);
 
+        // remove session from room sessions map
+        List<Session> sessionsInRoom = roomSessionsMap.get(id);
+        if (sessionsInRoom != null) {
+            sessionsInRoom.remove(session);
+            if (sessionsInRoom.isEmpty()) {
+                roomSessionsMap.remove(id);
+            }
+        }
+
         // send the message to chat
-        broadcast(username + " disconnected");
+        broadcastToRoom(id, username + " disconnected");
     }
 
     /**
@@ -153,6 +172,27 @@ public class Chat {
             }
         });
     }
+
+    /**
+     * Broadcasts a message to all users in the chat.
+     *
+     * @param message The message to be broadcasted to all users in room.
+     * @param roomId  The id of the room where the message is being sent.
+     */
+    private void broadcastToRoom(Long roomId, String message) {
+        List<Session> sessionsInRoom = roomSessionsMap.get(roomId);
+        if (sessionsInRoom != null) {
+            for (Session session : sessionsInRoom) {
+                try {
+                    session.getBasicRemote().sendText(message);
+                } catch (IOException e) {
+                    logger.info("[Broadcast Exception] " + e.getMessage());
+                }
+            }
+        }
+    }
 }
+
+
 
 
