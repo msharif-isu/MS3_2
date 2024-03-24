@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Random;
 import java.util.Scanner;
 
 public class LeaderboardActivity extends AppCompatActivity {
@@ -147,7 +148,7 @@ public class LeaderboardActivity extends AppCompatActivity {
 
         serviceIntent.setAction("CONNECT");
         serviceIntent.putExtra("key", "leaderboard");
-        serviceIntent.putExtra("url", "ws://10.0.2.2:8080/leaderboard/1010");
+        serviceIntent.putExtra("url", "ws://10.0.2.2:8080/leaderboard/" + new Random().nextFloat());
         startService(serviceIntent);
         LocalBroadcastManager
                 .getInstance(this)
