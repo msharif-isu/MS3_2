@@ -114,6 +114,9 @@ public class QuestionSocket {
             randomize();
             showMessageEveryone();
         }
+        else if (message.contentEquals("/clear")) {
+            ansRepo.deleteAll();
+        }
         // Direct message to a user using the format "@username <message>"
         else if (message.startsWith("@")) {
 
@@ -133,7 +136,16 @@ public class QuestionSocket {
         else { // Message to whole chat
             broadcast(username + ": " + message);
 
-            ansRepo.save(new Answer(username, message));
+            if (message.contentEquals(questRepo.findById(randInt).getAnswer())) {
+                ansRepo.save(new Answer(username, message, true));
+                broadcast("Correct!");
+                randomize();
+                showMessageEveryone();
+            }
+            else {
+                broadcast("False!");
+                ansRepo.save(new Answer(username, message, false));
+            }
         }
     }
 
