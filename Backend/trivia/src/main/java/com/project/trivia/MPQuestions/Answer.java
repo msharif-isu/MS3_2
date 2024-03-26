@@ -23,6 +23,9 @@ public class Answer {
     @Column
     private String userName;
 
+    @Column
+    private boolean correct;
+
     @Lob
     private String answer;
 
@@ -33,9 +36,10 @@ public class Answer {
 	
 	public Answer() {};
 	
-	public Answer(String userName, String answer) {
+	public Answer(String userName, String answer, boolean correct) {
 		this.userName = userName;
 		this.answer = answer;
+        this.correct = correct;
 	}
 
     public Long getId() {
@@ -60,6 +64,13 @@ public class Answer {
 
     public void setAnswer(String answer) {
         this.answer = answer;
+    }
+
+    public boolean getCorrect() {
+        return correct;
+    }
+    public void setCorrect(boolean correct) {
+        this.correct = correct;
     }
 
     public Date getSent() {
