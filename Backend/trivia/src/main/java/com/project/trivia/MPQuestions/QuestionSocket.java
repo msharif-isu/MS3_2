@@ -55,6 +55,11 @@ public class QuestionSocket {
     @Autowired
     public void setQuestionRepository(QuestionRepository repo) {questRepo = repo;}
 
+    private static AnswerRepository ansRepo;
+
+    @Autowired
+    public void setAnswerRepository(AnswerRepository repo) {ansRepo = repo;}
+
     /**
      * This method is called when a new WebSocket connection is established.
      *
@@ -127,6 +132,8 @@ public class QuestionSocket {
         }
         else { // Message to whole chat
             broadcast(username + ": " + message);
+
+            ansRepo.save(new Answer(username, message));
         }
     }
 
