@@ -24,43 +24,61 @@ android {
     }
 }
 
-// currently only work with AGP v7
-task javadoc(type: Javadoc) {
-    doFirst {
-        configurations.implementation
-                .filter { it.name.endsWith('.aar') }
-                .each { aar ->
-                    copy {
-                        from zipTree(aar)
-                        include "**/classes.jar"
-                        into "${buildDir}/tmp/aarsToJars/${aar.name.replace('.aar', '')}/"
-                    }
-                }
-    }
+android.applicationVariants.all { variant ->
+    task("generate${variant.name.capitalize()}Javadoc", type: Javadoc) {
+        description "Generates Javadoc for $variant.name."
 
-    configurations.implementation.setCanBeResolved(true)
-    source = android.sourceSets.main.java.srcDirs
-    classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
-    classpath += configurations.implementation
-    classpath += fileTree(dir: "${buildDir}/tmp/aarsToJars/")
+        source = variant.javaCompile.source
+        destinationDir = file("$rootDir/app/build/outputs/javadoc/")
+        failOnError false
 
-    android.applicationVariants.all { variant ->
-        if (variant.name == 'release') {
-            owner.classpath += variant.javaCompileProvider.get().classpath
+        doFirst {
+            ext.androidJar = "${android.sdkDirectory}/platforms/${android.compileSdkVersion}/android.jar"
+            classpath = files(variant.javaCompile.classpath.files) + files(ext.androidJar)
+
+            options.addStringOption "-show-members", "package"
         }
     }
-
-    destinationDir = file("${buildDir}/outputs/javadoc/")
-    options.memberLevel = JavadocMemberLevel.PRIVATE
-    failOnError false
-    exclude '**/BuildConfig.java'
-    exclude '**/R.java'
 }
 
-//New Changes:
-tasks.withType(Javadoc) {
-    doNotTrackState("Because the task accesses inputs in a way that is not compatible with incremental build")
-}
+
+//// currently only work with AGP v7
+//task javadoc(type: Javadoc) {
+//    doFirst {
+//        configurations.implementation
+//                .filter { it.name.endsWith('.aar') }
+//                .each { aar ->
+//                    copy {
+//                        from zipTree(aar)
+//                        include "**/classes.jar"
+//                        into "${buildDir}/tmp/aarsToJars/${aar.name.replace('.aar', '')}/"
+//                    }
+//                }
+//    }
+//
+//    configurations.implementation.setCanBeResolved(true)
+//    source = android.sourceSets.main.java.srcDirs
+//    classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
+//    classpath += configurations.implementation
+//    classpath += fileTree(dir: "${buildDir}/tmp/aarsToJars/")
+//
+//    android.applicationVariants.all { variant ->
+//        if (variant.name == 'release') {
+//            owner.classpath += variant.javaCompileProvider.get().classpath
+//        }
+//    }
+//
+//    destinationDir = file("${buildDir}/outputs/javadoc/")
+//    options.memberLevel = JavadocMemberLevel.PRIVATE
+//    failOnError false
+//    exclude '**/BuildConfig.java'
+//    exclude '**/R.java'
+//}
+
+////New Changes:
+//tasks.withType(Javadoc) {
+//    doNotTrackState("Because the task accesses inputs in a way that is not compatible with incremental build")
+//}
 
 dependencies {
     implementation 'androidx.appcompat:appcompat:1.6.1'

@@ -49,7 +49,7 @@ loadScripts(document, 'script');</script>
 </ul>
 <ul class="sub-nav-list">
 <li>Detail:&nbsp;</li>
-<li><a href="#field-detail">Field</a>&nbsp;|&nbsp;</li>
+<li>Field&nbsp;|&nbsp;</li>
 <li><a href="#constructor-detail">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method-detail">Method</a></li>
 </ul>
@@ -96,6 +96,7 @@ loadScripts(document, 'script');</script>
 <hr>
 <div class="type-signature"><span class="modifiers">public class </span><span class="element-name type-name-label">LoginActivity</span>
 <span class="extends-implements">extends androidx.appcompat.app.AppCompatActivity</span></div>
+<div class="block">Handles user login functionality.</div>
 </section>
 <section class="summary">
 <ul class="summary-list">
@@ -112,30 +113,6 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="field-summary" id="field-summary">
 <h2>Field Summary</h2>
-<div class="caption"><span>Fields</span></div>
-<div class="summary-table three-column-summary">
-<div class="table-header col-first">Modifier and Type</div>
-<div class="table-header col-second">Field</div>
-<div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><code>private <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second even-row-color"><code><a href="#backendUrl" class="member-name-link">backendUrl</a></code></div>
-<div class="col-last even-row-color">&nbsp;</div>
-<div class="col-first odd-row-color"><code>private android.widget.Button</code></div>
-<div class="col-second odd-row-color"><code><a href="#loginButton" class="member-name-link">loginButton</a></code></div>
-<div class="col-last odd-row-color">&nbsp;</div>
-<div class="col-first even-row-color"><code>private android.widget.EditText</code></div>
-<div class="col-second even-row-color"><code><a href="#passwordEditText" class="member-name-link">passwordEditText</a></code></div>
-<div class="col-last even-row-color">&nbsp;</div>
-<div class="col-first odd-row-color"><code>private android.widget.Button</code></div>
-<div class="col-second odd-row-color"><code><a href="#signupButton" class="member-name-link">signupButton</a></code></div>
-<div class="col-last odd-row-color">&nbsp;</div>
-<div class="col-first even-row-color"><code>private <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second even-row-color"><code><a href="#username" class="member-name-link">username</a></code></div>
-<div class="col-last even-row-color">&nbsp;</div>
-<div class="col-first odd-row-color"><code>private android.widget.EditText</code></div>
-<div class="col-second odd-row-color"><code><a href="#usernameEditText" class="member-name-link">usernameEditText</a></code></div>
-<div class="col-last odd-row-color">&nbsp;</div>
-</div>
 <div class="inherited-list">
 <h3 id="fields-inherited-from-class-android.app.Activity">Fields inherited from class&nbsp;android.app.Activity</h3>
 <code>DEFAULT_KEYS_DIALER, DEFAULT_KEYS_DISABLE, DEFAULT_KEYS_SEARCH_GLOBAL, DEFAULT_KEYS_SEARCH_LOCAL, DEFAULT_KEYS_SHORTCUT, FOCUSED_STATE_SET, RESULT_CANCELED, RESULT_FIRST_USER, RESULT_OK</code></div>
@@ -171,27 +148,9 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>private void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getPasswordIds(int,java.lang.String)" class="member-name-link">getPasswordIds</a><wbr>(int&nbsp;usernameId,
- <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;password)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Gets the id by using the password from the backend and compares it with the username id.</div>
-</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>private void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getUsernameId(java.lang.String,java.lang.String)" class="member-name-link">getUsernameId</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;username,
- <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;password)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Handles getting the username's corresponding id from the server, and sends the id to the getPasswordId method</div>
-</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>private void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#loginRequest(java.lang.String,java.lang.String)" class="member-name-link">loginRequest</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;username,
- <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;password)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Handles the login.</div>
-</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>protected void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#onCreate(android.os.Bundle)" class="member-name-link">onCreate</a><wbr>(android.os.Bundle&nbsp;savedInstanceState)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>protected void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#onCreate(android.os.Bundle)" class="member-name-link">onCreate</a><wbr>(android.os.Bundle&nbsp;savedInstanceState)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 </div>
 </div>
 </div>
@@ -231,50 +190,6 @@ loadScripts(document, 'script');</script>
 </section>
 <section class="details">
 <ul class="details-list">
-<!-- ============ FIELD DETAIL =========== -->
-<li>
-<section class="field-details" id="field-detail">
-<h2>Field Details</h2>
-<ul class="member-list">
-<li>
-<section class="detail" id="usernameEditText">
-<h3>usernameEditText</h3>
-<div class="member-signature"><span class="modifiers">private</span>&nbsp;<span class="return-type">android.widget.EditText</span>&nbsp;<span class="element-name">usernameEditText</span></div>
-</section>
-</li>
-<li>
-<section class="detail" id="username">
-<h3>username</h3>
-<div class="member-signature"><span class="modifiers">private</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">username</span></div>
-</section>
-</li>
-<li>
-<section class="detail" id="passwordEditText">
-<h3>passwordEditText</h3>
-<div class="member-signature"><span class="modifiers">private</span>&nbsp;<span class="return-type">android.widget.EditText</span>&nbsp;<span class="element-name">passwordEditText</span></div>
-</section>
-</li>
-<li>
-<section class="detail" id="loginButton">
-<h3>loginButton</h3>
-<div class="member-signature"><span class="modifiers">private</span>&nbsp;<span class="return-type">android.widget.Button</span>&nbsp;<span class="element-name">loginButton</span></div>
-</section>
-</li>
-<li>
-<section class="detail" id="signupButton">
-<h3>signupButton</h3>
-<div class="member-signature"><span class="modifiers">private</span>&nbsp;<span class="return-type">android.widget.Button</span>&nbsp;<span class="element-name">signupButton</span></div>
-</section>
-</li>
-<li>
-<section class="detail" id="backendUrl">
-<h3>backendUrl</h3>
-<div class="member-signature"><span class="modifiers">private</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">backendUrl</span></div>
-</section>
-</li>
-</ul>
-</section>
-</li>
 <!-- ========= CONSTRUCTOR DETAIL ======== -->
 <li>
 <section class="constructor-details" id="constructor-detail">
@@ -301,45 +216,6 @@ loadScripts(document, 'script');</script>
 <dl class="notes">
 <dt>Overrides:</dt>
 <dd><code>onCreate</code>&nbsp;in class&nbsp;<code>androidx.fragment.app.FragmentActivity</code></dd>
-</dl>
-</section>
-</li>
-<li>
-<section class="detail" id="loginRequest(java.lang.String,java.lang.String)">
-<h3>loginRequest</h3>
-<div class="member-signature"><span class="modifiers">private</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">loginRequest</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;username,
- <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;password)</span></div>
-<div class="block">Handles the login.</div>
-<dl class="notes">
-<dt>Parameters:</dt>
-<dd><code>username</code> - </dd>
-<dd><code>password</code> - </dd>
-</dl>
-</section>
-</li>
-<li>
-<section class="detail" id="getUsernameId(java.lang.String,java.lang.String)">
-<h3>getUsernameId</h3>
-<div class="member-signature"><span class="modifiers">private</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">getUsernameId</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;username,
- <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;password)</span></div>
-<div class="block">Handles getting the username's corresponding id from the server, and sends the id to the getPasswordId method</div>
-<dl class="notes">
-<dt>Parameters:</dt>
-<dd><code>username</code> - </dd>
-<dd><code>password</code> - </dd>
-</dl>
-</section>
-</li>
-<li>
-<section class="detail" id="getPasswordIds(int,java.lang.String)">
-<h3>getPasswordIds</h3>
-<div class="member-signature"><span class="modifiers">private</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">getPasswordIds</span><wbr><span class="parameters">(int&nbsp;usernameId,
- <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;password)</span></div>
-<div class="block">Gets the id by using the password from the backend and compares it with the username id.</div>
-<dl class="notes">
-<dt>Parameters:</dt>
-<dd><code>usernameId</code> - </dd>
-<dd><code>password</code> - </dd>
 </dl>
 </section>
 </li>

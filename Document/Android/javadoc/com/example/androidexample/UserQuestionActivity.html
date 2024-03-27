@@ -49,7 +49,7 @@ loadScripts(document, 'script');</script>
 </ul>
 <ul class="sub-nav-list">
 <li>Detail:&nbsp;</li>
-<li><a href="#field-detail">Field</a>&nbsp;|&nbsp;</li>
+<li>Field&nbsp;|&nbsp;</li>
 <li><a href="#constructor-detail">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method-detail">Method</a></li>
 </ul>
@@ -113,27 +113,6 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="field-summary" id="field-summary">
 <h2>Field Summary</h2>
-<div class="caption"><span>Fields</span></div>
-<div class="summary-table three-column-summary">
-<div class="table-header col-first">Modifier and Type</div>
-<div class="table-header col-second">Field</div>
-<div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><code>private android.widget.ImageButton</code></div>
-<div class="col-second even-row-color"><code><a href="#addQuestionButton" class="member-name-link">addQuestionButton</a></code></div>
-<div class="col-last even-row-color">&nbsp;</div>
-<div class="col-first odd-row-color"><code>private boolean</code></div>
-<div class="col-second odd-row-color"><code><a href="#attemptedQuestionRefresh" class="member-name-link">attemptedQuestionRefresh</a></code></div>
-<div class="col-last odd-row-color">&nbsp;</div>
-<div class="col-first even-row-color"><code>private <a href="UserQuestionAdapter.html" title="class in com.example.androidexample">UserQuestionAdapter</a></code></div>
-<div class="col-second even-row-color"><code><a href="#questionAdapter" class="member-name-link">questionAdapter</a></code></div>
-<div class="col-last even-row-color">&nbsp;</div>
-<div class="col-first odd-row-color"><code>private androidx.recyclerview.widget.RecyclerView</code></div>
-<div class="col-second odd-row-color"><code><a href="#questionList" class="member-name-link">questionList</a></code></div>
-<div class="col-last odd-row-color">&nbsp;</div>
-<div class="col-first even-row-color"><code>private static final <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second even-row-color"><code><a href="#SERVER_URL" class="member-name-link">SERVER_URL</a></code></div>
-<div class="col-last even-row-color">&nbsp;</div>
-</div>
 <div class="inherited-list">
 <h3 id="fields-inherited-from-class-android.app.Activity">Fields inherited from class&nbsp;android.app.Activity</h3>
 <code>DEFAULT_KEYS_DIALER, DEFAULT_KEYS_DISABLE, DEFAULT_KEYS_SEARCH_GLOBAL, DEFAULT_KEYS_SEARCH_LOCAL, DEFAULT_KEYS_SHORTCUT, FOCUSED_STATE_SET, RESULT_CANCELED, RESULT_FIRST_USER, RESULT_OK</code></div>
@@ -169,16 +148,6 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>private void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#addBlankQuestion()" class="member-name-link">addBlankQuestion</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Makes a request to the server to add a blank question</div>
-</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>private void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#makeQuestionsRequest()" class="member-name-link">makeQuestionsRequest</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Makes a request to the server to get user questions</div>
-</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>protected void</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#onCreate(android.os.Bundle)" class="member-name-link">onCreate</a><wbr>(android.os.Bundle&nbsp;savedInstanceState)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
@@ -221,52 +190,6 @@ loadScripts(document, 'script');</script>
 </section>
 <section class="details">
 <ul class="details-list">
-<!-- ============ FIELD DETAIL =========== -->
-<li>
-<section class="field-details" id="field-detail">
-<h2>Field Details</h2>
-<ul class="member-list">
-<li>
-<section class="detail" id="SERVER_URL">
-<h3>SERVER_URL</h3>
-<div class="member-signature"><span class="modifiers">private static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">SERVER_URL</span></div>
-<dl class="notes">
-<dt>See Also:</dt>
-<dd>
-<ul class="see-list">
-<li><a href="../../../constant-values.html#com.example.androidexample.UserQuestionActivity.SERVER_URL">Constant Field Values</a></li>
-</ul>
-</dd>
-</dl>
-</section>
-</li>
-<li>
-<section class="detail" id="attemptedQuestionRefresh">
-<h3>attemptedQuestionRefresh</h3>
-<div class="member-signature"><span class="modifiers">private</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">attemptedQuestionRefresh</span></div>
-</section>
-</li>
-<li>
-<section class="detail" id="questionList">
-<h3>questionList</h3>
-<div class="member-signature"><span class="modifiers">private</span>&nbsp;<span class="return-type">androidx.recyclerview.widget.RecyclerView</span>&nbsp;<span class="element-name">questionList</span></div>
-</section>
-</li>
-<li>
-<section class="detail" id="questionAdapter">
-<h3>questionAdapter</h3>
-<div class="member-signature"><span class="modifiers">private</span>&nbsp;<span class="return-type"><a href="UserQuestionAdapter.html" title="class in com.example.androidexample">UserQuestionAdapter</a></span>&nbsp;<span class="element-name">questionAdapter</span></div>
-</section>
-</li>
-<li>
-<section class="detail" id="addQuestionButton">
-<h3>addQuestionButton</h3>
-<div class="member-signature"><span class="modifiers">private</span>&nbsp;<span class="return-type">android.widget.ImageButton</span>&nbsp;<span class="element-name">addQuestionButton</span></div>
-</section>
-</li>
-</ul>
-</section>
-</li>
 <!-- ========= CONSTRUCTOR DETAIL ======== -->
 <li>
 <section class="constructor-details" id="constructor-detail">
@@ -293,25 +216,6 @@ loadScripts(document, 'script');</script>
 <dl class="notes">
 <dt>Overrides:</dt>
 <dd><code>onCreate</code>&nbsp;in class&nbsp;<code>androidx.fragment.app.FragmentActivity</code></dd>
-</dl>
-</section>
-</li>
-<li>
-<section class="detail" id="makeQuestionsRequest()">
-<h3>makeQuestionsRequest</h3>
-<div class="member-signature"><span class="modifiers">private</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">makeQuestionsRequest</span>()</div>
-<div class="block">Makes a request to the server to get user questions</div>
-</section>
-</li>
-<li>
-<section class="detail" id="addBlankQuestion()">
-<h3>addBlankQuestion</h3>
-<div class="member-signature"><span class="modifiers">private</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">addBlankQuestion</span>()
-                       throws <span class="exceptions">org.json.JSONException</span></div>
-<div class="block">Makes a request to the server to add a blank question</div>
-<dl class="notes">
-<dt>Throws:</dt>
-<dd><code>org.json.JSONException</code></dd>
 </dl>
 </section>
 </li>

@@ -49,7 +49,7 @@ loadScripts(document, 'script');</script>
 </ul>
 <ul class="sub-nav-list">
 <li>Detail:&nbsp;</li>
-<li><a href="#field-detail">Field</a>&nbsp;|&nbsp;</li>
+<li>Field&nbsp;|&nbsp;</li>
 <li><a href="#constructor-detail">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method-detail">Method</a></li>
 </ul>
@@ -96,6 +96,7 @@ loadScripts(document, 'script');</script>
 <hr>
 <div class="type-signature"><span class="modifiers">public class </span><span class="element-name type-name-label">SinglePlayerQuestionActivity</span>
 <span class="extends-implements">extends androidx.appcompat.app.AppCompatActivity</span></div>
+<div class="block">Handles the single player quiz functionality.</div>
 </section>
 <section class="summary">
 <ul class="summary-list">
@@ -112,60 +113,6 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="field-summary" id="field-summary">
 <h2>Field Summary</h2>
-<div class="caption"><span>Fields</span></div>
-<div class="summary-table three-column-summary">
-<div class="table-header col-first">Modifier and Type</div>
-<div class="table-header col-second">Field</div>
-<div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><code>private android.widget.EditText</code></div>
-<div class="col-second even-row-color"><code><a href="#answerBoxEditText" class="member-name-link">answerBoxEditText</a></code></div>
-<div class="col-last even-row-color">&nbsp;</div>
-<div class="col-first odd-row-color"><code>private <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second odd-row-color"><code><a href="#backendUrl" class="member-name-link">backendUrl</a></code></div>
-<div class="col-last odd-row-color">&nbsp;</div>
-<div class="col-first even-row-color"><code>private int</code></div>
-<div class="col-second even-row-color"><code><a href="#correctAnswers" class="member-name-link">correctAnswers</a></code></div>
-<div class="col-last even-row-color">&nbsp;</div>
-<div class="col-first odd-row-color"><code>private static final long</code></div>
-<div class="col-second odd-row-color"><code><a href="#COUNTDOWN_TIME" class="member-name-link">COUNTDOWN_TIME</a></code></div>
-<div class="col-last odd-row-color">&nbsp;</div>
-<div class="col-first even-row-color"><code>private android.os.CountDownTimer</code></div>
-<div class="col-second even-row-color"><code><a href="#countDownTimer" class="member-name-link">countDownTimer</a></code></div>
-<div class="col-last even-row-color">&nbsp;</div>
-<div class="col-first odd-row-color"><code>private int</code></div>
-<div class="col-second odd-row-color"><code><a href="#currentQuestionIndex" class="member-name-link">currentQuestionIndex</a></code></div>
-<div class="col-last odd-row-color">&nbsp;</div>
-<div class="col-first even-row-color"><code>private android.widget.TextView</code></div>
-<div class="col-second even-row-color"><code><a href="#pointsTextView" class="member-name-link">pointsTextView</a></code></div>
-<div class="col-last even-row-color">&nbsp;</div>
-<div class="col-first odd-row-color"><code>private <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second odd-row-color"><code><a href="#questionCorrectAnswer" class="member-name-link">questionCorrectAnswer</a></code></div>
-<div class="col-last odd-row-color">&nbsp;</div>
-<div class="col-first even-row-color"><code>private <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Integer.html" title="class or interface in java.lang" class="external-link">Integer</a>&gt;</code></div>
-<div class="col-second even-row-color"><code><a href="#questionIds" class="member-name-link">questionIds</a></code></div>
-<div class="col-last even-row-color">&nbsp;</div>
-<div class="col-first odd-row-color"><code>private android.widget.TextView</code></div>
-<div class="col-second odd-row-color"><code><a href="#questionTextView" class="member-name-link">questionTextView</a></code></div>
-<div class="col-last odd-row-color">&nbsp;</div>
-<div class="col-first even-row-color"><code>private android.widget.Button</code></div>
-<div class="col-second even-row-color"><code><a href="#submitButton" class="member-name-link">submitButton</a></code></div>
-<div class="col-last even-row-color">&nbsp;</div>
-<div class="col-first odd-row-color"><code>private long</code></div>
-<div class="col-second odd-row-color"><code><a href="#timeLeftInMillis" class="member-name-link">timeLeftInMillis</a></code></div>
-<div class="col-last odd-row-color">&nbsp;</div>
-<div class="col-first even-row-color"><code>private android.widget.TextView</code></div>
-<div class="col-second even-row-color"><code><a href="#timeLeftTextView" class="member-name-link">timeLeftTextView</a></code></div>
-<div class="col-last even-row-color">&nbsp;</div>
-<div class="col-first odd-row-color"><code>private <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second odd-row-color"><code><a href="#username" class="member-name-link">username</a></code></div>
-<div class="col-last odd-row-color">&nbsp;</div>
-<div class="col-first even-row-color"><code>private int</code></div>
-<div class="col-second even-row-color"><code><a href="#usernameId" class="member-name-link">usernameId</a></code></div>
-<div class="col-last even-row-color">&nbsp;</div>
-<div class="col-first odd-row-color"><code>private android.widget.TextView</code></div>
-<div class="col-second odd-row-color"><code><a href="#usernameTextView" class="member-name-link">usernameTextView</a></code></div>
-<div class="col-last odd-row-color">&nbsp;</div>
-</div>
 <div class="inherited-list">
 <h3 id="fields-inherited-from-class-android.app.Activity">Fields inherited from class&nbsp;android.app.Activity</h3>
 <code>DEFAULT_KEYS_DIALER, DEFAULT_KEYS_DISABLE, DEFAULT_KEYS_SEARCH_GLOBAL, DEFAULT_KEYS_SEARCH_LOCAL, DEFAULT_KEYS_SHORTCUT, FOCUSED_STATE_SET, RESULT_CANCELED, RESULT_FIRST_USER, RESULT_OK</code></div>
@@ -201,24 +148,6 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>private void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#displayResult()" class="member-name-link">displayResult</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Method to display result and handle end of quiz</div>
-</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>private void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#fetchQuestionDetails(int)" class="member-name-link">fetchQuestionDetails</a><wbr>(int&nbsp;questionId)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Method to fetch question details by ID from the backend</div>
-</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>private void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#fetchQuestionIds()" class="member-name-link">fetchQuestionIds</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Method to fetch question IDs from the backend</div>
-</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>private void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#handleSubmitButtonClick()" class="member-name-link">handleSubmitButtonClick</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>protected void</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#onCreate(android.os.Bundle)" class="member-name-link">onCreate</a><wbr>(android.os.Bundle&nbsp;savedInstanceState)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
@@ -228,32 +157,6 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>protected void</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#onPause()" class="member-name-link">onPause</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>private void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#sendCorrectAnswer(int,java.lang.String)" class="member-name-link">sendCorrectAnswer</a><wbr>(int&nbsp;id,
- <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;username)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Sends the user based on the question that the user got correct.</div>
-</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>private void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#showNextQuestion()" class="member-name-link">showNextQuestion</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Method to display the next question.</div>
-</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>private void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#startCountDown()" class="member-name-link">startCountDown</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Method to start countdown timer</div>
-</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>private void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#updateCountDownText()" class="member-name-link">updateCountDownText</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Method to update countdown text</div>
-</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>private void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#updatePoints()" class="member-name-link">updatePoints</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Updates points, as well as question activity for the leaderboard.</div>
-</div>
 </div>
 </div>
 </div>
@@ -293,118 +196,6 @@ loadScripts(document, 'script');</script>
 </section>
 <section class="details">
 <ul class="details-list">
-<!-- ============ FIELD DETAIL =========== -->
-<li>
-<section class="field-details" id="field-detail">
-<h2>Field Details</h2>
-<ul class="member-list">
-<li>
-<section class="detail" id="questionTextView">
-<h3>questionTextView</h3>
-<div class="member-signature"><span class="modifiers">private</span>&nbsp;<span class="return-type">android.widget.TextView</span>&nbsp;<span class="element-name">questionTextView</span></div>
-</section>
-</li>
-<li>
-<section class="detail" id="pointsTextView">
-<h3>pointsTextView</h3>
-<div class="member-signature"><span class="modifiers">private</span>&nbsp;<span class="return-type">android.widget.TextView</span>&nbsp;<span class="element-name">pointsTextView</span></div>
-</section>
-</li>
-<li>
-<section class="detail" id="timeLeftTextView">
-<h3>timeLeftTextView</h3>
-<div class="member-signature"><span class="modifiers">private</span>&nbsp;<span class="return-type">android.widget.TextView</span>&nbsp;<span class="element-name">timeLeftTextView</span></div>
-</section>
-</li>
-<li>
-<section class="detail" id="usernameTextView">
-<h3>usernameTextView</h3>
-<div class="member-signature"><span class="modifiers">private</span>&nbsp;<span class="return-type">android.widget.TextView</span>&nbsp;<span class="element-name">usernameTextView</span></div>
-</section>
-</li>
-<li>
-<section class="detail" id="answerBoxEditText">
-<h3>answerBoxEditText</h3>
-<div class="member-signature"><span class="modifiers">private</span>&nbsp;<span class="return-type">android.widget.EditText</span>&nbsp;<span class="element-name">answerBoxEditText</span></div>
-</section>
-</li>
-<li>
-<section class="detail" id="submitButton">
-<h3>submitButton</h3>
-<div class="member-signature"><span class="modifiers">private</span>&nbsp;<span class="return-type">android.widget.Button</span>&nbsp;<span class="element-name">submitButton</span></div>
-</section>
-</li>
-<li>
-<section class="detail" id="countDownTimer">
-<h3>countDownTimer</h3>
-<div class="member-signature"><span class="modifiers">private</span>&nbsp;<span class="return-type">android.os.CountDownTimer</span>&nbsp;<span class="element-name">countDownTimer</span></div>
-</section>
-</li>
-<li>
-<section class="detail" id="timeLeftInMillis">
-<h3>timeLeftInMillis</h3>
-<div class="member-signature"><span class="modifiers">private</span>&nbsp;<span class="return-type">long</span>&nbsp;<span class="element-name">timeLeftInMillis</span></div>
-</section>
-</li>
-<li>
-<section class="detail" id="currentQuestionIndex">
-<h3>currentQuestionIndex</h3>
-<div class="member-signature"><span class="modifiers">private</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">currentQuestionIndex</span></div>
-</section>
-</li>
-<li>
-<section class="detail" id="correctAnswers">
-<h3>correctAnswers</h3>
-<div class="member-signature"><span class="modifiers">private</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">correctAnswers</span></div>
-</section>
-</li>
-<li>
-<section class="detail" id="usernameId">
-<h3>usernameId</h3>
-<div class="member-signature"><span class="modifiers">private</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">usernameId</span></div>
-</section>
-</li>
-<li>
-<section class="detail" id="backendUrl">
-<h3>backendUrl</h3>
-<div class="member-signature"><span class="modifiers">private</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">backendUrl</span></div>
-</section>
-</li>
-<li>
-<section class="detail" id="questionCorrectAnswer">
-<h3>questionCorrectAnswer</h3>
-<div class="member-signature"><span class="modifiers">private</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">questionCorrectAnswer</span></div>
-</section>
-</li>
-<li>
-<section class="detail" id="username">
-<h3>username</h3>
-<div class="member-signature"><span class="modifiers">private</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">username</span></div>
-</section>
-</li>
-<li>
-<section class="detail" id="questionIds">
-<h3>questionIds</h3>
-<div class="member-signature"><span class="modifiers">private</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Integer.html" title="class or interface in java.lang" class="external-link">Integer</a>&gt;</span>&nbsp;<span class="element-name">questionIds</span></div>
-</section>
-</li>
-<li>
-<section class="detail" id="COUNTDOWN_TIME">
-<h3>COUNTDOWN_TIME</h3>
-<div class="member-signature"><span class="modifiers">private static final</span>&nbsp;<span class="return-type">long</span>&nbsp;<span class="element-name">COUNTDOWN_TIME</span></div>
-<dl class="notes">
-<dt>See Also:</dt>
-<dd>
-<ul class="see-list">
-<li><a href="../../../constant-values.html#com.example.androidexample.SinglePlayerQuestionActivity.COUNTDOWN_TIME">Constant Field Values</a></li>
-</ul>
-</dd>
-</dl>
-</section>
-</li>
-</ul>
-</section>
-</li>
 <!-- ========= CONSTRUCTOR DETAIL ======== -->
 <li>
 <section class="constructor-details" id="constructor-detail">
@@ -445,80 +236,12 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
-<section class="detail" id="handleSubmitButtonClick()">
-<h3>handleSubmitButtonClick</h3>
-<div class="member-signature"><span class="modifiers">private</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">handleSubmitButtonClick</span>()</div>
-</section>
-</li>
-<li>
-<section class="detail" id="fetchQuestionIds()">
-<h3>fetchQuestionIds</h3>
-<div class="member-signature"><span class="modifiers">private</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">fetchQuestionIds</span>()</div>
-<div class="block">Method to fetch question IDs from the backend</div>
-</section>
-</li>
-<li>
-<section class="detail" id="fetchQuestionDetails(int)">
-<h3>fetchQuestionDetails</h3>
-<div class="member-signature"><span class="modifiers">private</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">fetchQuestionDetails</span><wbr><span class="parameters">(int&nbsp;questionId)</span></div>
-<div class="block">Method to fetch question details by ID from the backend</div>
-</section>
-</li>
-<li>
-<section class="detail" id="showNextQuestion()">
-<h3>showNextQuestion</h3>
-<div class="member-signature"><span class="modifiers">private</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">showNextQuestion</span>()</div>
-<div class="block">Method to display the next question. Also clears the textbox.</div>
-</section>
-</li>
-<li>
-<section class="detail" id="displayResult()">
-<h3>displayResult</h3>
-<div class="member-signature"><span class="modifiers">private</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">displayResult</span>()</div>
-<div class="block">Method to display result and handle end of quiz</div>
-</section>
-</li>
-<li>
-<section class="detail" id="startCountDown()">
-<h3>startCountDown</h3>
-<div class="member-signature"><span class="modifiers">private</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">startCountDown</span>()</div>
-<div class="block">Method to start countdown timer</div>
-</section>
-</li>
-<li>
-<section class="detail" id="updateCountDownText()">
-<h3>updateCountDownText</h3>
-<div class="member-signature"><span class="modifiers">private</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">updateCountDownText</span>()</div>
-<div class="block">Method to update countdown text</div>
-</section>
-</li>
-<li>
 <section class="detail" id="onDestroy()">
 <h3>onDestroy</h3>
 <div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">onDestroy</span>()</div>
 <dl class="notes">
 <dt>Overrides:</dt>
 <dd><code>onDestroy</code>&nbsp;in class&nbsp;<code>androidx.appcompat.app.AppCompatActivity</code></dd>
-</dl>
-</section>
-</li>
-<li>
-<section class="detail" id="updatePoints()">
-<h3>updatePoints</h3>
-<div class="member-signature"><span class="modifiers">private</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">updatePoints</span>()</div>
-<div class="block">Updates points, as well as question activity for the leaderboard.</div>
-</section>
-</li>
-<li>
-<section class="detail" id="sendCorrectAnswer(int,java.lang.String)">
-<h3>sendCorrectAnswer</h3>
-<div class="member-signature"><span class="modifiers">private</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">sendCorrectAnswer</span><wbr><span class="parameters">(int&nbsp;id,
- <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;username)</span></div>
-<div class="block">Sends the user based on the question that the user got correct.</div>
-<dl class="notes">
-<dt>Parameters:</dt>
-<dd><code>id</code> - question id</dd>
-<dd><code>username</code> - current user's username</dd>
 </dl>
 </section>
 </li>
