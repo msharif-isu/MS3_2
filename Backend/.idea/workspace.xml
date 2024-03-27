@@ -6,12 +6,9 @@
   <component name="ChangeListManager">
     <list default="true" id="aa247b61-3439-49d8-9853-376a5b7b168c" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/trivia/src/main/java/com/project/trivia/MPQuestions/Answer.java" beforeDir="false" afterPath="$PROJECT_DIR$/trivia/src/main/java/com/project/trivia/MPQuestions/Answer.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/trivia/src/main/java/com/project/trivia/MPQuestions/QuestionSocket.java" beforeDir="false" afterPath="$PROJECT_DIR$/trivia/src/main/java/com/project/trivia/MPQuestions/QuestionSocket.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/trivia/src/main/java/com/project/trivia/Questions/Question.java" beforeDir="false" afterPath="$PROJECT_DIR$/trivia/src/main/java/com/project/trivia/Questions/Question.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/trivia/src/main/java/com/project/trivia/User/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/trivia/src/main/java/com/project/trivia/User/User.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/trivia/target/classes/com/project/trivia/Questions/Question.class" beforeDir="false" afterPath="$PROJECT_DIR$/trivia/target/classes/com/project/trivia/Questions/Question.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/trivia/target/classes/com/project/trivia/User/User.class" beforeDir="false" afterPath="$PROJECT_DIR$/trivia/target/classes/com/project/trivia/User/User.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -64,6 +61,7 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
+        <option value="jdk-17.0.9-jbr-17.0.9-4caba194b151-51f1b679" />
         <option value="jdk-21.0.2-openjdk-21.0.2-4caba194b151-4f524021" />
       </set>
     </attachedChunks>
@@ -83,7 +81,7 @@
       <workItem from="1711428826690" duration="3832000" />
       <workItem from="1711510302066" duration="370000" />
       <workItem from="1711510687419" duration="604000" />
-      <workItem from="1711511345190" duration="3534000" />
+      <workItem from="1711511345190" duration="4512000" />
     </task>
     <servers />
   </component>
