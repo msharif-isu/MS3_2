@@ -22,6 +22,9 @@ import org.json.JSONException;
 
 import java.util.ArrayList;
 
+/**
+ * Handles user login functionality.
+ */
 public class LoginActivity extends AppCompatActivity {
 
     private EditText usernameEditText;

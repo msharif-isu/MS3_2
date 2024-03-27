@@ -15,6 +15,9 @@ import com.android.volley.toolbox.Volley;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+/**
+ * ResultsActivity displays the results of the game and allows the user to play again or continue.
+ */
 public class ResultsActivity extends AppCompatActivity {
 
     private Button playAgainButton, continueButton;
@@ -66,6 +69,12 @@ public class ResultsActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * Sends the points earned by the user to the backend server.
+     *
+     * @param username The username of the user
+     * @param points   The points earned by the user
+     */
     private void givePoints(String username, int points) {
         RequestQueue queue = Volley.newRequestQueue(this);
         String url = backendUrl + "users/" + username + "/" + points;

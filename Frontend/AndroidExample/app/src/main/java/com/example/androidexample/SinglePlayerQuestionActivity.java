@@ -26,6 +26,9 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Handles the single player quiz functionality.
+ */
 public class SinglePlayerQuestionActivity extends AppCompatActivity {
 
     private TextView questionTextView, pointsTextView, timeLeftTextView, usernameTextView;

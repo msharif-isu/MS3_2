@@ -7,6 +7,10 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+/**
+ * MainActivity is the entry point of the application. It displays buttons for various actions
+ * and handles button click events to start corresponding activities.
+ */
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     private Button strBtn, jsonObjBtn, jsonArrBtn, imgBtn, questionBtn;
@@ -31,6 +35,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
+    /**
+     * Handles button click events. Starts corresponding activities based on the clicked button.
+     *
+     * @param v The View that was clicked
+     */
     @Override
     public void onClick(View v) {
         int id = v.getId();
