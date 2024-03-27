@@ -2,10 +2,13 @@ package com.project.trivia.MPQuestions;
 
 import java.io.IOException;
 import java.util.Hashtable;
+import java.util.List;
 import java.util.Map;
 
 
+import com.project.trivia.Questions.Question;
 import com.project.trivia.Questions.QuestionRepository;
+import com.project.trivia.User.User;
 import jakarta.websocket.OnClose;
 import jakarta.websocket.OnError;
 import jakarta.websocket.OnMessage;
@@ -117,6 +120,14 @@ public class QuestionSocket {
         else if (message.contentEquals("/clear")) {
             ansRepo.deleteAll();
         }
+        else if (message.contentEquals("/resetUseValue")) {
+            List<Question> allQuestion = questRepo.findAll();
+            for(int i=1; i<allQuestion.size()+1; i++) {
+                Question localQuestRepo = questRepo.findById(i);
+                localQuestRepo.setUsed(false);
+                questRepo.save(localQuestRepo);
+            }
+        }
         // Direct message to a user using the format "@username <message>"
         else if (message.startsWith("@")) {
 
@@ -138,7 +149,10 @@ public class QuestionSocket {
 
             if (message.contentEquals(questRepo.findById(randInt).getAnswer())) {
                 ansRepo.save(new Answer(username, message, true));
-                broadcast(String.valueOf(questRepo.findById(randInt).getUsed()));;
+                Question localQuestRepo = questRepo.findById(randInt);
+                localQuestRepo.setUsed(true);
+                questRepo.save(localQuestRepo);
+
                 broadcast("Correct!");
                 randomize();
                 showMessageEveryone();
@@ -221,13 +235,11 @@ public class QuestionSocket {
     private void showMessageEveryone() {
         String mpQuestion = questRepo.findById(randInt).getQuestion();
         broadcast(mpQuestion);
-        questRepo.findById(randInt).setUsed(true);
     }
 
     private void showMessageOne(String username) {
         String mpQuestion = questRepo.findById(randInt).getQuestion();
         sendMessageToPArticularUser(username, mpQuestion);
-        questRepo.findById(randInt).setUsed(true);
     }
 
     private void randomize() {

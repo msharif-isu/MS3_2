@@ -2,8 +2,10 @@ package com.project.trivia.Questions;
 
 import com.project.trivia.MPQuestions.Answer;
 import jakarta.persistence.*;
+import org.hibernate.annotations.DynamicUpdate;
 
 @Entity
+@DynamicUpdate
 public class Question {
 
     @Id
