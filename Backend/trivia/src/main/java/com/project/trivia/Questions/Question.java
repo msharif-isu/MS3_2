@@ -4,6 +4,8 @@ import com.project.trivia.MPQuestions.Answer;
 import jakarta.persistence.*;
 import org.hibernate.annotations.DynamicUpdate;
 
+import java.util.List;
+
 @Entity
 @DynamicUpdate
 public class Question {
@@ -16,8 +18,8 @@ public class Question {
     private String questionType;
     private boolean used;
 
-    @OneToOne
-    private Answer ans;
+    @OneToMany
+    private List<Answer> ans;
 
     public Question(String question, String answer, String questionType, boolean used) {
         this.question = question;

@@ -28,7 +28,7 @@ public class Answer {
     @Column(name = "sent")
     private Date sent = new Date();
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "question_id")
     private Question question;
 
@@ -43,6 +43,7 @@ public class Answer {
 		this.userName = userName;
 		this.answer = answer;
         this.correct = correct;
+        //this.question = question;
 	}
 
     public Long getId() {
@@ -83,6 +84,10 @@ public class Answer {
     public void setSent(Date sent) {
         this.sent = sent;
     }
+
+    public Question getQuestion() {return question;}
+
+    public void setQuestion(Question question) {this.question = question;}
 
     
 }

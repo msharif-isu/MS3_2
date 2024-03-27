@@ -121,12 +121,7 @@ public class QuestionSocket {
             ansRepo.deleteAll();
         }
         else if (message.contentEquals("/resetUseValue")) {
-            List<Question> allQuestion = questRepo.findAll();
-            for(int i=1; i<allQuestion.size()+1; i++) {
-                Question localQuestRepo = questRepo.findById(i);
-                localQuestRepo.setUsed(false);
-                questRepo.save(localQuestRepo);
-            }
+            resetUseValue();
         }
         // Direct message to a user using the format "@username <message>"
         else if (message.startsWith("@")) {
@@ -148,8 +143,10 @@ public class QuestionSocket {
             broadcast(username + ": " + message);
 
             if (message.contentEquals(questRepo.findById(randInt).getAnswer())) {
-                ansRepo.save(new Answer(username, message, true));
                 Question localQuestRepo = questRepo.findById(randInt);
+                Answer localAnswer = new Answer(username, message, true);
+                localAnswer.setQuestion(localQuestRepo);
+                ansRepo.save(localAnswer);
                 localQuestRepo.setUsed(true);
                 questRepo.save(localQuestRepo);
 
@@ -160,7 +157,9 @@ public class QuestionSocket {
             }
             else {
                 broadcast("False!");
-                ansRepo.save(new Answer(username, message, false));
+                Answer localAnswer = new Answer(username, message, false);
+                //localAnswer.setQuestion(questRepo.findById(randInt));
+                ansRepo.save(localAnswer);
             }
         }
     }
@@ -247,6 +246,15 @@ public class QuestionSocket {
         randInt = (int)(Math.random()*amount)+1;
         while (questRepo.findById(randInt).getUsed()) {
             randomize();
+        }
+    }
+
+    private void resetUseValue() {
+        List<Question> allQuestion = questRepo.findAll();
+        for(int i=1; i<allQuestion.size()+1; i++) {
+            Question localQuestRepo = questRepo.findById(i);
+            localQuestRepo.setUsed(false);
+            questRepo.save(localQuestRepo);
         }
     }
 }
