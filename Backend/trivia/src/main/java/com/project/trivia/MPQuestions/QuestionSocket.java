@@ -55,6 +55,11 @@ public class QuestionSocket {
     @Autowired
     public void setQuestionRepository(QuestionRepository repo) {questRepo = repo;}
 
+    private static AnswerRepository ansRepo;
+
+    @Autowired
+    public void setAnswerRepository(AnswerRepository repo) {ansRepo = repo;}
+
     /**
      * This method is called when a new WebSocket connection is established.
      *
@@ -109,6 +114,9 @@ public class QuestionSocket {
             randomize();
             showMessageEveryone();
         }
+        else if (message.contentEquals("/clear")) {
+            ansRepo.deleteAll();
+        }
         // Direct message to a user using the format "@username <message>"
         else if (message.startsWith("@")) {
 
@@ -127,6 +135,17 @@ public class QuestionSocket {
         }
         else { // Message to whole chat
             broadcast(username + ": " + message);
+
+            if (message.contentEquals(questRepo.findById(randInt).getAnswer())) {
+                ansRepo.save(new Answer(username, message, true));
+                broadcast("Correct!");
+                randomize();
+                showMessageEveryone();
+            }
+            else {
+                broadcast("False!");
+                ansRepo.save(new Answer(username, message, false));
+            }
         }
     }
 
