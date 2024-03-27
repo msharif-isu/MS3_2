@@ -2,15 +2,10 @@ package com.project.trivia.MPQuestions;
 
 import java.util.Date;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Lob;
-import jakarta.persistence.Table;
-import jakarta.persistence.Temporal;
-import jakarta.persistence.TemporalType;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.project.trivia.Questions.Question;
+import com.project.trivia.User.User;
+import jakarta.persistence.*;
 
 import lombok.Data;
 
@@ -32,8 +27,16 @@ public class Answer {
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "sent")
     private Date sent = new Date();
-	
-	
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "question_id")
+    private Question question;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    @JsonIgnore
+    private User user;
+
 	public Answer() {};
 	
 	public Answer(String userName, String answer, boolean correct) {

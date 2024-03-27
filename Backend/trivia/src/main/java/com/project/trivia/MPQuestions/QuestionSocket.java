@@ -138,9 +138,11 @@ public class QuestionSocket {
 
             if (message.contentEquals(questRepo.findById(randInt).getAnswer())) {
                 ansRepo.save(new Answer(username, message, true));
+                broadcast(String.valueOf(questRepo.findById(randInt).getUsed()));;
                 broadcast("Correct!");
                 randomize();
                 showMessageEveryone();
+
             }
             else {
                 broadcast("False!");
@@ -219,15 +221,20 @@ public class QuestionSocket {
     private void showMessageEveryone() {
         String mpQuestion = questRepo.findById(randInt).getQuestion();
         broadcast(mpQuestion);
+        questRepo.findById(randInt).setUsed(true);
     }
 
     private void showMessageOne(String username) {
         String mpQuestion = questRepo.findById(randInt).getQuestion();
         sendMessageToPArticularUser(username, mpQuestion);
+        questRepo.findById(randInt).setUsed(true);
     }
 
     private void randomize() {
         long amount = questRepo.count()-1;
         randInt = (int)(Math.random()*amount)+1;
+        while (questRepo.findById(randInt).getUsed()) {
+            randomize();
+        }
     }
 }
