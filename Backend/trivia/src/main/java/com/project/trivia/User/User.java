@@ -1,5 +1,6 @@
 package com.project.trivia.User;
 
+import com.project.trivia.Leaderboard.Leaderboard;
 import com.project.trivia.MPQuestions.Answer;
 import jakarta.persistence.*;
 
@@ -19,6 +20,9 @@ public class User {
 
     @OneToMany(mappedBy="user")
     private List<Answer> ans;
+
+    @OneToOne
+    private Leaderboard leaderboard;
 
     public User(String username, String password, String email) {
         this.username = username;
