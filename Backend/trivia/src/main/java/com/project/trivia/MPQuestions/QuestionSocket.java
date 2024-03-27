@@ -9,6 +9,7 @@ import java.util.Map;
 import com.project.trivia.Questions.Question;
 import com.project.trivia.Questions.QuestionRepository;
 import com.project.trivia.User.User;
+import com.project.trivia.User.UserRepository;
 import jakarta.websocket.OnClose;
 import jakarta.websocket.OnError;
 import jakarta.websocket.OnMessage;
@@ -62,6 +63,10 @@ public class QuestionSocket {
 
     @Autowired
     public void setAnswerRepository(AnswerRepository repo) {ansRepo = repo;}
+
+    //private static UserRepository userRepo;
+   // @Autowired
+   // private void setUserRepository(UserRepository repo) {userRepo = repo;}
 
     /**
      * This method is called when a new WebSocket connection is established.
