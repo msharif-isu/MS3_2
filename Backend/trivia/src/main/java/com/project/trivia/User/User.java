@@ -1,9 +1,10 @@
 package com.project.trivia.User;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.project.trivia.Leaderboard.Leaderboard;
+import com.project.trivia.MPQuestions.Answer;
+import jakarta.persistence.*;
+
+import java.util.List;
 
 @Entity
 public class User {
@@ -16,6 +17,12 @@ public class User {
     private String email;
 
     private long points;
+
+    @OneToMany(mappedBy="user")
+    private List<Answer> ans;
+
+    @OneToOne
+    private Leaderboard leaderboard;
 
     public User(String username, String password, String email) {
         this.username = username;
