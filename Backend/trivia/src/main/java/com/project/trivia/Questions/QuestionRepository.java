@@ -8,4 +8,8 @@ public interface QuestionRepository extends JpaRepository<Question, Long> {
 
     @Transactional
     void deleteById(int id);
+
+    long count();
+
+
 }

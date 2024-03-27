@@ -1,9 +1,7 @@
 package com.project.trivia.Leaderboard;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.project.trivia.User.User;
+import jakarta.persistence.*;
 
 @Entity
 public class Leaderboard {
@@ -17,6 +15,8 @@ public class Leaderboard {
     private int yearlyPoints;
     private int lifetimePoints;
     private String name;
+    @OneToOne
+    private User user;
     public Leaderboard(int userPoints, int weeklyPoints, int monthlyPoints, int yearlyPoints, int lifetimePoints, String name) {
         this.userPoints = userPoints;
         this.weeklyPoints = weeklyPoints;

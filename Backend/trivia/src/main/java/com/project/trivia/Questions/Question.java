@@ -1,11 +1,13 @@
 package com.project.trivia.Questions;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.project.trivia.MPQuestions.Answer;
+import jakarta.persistence.*;
+import org.hibernate.annotations.DynamicUpdate;
+
+import java.util.List;
 
 @Entity
+@DynamicUpdate
 public class Question {
 
     @Id
@@ -14,10 +16,16 @@ public class Question {
     private String question;
     private String answer;
     private String questionType;
-    public Question(String question, String answer, String questionType) {
+    private boolean used;
+
+    @OneToMany
+    private List<Answer> ans;
+
+    public Question(String question, String answer, String questionType, boolean used) {
         this.question = question;
         this.answer = answer;
         this.questionType = questionType;
+        this.used = used;
     }
     public Question() {};
 
@@ -51,6 +59,10 @@ public class Question {
     public void setQuestionType(String questionType) {
         this.questionType = questionType;
     }
+
+    public boolean getUsed() {return used;}
+
+    public void setUsed(boolean used) {this.used = used;}
 
 
 }
