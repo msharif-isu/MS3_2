@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="0f51f91a-7085-4a7e-bc34-239dbced258e" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/../../../AndroidStudio/tutorials-android_unit1_1_helloworld/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../AndroidStudio/tutorials-android_unit1_1_helloworld/AndroidExample/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../AndroidStudio/tutorials-android_unit1_1_helloworld/AndroidExample/app/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../AndroidStudio/tutorials-android_unit1_1_helloworld/AndroidExample/app/build.gradle" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../AndroidStudio/tutorials-android_unit1_1_helloworld/AndroidExample/app/proguard-rules.pro" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../AndroidStudio/tutorials-android_unit1_1_helloworld/AndroidExample/app/src/androidTest/java/com/example/androidexample/ExampleInstrumentedTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../AndroidStudio/tutorials-android_unit1_1_helloworld/AndroidExample/app/src/main/AndroidManifest.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../AndroidStudio/tutorials-android_unit1_1_helloworld/AndroidExample/app/src/main/java/com/example/androidexample/MainActivity.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../AndroidStudio/tutorials-android_unit1_1_helloworld/AndroidExample/app/src/main/res/drawable/ic_launcher_background.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../AndroidStudio/tutorials-android_unit1_1_helloworld/AndroidExample/app/src/main/res/drawable/ic_launcher_foreground.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../AndroidStudio/tutorials-android_unit1_1_helloworld/AndroidExample/app/src/main/res/layout/activity_main.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../AndroidStudio/tutorials-android_unit1_1_helloworld/AndroidExample/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../AndroidStudio/tutorials-android_unit1_1_helloworld/AndroidExample/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../AndroidStudio/tutorials-android_unit1_1_helloworld/AndroidExample/app/src/main/res/mipmap-hdpi/ic_launcher.webp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../AndroidStudio/tutorials-android_unit1_1_helloworld/AndroidExample/app/src/main/res/mipmap-hdpi/ic_launcher_round.webp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../AndroidStudio/tutorials-android_unit1_1_helloworld/AndroidExample/app/src/main/res/mipmap-mdpi/ic_launcher.webp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../AndroidStudio/tutorials-android_unit1_1_helloworld/AndroidExample/app/src/main/res/mipmap-mdpi/ic_launcher_round.webp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../AndroidStudio/tutorials-android_unit1_1_helloworld/AndroidExample/app/src/main/res/mipmap-xhdpi/ic_launcher.webp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../AndroidStudio/tutorials-android_unit1_1_helloworld/AndroidExample/app/src/main/res/mipmap-xhdpi/ic_launcher_round.webp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../AndroidStudio/tutorials-android_unit1_1_helloworld/AndroidExample/app/src/main/res/mipmap-xxhdpi/ic_launcher.webp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../AndroidStudio/tutorials-android_unit1_1_helloworld/AndroidExample/app/src/main/res/mipmap-xxhdpi/ic_launcher_round.webp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../AndroidStudio/tutorials-android_unit1_1_helloworld/AndroidExample/app/src/main/res/mipmap-xxxhdpi/ic_launcher.webp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../AndroidStudio/tutorials-android_unit1_1_helloworld/AndroidExample/app/src/main/res/mipmap-xxxhdpi/ic_launcher_round.webp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../AndroidStudio/tutorials-android_unit1_1_helloworld/AndroidExample/app/src/main/res/values-night/themes.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../AndroidStudio/tutorials-android_unit1_1_helloworld/AndroidExample/app/src/main/res/values/colors.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../AndroidStudio/tutorials-android_unit1_1_helloworld/AndroidExample/app/src/main/res/values/strings.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../AndroidStudio/tutorials-android_unit1_1_helloworld/AndroidExample/app/src/main/res/values/themes.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../AndroidStudio/tutorials-android_unit1_1_helloworld/AndroidExample/app/src/main/res/xml/backup_rules.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../AndroidStudio/tutorials-android_unit1_1_helloworld/AndroidExample/app/src/main/res/xml/data_extraction_rules.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../AndroidStudio/tutorials-android_unit1_1_helloworld/AndroidExample/app/src/test/java/com/example/androidexample/ExampleUnitTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../AndroidStudio/tutorials-android_unit1_1_helloworld/AndroidExample/build.gradle" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../AndroidStudio/tutorials-android_unit1_1_helloworld/AndroidExample/gradle.properties" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../AndroidStudio/tutorials-android_unit1_1_helloworld/AndroidExample/gradle/wrapper/gradle-wrapper.jar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../AndroidStudio/tutorials-android_unit1_1_helloworld/AndroidExample/gradle/wrapper/gradle-wrapper.properties" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../AndroidStudio/tutorials-android_unit1_1_helloworld/AndroidExample/gradlew" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../AndroidStudio/tutorials-android_unit1_1_helloworld/AndroidExample/gradlew.bat" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../AndroidStudio/tutorials-android_unit1_1_helloworld/AndroidExample/settings.gradle" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../AndroidStudio/tutorials-android_unit1_1_helloworld/README.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../AndroidStudio/tutorials-android_unit1_2_intent/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../AndroidStudio/tutorials-android_unit1_2_intent/AndroidExample/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../AndroidStudio/tutorials-android_unit1_2_intent/AndroidExample/app/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../AndroidStudio/tutorials-android_unit1_2_intent/AndroidExample/app/build.gradle" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../AndroidStudio/tutorials-android_unit1_2_intent/AndroidExample/app/proguard-rules.pro" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../AndroidStudio/tutorials-android_unit1_2_intent/AndroidExample/app/src/androidTest/java/com/example/androidexample/ExampleInstrumentedTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../AndroidStudio/tutorials-android_unit1_2_intent/AndroidExample/app/src/main/AndroidManifest.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../AndroidStudio/tutorials-android_unit1_2_intent/AndroidExample/app/src/main/java/com/example/androidexample/CounterActivity.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../AndroidStudio/tutorials-android_unit1_2_intent/AndroidExample/app/src/main/java/com/example/androidexample/MainActivity.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../AndroidStudio/tutorials-android_unit1_2_intent/AndroidExample/app/src/main/res/drawable/ic_launcher_background.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../AndroidStudio/tutorials-android_unit1_2_intent/AndroidExample/app/src/main/res/drawable/ic_launcher_foreground.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../AndroidStudio/tutorials-android_unit1_2_intent/AndroidExample/app/src/main/res/layout/activity_counter.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../AndroidStudio/tutorials-android_unit1_2_intent/AndroidExample/app/src/main/res/layout/activity_main.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../AndroidStudio/tutorials-android_unit1_2_intent/AndroidExample/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../AndroidStudio/tutorials-android_unit1_2_intent/AndroidExample/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../AndroidStudio/tutorials-android_unit1_2_intent/AndroidExample/app/src/main/res/mipmap-hdpi/ic_launcher.webp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../AndroidStudio/tutorials-android_unit1_2_intent/AndroidExample/app/src/main/res/mipmap-hdpi/ic_launcher_round.webp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../AndroidStudio/tutorials-android_unit1_2_intent/AndroidExample/app/src/main/res/mipmap-mdpi/ic_launcher.webp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../AndroidStudio/tutorials-android_unit1_2_intent/AndroidExample/app/src/main/res/mipmap-mdpi/ic_launcher_round.webp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../AndroidStudio/tutorials-android_unit1_2_intent/AndroidExample/app/src/main/res/mipmap-xhdpi/ic_launcher.webp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../AndroidStudio/tutorials-android_unit1_2_intent/AndroidExample/app/src/main/res/mipmap-xhdpi/ic_launcher_round.webp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../AndroidStudio/tutorials-android_unit1_2_intent/AndroidExample/app/src/main/res/mipmap-xxhdpi/ic_launcher.webp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../AndroidStudio/tutorials-android_unit1_2_intent/AndroidExample/app/src/main/res/mipmap-xxhdpi/ic_launcher_round.webp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../AndroidStudio/tutorials-android_unit1_2_intent/AndroidExample/app/src/main/res/mipmap-xxxhdpi/ic_launcher.webp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../AndroidStudio/tutorials-android_unit1_2_intent/AndroidExample/app/src/main/res/mipmap-xxxhdpi/ic_launcher_round.webp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../AndroidStudio/tutorials-android_unit1_2_intent/AndroidExample/app/src/main/res/values-night/themes.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../AndroidStudio/tutorials-android_unit1_2_intent/AndroidExample/app/src/main/res/values/colors.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../AndroidStudio/tutorials-android_unit1_2_intent/AndroidExample/app/src/main/res/values/strings.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../AndroidStudio/tutorials-android_unit1_2_intent/AndroidExample/app/src/main/res/values/themes.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../AndroidStudio/tutorials-android_unit1_2_intent/AndroidExample/app/src/main/res/xml/backup_rules.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../AndroidStudio/tutorials-android_unit1_2_intent/AndroidExample/app/src/main/res/xml/data_extraction_rules.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../AndroidStudio/tutorials-android_unit1_2_intent/AndroidExample/app/src/test/java/com/example/androidexample/ExampleUnitTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../AndroidStudio/tutorials-android_unit1_2_intent/AndroidExample/build.gradle" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../AndroidStudio/tutorials-android_unit1_2_intent/AndroidExample/gradle.properties" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../AndroidStudio/tutorials-android_unit1_2_intent/AndroidExample/gradle/wrapper/gradle-wrapper.jar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../AndroidStudio/tutorials-android_unit1_2_intent/AndroidExample/gradle/wrapper/gradle-wrapper.properties" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../AndroidStudio/tutorials-android_unit1_2_intent/AndroidExample/gradlew" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../AndroidStudio/tutorials-android_unit1_2_intent/AndroidExample/gradlew.bat" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../AndroidStudio/tutorials-android_unit1_2_intent/AndroidExample/settings.gradle" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../AndroidStudio/tutorials-android_unit1_2_intent/README.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../AndroidStudio/tutorials-android_unit1_3_login_signup/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../AndroidStudio/tutorials-android_unit1_3_login_signup/AndroidExample/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../AndroidStudio/tutorials-android_unit1_3_login_signup/AndroidExample/app/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../AndroidStudio/tutorials-android_unit1_3_login_signup/AndroidExample/app/build.gradle" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../AndroidStudio/tutorials-android_unit1_3_login_signup/AndroidExample/app/proguard-rules.pro" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../AndroidStudio/tutorials-android_unit1_3_login_signup/AndroidExample/app/src/androidTest/java/com/example/androidexample/ExampleInstrumentedTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../AndroidStudio/tutorials-android_unit1_3_login_signup/AndroidExample/app/src/main/AndroidManifest.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../AndroidStudio/tutorials-android_unit1_3_login_signup/AndroidExample/app/src/main/java/com/example/androidexample/LoginActivity.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../AndroidStudio/tutorials-android_unit1_3_login_signup/AndroidExample/app/src/main/java/com/example/androidexample/MainActivity.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../AndroidStudio/tutorials-android_unit1_3_login_signup/AndroidExample/app/src/main/java/com/example/androidexample/SignupActivity.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../AndroidStudio/tutorials-android_unit1_3_login_signup/AndroidExample/app/src/main/res/drawable/ic_launcher_background.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../AndroidStudio/tutorials-android_unit1_3_login_signup/AndroidExample/app/src/main/res/drawable/ic_launcher_foreground.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../AndroidStudio/tutorials-android_unit1_3_login_signup/AndroidExample/app/src/main/res/layout/activity_login.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../AndroidStudio/tutorials-android_unit1_3_login_signup/AndroidExample/app/src/main/res/layout/activity_main.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../AndroidStudio/tutorials-android_unit1_3_login_signup/AndroidExample/app/src/main/res/layout/activity_signup.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../AndroidStudio/tutorials-android_unit1_3_login_signup/AndroidExample/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../AndroidStudio/tutorials-android_unit1_3_login_signup/AndroidExample/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../AndroidStudio/tutorials-android_unit1_3_login_signup/AndroidExample/app/src/main/res/mipmap-hdpi/ic_launcher.webp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../AndroidStudio/tutorials-android_unit1_3_login_signup/AndroidExample/app/src/main/res/mipmap-hdpi/ic_launcher_round.webp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../AndroidStudio/tutorials-android_unit1_3_login_signup/AndroidExample/app/src/main/res/mipmap-mdpi/ic_launcher.webp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../AndroidStudio/tutorials-android_unit1_3_login_signup/AndroidExample/app/src/main/res/mipmap-mdpi/ic_launcher_round.webp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../AndroidStudio/tutorials-android_unit1_3_login_signup/AndroidExample/app/src/main/res/mipmap-xhdpi/ic_launcher.webp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../AndroidStudio/tutorials-android_unit1_3_login_signup/AndroidExample/app/src/main/res/mipmap-xhdpi/ic_launcher_round.webp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../AndroidStudio/tutorials-android_unit1_3_login_signup/AndroidExample/app/src/main/res/mipmap-xxhdpi/ic_launcher.webp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../AndroidStudio/tutorials-android_unit1_3_login_signup/AndroidExample/app/src/main/res/mipmap-xxhdpi/ic_launcher_round.webp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../AndroidStudio/tutorials-android_unit1_3_login_signup/AndroidExample/app/src/main/res/mipmap-xxxhdpi/ic_launcher.webp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../AndroidStudio/tutorials-android_unit1_3_login_signup/AndroidExample/app/src/main/res/mipmap-xxxhdpi/ic_launcher_round.webp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../AndroidStudio/tutorials-android_unit1_3_login_signup/AndroidExample/app/src/main/res/values-night/themes.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../AndroidStudio/tutorials-android_unit1_3_login_signup/AndroidExample/app/src/main/res/values/colors.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../AndroidStudio/tutorials-android_unit1_3_login_signup/AndroidExample/app/src/main/res/values/strings.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../AndroidStudio/tutorials-android_unit1_3_login_signup/AndroidExample/app/src/main/res/values/themes.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../AndroidStudio/tutorials-android_unit1_3_login_signup/AndroidExample/app/src/main/res/xml/backup_rules.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../AndroidStudio/tutorials-android_unit1_3_login_signup/AndroidExample/app/src/main/res/xml/data_extraction_rules.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../AndroidStudio/tutorials-android_unit1_3_login_signup/AndroidExample/app/src/test/java/com/example/androidexample/ExampleUnitTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../AndroidStudio/tutorials-android_unit1_3_login_signup/AndroidExample/build.gradle" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../AndroidStudio/tutorials-android_unit1_3_login_signup/AndroidExample/gradle.properties" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../AndroidStudio/tutorials-android_unit1_3_login_signup/AndroidExample/gradle/wrapper/gradle-wrapper.jar" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../AndroidStudio/tutorials-android_unit1_3_login_signup/AndroidExample/gradle/wrapper/gradle-wrapper.properties" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../AndroidStudio/tutorials-android_unit1_3_login_signup/AndroidExample/gradlew" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../AndroidStudio/tutorials-android_unit1_3_login_signup/AndroidExample/gradlew.bat" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../AndroidStudio/tutorials-android_unit1_3_login_signup/AndroidExample/settings.gradle" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../AndroidStudio/tutorials-android_unit1_3_login_signup/README.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../tutorials-springboot_unit1_1_helloworld/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../tutorials-springboot_unit1_1_helloworld/README.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../tutorials-springboot_unit1_1_helloworld/helloworld/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../tutorials-springboot_unit1_1_helloworld/helloworld/Readme.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../tutorials-springboot_unit1_1_helloworld/helloworld/pom.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../tutorials-springboot_unit1_1_helloworld/helloworld/src/main/java/coms309/Application.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../tutorials-springboot_unit1_1_helloworld/helloworld/src/main/java/coms309/WelcomeController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../tutorials-springboot_unit1_1_helloworld/helloworld/src/main/resources/application.properties" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../README.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Readme.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/coms309/Application.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/coms309/ExceptionController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/coms309/WelcomeController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/coms309/people/PeopleController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/coms309/people/Person.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/application.properties" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../tutorials-springboot_unit1_3_petclinic_example/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../tutorials-springboot_unit1_3_petclinic_example/README.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../tutorials-springboot_unit1_3_petclinic_example/Spring/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../tutorials-springboot_unit1_3_petclinic_example/Spring/mvnw" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../tutorials-springboot_unit1_3_petclinic_example/Spring/mvnw.cmd" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../tutorials-springboot_unit1_3_petclinic_example/Spring/pom.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../tutorials-springboot_unit1_3_petclinic_example/Spring/src/main/java/org/springframework/samples/petclinic/PetClinicApplication.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../tutorials-springboot_unit1_3_petclinic_example/Spring/src/main/java/org/springframework/samples/petclinic/owner/OwnerController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../tutorials-springboot_unit1_3_petclinic_example/Spring/src/main/java/org/springframework/samples/petclinic/owner/OwnerRepository.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../tutorials-springboot_unit1_3_petclinic_example/Spring/src/main/java/org/springframework/samples/petclinic/owner/Owners.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../tutorials-springboot_unit1_3_petclinic_example/Spring/src/main/java/org/springframework/samples/petclinic/system/CrashController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../tutorials-springboot_unit1_3_petclinic_example/Spring/src/main/java/org/springframework/samples/petclinic/system/WelcomeController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../tutorials-springboot_unit1_3_petclinic_example/Spring/src/main/resources/application.properties" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../tutorials-springboot_unit1_3_petclinic_example/Spring/src/main/resources/banner.txt" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../../.." />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProjectColorInfo"><![CDATA[{
+  "associatedIndex": 5
+}]]></component>
+  <component name="ProjectId" id="2bZHWZpHK3dnSMdZsHIUCUC1VYe" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RequestMappingsPanelOrder0": "0",
+    "RequestMappingsPanelOrder1": "1",
+    "RequestMappingsPanelWidth0": "75",
+    "RequestMappingsPanelWidth1": "75",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "Spring Boot.Application.executor": "Run",
+    "git-widget-placeholder": "main",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "C:/Users/rapra/coms309-2/Springboot/tutorials-springboot_unit1_2_hellopeople",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="RunManager">
+    <configuration name="Application" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+      <module name="hellopeople" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="coms309.Application" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="jdk-21.0.2-openjdk-21.0.2-4caba194b151-4f524021" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="0f51f91a-7085-4a7e-bc34-239dbced258e" name="Changes" comment="" />
+      <created>1706415712347</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1706415712347</updated>
+      <workItem from="1706415713347" duration="722000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+</project>
