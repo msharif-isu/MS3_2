@@ -34,7 +34,7 @@
         private Button signupButton;
 
         private String username;
-        private String backendUrl = "http://10.0.2.2:8080/users/";
+        private String backendUrl = "http://10.0.2.2:8081/users/";
         //change to "http://coms-309-034.class.las.iastate.edu:8080/users/"
 
         private SharedPreferences sharedPreferences;

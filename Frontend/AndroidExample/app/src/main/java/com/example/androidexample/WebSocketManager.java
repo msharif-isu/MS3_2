@@ -171,10 +171,4 @@ public class WebSocketManager {
             }
         }
     }
-    public void closeWebSocket() {
-        if (webSocketClient != null) {
-            webSocketClient.close();
-        }
-    }
-
 }

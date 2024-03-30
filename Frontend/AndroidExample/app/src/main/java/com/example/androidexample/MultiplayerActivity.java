@@ -45,6 +45,7 @@ public class MultiplayerActivity extends AppCompatActivity implements WebSocketL
 
     //TODO PROPER QUESTION IMPLEMENTAITON FOR MULTIPLAYER
     private List<Integer> questionIds = new ArrayList<>();
+    private String backendUrl = "http://10.0.2.2:8081/";
     private int currentQuestionIndex = 0;
     private String questionCorrectAnswer = "Joe Biden";
     TextView questionTextView;
@@ -74,6 +75,8 @@ public class MultiplayerActivity extends AppCompatActivity implements WebSocketL
         timeLeftInMillis = timeInMinutes * 60 * 1000;
         startCountDownTimer();
 
+        fetchQuestionIds();
+
 
         //Todo add question support from database. Also add point support using database for multiple user support
         questionTextView.setText("Who is the current president of the United States?");
@@ -85,6 +88,7 @@ public class MultiplayerActivity extends AppCompatActivity implements WebSocketL
         String chatUrl = "ws://10.0.2.2:8080/chat/";
         //todo if username is blank, give error.
         String serverUrl = chatUrl + username;
+
 
         // Establish WebSocket connection and set listener
         WebSocketManager.getInstance().connectWebSocket(serverUrl);
@@ -111,9 +115,9 @@ public class MultiplayerActivity extends AppCompatActivity implements WebSocketL
 
             @Override
             public void onFinish() {
-                //TODO make something happen when time is up
                 timeLeftInMillis = 0;
                 updateCountDownText();
+                // Perform any action when the timer finishes
             }
         }.start();
     }
@@ -121,6 +125,7 @@ public class MultiplayerActivity extends AppCompatActivity implements WebSocketL
     private void updateCountDownText() {
         int minutes = (int) (timeLeftInMillis / 1000) / 60;
         int seconds = (int) (timeLeftInMillis / 1000) % 60;
+
         String timeLeftFormatted = String.format("%02d:%02d", minutes, seconds);
         timeLeftTextView.setText("Time Left: " + timeLeftFormatted);
     }
@@ -134,24 +139,37 @@ public class MultiplayerActivity extends AppCompatActivity implements WebSocketL
     }
 
     @Override
-    public void onWebSocketMessage(String message) {
-        runOnUiThread(() -> {
-            String s = msgTv.getText().toString();
-            if (message.startsWith("Question: ")) {
-                String question = message.substring("Question: ".length());
-                questionTextView.setText(question);
-            //} else if (message.equals("Correct!")) {
-            }
-            else {
-                msgTv.setText(s + "\n" + message);
-            }
+    public void onWebSocketOpen(ServerHandshake handshakedata) {
 
-        });
     }
 
     @Override
-    public void onWebSocketOpen(ServerHandshake handshakedata) {
+    public void onWebSocketMessage(String message) {
+        runOnUiThread(() -> {
+            String s = msgTv.getText().toString();
+            Spannable spannable = new SpannableString(s + "\n" + message);
 
+            // Split the message into username and answer
+            String[] parts = message.split(":");
+            if (parts.length == 2) {
+                String username = parts[0];
+                String answer = parts[1].trim(); // Trim to remove extra spaces
+
+                // Check if the answer is correct
+                if (answer.equalsIgnoreCase(questionCorrectAnswer)) {
+                    userPoints += 100;
+                    pointsTextView.setText("Points: " + userPoints);
+
+                    // Change the color of the correct answer message
+                    SpannableStringBuilder builder = new SpannableStringBuilder(username + " got the correct answer!");
+                    builder.setSpan(new ForegroundColorSpan(0xFF00FF00), 0, builder.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    msgTv.append("\n");
+                    msgTv.append(builder);
+                } else {
+                    msgTv.setText(s + "\n" + message);
+                }
+            }
+        });
     }
 
 
@@ -169,11 +187,66 @@ public class MultiplayerActivity extends AppCompatActivity implements WebSocketL
 
     }
 
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        // Close WebSocket connection
-        WebSocketManager.getInstance().closeWebSocket();
+
+    private void fetchQuestionIds() {
+        RequestQueue queue = Volley.newRequestQueue(this);
+        String url = backendUrl + "getPuestions";
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url, null,
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        try {
+                            for (int i = 0; i < response.length(); i++) {
+                                questionIds.add(response.getInt(i));
+                            }
+                            showNextQuestion();
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // Handle error
+                        Toast.makeText(MultiplayerActivity.this, "Failed to fetch question IDs", Toast.LENGTH_SHORT).show();
+                    }
+                });
+        queue.add(jsonArrayRequest);
+    }
+
+    private void showNextQuestion() {
+        //answerBoxEditText.setText("");
+        int questionId = questionIds.get(currentQuestionIndex);
+        fetchQuestionDetails(questionId);
+    }
+
+    private void fetchQuestionDetails(int questionId) {
+        RequestQueue queue = Volley.newRequestQueue(this);
+        String url = backendUrl + "pelican/" + questionId;
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            // Parse the JSON response to get question details
+                            String question = response.getString("question");
+                            questionCorrectAnswer = response.getString("answer");
+                            // Display the question
+                            questionTextView.setText(question);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // Handle error
+                        Toast.makeText(MultiplayerActivity.this, "Failed to fetch question details", Toast.LENGTH_SHORT).show();
+                    }
+                });
+        queue.add(jsonObjectRequest);
     }
 
 }
