@@ -147,7 +147,10 @@ public class QuestionSocket {
         else { // Message to whole chat
             broadcast(username + ": " + message);
 
-            if (message.contentEquals(questRepo.findById(randInt).getAnswer())) {
+            String providedAnswer = message.toLowerCase();
+            String correctAnswer = questRepo.findById(randInt).getAnswer().toLowerCase();
+
+            if (providedAnswer.equals(correctAnswer)) {
                 Question localQuestRepo = questRepo.findById(randInt);
                 Answer localAnswer = new Answer(username, message, true);
                 localAnswer.setQuestion(localQuestRepo);
@@ -237,12 +240,12 @@ public class QuestionSocket {
     }
 
     private void showMessageEveryone() {
-        String mpQuestion = questRepo.findById(randInt).getQuestion();
+        String mpQuestion = "Question: " + questRepo.findById(randInt).getQuestion();
         broadcast(mpQuestion);
     }
 
     private void showMessageOne(String username) {
-        String mpQuestion = questRepo.findById(randInt).getQuestion();
+        String mpQuestion = "Question: " + questRepo.findById(randInt).getQuestion();
         sendMessageToPArticularUser(username, mpQuestion);
     }
 
