@@ -1,5 +1,7 @@
 package com.project.trivia.User;
 
+import com.project.trivia.FriendsList.Friends;
+import com.project.trivia.FriendsList.FriendsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,6 +13,9 @@ public class UserController {
 
     @Autowired
     UserRepository userRepository;
+
+    @Autowired
+    FriendsRepository friendRepo;
 
     private String success = "{\"message\":\"success\"}";
     private String failure = "{\"message\":\"failure\"}";
@@ -27,12 +32,14 @@ public class UserController {
 
     @PostMapping(path = "/users")
     public String createUser(@RequestBody User user){
+        Friends temp = new Friends(user.getUsername());
         if (user == null)
             return failure;
         else if(userRepository.existsByUsername(user.getUsername())){
             return failure;
         }
         userRepository.save(user);
+        friendRepo.save(temp);
         return success;
     }
 

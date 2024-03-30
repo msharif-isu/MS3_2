@@ -12,11 +12,20 @@ public class Friends {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToMany
+    @ManyToMany(mappedBy = "friends")
     private List<User> user;
     private String username;
 
-    public Long getId() {
+
+    public Friends(String username) {
+        this.username = username;
+    }
+
+    public Friends() {
+
+    }
+
+    public long getId() {
         return id;
     }
 
@@ -30,5 +39,13 @@ public class Friends {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public List<User> getUser() {
+        return user;
+    }
+
+    public void setUser(List<User> user) {
+        this.user = user;
     }
 }

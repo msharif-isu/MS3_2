@@ -1,5 +1,6 @@
 package com.project.trivia.User;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.project.trivia.FriendsList.Friends;
 import jakarta.persistence.*;
 
@@ -12,6 +13,11 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     @ManyToMany
+    @JoinTable(
+            name = "user_friends",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "friends_id"))
+    @JsonIgnore
     private List<Friends> friends;
     private String username;
     private String password;
@@ -71,6 +77,11 @@ public class User {
     }
 
 
+    public List<Friends> getFriends() {
+        return friends;
+    }
 
-
+    public void setFriends(List<Friends> friends) {
+        this.friends = friends;
+    }
 }
