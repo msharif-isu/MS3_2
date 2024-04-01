@@ -5,6 +5,7 @@ import jakarta.websocket.server.PathParam;
 import jakarta.websocket.server.ServerEndpoint;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -14,6 +15,11 @@ import java.util.*;
 @Component
 public class Chat {
 
+    private static MessageRepository msgRepo;
+    @Autowired
+    public void setMessageRepository(MessageRepository repo) {
+        msgRepo = repo;  // we are setting the static variable
+    }
     private static Map<Session, String> sessionUsernameMap = new Hashtable<>();
     private static Map<String, Session> usernameSessionMap = new Hashtable<>();
 
@@ -95,6 +101,8 @@ public class Chat {
         } else { // Message to whole chat
             broadcastToRoom(id, username + ": " + message);
         }
+
+        msgRepo.save(new Message(username, message, id));
     }
 
     /**
