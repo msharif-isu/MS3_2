@@ -71,6 +71,18 @@ public class UserController {
         return user;
     }
 
+    @PutMapping(path = "/editBio/{username}/{bio}")
+    public User editBio(@PathVariable String username, @PathVariable String bio){
+        User user = userRepository.findByUsername(username);
+        if(user == null)
+            return null;
+        user.setBio(bio);
+        userRepository.save(user);
+        return user;
+    }
+
+
+
     //Temp way to get id of username passowrd
 
     @GetMapping(path = "/users/getIdByUsername/{username}")

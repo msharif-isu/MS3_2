@@ -61,20 +61,25 @@ public class FriendsController {
 
     @DeleteMapping("/{userId}/removeFriend/{friendId}")
     String removeFriend(@PathVariable int userId, @PathVariable int friendId) {
-        User user = userRepo.findById(userId);
-        Friends friend = friendsRepo.findById(friendId);
+        User user1 = userRepo.findById(userId);
+        User user2 = userRepo.findById(friendId);
+        Friends friend1 = friendsRepo.findById(friendId);
+        Friends friend2 = friendsRepo.findById(userId);
 
-        if (user == null || friend == null) {
+        if (user1 == null || friend1 == null) {
             return "User or friend not found.";
         }
-        if (!user.getFriends().contains(friend)) {
-            return user.getUsername() +" is not friends with " + friend.getUsername();
+        if (!user1.getFriends().contains(friend1)) {
+            return user1.getUsername() +" is not friends with " + friend1.getUsername();
         }
 
-        user.getFriends().remove(friend);
-        userRepo.save(user);
+        user1.getFriends().remove(friend1);
+        userRepo.save(user1);
 
-        return user.getUsername() + " and " + friend.getUsername() + " are no longer friends ";
+        user2.getFriends().remove(friend2);
+        userRepo.save(user2);
+
+        return user1.getUsername() + " and " + friend1.getUsername() + " are no longer friends ";
     }
 
     @GetMapping(path = "/friendsList/{userId}")

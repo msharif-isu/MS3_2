@@ -22,13 +22,15 @@ public class User {
     private String username;
     private String password;
     private String email;
-
+    private String bio;
+    private String filePath;
     private long points;
 
     public User(String username, String password, String email) {
         this.username = username;
         this.password = password;
         this.email = email;
+        bio = "";
         points = 0;
     }
 
@@ -83,5 +85,21 @@ public class User {
 
     public void setFriends(List<Friends> friends) {
         this.friends = friends;
+    }
+
+    public String getBio() {
+        return bio;
+    }
+
+    public void setBio(String bio) {
+        this.bio = bio;
+    }
+
+    public String getFilePath() {
+        return filePath;
+    }
+
+    public void setFilePath(String filePath) {
+        this.filePath = filePath;
     }
 }
