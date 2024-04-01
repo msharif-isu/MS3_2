@@ -34,33 +34,28 @@ public class FriendsController {
     }
 
 
-    @PostMapping(path = "/friendToTable")
-    String addToTable(@RequestBody Friends friend){
-        if (friend == null){
-            return failure;
-        }
-        friendsRepo.save(friend);
-
-        return success;
-    }
-
     @PostMapping(path = "/{userId}/addFriend/{friendId}")
     String addFriend(@PathVariable int userId, @PathVariable int friendId){
-        User user = userRepo.findById(userId);
-        Friends friend = friendsRepo.findById(friendId);
+        User user1 = userRepo.findById(userId);
+        User user2 = userRepo.findById(friendId);
+        Friends friend1 = friendsRepo.findById(friendId);
+        Friends friend2 = friendsRepo.findById(userId);
 
-        if (user == null || friend == null) {
+        if (user1 == null || friend1 == null) {
             return "User or friend not found.";
         }
 
-        if (user.getFriends().contains(friend)) {
+        if (user1.getFriends().contains(friend1)) {
             return "User is already friends with this friend.";
         }
 
-        user.getFriends().add(friend);
-        userRepo.save(user);
+        user1.getFriends().add(friend1);
+        userRepo.save(user1);
 
-        return user.getUsername() + " is now friends with " + friend.getUsername();
+        user2.getFriends().add(friend2);
+        userRepo.save(user2);
+
+        return user1.getUsername() + " is now friends with " + friend1.getUsername();
     }
 
 
@@ -82,7 +77,7 @@ public class FriendsController {
         return user.getUsername() + " and " + friend.getUsername() + " are no longer friends ";
     }
 
-    @GetMapping(path = "/friendsOfUser/{userId}")
+    @GetMapping(path = "/friendsList/{userId}")
     List<Friends> friendsOfUser(@PathVariable int userId){
         User user = userRepo.findById(userId);
         if(user == null){
