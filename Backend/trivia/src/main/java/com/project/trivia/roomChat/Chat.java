@@ -1,4 +1,4 @@
-package com.project.trivia.Websocket;
+package com.project.trivia.roomChat;
 
 import jakarta.websocket.*;
 import jakarta.websocket.server.PathParam;

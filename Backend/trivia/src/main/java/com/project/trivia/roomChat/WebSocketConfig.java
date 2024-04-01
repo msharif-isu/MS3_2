@@ -1,4 +1,4 @@
-package com.project.trivia.Websocket;
+package com.project.trivia.roomChat;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
