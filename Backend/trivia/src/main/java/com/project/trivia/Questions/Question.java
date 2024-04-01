@@ -17,15 +17,17 @@ public class Question {
     private String answer;
     private String questionType;
     private boolean used;
+    private boolean userCreated;
 
     @OneToMany
     private List<Answer> ans;
 
-    public Question(String question, String answer, String questionType, boolean used) {
+    public Question(String question, String answer, String questionType, boolean used, boolean userCreated) {
         this.question = question;
         this.answer = answer;
         this.questionType = questionType;
         this.used = used;
+        this.userCreated = userCreated;
     }
     public Question() {};
 
@@ -63,6 +65,11 @@ public class Question {
     public boolean getUsed() {return used;}
 
     public void setUsed(boolean used) {this.used = used;}
+
+    public boolean getUserCreated() {return userCreated;}
+
+    public void setUserCreated(boolean userCreated) {this.userCreated = userCreated;}
+
 
 
 }
