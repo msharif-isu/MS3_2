@@ -205,6 +205,4 @@ public class ProfileActivity extends AppCompatActivity {
         });
         queue.add(jsonObjectRequest);
     }
-
-
 }

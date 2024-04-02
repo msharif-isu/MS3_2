@@ -34,11 +34,11 @@ public class FriendsController {
     }
 
 
-    @PostMapping(path = "/{userId}/addFriend/{friendId}")
-    String addFriend(@PathVariable int userId, @PathVariable int friendId){
+    @PostMapping(path = "/{userId}/addFriend/{friendName}")
+    String addFriend(@PathVariable int userId, @PathVariable String friendName){
         User user1 = userRepo.findById(userId);
-        User user2 = userRepo.findById(friendId);
-        Friends friend1 = friendsRepo.findById(friendId);
+        User user2 = userRepo.findByUsername(friendName);
+        Friends friend1 = friendsRepo.findByUsername(friendName);
         Friends friend2 = friendsRepo.findById(userId);
 
         if (user1 == null || friend1 == null) {
@@ -59,11 +59,11 @@ public class FriendsController {
     }
 
 
-    @DeleteMapping("/{userId}/removeFriend/{friendId}")
-    String removeFriend(@PathVariable int userId, @PathVariable int friendId) {
+    @DeleteMapping("/{userId}/removeFriend/{friendName}")
+    String removeFriend(@PathVariable int userId, @PathVariable String friendName) {
         User user1 = userRepo.findById(userId);
-        User user2 = userRepo.findById(friendId);
-        Friends friend1 = friendsRepo.findById(friendId);
+        User user2 = userRepo.findByUsername(friendName);
+        Friends friend1 = friendsRepo.findByUsername(friendName);
         Friends friend2 = friendsRepo.findById(userId);
 
         if (user1 == null || friend1 == null) {
@@ -93,4 +93,3 @@ public class FriendsController {
 
 
 }
-
