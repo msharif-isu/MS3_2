@@ -2,8 +2,8 @@ package com.project.trivia.Lobby;
 
 import com.project.trivia.User.User;
 import jakarta.persistence.*;
-import lombok.Getter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -20,20 +20,25 @@ public class Lobby {
      */
     private int playerCount;
     private String host;
-    @OneToMany(mappedBy = "lobbyId", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "lobby")
     private List<User> players;
     private Boolean started;
 
     private Boolean finished;
 
-    public Lobby(int roomSize, String host, String p1) {
+
+    public Lobby(int roomSize, String host) {
         this.roomSize = roomSize;
         playerCount = 1;
         this.host = host;
+        players = new ArrayList<>();
+        started = false;
+        finished = false;
+
     }
 
     public Lobby() {
-
+        players = new ArrayList<>();
     }
 
     public void setId(Long id) {

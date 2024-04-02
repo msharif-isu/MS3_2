@@ -1,5 +1,6 @@
 package com.project.trivia.User;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.project.trivia.Leaderboard.Leaderboard;
 import com.project.trivia.Lobby.Lobby;
 import com.project.trivia.MPQuestions.Answer;
@@ -22,8 +23,9 @@ public class User {
     @OneToMany(mappedBy="user")
     private List<Answer> ans;
     @ManyToOne
-    @JoinColumn(name="lobby_id", nullable=false)
-    private Lobby lobbyId;
+    @JoinColumn(name="lobby_id")
+    @JsonIgnore
+    private Lobby lobby;
 
     @OneToOne
     private Leaderboard leaderboard;
@@ -79,12 +81,10 @@ public class User {
         this.points = points;
     }
 
-
-    public Lobby getLobbyId() {
-        return lobbyId;
+    public Lobby getLobby() {
+        return lobby;
     }
-
-    public void setLobbyId(Lobby lobbyId) {
-        this.lobbyId = lobbyId;
+    public void setLobby(Lobby lobbyId) {
+        this.lobby = lobbyId;
     }
 }
