@@ -81,11 +81,11 @@ public class QueryActivity extends AppCompatActivity {
         String serverUrl = RequestURLs.SERVER_HTTP_QUESTION_QUERY_URL;
 
         if (type.trim().isEmpty()) {
-            serverUrl = String.format("%s/userGenerated/%d", serverUrl, (isUserGenerated) ? 1 : 0);
+            serverUrl = String.format("%s/userCreated/%d", serverUrl, (isUserGenerated) ? 1 : 0);
             Log.d("TryTryTryAgain", "Filtered by user-generated");
         } else {
-            serverUrl = String.format("%s/topic/%s", serverUrl, type);
-            Log.d("TryTryTryAgain", "Filtered by user-generated and type");
+            serverUrl = String.format("%s/filter/%s/%d", serverUrl, type, (isUserGenerated) ? 1 : 0);
+            Log.d("TryTryTryAgain", "Filtered by type");
         }
             JsonArrayRequest questionRequest = new JsonArrayRequest(
                     Request.Method.GET,
@@ -119,7 +119,6 @@ public class QueryActivity extends AppCompatActivity {
                     new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError error) {
-                            Log.d("VolleyError", error.toString());
                             if (!attemptedRefresh) {
                                 Toast.makeText(getApplicationContext(), "Leaderboard failed to load, reattempting to get data from server", Toast.LENGTH_LONG).show();
                                 requestQuestions(type, isUserGenerated);
