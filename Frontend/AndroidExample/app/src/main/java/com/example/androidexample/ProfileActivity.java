@@ -24,6 +24,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
 import org.json.JSONArray;
@@ -39,7 +40,7 @@ public class ProfileActivity extends AppCompatActivity {
     private ArrayList<UserFriend> friendsList;
     private RecyclerView recyclerView;
     ImageView imgView;
-    ImageButton addFriends;
+    ImageButton addFriends, editBioButton;
     //Button addFriend = findViewById(R.id.addFriend);
     TextView questionsAnswered, achievementsUnlocked, userBiography, usernameText, friendsListText;
     private String username;
@@ -70,18 +71,24 @@ public class ProfileActivity extends AppCompatActivity {
         usernameText = findViewById(R.id.username);
         friendsListText = findViewById(R.id.freindsListText);
         recyclerView = findViewById(R.id.friendList);
+        editBioButton = findViewById(R.id.editBioButton);
 
         questionsAnswered.setText("Add Friends");
         achievementsUnlocked.setText("");
-        userBiography.setText("I am the real alok");
+        getBio();
+//        userBiography.setText(temp);
         usernameText.setText(username);
         //friendsListText.setText("Friends:");
+
 
         setFriendInfo();
         setAdapter();
 
         addFriends.setOnClickListener(view -> {
             addFriendsDialog();
+        });
+        editBioButton.setOnClickListener(view -> {
+            editButtonDialog();
         });
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -91,6 +98,58 @@ public class ProfileActivity extends AppCompatActivity {
             }
         });
 
+
+    }
+
+    private void editButtonDialog() {
+        Dialog dialog = new Dialog(this);
+        dialog.setContentView(R.layout.edit_bio);
+        dialog.show();
+
+        Button save = dialog.findViewById(R.id.save);
+        Button cancelButton = dialog.findViewById(R.id.cancel);
+        EditText bioEdit = dialog.findViewById(R.id.bioEdit);
+
+        cancelButton.setOnClickListener(v -> dialog.dismiss());
+        save.setOnClickListener(v -> {
+
+            String newBio = bioEdit.getText().toString();
+            editBio(newBio);
+            dialog.dismiss();
+        });
+
+
+    }
+
+    private void editBio(String newBio) {
+        JSONObject requestBody = new JSONObject();
+        try {
+            requestBody.put("bio", newBio);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        RequestQueue queue = Volley.newRequestQueue(this);
+        String url = backendUrl + "editBio/" + username + "/" + newBio;
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.PUT, url, requestBody, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    String message = response.getString("message");
+                    userBiography.setText(newBio);
+                    Toast.makeText(ProfileActivity.this, message, Toast.LENGTH_SHORT).show();
+                    Log.e("ProfileActivity", "find this:" + newBio);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    Log.e("ProfileActivity", "Error parsing response: " + e.getMessage());
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e("ProfileActivity", "Error editing bio: " + error.getMessage());
+            }
+        });
+        queue.add(jsonObjectRequest);
     }
 
     private void addFriendsDialog() {
@@ -110,8 +169,6 @@ public class ProfileActivity extends AppCompatActivity {
             dialog.dismiss();
         });
     }
-
-
 
     private void addFriends(String friendId, Dialog dialog) {
         JSONObject requestBody = new JSONObject();
@@ -154,7 +211,6 @@ public class ProfileActivity extends AppCompatActivity {
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(adapter);
     }
-
 
     private void setFriendInfo() {
 //        friendsList.add(new UserFriend("Alok1", "This is the real alok", null));
@@ -205,4 +261,25 @@ public class ProfileActivity extends AppCompatActivity {
         });
         queue.add(jsonObjectRequest);
     }
+
+    private void getBio() {
+        RequestQueue queue = Volley.newRequestQueue(this);
+        String url = backendUrl + "users/getBio/" + username;
+        Log.e("ProfileActivity", "Bio url:" + url);
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                userBiography.setText(response);
+                Log.e("ProfileActivity", "Bio received:" + response);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e("ProfileActivity", "Error fetching bio: " + error.getMessage());
+            }
+        });
+        queue.add(stringRequest);
+    }
+
+
 }
