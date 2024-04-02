@@ -1,6 +1,7 @@
 package com.project.trivia.User;
 
 import com.project.trivia.Leaderboard.Leaderboard;
+import com.project.trivia.Lobby.Lobby;
 import com.project.trivia.MPQuestions.Answer;
 import jakarta.persistence.*;
 
@@ -20,6 +21,9 @@ public class User {
 
     @OneToMany(mappedBy="user")
     private List<Answer> ans;
+    @ManyToOne
+    @JoinColumn(name="lobby_id", nullable=false)
+    private Lobby lobbyId;
 
     @OneToOne
     private Leaderboard leaderboard;
@@ -76,6 +80,11 @@ public class User {
     }
 
 
+    public Lobby getLobbyId() {
+        return lobbyId;
+    }
 
-
+    public void setLobbyId(Lobby lobbyId) {
+        this.lobbyId = lobbyId;
+    }
 }
