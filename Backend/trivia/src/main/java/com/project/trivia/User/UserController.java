@@ -1,5 +1,7 @@
 package com.project.trivia.User;
 
+import com.project.trivia.FriendsList.Friends;
+import com.project.trivia.FriendsList.FriendsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,6 +13,9 @@ public class UserController {
 
     @Autowired
     UserRepository userRepository;
+
+    @Autowired
+    FriendsRepository friendRepo;
 
     private String success = "{\"message\":\"success\"}";
     private String failure = "{\"message\":\"failure\"}";
@@ -27,12 +32,14 @@ public class UserController {
 
     @PostMapping(path = "/users")
     public String createUser(@RequestBody User user){
+        Friends temp = new Friends(user.getUsername());
         if (user == null)
             return failure;
         else if(userRepository.existsByUsername(user.getUsername())){
             return failure;
         }
         userRepository.save(user);
+        friendRepo.save(temp);
         return success;
     }
 
@@ -48,6 +55,7 @@ public class UserController {
     @DeleteMapping(path = "/users/{id}")
     public String deleteUser(@PathVariable int id){
         userRepository.deleteById(id);
+        friendRepo.deleteById(id);
         return success;
     }
 
@@ -62,6 +70,18 @@ public class UserController {
         userRepository.save(user);
         return user;
     }
+
+    @PutMapping(path = "/editBio/{username}/{bio}")
+    public User editBio(@PathVariable String username, @PathVariable String bio){
+        User user = userRepository.findByUsername(username);
+        if(user == null)
+            return null;
+        user.setBio(bio);
+        userRepository.save(user);
+        return user;
+    }
+
+
 
     //Temp way to get id of username passowrd
 
