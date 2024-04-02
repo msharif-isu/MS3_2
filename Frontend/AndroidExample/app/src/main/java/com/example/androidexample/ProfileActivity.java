@@ -16,14 +16,17 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -40,10 +43,12 @@ public class ProfileActivity extends AppCompatActivity {
     //Button addFriend = findViewById(R.id.addFriend);
     TextView questionsAnswered, achievementsUnlocked, userBiography, usernameText, friendsListText;
     private String username;
+
     private int userId;
     private String backendUrl = RequestURLs.SERVER_HTTP_URL + "/";
-            //"http://localhost:8080/";
-        //RequestURLs.SERVER_HTTP_URL;
+    //"http://localhost:8080/";
+    //RequestURLs.SERVER_HTTP_URL;
+    private SwipeRefreshLayout swipeRefreshLayout;
 
 
     @Override
@@ -56,6 +61,7 @@ public class ProfileActivity extends AppCompatActivity {
 
         friendsList = new ArrayList<>();
 
+        swipeRefreshLayout = findViewById(R.id.swipeRefreshLayout);
         imgView = findViewById(R.id.imgView);
         addFriends = findViewById(R.id.addFriends);
         questionsAnswered = findViewById(R.id.questionsAnswered);
@@ -76,6 +82,13 @@ public class ProfileActivity extends AppCompatActivity {
 
         addFriends.setOnClickListener(view -> {
             addFriendsDialog();
+        });
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                setFriendInfo();
+                swipeRefreshLayout.setRefreshing(false);
+            }
         });
 
     }
@@ -98,6 +111,8 @@ public class ProfileActivity extends AppCompatActivity {
         });
     }
 
+
+
     private void addFriends(String friendId, Dialog dialog) {
         JSONObject requestBody = new JSONObject();
         try {
@@ -109,24 +124,23 @@ public class ProfileActivity extends AppCompatActivity {
         RequestQueue queue = Volley.newRequestQueue(this);
         String url = backendUrl + userId + "/addFriend/" + friendId;
         Log.e("ProfileActivity", "URL = " + url);
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, requestBody,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        try {
-                            String message = response.getString("message");
-                            Toast.makeText(ProfileActivity.this, message, Toast.LENGTH_SHORT).show();
-                            Toast.makeText(ProfileActivity.this, "Friend added", Toast.LENGTH_SHORT).show();
-                            dialog.dismiss();
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                            Log.e("ProfileActivity", "Error parsing response: " + e.getMessage());
-                        }
-                    }
-                }, new Response.ErrorListener() {
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, requestBody, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    String message = response.getString("message");
+                    Toast.makeText(ProfileActivity.this, message, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ProfileActivity.this, "Friend added", Toast.LENGTH_SHORT).show();
+                    dialog.dismiss();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    Log.e("ProfileActivity", "Error parsing response: " + e.getMessage());
+                }
+            }
+        }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-            //    Toast.makeText(ProfileActivity.this, "Error adding friend", Toast.LENGTH_SHORT).show();
+                //    Toast.makeText(ProfileActivity.this, "Error adding friend", Toast.LENGTH_SHORT).show();
                 Log.e("ProfileActivity", "Error adding friend: " + error.getMessage());
             }
         });
@@ -141,18 +155,56 @@ public class ProfileActivity extends AppCompatActivity {
         recyclerView.setAdapter(adapter);
     }
 
-    private void setFriendInfo() {
-        friendsList.add(new UserFriend("Alok1", "This is the real alok", null));
-        friendsList.add(new UserFriend("Alok2", "This is actually the real alok", null));
-        friendsList.add(new UserFriend("Alok3", "Nah, This is the real alok!", null));
-        friendsList.add(new UserFriend("Mahdi", "I will give Owais an A on this demo.", null));
-        friendsList.add(new UserFriend("Alok4", "Nope, its actually me", null));
-        friendsList.add(new UserFriend("Alok5", "Alok4 is lying.", null));
-        friendsList.add(new UserFriend("Osamson", "I agree with Alok5", null));
-        friendsList.add(new UserFriend("Aldaco", "Hello, I am definitly the real Dr. Aldaco", null));
-        friendsList.add(new UserFriend("Alok8", "I am the real alok", null));
-        friendsList.add(new UserFriend("Alok9", "Nah.", null));
 
+    private void setFriendInfo() {
+//        friendsList.add(new UserFriend("Alok1", "This is the real alok", null));
+//        friendsList.add(new UserFriend("Alok2", "This is actually the real alok", null));
+//        friendsList.add(new UserFriend("Alok3", "Nah, This is the real alok!", null));
+//        friendsList.add(new UserFriend("Mahdi", "I will give Owais an A on this demo.", null));
+//        friendsList.add(new UserFriend("Alok4", "Nope, its actually me", null));
+//        friendsList.add(new UserFriend("Alok5", "Alok4 is lying.", null));
+//        friendsList.add(new UserFriend("Osamson", "I agree with Alok5", null));
+//        friendsList.add(new UserFriend("Aldaco", "Hello, I am definitly the real Dr. Aldaco", null));
+//        friendsList.add(new UserFriend("Alok8", "I am the real alok", null));
+//        friendsList.add(new UserFriend("Alok9", "Nah.", null));
+        RequestQueue queue = Volley.newRequestQueue(this);
+        String url = backendUrl + "friends/" + userId;
+        Log.d("ProfileActivity", "Fetching friend details: " + url);
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                String jsonResponse = response.toString();
+                Log.d("ProfileActivity", "Friend Details JSON Response: " + jsonResponse);
+                try {
+                    // Clear the existing data in the friendsList. This avoids duplicate entries.
+                    friendsList.clear();
+                    JSONArray userArray = response.getJSONArray("user");
+                    for (int i = 0; i < userArray.length(); i++) {
+                        JSONObject userObject = userArray.getJSONObject(i);
+                        String username = userObject.getString("username");
+                        String bio = userObject.isNull("bio") ? "" : userObject.getString("bio");
+                        String filePath = userObject.optString("filePath", "");
+                        Log.d("ProfileActivity", "Username: " + username);
+                        Log.d("ProfileActivity", "Bio: " + bio);
+                        Log.d("ProfileActivity", "File Path: " + filePath);
+                        friendsList.add(new UserFriend(username, bio, filePath));
+                    }
+
+                    // Notify the adapter that the data has changed
+                    recyclerView.getAdapter().notifyDataSetChanged();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    Log.e("ProfileActivity", "Error parsing friend details JSON: " + e.getMessage());
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e("ProfileActivity", "Error fetching friend details: " + error.getMessage());
+            }
+        });
+        queue.add(jsonObjectRequest);
     }
+
 
 }

@@ -106,4 +106,15 @@ public class UserController {
         }
         return passwordIds;
     }
+
+    @GetMapping(path = "/users/getBio/{username}")
+    public String getBioByUsername(@PathVariable String username) {
+        User user = userRepository.findByUsername(username);
+        if (user != null) {
+            return user.getBio();
+        } else {
+            return "User not found";
+        }
+    }
+
 }
