@@ -8,4 +8,6 @@ public interface FriendsRepository extends JpaRepository<Friends, Long> {
     @Transactional
     void deleteById(int id);
 
+    Friends findByUsername(String name);
+
 }
