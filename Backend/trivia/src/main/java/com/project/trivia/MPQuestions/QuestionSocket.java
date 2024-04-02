@@ -59,6 +59,8 @@ public class QuestionSocket {
     @Autowired
     public void setQuestionRepository(QuestionRepository repo) {questRepo = repo;}
 
+
+
     private static AnswerRepository ansRepo;
 
     @Autowired
@@ -153,14 +155,20 @@ public class QuestionSocket {
             if (providedAnswer.equals(correctAnswer)) {
                 Question localQuestRepo = questRepo.findById(randInt);
                 Answer localAnswer = new Answer(username, message, true);
-                localAnswer.setQuestion(localQuestRepo);
+                //localAnswer.setQuestion(localQuestRepo);
                 ansRepo.save(localAnswer);
                 localQuestRepo.setUsed(true);
                 questRepo.save(localQuestRepo);
 
                 broadcast("Correct!");
-                randomize();
-                showMessageEveryone();
+                if (allQuestionsUsed()) {
+                    broadcast("Game is now over congrats!");
+                }
+                else {
+                    randomize();
+                    showMessageEveryone();
+                }
+
 
             }
             else {
@@ -265,4 +273,18 @@ public class QuestionSocket {
             questRepo.save(localQuestRepo);
         }
     }
+
+    private boolean allQuestionsUsed() {
+        List<Question> allQuestion = questRepo.findAll();
+        boolean allUsed = true;
+        for(int i=1; i<allQuestion.size()+1; i++) {
+            Question localQuestRepo = questRepo.findById(i);
+            if (!localQuestRepo.getUsed()) {
+                allUsed = false;
+            }
+        }
+        return allUsed;
+    }
+
+
 }

@@ -12,7 +12,7 @@ import lombok.Data;
 @Entity
 public class Answer {
 	@Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     @Column
@@ -28,8 +28,9 @@ public class Answer {
     @Column(name = "sent")
     private Date sent = new Date();
 
-    @ManyToOne(cascade = CascadeType.MERGE)
+    @ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
     @JoinColumn(name = "question_id")
+    @JsonIgnore
     private Question question;
 
     @ManyToOne

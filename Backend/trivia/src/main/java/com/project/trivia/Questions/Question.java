@@ -3,6 +3,7 @@ package com.project.trivia.Questions;
 import com.project.trivia.MPQuestions.Answer;
 import jakarta.persistence.*;
 import org.hibernate.annotations.DynamicUpdate;
+import org.hibernate.annotations.Fetch;
 
 import java.util.List;
 
@@ -11,14 +12,14 @@ import java.util.List;
 public class Question {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
     private String question;
     private String answer;
     private String questionType;
     private boolean used;
 
-    @OneToMany
+    @OneToMany(mappedBy = "question")
     private List<Answer> ans;
 
     public Question(String question, String answer, String questionType, boolean used) {
