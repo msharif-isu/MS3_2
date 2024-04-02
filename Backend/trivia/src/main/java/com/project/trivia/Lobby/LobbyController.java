@@ -92,9 +92,6 @@ public class LobbyController {
         if (lobby == null){
             return null;
         }
-        if(lobby.getPlayerCount() >= lobby.getRoomSize()){
-            throw new ResponseStatusException(HttpStatus.I_AM_A_TEAPOT, "full");
-        }
 
         lobby.getPlayers().remove(user);
         user.setLobby(null);
@@ -108,6 +105,22 @@ public class LobbyController {
         userRepo.save(user);
 
         return lobby;
+    }
+
+    @PutMapping(path = "/gameStatus/{status}/{roomId}")
+    public Lobby setStatus(@PathVariable int status, @PathVariable int roomId){
+        Lobby lobby = lobbyRepo.findById(roomId);
+        switch (status){
+            case 0:
+                lobby.setFinished(false);
+            case 1:
+                lobby.setFinished(true);
+        }
+
+        lobbyRepo.save(lobby);
+
+        return lobby;
+
     }
 
     @GetMapping(path = "/inRoom/{id}")
