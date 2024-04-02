@@ -22,7 +22,6 @@ public class Lobby {
     private String host;
     @OneToMany(mappedBy = "lobby")
     private List<User> players;
-    private Boolean started;
 
     private Boolean finished;
 
@@ -32,7 +31,6 @@ public class Lobby {
         playerCount = 1;
         this.host = host;
         players = new ArrayList<>();
-        started = false;
         finished = false;
 
     }
@@ -75,5 +73,13 @@ public class Lobby {
 
     public void setPlayers(List<User> players) {
         this.players = players;
+    }
+
+    public Boolean getFinished() {
+        return finished;
+    }
+
+    public void setFinished(Boolean finished) {
+        this.finished = finished;
     }
 }
