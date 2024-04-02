@@ -17,7 +17,6 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -31,7 +30,7 @@ public class UserQuestionAdapter extends RecyclerView.Adapter<UserQuestionAdapte
     /**
      * An array of UserQuestionListItems to pull data from
      */
-    private List<UserQuestionListItem> questionsDataSet;
+    private List<Question> questionsDataSet;
 
     /**
      * The url of the server to send responses to
@@ -76,7 +75,7 @@ public class UserQuestionAdapter extends RecyclerView.Adapter<UserQuestionAdapte
      * @param dataSet JSONArray containing the data to populate views to be used
      * by RecyclerView
      */
-    public UserQuestionAdapter(Context context, String SERVER_URL, List<UserQuestionListItem> dataSet) {
+    public UserQuestionAdapter(Context context, String SERVER_URL, List<Question> dataSet) {
         this.context = context;
         this.SERVER_URL = SERVER_URL;
         questionsDataSet = dataSet;
@@ -96,7 +95,7 @@ public class UserQuestionAdapter extends RecyclerView.Adapter<UserQuestionAdapte
     // Replace the contents of a view (invoked by the layout manager)
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, final int position) {
-        UserQuestionListItem userData = questionsDataSet.get(position);
+        Question userData = questionsDataSet.get(position);
         viewHolder.getQuestionView().setText(userData.getQuestion());
         viewHolder.getAnswerView().setText(userData.getAnswer());
         viewHolder.getQuestionNumber().setText(String.format("#%d", position + 1));

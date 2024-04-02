@@ -9,7 +9,7 @@ public class RequestURLs {
      */
     public static final String SERVER_HTTP_URL = "http://coms-309-034.class.las.iastate.edu:8080";
     public static final String SERVER_HTTP_USER_QUESTION_URL = "http://coms-309-034.class.las.iastate.edu:8080/question";
-
+    public static final String SERVER_HTTP_QUESTION_QUERY_URL = "http://coms-309-034.class.las.iastate.edu:8080/query";
     /**
      * The URL to be used to refer to any WebSocket requests made to the VM server
      */
