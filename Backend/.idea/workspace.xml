@@ -4,12 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="aa247b61-3439-49d8-9853-376a5b7b168c" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/trivia/src/main/java/com/project/trivia/Queryboard/Query.java" beforeDir="false" afterPath="$PROJECT_DIR$/trivia/src/main/java/com/project/trivia/Queryboard/Query.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/trivia/src/main/java/com/project/trivia/Questions/QuestionController.java" beforeDir="false" afterPath="$PROJECT_DIR$/trivia/src/main/java/com/project/trivia/Questions/QuestionController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/trivia/target/classes/com/project/trivia/Questions/QuestionController.class" beforeDir="false" afterPath="$PROJECT_DIR$/trivia/target/classes/com/project/trivia/Questions/QuestionController.class" afterDir="false" />
-    </list>
+    <list default="true" id="aa247b61-3439-49d8-9853-376a5b7b168c" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
