@@ -258,10 +258,11 @@ public class QuestionSocket {
     }
 
     private void randomize() {
-        long amount = questRepo.count()-1;
-        randInt = (int)(Math.random()*amount)+1;
+        long amount = questRepo.count();
+        randInt = (int)((Math.random()*amount)+1);
         while (questRepo.findById(randInt).getUsed()) {
             randomize();
+
         }
     }
 
