@@ -1,6 +1,7 @@
 package com.example.androidexample;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.util.Log;
@@ -25,10 +26,8 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
-/**
- * Handles the single player quiz functionality.
- */
 public class SinglePlayerQuestionActivity extends AppCompatActivity {
 
     private TextView questionTextView, pointsTextView, timeLeftTextView, usernameTextView;
@@ -41,7 +40,7 @@ public class SinglePlayerQuestionActivity extends AppCompatActivity {
     private int usernameId;
 
     //this exists because the server decided to stop working :)
-    private String backendUrl = "http://coms-309-034.class.las.iastate.edu:8080/";
+    private String backendUrl = "http://10.0.2.2:8081/";
     private String questionCorrectAnswer;
 
     private String username;
@@ -70,10 +69,17 @@ public class SinglePlayerQuestionActivity extends AppCompatActivity {
 
         pointsTextView.setText("Points: 0");
 
-        Bundle extras = getIntent().getExtras();
-        if (extras != null) {
-            username = extras.getString("USERNAME");
-            usernameId = extras.getInt("USERID");
+
+        SharedPreferences prefs = getSharedPreferences("UserData", MODE_PRIVATE);
+        username = prefs.getString("USERNAME", "");
+        //Log.d("MainActivity", "Username from SharedPreferences: " + username);
+
+
+//        Bundle extras = getIntent().getExtras();
+//        if (extras != null) {
+//            username = extras.getString("USERNAME");
+//            usernameId = extras.getInt("USERID");
+        if (!Objects.equals(username, "")) {
             usernameTextView.setText(username); // this will come from LoginActivity
         } else {
             usernameTextView.setText("Not logged in");
@@ -121,32 +127,32 @@ public class SinglePlayerQuestionActivity extends AppCompatActivity {
     /**
      * Method to fetch question IDs from the backend
      */
-    private void fetchQuestionIds() {
-        RequestQueue queue = Volley.newRequestQueue(this);
-        String url = backendUrl + "getPuestions";
-        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url, null,
-                new Response.Listener<JSONArray>() {
-                    @Override
-                    public void onResponse(JSONArray response) {
-                        try {
-                            for (int i = 0; i < response.length(); i++) {
-                                questionIds.add(response.getInt(i));
+        private void fetchQuestionIds() {
+            RequestQueue queue = Volley.newRequestQueue(this);
+            String url = backendUrl + "getPuestions";
+            JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url, null,
+                    new Response.Listener<JSONArray>() {
+                        @Override
+                        public void onResponse(JSONArray response) {
+                            try {
+                                for (int i = 0; i < response.length(); i++) {
+                                    questionIds.add(response.getInt(i));
+                                }
+                                showNextQuestion();
+                            } catch (JSONException e) {
+                                e.printStackTrace();
                             }
-                            showNextQuestion();
-                        } catch (JSONException e) {
-                            e.printStackTrace();
                         }
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        // Handle error
-                        Toast.makeText(SinglePlayerQuestionActivity.this, "Failed to fetch question IDs", Toast.LENGTH_SHORT).show();
-                    }
-                });
-        queue.add(jsonArrayRequest);
-    }
+                    },
+                    new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            // Handle error
+                            Toast.makeText(SinglePlayerQuestionActivity.this, "Failed to fetch question IDs", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+            queue.add(jsonArrayRequest);
+        }
 
     /**
      * Method to fetch question details by ID from the backend
