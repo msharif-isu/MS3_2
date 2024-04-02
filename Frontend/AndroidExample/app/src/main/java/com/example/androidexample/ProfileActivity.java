@@ -1,8 +1,10 @@
 package com.example.androidexample;
 
 import android.app.Dialog;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.style.TtsSpan;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -15,7 +17,19 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
+
+import url.RequestURLs;
 
 public class ProfileActivity extends AppCompatActivity {
 
@@ -24,13 +38,21 @@ public class ProfileActivity extends AppCompatActivity {
     ImageView imgView;
     ImageButton addFriends;
     //Button addFriend = findViewById(R.id.addFriend);
+    TextView questionsAnswered, achievementsUnlocked, userBiography, usernameText, friendsListText;
+    private String username;
+    private int userId;
+    private String backendUrl = RequestURLs.SERVER_HTTP_URL + "/";
+            //"http://localhost:8080/";
+        //RequestURLs.SERVER_HTTP_URL;
 
-    TextView questionsAnswered, achievementsUnlocked, userBiography, username, friendsListText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
+        SharedPreferences prefs = getSharedPreferences("UserData", MODE_PRIVATE);
+        username = prefs.getString("USERNAME", "");
+        userId = prefs.getInt("USER_ID", 0);
 
         friendsList = new ArrayList<>();
 
@@ -39,14 +61,14 @@ public class ProfileActivity extends AppCompatActivity {
         questionsAnswered = findViewById(R.id.questionsAnswered);
         achievementsUnlocked = findViewById(R.id.AcheivementsUnlocked);
         userBiography = findViewById(R.id.userBiography);
-        username = findViewById(R.id.username);
+        usernameText = findViewById(R.id.username);
         friendsListText = findViewById(R.id.freindsListText);
         recyclerView = findViewById(R.id.friendList);
 
         questionsAnswered.setText("Add Friends");
         achievementsUnlocked.setText("");
         userBiography.setText("I am the real alok");
-        username.setText("AlokShrestha");
+        usernameText.setText(username);
         //friendsListText.setText("Friends:");
 
         setFriendInfo();
@@ -71,58 +93,44 @@ public class ProfileActivity extends AppCompatActivity {
         addFriend.setOnClickListener(v -> {
 
             String friend = friendUsernameEdit.getText().toString();
-            addFriends(friend);
+            addFriends(friend, dialog);
             dialog.dismiss();
         });
     }
 
-    private void addFriends(String friendId) {
-        // Check if any field is empty
-//        if (userId.isEmpty() || friendId.isEmpty()) {
-//            Toast.makeText(this, "No username added", Toast.LENGTH_SHORT).show();
-//            return;
-//        }
-//
-//        // Create a JSONObject with the request parameters
-//        JSONObject requestBody = new JSONObject();
-//        try {
-//            requestBody.put("userId", userId);
-//            requestBody.put("friendId", friendId);
-//        } catch (JSONException e) {
-//            e.printStackTrace();
-//        }
-//
-//        // Instantiate the RequestQueue.
-//        RequestQueue queue = Volley.newRequestQueue(this);
-//        String url = "http://your_api_endpoint.com/" + userId + "/addFriend/" + friendId;
-//
-//        // Request a JSON response from the provided URL
-//        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, requestBody,
-//                new Response.Listener<JSONObject>() {
-//                    @Override
-//                    public void onResponse(JSONObject response) {
-//                        // Handle successful response
-//                        try {
-//                            String message = response.getString("message");
-//                            Toast.makeText(AddFriendActivity.this, message, Toast.LENGTH_SHORT).show();
-//                            finish(); // Close the activity after adding friend
-//                        } catch (JSONException e) {
-//                            e.printStackTrace();
-//                            Log.e(TAG, "Error parsing response: " + e.getMessage());
-//                        }
-//                    }
-//                }, new Response.ErrorListener() {
-//            @Override
-//            public void onErrorResponse(VolleyError error) {
-//                // Handle error response
-//                Toast.makeText(AddFriendActivity.this, "Error adding friend", Toast.LENGTH_SHORT).show();
-//                Log.e(TAG, "Error adding friend: " + error.getMessage());
-//            }
-//        });
-//
-//        // Add the request to the RequestQueue.
-//        queue.add(jsonObjectRequest);
-
+    private void addFriends(String friendId, Dialog dialog) {
+        JSONObject requestBody = new JSONObject();
+        try {
+            requestBody.put("userId", userId);
+            requestBody.put("friendId", friendId);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        RequestQueue queue = Volley.newRequestQueue(this);
+        String url = backendUrl + userId + "/addFriend/" + friendId;
+        Log.e("ProfileActivity", "URL = " + url);
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, requestBody,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            String message = response.getString("message");
+                            Toast.makeText(ProfileActivity.this, message, Toast.LENGTH_SHORT).show();
+                            Toast.makeText(ProfileActivity.this, "Friend added", Toast.LENGTH_SHORT).show();
+                            dialog.dismiss();
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Log.e("ProfileActivity", "Error parsing response: " + e.getMessage());
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+            //    Toast.makeText(ProfileActivity.this, "Error adding friend", Toast.LENGTH_SHORT).show();
+                Log.e("ProfileActivity", "Error adding friend: " + error.getMessage());
+            }
+        });
+        queue.add(jsonObjectRequest);
     }
 
     private void setAdapter() {
