@@ -51,7 +51,7 @@ public class QuestionController {
     @GetMapping("/query/topic/{topic}")
     List<Question> getTopics(@PathVariable String topic){
         List<Question> allTopics = questionRepository.findAll();
-        allTopics.removeIf(n -> (n.getQuestionType().equals(topic)));
+        allTopics.removeIf(n -> (!n.getQuestionType().equals(topic)));
 
         return allTopics;
     }
