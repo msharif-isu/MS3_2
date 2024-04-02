@@ -1,6 +1,8 @@
     package com.example.androidexample;
 
     import androidx.appcompat.app.AppCompatActivity;
+    import url.RequestURLs;
+
 
     import android.util.Log;
 
@@ -34,7 +36,8 @@
         private Button signupButton;
 
         private String username;
-        private String backendUrl = "http://10.0.2.2:8080/users/";
+        private int userId;
+        private String backendUrl = RequestURLs.SERVER_HTTP_URL + "/users/";
         //change to "http://coms-309-034.class.las.iastate.edu:8080/users/"
 
         private SharedPreferences sharedPreferences;
@@ -51,10 +54,11 @@
 
             sharedPreferences = getSharedPreferences("loginPrefs", Context.MODE_PRIVATE);
             username = sharedPreferences.getString("username", "");
+            userId = sharedPreferences.getInt("USER_ID", 0);
 
             // Check if user already logged in
             if (sharedPreferences.contains("username")) {
-                proceedToNextActivity(username);
+                proceedToNextActivity(username, userId);
             }
 
             loginButton.setOnClickListener(new View.OnClickListener() {
@@ -115,7 +119,8 @@
                 public void onErrorResponse(VolleyError error) {
                     // Handle error response
                     // This will probably be updated to have more specific errors at a later date.
-                    Toast.makeText(LoginActivity.this, "Error getting username ID: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LoginActivity.this, "Error getting username ID: " + error.getMessage(), Toast.LENGTH_LONG).show();
+                    Log.d("Response", "Response is the following: " + error.getMessage() + "url = " + url);
                 }
             });
             // Add the request to the RequestQueue.
@@ -132,6 +137,7 @@
             // Create the RequestQueue.
             RequestQueue queue = Volley.newRequestQueue(this);
             String url = backendUrl + "getIdByPassword/" + password;
+
 
             // Request a string response from the provided URL.
             JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url, null,
@@ -151,7 +157,7 @@
                                     // Login successful
                                     // Redirects to another activity but I will probably change this
                                     // To redirect to the main menu when it is implemented.
-                                    proceedToNextActivity(username);
+                                    proceedToNextActivity(username, usernameId);
                                 } else {
                                     // Login failed
                                     // Show error message.
@@ -173,11 +179,13 @@
             queue.add(jsonArrayRequest);
         }
 
-        private void proceedToNextActivity(String username) {
+        private void proceedToNextActivity(String username, int userId) {
             // Save username in SharedPreferences
+
             SharedPreferences prefs = getSharedPreferences("UserData", MODE_PRIVATE);
             SharedPreferences.Editor editor = prefs.edit();
             editor.putString("USERNAME", username);
+            editor.putInt("USER_ID", userId);
             //Toast.makeText(LoginActivity.this, "username: " + username, Toast.LENGTH_SHORT).show();
             editor.commit();
 

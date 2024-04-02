@@ -8,19 +8,24 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     private Button strBtn, jsonObjBtn, jsonArrBtn, imgBtn, questionBtn;
 
+    private ImageButton profileButton;
+
     private String username;
+    private int userId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         SharedPreferences prefs = getSharedPreferences("UserData", MODE_PRIVATE);
         username = prefs.getString("USERNAME","");
-        Log.d("MainActivity", "Username from SharedPreferences: " + username);
+        userId = prefs.getInt("USER_ID", 0);
+        Log.d("MainActivity", "Username from SharedPreferences: " + userId + username);
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -30,6 +35,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         jsonArrBtn = findViewById(R.id.btnJsonArrRequest);
         imgBtn = findViewById(R.id.btnImageRequest);
         questionBtn = findViewById(R.id.btnQuestionSinglePlayer);
+        profileButton = findViewById(R.id.profileButton);
 
         /* button click listeners */
         strBtn.setOnClickListener(this);
@@ -37,6 +43,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         jsonArrBtn.setOnClickListener(this);
         imgBtn.setOnClickListener(this);
         questionBtn.setOnClickListener(this);
+        profileButton.setOnClickListener(this);
 
         // Check if the username exists in SharedPreferences
         //SharedPreferences sharedPreferences = getSharedPreferences("loginPrefs", MODE_PRIVATE);
@@ -65,6 +72,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             startActivity(new Intent(MainActivity.this, LeaderboardActivity.class));
         } else if (id == R.id.btnQuestionSinglePlayer) {
             startActivity(new Intent(MainActivity.this, LoginActivity.class));
+        } else if (id == R.id.profileButton) {
+            startActivity(new Intent(MainActivity.this, ProfileActivity.class));
         }
     }
 }

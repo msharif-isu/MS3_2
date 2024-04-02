@@ -6,30 +6,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.text.SpannableStringBuilder;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
-
-import android.text.Spannable;
-import android.text.SpannableString;
-import android.text.style.ForegroundColorSpan;
-
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonArrayRequest;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.Volley;
 
 import org.java_websocket.handshake.ServerHandshake;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -67,7 +50,7 @@ public class MultiplayerActivity extends AppCompatActivity implements WebSocketL
         EditText answerEditText = findViewById(R.id.answer_box);
         Button submitButton = findViewById(R.id.submit_button);
         timeLeftTextView = findViewById(R.id.time_left);
-        msgTv = findViewById(R.id.tx1);
+        msgTv = findViewById(R.id.friendsList);
 
         // Set initial time in minutes
         int timeInMinutes = 10;
