@@ -87,10 +87,12 @@ public class UserController {
         }
         return passwordIds;
     }
-    
+
     @GetMapping(path="/users/getPoints/{id}")
     Leaderboard lb (@PathVariable int id) {
         User user = userRepository.findById(id);
         return user.getLeaderboard();
     }
+
+    
 }
