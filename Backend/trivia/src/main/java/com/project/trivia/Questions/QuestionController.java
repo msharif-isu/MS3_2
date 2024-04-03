@@ -8,6 +8,7 @@ import com.project.trivia.Queryboard.Query;
 
 import java.util.ArrayList;
 import java.util.List;
+import com.project.trivia.Jeopardy.Jeopardy;
 
 @RestController
 public class QuestionController {

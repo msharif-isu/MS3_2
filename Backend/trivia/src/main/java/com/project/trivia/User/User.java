@@ -75,7 +75,11 @@ public class User {
         this.points = points;
     }
 
+    public Leaderboard getLeaderboard() {
+        return leaderboard;
+    }
 
-
-
+    public void setLeaderboard(Leaderboard leaderboard) {
+        this.leaderboard = leaderboard;
+    }
 }

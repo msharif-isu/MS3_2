@@ -5,30 +5,16 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="aa247b61-3439-49d8-9853-376a5b7b168c" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/../Frontend/AndroidExample/app/src/main/java/com/example/androidexample/QueryActivity.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../Frontend/AndroidExample/app/src/main/java/com/example/androidexample/QueryListAdapter.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../Frontend/AndroidExample/app/src/main/java/com/example/androidexample/Question.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../Frontend/AndroidExample/app/src/main/res/layout/activity_query.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../Frontend/AndroidExample/app/src/main/res/layout/query_row_item.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/trivia/src/main/java/com/project/trivia/Jeopardy/Jeopardy.java" beforeDir="false" afterPath="$PROJECT_DIR$/trivia/src/main/java/com/project/trivia/Jeopardy/Jeopardy.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/trivia/src/main/java/com/project/trivia/Leaderboard/Leaderboard.java" beforeDir="false" afterPath="$PROJECT_DIR$/trivia/src/main/java/com/project/trivia/Leaderboard/Leaderboard.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/trivia/src/main/java/com/project/trivia/Questions/QuestionController.java" beforeDir="false" afterPath="$PROJECT_DIR$/trivia/src/main/java/com/project/trivia/Questions/QuestionController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/trivia/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/trivia/src/main/resources/application.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/trivia/target/classes/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/trivia/target/classes/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/trivia/src/main/java/com/project/trivia/TriviaApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/trivia/src/main/java/com/project/trivia/TriviaApplication.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/trivia/src/main/java/com/project/trivia/User/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/trivia/src/main/java/com/project/trivia/User/User.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/trivia/target/classes/com/project/trivia/Leaderboard/Leaderboard.class" beforeDir="false" afterPath="$PROJECT_DIR$/trivia/target/classes/com/project/trivia/Leaderboard/Leaderboard.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/trivia/target/classes/com/project/trivia/Leaderboard/LeaderboardController.class" beforeDir="false" afterPath="$PROJECT_DIR$/trivia/target/classes/com/project/trivia/Leaderboard/LeaderboardController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/trivia/target/classes/com/project/trivia/Leaderboard/LeaderboardRepository.class" beforeDir="false" afterPath="$PROJECT_DIR$/trivia/target/classes/com/project/trivia/Leaderboard/LeaderboardRepository.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/trivia/target/classes/com/project/trivia/Questions/Question.class" beforeDir="false" afterPath="$PROJECT_DIR$/trivia/target/classes/com/project/trivia/Questions/Question.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/trivia/target/classes/com/project/trivia/Questions/QuestionController.class" beforeDir="false" afterPath="$PROJECT_DIR$/trivia/target/classes/com/project/trivia/Questions/QuestionController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/trivia/target/classes/com/project/trivia/Questions/QuestionRepository.class" beforeDir="false" afterPath="$PROJECT_DIR$/trivia/target/classes/com/project/trivia/Questions/QuestionRepository.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/trivia/target/classes/com/project/trivia/TriviaApplication.class" beforeDir="false" afterPath="$PROJECT_DIR$/trivia/target/classes/com/project/trivia/TriviaApplication.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/trivia/target/classes/com/project/trivia/User/User.class" beforeDir="false" afterPath="$PROJECT_DIR$/trivia/target/classes/com/project/trivia/User/User.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/trivia/target/classes/com/project/trivia/User/UserController.class" beforeDir="false" afterPath="$PROJECT_DIR$/trivia/target/classes/com/project/trivia/User/UserController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/trivia/target/classes/com/project/trivia/User/UserRepository.class" beforeDir="false" afterPath="$PROJECT_DIR$/trivia/target/classes/com/project/trivia/User/UserRepository.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Frontend/AndroidExample/app/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../Frontend/AndroidExample/app/src/main/AndroidManifest.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Frontend/AndroidExample/app/src/main/java/com/example/androidexample/MainActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Frontend/AndroidExample/app/src/main/java/com/example/androidexample/MainActivity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Frontend/AndroidExample/app/src/main/java/com/example/androidexample/UserQuestionActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Frontend/AndroidExample/app/src/main/java/com/example/androidexample/UserQuestionActivity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Frontend/AndroidExample/app/src/main/java/com/example/androidexample/UserQuestionAdapter.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Frontend/AndroidExample/app/src/main/java/com/example/androidexample/UserQuestionAdapter.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Frontend/AndroidExample/app/src/main/java/com/example/androidexample/UserQuestionListItem.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Frontend/AndroidExample/app/src/main/java/url/RequestURLs.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Frontend/AndroidExample/app/src/main/java/url/RequestURLs.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -66,7 +52,7 @@
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "Spring Boot.TriviaApplication.executor": "Run",
-    "git-widget-placeholder": "Merging 32-querying-from-database-and-listing",
+    "git-widget-placeholder": "32-querying-from-database-and-listing",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "C:/Users/rapra/ms312/ms3_2/Experiment/raphaelb/ex2/SB3/tutorials-springboot_unit2_2_onetomany",
     "node.js.detected.package.eslint": "true",
@@ -116,5 +102,28 @@
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State>
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="origin/33-jeopardy-sp" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </State>
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
 </project>
