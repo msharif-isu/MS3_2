@@ -18,6 +18,7 @@ import jakarta.websocket.Session;
 import jakarta.websocket.server.PathParam;
 import jakarta.websocket.server.ServerEndpoint;
 
+import org.hibernate.Hibernate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -155,6 +156,8 @@ public class QuestionSocket {
             if (providedAnswer.equals(correctAnswer)) {
                 Question localQuestRepo = questRepo.findById(randInt);
                 Answer localAnswer = new Answer(username, message, true);
+                localQuestRepo.addAnswer(localAnswer);
+                //Hibernate.initialize(localQuestRepo);
                 //localAnswer.setQuestion(localQuestRepo);
                 ansRepo.save(localAnswer);
                 localQuestRepo.setUsed(true);
@@ -175,6 +178,11 @@ public class QuestionSocket {
                 broadcast("False!");
                 Answer localAnswer = new Answer(username, message, false);
                 //localAnswer.setQuestion(questRepo.findById(randInt));
+                Question localQuestion = questRepo.findById(randInt);
+                localQuestion.addAnswer(localAnswer);
+                Hibernate.initialize(localQuestion);
+
+                questRepo.save(localQuestion);
                 ansRepo.save(localAnswer);
             }
         }

@@ -13,6 +13,7 @@ import lombok.Data;
 public class Answer {
 	@Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Lob
     private Long id;
 
     @Column
@@ -21,14 +22,14 @@ public class Answer {
     @Column
     private boolean correct;
 
-    @Lob
+    @Column
     private String answer;
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "sent")
     private Date sent = new Date();
 
-    @ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
+    @ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
     @JoinColumn(name = "question_id")
     @JsonIgnore
     private Question question;
@@ -89,6 +90,8 @@ public class Answer {
     public Question getQuestion() {return question;}
 
     public void setQuestion(Question question) {this.question = question;}
+
+
 
     
 }
