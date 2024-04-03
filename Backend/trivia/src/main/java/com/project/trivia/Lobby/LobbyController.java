@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -21,6 +22,17 @@ public class LobbyController {
     private String failure = "{\"message\":\"failure\"}";
 
     @GetMapping(path = "/lobbies")
+    List<Lobby> getCurrentLobbies() {
+        List<Lobby> currentLobbies = new ArrayList<>();
+        for (Lobby lobby : getAllLobbies()){
+            if (!lobby.getFinished()){
+                currentLobbies.add(lobby);
+            }
+        }
+        return currentLobbies;
+    }
+
+    @GetMapping(path = "/alllobbies")
     List<Lobby> getAllLobbies() {
         return lobbyRepo.findAll();
     }

@@ -1,10 +1,8 @@
 package com.project.trivia.Questions;
 
-import org.hibernate.annotations.Array;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -45,38 +43,4 @@ public class QuestionController {
         question.setQuestionType(request.getQuestionType());
         return questionRepository.findById(id);
     }
-
-    @GetMapping("/query/topic/{topic}")
-    List<Question> getTopics(@PathVariable String topic){
-        List<Question> allTopics = questionRepository.findAll();
-        for (int i=1; i<allTopics.size(); i++) {
-            if(!allTopics.get(i).getQuestionType().equals(topic)) {
-                allTopics.remove(i);
-            }
-        }
-        return allTopics;
-    }
-
-    @GetMapping("/query/userCreated/{userCreated}")
-    List<Question> getUserCreated(@PathVariable Boolean userCreated){
-        List<Question> allTopics = questionRepository.findAll();
-        ArrayList<Question> temp = new ArrayList<Question>();
-        ArrayList<Boolean> tempVal = new ArrayList<Boolean>();
-        int[] toBeRemoved = new int[allTopics.size()];
-        int count = 0;
-
-        for (int i=1; i<allTopics.size(); i++) {
-            if(allTopics.get(i).getUserCreated() == userCreated) {
-                toBeRemoved[i] = i;
-                count++;
-            }
-        }
-        int j=0;
-        while (j<count) {
-            allTopics.remove(toBeRemoved[j]);
-        }
-        return temp;
-    }
-
-
 }
