@@ -1,5 +1,6 @@
 package com.project.trivia.User;
 
+import com.project.trivia.Leaderboard.Leaderboard;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -85,5 +86,11 @@ public class UserController {
             passwordIds.add(user.getId());
         }
         return passwordIds;
+    }
+    
+    @GetMapping(path="/users/getPoints/{id}")
+    Leaderboard lb (@PathVariable int id) {
+        User user = userRepository.findById(id);
+        return user.getLeaderboard();
     }
 }
