@@ -51,7 +51,7 @@ public class QuestionController {
     @GetMapping("/query/topic/{topic}")
     List<Question> getTopics(@PathVariable String topic){
         List<Question> allTopics = questionRepository.findAll();
-        allTopics.removeIf(n -> (n.getQuestionType().equals(topic)));
+        allTopics.removeIf(n -> (!n.getQuestionType().equals(topic)));
 
         return allTopics;
     }
@@ -61,6 +61,14 @@ public class QuestionController {
         List<Question> allTopics = questionRepository.findAll();
         allTopics.removeIf(n -> (n.getUserCreated() != userCreated));
 
+        return allTopics;
+    }
+
+    @GetMapping("/query/multiple/{topic}/{userCreated}")
+    List<Question> getMultipleFilters(@PathVariable String topic, @PathVariable Boolean userCreated) {
+        List<Question> allTopics = questionRepository.findAll();
+        allTopics.removeIf(n -> ((!n.getQuestionType().equals(topic)) && (n.getUserCreated() == userCreated)));
+        allTopics.removeIf(n -> ((!n.getQuestionType().equals(topic)) && (n.getUserCreated() != userCreated)));
         return allTopics;
     }
 
