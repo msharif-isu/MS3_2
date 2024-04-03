@@ -187,8 +187,6 @@ public class LobbiesActivity extends AppCompatActivity {
     }
 
 
-
-
     private void joinLobby(long roomId, int userId) {
         String url = backendUrl + "joinRoom/" + roomId + "/" + userId;
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.PUT, url, null, new Response.Listener<JSONObject>() {
@@ -285,7 +283,7 @@ public class LobbiesActivity extends AppCompatActivity {
             UserFriend player = new UserFriend(username, bio, null);
             players.add(player);
         }
-        return new Lobby(host, roomSize, playerCount, lobbyId, players);
+        return new Lobby(host, playerCount, roomSize, lobbyId, players);
     }
 
 
@@ -307,7 +305,7 @@ public class LobbiesActivity extends AppCompatActivity {
                         long id = jsonObject.getLong("id");
                         //boolean started = jsonObject.getBoolean("started");
                         if (finished != true) {
-                            lobbyList.add(new Lobby(host, roomSize, playerCount, id, null));
+                            lobbyList.add(new Lobby(host, playerCount, roomSize, id, null));
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
