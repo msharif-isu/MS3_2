@@ -1,5 +1,6 @@
 package com.project.trivia.Leaderboard;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.project.trivia.User.User;
 import jakarta.persistence.*;
 
@@ -16,7 +17,9 @@ public class Leaderboard {
     private int lifetimePoints;
     private String name;
     @OneToOne
+    @JsonIgnore
     private User user;
+
     public Leaderboard(int userPoints, int weeklyPoints, int monthlyPoints, int yearlyPoints, int lifetimePoints, String name) {
         this.userPoints = userPoints;
         this.weeklyPoints = weeklyPoints;
@@ -82,4 +85,8 @@ public class Leaderboard {
     public void setName(String name) {
         this.name = name;
     }
+
+    public User getUser() {return user;}
+
+    public void setUser(User user) {this.user = user;}
 }

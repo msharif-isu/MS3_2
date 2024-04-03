@@ -1,5 +1,6 @@
 package com.project.trivia.Questions;
 
+import com.project.trivia.MPQuestions.Answer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -42,5 +43,11 @@ public class QuestionController {
         question.setAnswer(request.getAnswer());
         question.setQuestionType(request.getQuestionType());
         return questionRepository.findById(id);
+    }
+
+    @GetMapping("/question/answers/{id}")
+    List<Answer> getAnswer(@PathVariable int id) {
+        Question question = questionRepository.findById(id);
+        return question.getAnswers();
     }
 }

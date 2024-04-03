@@ -18,6 +18,7 @@ import jakarta.websocket.Session;
 import jakarta.websocket.server.PathParam;
 import jakarta.websocket.server.ServerEndpoint;
 
+import org.hibernate.Hibernate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,6 +59,8 @@ public class QuestionSocket {
 
     @Autowired
     public void setQuestionRepository(QuestionRepository repo) {questRepo = repo;}
+
+
 
     private static AnswerRepository ansRepo;
 
@@ -147,23 +150,39 @@ public class QuestionSocket {
         else { // Message to whole chat
             broadcast(username + ": " + message);
 
-            if (message.contentEquals(questRepo.findById(randInt).getAnswer())) {
+            String providedAnswer = message.toLowerCase();
+            String correctAnswer = questRepo.findById(randInt).getAnswer().toLowerCase();
+
+            if (providedAnswer.equals(correctAnswer)) {
                 Question localQuestRepo = questRepo.findById(randInt);
                 Answer localAnswer = new Answer(username, message, true);
-                localAnswer.setQuestion(localQuestRepo);
+                localQuestRepo.addAnswer(localAnswer);
+                //Hibernate.initialize(localQuestRepo);
+                //localAnswer.setQuestion(localQuestRepo);
                 ansRepo.save(localAnswer);
                 localQuestRepo.setUsed(true);
                 questRepo.save(localQuestRepo);
 
                 broadcast("Correct!");
-                randomize();
-                showMessageEveryone();
+                if (allQuestionsUsed()) {
+                    broadcast("Game is now over congrats!");
+                }
+                else {
+                    randomize();
+                    showMessageEveryone();
+                }
+
 
             }
             else {
                 broadcast("False!");
                 Answer localAnswer = new Answer(username, message, false);
                 //localAnswer.setQuestion(questRepo.findById(randInt));
+                Question localQuestion = questRepo.findById(randInt);
+                localQuestion.addAnswer(localAnswer);
+                Hibernate.initialize(localQuestion);
+
+                questRepo.save(localQuestion);
                 ansRepo.save(localAnswer);
             }
         }
@@ -237,20 +256,21 @@ public class QuestionSocket {
     }
 
     private void showMessageEveryone() {
-        String mpQuestion = questRepo.findById(randInt).getQuestion();
+        String mpQuestion = "Question: " + questRepo.findById(randInt).getQuestion();
         broadcast(mpQuestion);
     }
 
     private void showMessageOne(String username) {
-        String mpQuestion = questRepo.findById(randInt).getQuestion();
+        String mpQuestion = "Question: " + questRepo.findById(randInt).getQuestion();
         sendMessageToPArticularUser(username, mpQuestion);
     }
 
     private void randomize() {
-        long amount = questRepo.count()-1;
-        randInt = (int)(Math.random()*amount)+1;
+        long amount = questRepo.count();
+        randInt = (int)((Math.random()*amount)+1);
         while (questRepo.findById(randInt).getUsed()) {
             randomize();
+
         }
     }
 
@@ -262,4 +282,18 @@ public class QuestionSocket {
             questRepo.save(localQuestRepo);
         }
     }
+
+    private boolean allQuestionsUsed() {
+        List<Question> allQuestion = questRepo.findAll();
+        boolean allUsed = true;
+        for(int i=1; i<allQuestion.size()+1; i++) {
+            Question localQuestRepo = questRepo.findById(i);
+            if (!localQuestRepo.getUsed()) {
+                allUsed = false;
+            }
+        }
+        return allUsed;
+    }
+
+
 }

@@ -21,7 +21,8 @@ public class User {
     @OneToMany(mappedBy="user")
     private List<Answer> ans;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "leaderboard_id")
     private Leaderboard leaderboard;
 
     public User(String username, String password, String email) {
@@ -75,7 +76,9 @@ public class User {
         this.points = points;
     }
 
+    public Leaderboard getLeaderboard() {return leaderboard;}
 
-
-
+    public void setLeaderboard(Leaderboard leaderboard) {
+        this.leaderboard = leaderboard;
+    }
 }
