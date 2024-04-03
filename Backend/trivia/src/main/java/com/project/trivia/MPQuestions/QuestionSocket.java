@@ -92,8 +92,8 @@ public class QuestionSocket {
 
         // Handle the case of a duplicate username
         if (usernameSessionMap.containsKey(username)) {
-            session.getBasicRemote().sendText("Username already exists");
-            session.close();
+            session.getBasicRemote().sendText("Username already exists. Please choose a different username.");
+            return;
         }
         else {
             // map current session with username
@@ -133,8 +133,8 @@ public class QuestionSocket {
         if (message.contentEquals("/next")) {
             randomize();
             showMessageEveryone(id);
-        } else if (message.contentEquals("/clear")) {
-            ansRepo.deleteAll();
+        //} else if (message.contentEquals("/clear")) {
+            //ansRepo.deleteAll();
         } else if (message.contentEquals("/resetUseValue")) {
             resetUseValue();
         } else if (message.startsWith("@")) {
@@ -153,9 +153,9 @@ public class QuestionSocket {
             String correctAnswer = questRepo.findById(randInt).getAnswer().toLowerCase();
             if (providedAnswer.equals(correctAnswer)) {
                 Question localQuestRepo = questRepo.findById(randInt);
-                Answer localAnswer = new Answer(username, message, true);
-                localQuestRepo.addAnswer(localAnswer);
-                ansRepo.save(localAnswer);
+                //Answer localAnswer = new Answer(username, message, true);
+                //localQuestRepo.addAnswer(localAnswer);
+                //ansRepo.save(localAnswer);
                 localQuestRepo.setUsed(true);
                 questRepo.save(localQuestRepo);
                 broadcastToRoom(id, "Correct!");
@@ -167,11 +167,11 @@ public class QuestionSocket {
                 }
             } else {
                 broadcastToRoom(id,"False!");
-                Answer localAnswer = new Answer(username, message, false);
+                //Answer localAnswer = new Answer(username, message, false);
                 Question localQuestion = questRepo.findById(randInt);
-                localQuestion.addAnswer(localAnswer);
+                //localQuestion.addAnswer(localAnswer);
                 questRepo.save(localQuestion);
-                ansRepo.save(localAnswer);
+                //ansRepo.save(localAnswer);
             }
         }
     }
