@@ -20,6 +20,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.Dialog;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
@@ -93,6 +94,7 @@ public class LobbiesActivity extends AppCompatActivity {
         getLobbyDetails(roomId);
         Button joinRoom = dialog.findViewById(R.id.buttonJoinRoom);
         Button leaveRoom = dialog.findViewById(R.id.buttonLeaveRoom);
+        Button startGame = dialog.findViewById(R.id.buttonStartGame);
         RecyclerView playerListRecyclerView = dialog.findViewById(R.id.recycleView);
 
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
@@ -110,6 +112,11 @@ public class LobbiesActivity extends AppCompatActivity {
         playerListRecyclerView.setAdapter(adapter);
 
         // TODO: Start game
+        startGame.setOnClickListener(v -> {
+            joinLobby(roomId, userId);
+            getLobbyDetails(roomId);
+            beginGame(roomId);
+        });
         leaveRoom.setOnClickListener(v -> {
             leaveRoom(roomId, userId);
             dialog.dismiss();
@@ -119,6 +126,12 @@ public class LobbiesActivity extends AppCompatActivity {
             getLobbyDetails(roomId);
             //dialog.dismiss();
         });
+    }
+
+    private void beginGame(long roomId) {
+        Intent intent = new Intent(LobbiesActivity.this, MultiplayerActivity.class);
+        intent.putExtra("ROOM_ID", roomId);
+        startActivity(intent);
     }
 
     private void leaveRoom(long roomId, int userId) {

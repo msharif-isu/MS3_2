@@ -41,6 +41,8 @@ public class MultiplayerActivity extends AppCompatActivity implements WebSocketL
         //get username to connect to websocket
         SharedPreferences sharedPreferences = getSharedPreferences("UserData", MODE_PRIVATE);
         String username = sharedPreferences.getString("USERNAME", "");
+        long roomId = getIntent().getLongExtra("ROOM_ID", -1);
+
 //        Log.d("MainActivity", "Username from SharedPreferences: " + username);
 //        Toast.makeText(MultiplayerActivity.this, "Welcome " + username, Toast.LENGTH_SHORT).show();
 
@@ -65,7 +67,7 @@ public class MultiplayerActivity extends AppCompatActivity implements WebSocketL
         msgTv.setText("User answers will appear here:\n");
 
         //automatically connect to websocket based on username.
-        String chatUrl = "ws://10.0.2.2:8080/chat/";
+        String chatUrl = "ws://10.0.2.2:8080/chat/" + roomId + "/";
         //todo if username is blank, give error.
         String serverUrl = chatUrl + username;
 
