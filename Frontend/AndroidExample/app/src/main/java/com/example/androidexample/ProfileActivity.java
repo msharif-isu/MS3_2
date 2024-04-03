@@ -37,6 +37,7 @@ import url.RequestURLs;
 
 public class ProfileActivity extends AppCompatActivity {
 
+    //TODO removing friends!
     private ArrayList<UserFriend> friendsList;
     private RecyclerView recyclerView;
     ImageView imgView;
@@ -204,13 +205,47 @@ public class ProfileActivity extends AppCompatActivity {
         queue.add(jsonObjectRequest);
     }
 
+    private FriendsListAdapter adapter; // Declare adapter as a class member
+
     private void setAdapter() {
-        FriendsListAdapter adapter = new FriendsListAdapter(friendsList);
+        adapter = new FriendsListAdapter(friendsList, new FriendsListAdapter.OnDeleteClickListener() {
+            @Override
+            public void onDeleteClick(int position) {
+                // TODO Handle delete action here
+                UserFriend friend = friendsList.get(position);
+                String friendName = friend.getUsername();
+                friendsList.remove(position);
+
+                removeFriendFromDatabase(friendName); // Pass the friend's name to the method to remove from the database
+
+                adapter.notifyItemRemoved(position);
+            }
+        });
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(adapter);
     }
+
+    private void removeFriendFromDatabase(String friendName) {
+        RequestQueue queue = Volley.newRequestQueue(this);
+        String url = backendUrl + userId + "/removeFriend/" + friendName; // Adjust the URL according to your backend API
+        Log.d("ProfileActivity", "Removing friend from database: " + url);
+        StringRequest stringRequest = new StringRequest(Request.Method.DELETE, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                Log.d("ProfileActivity", "Unfriended " + friendName);
+                Toast.makeText(ProfileActivity.this, "Unfriended " + friendName, Toast.LENGTH_SHORT).show();
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e("ProfileActivity", "Error removing friend from database: " + error.getMessage());
+            }
+        });
+        queue.add(stringRequest);
+    }
+
 
     private void setFriendInfo() {
 //        friendsList.add(new UserFriend("Alok1", "This is the real alok", null));
@@ -280,6 +315,5 @@ public class ProfileActivity extends AppCompatActivity {
         });
         queue.add(stringRequest);
     }
-
 
 }
