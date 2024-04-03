@@ -1,5 +1,7 @@
 package com.project.trivia.roomChat;
 
+import com.project.trivia.User.User;
+import com.project.trivia.User.UserRepository;
 import jakarta.websocket.*;
 import jakarta.websocket.server.PathParam;
 import jakarta.websocket.server.ServerEndpoint;
@@ -16,9 +18,14 @@ import java.util.*;
 public class Chat {
 
     private static MessageRepository msgRepo;
+    private static UserRepository userRepo;
     @Autowired
     public void setMessageRepository(MessageRepository repo) {
         msgRepo = repo;  // we are setting the static variable
+    }
+    @Autowired
+    public void setUserRepository(UserRepository repo) {
+        userRepo = repo;  // we are setting the static variable
     }
     private static Map<Session, String> sessionUsernameMap = new Hashtable<>();
     private static Map<String, Session> usernameSessionMap = new Hashtable<>();
@@ -102,7 +109,12 @@ public class Chat {
             broadcastToRoom(id, username + ": " + message);
         }
 
-        msgRepo.save(new Message(username, message, id));
+        User u = userRepo.findByUsername(username);
+        Message messageSent = new Message(u, message, id);
+
+        u.getMessages().add(messageSent);
+
+        msgRepo.save(messageSent);
     }
 
     /**

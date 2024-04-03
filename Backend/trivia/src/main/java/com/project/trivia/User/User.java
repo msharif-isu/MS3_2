@@ -1,9 +1,12 @@
 package com.project.trivia.User;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.project.trivia.roomChat.Message;
+import jakarta.persistence.*;
+import org.w3c.dom.stylesheets.LinkStyle;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class User {
@@ -17,11 +20,16 @@ public class User {
 
     private long points;
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JsonIgnore
+    private List<Message> messages;
+
     public User(String username, String password, String email) {
         this.username = username;
         this.password = password;
         this.email = email;
         points = 0;
+        messages = new ArrayList<>();
     }
 
     public User() {
@@ -69,6 +77,11 @@ public class User {
     }
 
 
+    public List<Message> getMessages() {
+        return messages;
+    }
 
-
+    public void setMessages(List<Message> messages) {
+        this.messages = messages;
+    }
 }
