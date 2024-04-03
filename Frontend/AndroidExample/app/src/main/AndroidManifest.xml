@@ -40,6 +40,10 @@
             android:name=".SinglePlayerQuestionActivity"
             android:exported="false" />
         <activity
+            android:name=".LeaderboardActivity"
+            android:exported="false">
+        </activity>
+        <activity
             android:name=".UserQuestionActivity"
             android:exported="false">
         </activity>
@@ -51,6 +55,9 @@
             android:exported="false" />
         <activity
             android:name=".ResultsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".QueryActivity"
             android:exported="false" />
     </application>
 </manifest>

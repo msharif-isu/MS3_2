@@ -44,7 +44,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) {
         int id = v.getId();
         if (id == R.id.btnStringRequest) {
-            startActivity(new Intent(MainActivity.this, StringReqActivity.class));
+            startActivity(new Intent(MainActivity.this, QueryActivity.class));
         } else if (id == R.id.btnJsonObjRequest) {
             startActivity(new Intent(MainActivity.this, JsonObjReqActivity.class));
         } else if (id == R.id.btnJsonArrRequest) {

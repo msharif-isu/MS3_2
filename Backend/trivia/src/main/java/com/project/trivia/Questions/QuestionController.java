@@ -1,10 +1,15 @@
 package com.project.trivia.Questions;
 
 import com.project.trivia.MPQuestions.Answer;
+
+import org.hibernate.annotations.Array;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import com.project.trivia.Queryboard.Query;
 
+import java.util.ArrayList;
 import java.util.List;
+import com.project.trivia.Jeopardy.Jeopardy;
 
 @RestController
 public class QuestionController {
@@ -44,6 +49,41 @@ public class QuestionController {
         question.setQuestionType(request.getQuestionType());
         return questionRepository.findById(id);
     }
+
+    @GetMapping("/query/topic/{topic}")
+    List<Question> getTopics(@PathVariable String topic){
+        List<Question> allTopics = questionRepository.findAll();
+        allTopics.removeIf(n -> (!n.getQuestionType().equals(topic)));
+
+        return allTopics;
+    }
+
+    @GetMapping("/query/userCreated/{userCreated}")
+    List<Question> getUserCreated(@PathVariable Boolean userCreated){
+        List<Question> allTopics = questionRepository.findAll();
+        allTopics.removeIf(n -> (n.getUserCreated() != userCreated));
+
+        return allTopics;
+    }
+
+    @GetMapping("/query/multiple/{topic}/{userCreated}")
+    List<Question> getMultipleFilters(@PathVariable String topic, @PathVariable Boolean userCreated) {
+        List<Question> allTopics = questionRepository.findAll();
+        allTopics.removeIf(n -> ((!n.getQuestionType().equals(topic)) && (n.getUserCreated() == userCreated)));
+        allTopics.removeIf(n -> ((!n.getQuestionType().equals(topic)) && (n.getUserCreated() != userCreated)));
+        return allTopics;
+    }
+
+    @GetMapping("/test")
+    List<Question> testFunction() {
+        List<Question> allTopics = questionRepository.findAll();
+        List<Question> small1 = Query.limitList(allTopics, 3);
+        List<Question> small2 = Query.limitList(allTopics, 5);
+
+        return Query.joinList(small1, small2);
+    }
+
+
 
     @GetMapping("/question/answers/{id}")
     List<Answer> getAnswer(@PathVariable int id) {
