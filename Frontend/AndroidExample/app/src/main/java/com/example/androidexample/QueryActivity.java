@@ -81,11 +81,14 @@ public class QueryActivity extends AppCompatActivity {
         String serverUrl = RequestURLs.SERVER_HTTP_QUESTION_QUERY_URL;
 
         if (type.trim().isEmpty()) {
-            serverUrl = String.format("%s/userCreated/%d", serverUrl, (isUserGenerated) ? 1 : 0);
-            Log.d("TryTryTryAgain", "Filtered by user-generated");
+            if (isUserGenerated) {
+                serverUrl = String.format("%s/userCreated/1", serverUrl);
+            } else {
+                serverUrl = RequestURLs.SERVER_HTTP_QUESTION_URL;
+            }
+
         } else {
-            serverUrl = String.format("%s/filter/%s/%d", serverUrl, type, (isUserGenerated) ? 1 : 0);
-            Log.d("TryTryTryAgain", "Filtered by type");
+            serverUrl = String.format("%s/multiple/%s/%d", serverUrl, type, (isUserGenerated) ? 1 : 0);
         }
             JsonArrayRequest questionRequest = new JsonArrayRequest(
                     Request.Method.GET,
