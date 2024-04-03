@@ -27,8 +27,11 @@ public class LobbyController {
 
     @GetMapping(path = "/lobbies/{id}")
     public Lobby getLobbyById(@PathVariable int id){
-        return lobbyRepo.findById(id);
+        Lobby lobby = lobbyRepo.findById(id);
+        lobby.setPlayers(lobby.getPlayers()); // Assuming lobby has a list of players
+        return lobby;
     }
+
     @PostMapping(path = "/create/{userId}/{roomSize}")
     public Lobby createRoom(@PathVariable int  userId, @PathVariable int roomSize){
         User host = userRepo.findById(userId);
@@ -57,15 +60,45 @@ public class LobbyController {
             throw new ResponseStatusException(HttpStatus.GONE,"Game has ended no longer able to join");
         }
 
-        lobby.getPlayers().add(user);
-        user.setLobby(lobby);
-        lobby.setPlayerCount(lobby.getPlayerCount() + 1);
+        // Check if the user is already in the lobby
+        if (!lobby.getPlayers().contains(user)) {
+            lobby.getPlayers().add(user);
+            user.setLobby(lobby);
+            lobby.setPlayerCount(lobby.getPlayerCount() + 1);
 
-        lobbyRepo.save(lobby);
-        userRepo.save(user);
+            lobbyRepo.save(lobby);
+            userRepo.save(user);
+        }
 
         return lobby;
     }
+
+    @DeleteMapping(path = "/leave/{roomId}/{userId}")
+    public Lobby leaveRoom (@PathVariable int userId, @PathVariable int roomId){
+        User user = userRepo.findById(userId);
+        Lobby lobby = lobbyRepo.findById(roomId);
+        if (lobby == null || !lobby.getPlayers().contains(user)){
+            return null;
+        }
+        // Remove user from lobby only if they are currently in the lobby
+        if (lobby.getPlayers().remove(user)) {
+            user.setLobby(null);
+            lobby.setPlayerCount(lobby.getPlayerCount() - 1);
+            if (lobby.getPlayerCount() == 0) {
+                // If there are no players left, delete the lobby
+                lobbyRepo.delete(lobby);
+                return null;
+            }
+            if (lobby.getRoomSize() <= 0) {
+                lobby.setFinished(true);
+            }
+            lobbyRepo.save(lobby);
+            userRepo.save(user);
+        }
+        return lobby;
+    }
+
+
 
     @PutMapping(path = "/changeHost/{roomId}/{username}")
     public Lobby changeHost(@PathVariable int roomId, @PathVariable String username){
@@ -84,28 +117,6 @@ public class LobbyController {
         return lobby;
     }
 
-    @DeleteMapping(path = "/leave/{roomId}/{userId}")
-    public Lobby leaveRoom (@PathVariable int userId, @PathVariable int roomId){
-        User user = userRepo.findById(userId);
-        Lobby lobby = lobbyRepo.findById(roomId);
-
-        if (lobby == null){
-            return null;
-        }
-
-        lobby.getPlayers().remove(user);
-        user.setLobby(null);
-        lobby.setPlayerCount(lobby.getPlayerCount() - 1);
-
-        if(lobby.getRoomSize() <= 0){
-            lobby.setFinished(true);
-        }
-
-        lobbyRepo.save(lobby);
-        userRepo.save(user);
-
-        return lobby;
-    }
 
     @PutMapping(path = "/gameStatus/{status}/{roomId}")
     public Lobby setStatus(@PathVariable int status, @PathVariable int roomId){

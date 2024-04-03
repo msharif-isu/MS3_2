@@ -82,4 +82,8 @@ public class Lobby {
     public void setFinished(Boolean finished) {
         this.finished = finished;
     }
+    public Long getId() {
+        return id;
+    }
+
 }

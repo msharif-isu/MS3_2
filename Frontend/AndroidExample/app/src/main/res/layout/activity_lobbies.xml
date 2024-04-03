@@ -9,14 +9,12 @@
 
     <ImageView
         android:id="@+id/imageView4"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_width="411dp"
+        android:layout_height="891dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/lobbyTitle"
-        app:srcCompat="@drawable/loginsignuptextboxaccent" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/lobbyTitle"
@@ -33,7 +31,6 @@
         android:id="@+id/buttonJoinRoom"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/lobbyTitle"
         android:layout_marginTop="16dp"
         android:text="Join Room"
         app:layout_constraintLeft_toLeftOf="parent"

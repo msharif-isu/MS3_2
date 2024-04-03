@@ -15,9 +15,11 @@ import java.util.ArrayList;
 public class LobbyAdapter extends RecyclerView.Adapter<LobbyAdapter.myViewHolder> {
 
     private ArrayList<Lobby> lobbyList;
+    private LobbiesActivity activity; // Reference to the activity
 
-    public LobbyAdapter(ArrayList<Lobby> lobbyList) {
+    public LobbyAdapter(ArrayList<Lobby> lobbyList, LobbiesActivity activity) {
         this.lobbyList = lobbyList;
+        this.activity = activity;
     }
 
     public class myViewHolder extends RecyclerView.ViewHolder {
@@ -32,6 +34,20 @@ public class LobbyAdapter extends RecyclerView.Adapter<LobbyAdapter.myViewHolder
             playerCount = itemView.findViewById(R.id.playerCount);
             box = itemView.findViewById(R.id.box);
             joinButton = itemView.findViewById(R.id.button2);
+
+            // Set OnClickListener for join button
+            joinButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int position = getAdapterPosition();
+                    if (position != RecyclerView.NO_POSITION) {
+                        // Get the Lobby object at the clicked position
+                        Lobby lobby = lobbyList.get(position);
+                        // Call the method in the activity to show the join lobby dialog
+                        activity.joinLobbyDialog(lobby.getId());
+                    }
+                }
+            });
         }
     }
 
@@ -50,19 +66,10 @@ public class LobbyAdapter extends RecyclerView.Adapter<LobbyAdapter.myViewHolder
         holder.lobbyName.setText(lobbyName);
         holder.roomSize.setText("Maximum Room Size: " + String.valueOf(roomSize));
         holder.playerCount.setText("Number of Players:" + String.valueOf(playerCount));
-
-        holder.joinButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Handle button click
-            }
-        });
     }
 
     @Override
     public int getItemCount() {
         return lobbyList.size();
     }
-
-
 }
