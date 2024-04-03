@@ -205,19 +205,17 @@ public class ProfileActivity extends AppCompatActivity {
         queue.add(jsonObjectRequest);
     }
 
-    private FriendsListAdapter adapter; // Declare adapter as a class member
+    private FriendsListAdapter adapter;
 
     private void setAdapter() {
         adapter = new FriendsListAdapter(friendsList, new FriendsListAdapter.OnDeleteClickListener() {
             @Override
             public void onDeleteClick(int position) {
-                // TODO Handle delete action here
                 UserFriend friend = friendsList.get(position);
                 String friendName = friend.getUsername();
                 friendsList.remove(position);
 
-                removeFriendFromDatabase(friendName); // Pass the friend's name to the method to remove from the database
-
+                removeFriendFromDatabase(friendName);
                 adapter.notifyItemRemoved(position);
             }
         });

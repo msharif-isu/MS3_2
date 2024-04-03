@@ -63,7 +63,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) {
         int id = v.getId();
         if (id == R.id.btnStringRequest) {
-            startActivity(new Intent(MainActivity.this, MultiplayerActivity.class));
+            startActivity(new Intent(MainActivity.this, LobbiesActivity.class));
         } else if (id == R.id.btnJsonObjRequest) {
             startActivity(new Intent(MainActivity.this, SinglePlayerQuestionActivity.class));
         } else if (id == R.id.btnJsonArrRequest) {
