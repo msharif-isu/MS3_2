@@ -275,12 +275,12 @@ public class LobbiesActivity extends AppCompatActivity implements WebSocketListe
         cancelButton.setOnClickListener(v -> dialog.dismiss());
         createLobby.setOnClickListener(v -> {
             int lobbySize = (int) slider.getValue();
-            if (lobbySize != 0) {
+            if (lobbySize != 0 && lobbySize != 1) {
                 Toast.makeText(this, "Creating lobby with size: " + lobbySize, Toast.LENGTH_SHORT).show();
                 createLobby(lobbySize, userId);
                 dialog.dismiss();
             } else {
-                Toast.makeText(this, "Can't create lobby with size 0", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Can't create lobby with size 0 or 1", Toast.LENGTH_SHORT).show();
             }
         });
     }
