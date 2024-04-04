@@ -153,9 +153,10 @@ public class LeaderboardActivity extends AppCompatActivity {
                 .registerReceiver(messageReceiver, new IntentFilter("WebSocketMessageReceived"));
         serviceIntent.setAction("CONNECT");
         serviceIntent.putExtra("key", "leaderboard");
-        serviceIntent.putExtra("url", RequestURLs.SERVER_WEBSOCKET_LEADERBOARD_URL + "/" + new Random().nextFloat());
+        String websocketURL = RequestURLs.SERVER_WEBSOCKET_LEADERBOARD_URL + "/" + new Random().nextFloat();
+        Log.d("WebSocketStartup", "onStart: " + websocketURL);
+        serviceIntent.putExtra("url", websocketURL);
         startService(serviceIntent);
-        Log.d("HiHello", "onStart: Tried to start");
     }
 
     @Override
