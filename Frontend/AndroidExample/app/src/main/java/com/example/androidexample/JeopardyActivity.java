@@ -24,20 +24,24 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Random;
 
 import url.RequestURLs;
 
 public class JeopardyActivity extends AppCompatActivity {
-
-    private List<Button> questionButtons;
-    private List<Question> questions;
+    private List<List<Button>> buttonColumns;
+    private List<Button> questionCategory0Buttons;
+    private List<Button> questionCategory1Buttons;
+    private List<Button> questionCategory2Buttons;
+    private List<TextView> categoryTitles;
     private TextView pointsText;
 
     private String username;
     private int userID;
     private int points;
+    private boolean attemptedRefresh = false;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -48,13 +52,15 @@ public class JeopardyActivity extends AppCompatActivity {
         username = prefs.getString("USERNAME","");
         userID = prefs.getInt("USER_ID", 0);
 
-        questionButtons = new ArrayList<>();
-        questions = new ArrayList<>();
-
         points = 0;
         pointsText = findViewById(R.id.jeopardy_point_total_text);
 
         pointsText.setText("Total Points: " + points);
+
+        buttonColumns = new ArrayList<>();
+        questionCategory0Buttons = new ArrayList<>();
+        questionCategory1Buttons = new ArrayList<>();
+        questionCategory2Buttons = new ArrayList<>();
 
         Button questionButton00 = findViewById(R.id.jeopardy_button_00);
         Button questionButton10 = findViewById(R.id.jeopardy_button_10);
@@ -66,25 +72,39 @@ public class JeopardyActivity extends AppCompatActivity {
         Button questionButton12 = findViewById(R.id.jeopardy_button_12);
         Button questionButton22 = findViewById(R.id.jeopardy_button_22);
 
-        questionButtons.add(questionButton00);
-        questionButtons.add(questionButton10);
-        questionButtons.add(questionButton20);
-        questionButtons.add(questionButton01);
-        questionButtons.add(questionButton11);
-        questionButtons.add(questionButton21);
-        questionButtons.add(questionButton02);
-        questionButtons.add(questionButton12);
-        questionButtons.add(questionButton22);
+        questionCategory0Buttons.add(questionButton00);
+        questionCategory0Buttons.add(questionButton10);
+        questionCategory0Buttons.add(questionButton20);
+        questionCategory1Buttons.add(questionButton01);
+        questionCategory1Buttons.add(questionButton11);
+        questionCategory1Buttons.add(questionButton21);
+        questionCategory2Buttons.add(questionButton02);
+        questionCategory2Buttons.add(questionButton12);
+        questionCategory2Buttons.add(questionButton22);
+        buttonColumns.add(questionCategory0Buttons);
+        buttonColumns.add(questionCategory1Buttons);
+        buttonColumns.add(questionCategory2Buttons);
+
+        TextView category0 = findViewById(R.id.jeopardy_category_0);
+        TextView category1 = findViewById(R.id.jeopardy_category_1);
+        TextView category2 = findViewById(R.id.jeopardy_category_2);
+
+        categoryTitles.add(category0);
+        categoryTitles.add(category1);
+        categoryTitles.add(category2);
 
         Question placeholder = new Question(99, "99?", "69", "Number", false, false);
+
         // If no questions are loaded yet, show this message
-        questionButtons.forEach(q -> {
-            q.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Toast.makeText(getApplicationContext(), "Question hasn't loaded", Toast.LENGTH_SHORT).show();
-                    questionDialog(q, placeholder);
-                }
+        buttonColumns.forEach(c -> {
+            c.forEach(q -> {
+                q.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Toast.makeText(getApplicationContext(), "Question hasn't loaded", Toast.LENGTH_SHORT).show();
+                        questionDialog(q, placeholder);
+                    }
+                });
             });
         });
 
@@ -102,34 +122,58 @@ public class JeopardyActivity extends AppCompatActivity {
                 new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
-                        questions.clear();
+                        // Sort questions into different lists based on question type
+                        List<Question> questions = new ArrayList<>();
+                        HashSet<String> categories = new HashSet<>();
+
                         for (int i = 0; i < response.length(); i++) {
                             try {
-                                questions.add(new Question(response.getJSONObject(i)));
+                                Question q = new Question(response.getJSONObject(i));
+                                questions.add(q);
+                                categories.add(q.getQuestionType());
                             } catch (JSONException e) {
                                 throw new RuntimeException(e);
                             }
                         }
 
-                        Collections.shuffle(questions);
+                        List<List<Question>> categoryQuestions = new ArrayList<>();
+                        List<String> categoryList = new ArrayList<>(categories);
 
-                        for (int i = 0; i < questionButtons.size(); i++) {
-                            Button b = questionButtons.get(i);
-                            Question q = questions.get(i);
-                            b.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    questionDialog(b, q);
-                                    b.setEnabled(false);
-                                }
-                            });
+                        for (int i = 0; i < categoryList.size(); i++) {
+                            String category = categoryList.get(i);
+                            List<Question> temp = new ArrayList<>(questions);
+                            temp.removeIf(q -> !q.getQuestionType().equals(category));
+                            categoryQuestions.add(temp);
+                            categoryTitles.get(i).setText(category);
+                        }
+
+                        // Set each button to a random question in their category
+                        Random rand = new Random();
+                        for (int i = 0; i < buttonColumns.size(); i++) {
+                            for (Button b : buttonColumns.get(i)) {
+                                int randQuestionIndex = rand.nextInt(buttonColumns.get(i).size());
+
+                                Question q = categoryQuestions.get(i).get(randQuestionIndex);
+                                b.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        questionDialog(b, q);
+                                    }
+                                });
+                            }
                         }
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-
+                        if (!attemptedRefresh) {
+                            Toast.makeText(getApplicationContext(), "Unable to load questions, reattempting to get questions from server", Toast.LENGTH_LONG).show();
+                            requestJeopardyQuestions();
+                            attemptedRefresh = true;
+                        } else {
+                            Toast.makeText(getApplicationContext(), "Unable to reach server", Toast.LENGTH_LONG).show();
+                        }
                     }
                 }
         );
@@ -173,7 +217,7 @@ public class JeopardyActivity extends AppCompatActivity {
      * @param givenAnswer
      */
     private void saveUserAnswer(int questionID, String givenAnswer) {
-        //TODO make post request
+        //TODO post user answer for a given question as a POST request
     }
 
     /**
@@ -198,8 +242,12 @@ public class JeopardyActivity extends AppCompatActivity {
                                     points += pointsToAdd;
                                     pointsText.setText("Total Points: " + points);
                                     addUserPoints(pointsToAdd);
+                                    dialog.dismiss();
+                                    button.setEnabled(false);
                                     break;
                                 }
+                                dialog.dismiss();
+                                button.setEnabled(false);
 
 
                             } catch (JSONException e) {
@@ -211,7 +259,7 @@ public class JeopardyActivity extends AppCompatActivity {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-
+                        Log.d("JeopardyActivity", "Failed to check answer: " + givenAnswer);
                     }
                 }
         );
