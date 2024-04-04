@@ -20,9 +20,8 @@ import com.android.volley.toolbox.Volley;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-/**
- * Allows users to sign up for the application by providing their username, password, and email.
- */
+import url.RequestURLs;
+
 public class SignupActivity extends AppCompatActivity {
 
     private EditText usernameEditText;
@@ -32,7 +31,7 @@ public class SignupActivity extends AppCompatActivity {
     private Button loginButton;
     private Button signupButton;
 
-    private String backendUrl = "http://coms-309-034.class.las.iastate.edu:8080/users";
+    private String backendUrl = RequestURLs.SERVER_HTTP_URL + "/users";
     //change to "http://coms-309-034.class.las.iastate.edu:8080/users/"
     //or to "http://10.0.2.2:8080/users"
     private RequestQueue requestQueue;
@@ -80,23 +79,10 @@ public class SignupActivity extends AppCompatActivity {
         });
     }
 
-    /**
-     * Checks if the given email address is valid.
-     *
-     * @param email The email address to validate
-     * @return True if the email address is valid, otherwise false
-     */
     private boolean isValidEmail(String email) {
         return Patterns.EMAIL_ADDRESS.matcher(email).matches();
     }
 
-    /**
-     * Sends a signup request to the backend server.
-     *
-     * @param username The username provided by the user
-     * @param password The password provided by the user
-     * @param email    The email provided by the user
-     */
     private void sendSignupRequest(String username, String password, String email) {
         String url = backendUrl;
 
