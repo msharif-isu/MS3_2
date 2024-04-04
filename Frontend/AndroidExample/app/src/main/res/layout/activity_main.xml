@@ -82,4 +82,24 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:srcCompat="@tools:sample/avatars" />
 
+    <Button
+        android:id="@+id/btnQuery"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Question Search"
+        app:layout_constraintBottom_toTopOf="@+id/btnStringRequest"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView" />
+
+    <Button
+        android:id="@+id/btnJeopardy"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:text="Jeopardy"
+        app:layout_constraintBottom_toBottomOf="@+id/btnJsonObjRequest"
+        app:layout_constraintEnd_toStartOf="@+id/btnJsonObjRequest"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/btnJsonObjRequest" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

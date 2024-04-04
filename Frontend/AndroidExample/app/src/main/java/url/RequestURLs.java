@@ -11,8 +11,8 @@ public class RequestURLs {
 
             //"http://coms-309-034.class.las.iastate.edu:8080";
     public static final String SERVER_HTTP_USER_QUESTION_URL = "http://coms-309-034.class.las.iastate.edu:8080/question";
-    public static final String SERVER_HTTP_URL = "http://coms-309-034.class.las.iastate.edu:8080";
     public static final String SERVER_HTTP_QUESTION_URL = "http://10.0.2.2:8080/question";
+    public static final String SERVER_HTTP_QUESTION_QUERY_URL = "http://10.0.2.2:8080/query";
     public static final String SERVER_HTTP_SAVE_ANSWER_URL = "http://coms-309-034.class.las.iastate.edu:8080/answer";
     public static final String SERVER_HTTP_ANSWER_CHECKER_URL = "http://10.0.2.2:8080/question/answers";
     public static final String SERVER_HTTP_CREATE_USER_ANSWER_URL = "http://10.0.2.2:8080/answer/add";

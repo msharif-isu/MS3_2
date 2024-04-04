@@ -13,7 +13,7 @@ import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private Button strBtn, jsonObjBtn, jsonArrBtn, imgBtn, questionBtn;
+    private Button strBtn, jsonObjBtn, jsonArrBtn, imgBtn, questionBtn, queryButton, jeopardyButton;
 
     private ImageButton profileButton;
 
@@ -36,6 +36,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         imgBtn = findViewById(R.id.btnImageRequest);
         questionBtn = findViewById(R.id.btnQuestionSinglePlayer);
         profileButton = findViewById(R.id.profileButton);
+        queryButton = findViewById(R.id.btnQuery);
+        jeopardyButton = findViewById(R.id.btnJeopardy);
 
         /* button click listeners */
         strBtn.setOnClickListener(this);
@@ -44,6 +46,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         imgBtn.setOnClickListener(this);
         questionBtn.setOnClickListener(this);
         profileButton.setOnClickListener(this);
+        queryButton.setOnClickListener(this);
+        jeopardyButton.setOnClickListener(this);
+
 
         // Check if the username exists in SharedPreferences
         //SharedPreferences sharedPreferences = getSharedPreferences("loginPrefs", MODE_PRIVATE);
@@ -74,6 +79,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             startActivity(new Intent(MainActivity.this, LoginActivity.class));
         } else if (id == R.id.profileButton) {
             startActivity(new Intent(MainActivity.this, ProfileActivity.class));
+        } else if (id == R.id.btnQuery) {
+            startActivity(new Intent(MainActivity.this, QueryActivity.class));
+        } else if (id == R.id.btnJeopardy) {
+            startActivity(new Intent(MainActivity.this, JeopardyActivity.class));
         }
     }
 }

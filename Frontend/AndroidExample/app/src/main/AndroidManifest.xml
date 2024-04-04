@@ -61,5 +61,11 @@
         <activity
             android:name=".LobbiesActivity"
             android:exported="false" />
+        <activity
+            android:name=".QueryActivity"
+            android:exported="false" />
+        <activity
+            android:name=".JeopardyActivity"
+            android:exported="false" />
     </application>
 </manifest>
