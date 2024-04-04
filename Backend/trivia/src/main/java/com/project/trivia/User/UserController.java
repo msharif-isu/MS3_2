@@ -1,5 +1,7 @@
 package com.project.trivia.User;
 
+import com.project.trivia.Leaderboard.Leaderboard;
+import com.project.trivia.roomChat.Message;
 import com.project.trivia.FriendsList.Friends;
 import com.project.trivia.FriendsList.FriendsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -107,6 +109,17 @@ public class UserController {
         return passwordIds;
     }
 
+    @GetMapping(path="/users/getPoints/{id}")
+    Leaderboard lb (@PathVariable int id) {
+        User user = userRepository.findById(id);
+        return user.getLeaderboard();
+    }
+
+    @GetMapping(path = "/messagesSent/{userId}")
+    public List<Message> getAllUsersMessages(@PathVariable int userId){
+        return userRepository.findById(userId).getMessages();
+    }
+
     @GetMapping(path = "/users/getBio/{username}")
     public String getBioByUsername(@PathVariable String username) {
         User user = userRepository.findByUsername(username);
@@ -116,6 +129,4 @@ public class UserController {
             return "User not found";
         }
     }
-
-
 }

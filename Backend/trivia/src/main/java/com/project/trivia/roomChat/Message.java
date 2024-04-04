@@ -1,5 +1,7 @@
 package com.project.trivia.roomChat;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.project.trivia.User.User;
 import jakarta.persistence.*;
 
 import java.util.Date;
@@ -11,8 +13,10 @@ public class Message {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column
-    private String userName;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    @JsonIgnore
+    private User user;
     @Column
     private Long roomId;
     @Lob
@@ -25,8 +29,8 @@ public class Message {
 	
 	public Message() {};
 	
-	public Message(String userName, String content, Long roomId) {
-		this.userName = userName;
+	public Message(User userName, String content, Long roomId) {
+		this.user = userName;
 		this.content = content;
         this.roomId = roomId;
 	}
@@ -39,12 +43,12 @@ public class Message {
         this.id = id;
     }
 
-    public String getUserName() {
-        return userName;
+    public User getUserName() {
+        return user;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setUserName(User userName) {
+        this.user = userName;
     }
 
     public String getContent() {

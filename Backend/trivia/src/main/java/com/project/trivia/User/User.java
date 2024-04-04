@@ -8,6 +8,14 @@ import jakarta.persistence.*;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.project.trivia.roomChat.Message;
+import jakarta.persistence.*;
+import org.w3c.dom.stylesheets.LinkStyle;
+
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 public class User {
 
@@ -29,10 +37,14 @@ public class User {
     private long points;
 
     @ManyToOne
-    @JoinColumn(name="lobby_id")
+    @JoinColumn(name = "lobby_id")
     @JsonIgnore
     private Lobby lobby;
 
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JsonIgnore
+    private List<Message> messages;
 
     public User(String username, String password, String email) {
         this.username = username;
@@ -40,6 +52,7 @@ public class User {
         this.email = email;
         bio = "";
         points = 0;
+        messages = new ArrayList<>();
     }
 
     public User() {
@@ -103,18 +116,30 @@ public class User {
         this.bio = bio;
     }
 
+    public List<Message> getMessages() {
+        return messages;
+    }
+
+    public void setLeaderboard(Leaderboard leaderboard) {
+        this.leaderboard = leaderboard;
+    }
+
     public String getFilePath() {
         return filePath;
+    }
+
+    public void setMessages(List<Message> messages) {
+        this.messages = messages;
     }
 
     public void setFilePath(String filePath) {
         this.filePath = filePath;
     }
 
-
     public Lobby getLobby() {
         return lobby;
     }
+
     public void setLobby(Lobby lobbyId) {
         this.lobby = lobbyId;
     }
