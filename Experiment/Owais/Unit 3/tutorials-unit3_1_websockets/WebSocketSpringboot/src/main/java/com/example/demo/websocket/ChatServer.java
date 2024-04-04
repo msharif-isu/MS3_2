@@ -55,11 +55,11 @@ public class ChatServer {
         logger.info("[onOpen] " + username);
 
         // Handle the case of a duplicate username
-        if (usernameSessionMap.containsKey(username)) {
-            session.getBasicRemote().sendText("Username already exists");
-            session.close();
-        }
-        else {
+//        if (usernameSessionMap.containsKey(username)) {
+//            session.getBasicRemote().sendText("Username already exists");
+//            session.close();
+//        }
+//        else {
             // map current session with username
             sessionUsernameMap.put(session, username);
 
@@ -67,11 +67,11 @@ public class ChatServer {
             usernameSessionMap.put(username, session);
 
             // send to the user joining in
-            sendMessageToPArticularUser(username, "Welcome to the chat server, "+username);
+            sendMessageToPArticularUser(username, "Welcome to the game room, "+username);
 
             // send to everyone in the chat
-            broadcast("User: " + username + " has Joined the Chat");
-        }
+            broadcast("User: " + username + " has Joined the Game Lobby");
+//        }
     }
 
     /**
@@ -85,13 +85,10 @@ public class ChatServer {
 
         // get the username by session
         String username = sessionUsernameMap.get(session);
-
         // server side log
         logger.info("[onMessage] " + username + ": " + message);
-
         // Direct message to a user using the format "@username <message>"
         if (message.startsWith("@")) {
-
             // split by space
             String[] split_msg =  message.split("\\s+");
 

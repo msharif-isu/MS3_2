@@ -11,8 +11,9 @@ import lombok.Data;
 
 @Entity
 public class Answer {
-	@Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Lob
     private Long id;
 
     @Column
@@ -21,15 +22,16 @@ public class Answer {
     @Column
     private boolean correct;
 
-    @Lob
+    @Column
     private String answer;
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "sent")
     private Date sent = new Date();
 
-    @ManyToOne(cascade = CascadeType.MERGE)
+    @ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
     @JoinColumn(name = "question_id")
+    @JsonIgnore
     private Question question;
 
     @ManyToOne
@@ -37,14 +39,17 @@ public class Answer {
     @JsonIgnore
     private User user;
 
-	public Answer() {};
-	
-	public Answer(String userName, String answer, boolean correct) {
-		this.userName = userName;
-		this.answer = answer;
+    public Answer() {
+    }
+
+    ;
+
+    public Answer(String userName, String answer, boolean correct) {
+        this.userName = userName;
+        this.answer = answer;
         this.correct = correct;
         //this.question = question;
-	}
+    }
 
     public Long getId() {
         return id;
@@ -73,6 +78,7 @@ public class Answer {
     public boolean getCorrect() {
         return correct;
     }
+
     public void setCorrect(boolean correct) {
         this.correct = correct;
     }
@@ -85,9 +91,12 @@ public class Answer {
         this.sent = sent;
     }
 
-    public Question getQuestion() {return question;}
+    public Question getQuestion() {
+        return question;
+    }
 
-    public void setQuestion(Question question) {this.question = question;}
+    public void setQuestion(Question question) {
+        this.question = question;
+    }
 
-    
 }

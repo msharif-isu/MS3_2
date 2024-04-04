@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/imgView"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:layout_gravity="center"
+        android:scaleType="fitCenter"
+        app:layout_constraintBottom_toTopOf="@+id/username"
+        app:layout_constraintEnd_toStartOf="@+id/questionsAnswered"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"></ImageView>
+
+    <TextView
+        android:id="@+id/questionsAnswered"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="TextView"
+        android:textSize="20dp"
+        app:layout_constraintBottom_toBottomOf="@+id/imgView"
+        app:layout_constraintEnd_toStartOf="@+id/AcheivementsUnlocked"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/imgView" />
+
+    <TextView
+        android:id="@+id/AcheivementsUnlocked"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="TextView"
+        android:textSize="20dp"
+        app:layout_constraintBottom_toBottomOf="@+id/questionsAnswered"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/questionsAnswered" />
+
+    <ImageButton
+        android:id="@+id/addFriends"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:background="#00FFFFFF"
+        android:scaleX="3"
+        android:scaleY="3"
+        app:layout_constraintBottom_toTopOf="@+id/questionsAnswered"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/imgView"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@android:drawable/ic_menu_add" />
+
+    <TextView
+        android:id="@+id/userBiography"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="TextView"
+        android:textSize="20dp"
+        app:layout_constraintEnd_toEndOf="@+id/addFriends"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/username" />
+
+    <TextView
+        android:id="@+id/username"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="TextView"
+        android:textSize="20dp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="@+id/imgView"
+        app:layout_constraintStart_toStartOf="@+id/imgView"
+        app:layout_constraintTop_toBottomOf="@+id/imgView" />
+
+    <TextView
+        android:id="@+id/freindsListText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
+        android:text="Friends:"
+        android:textSize="20dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/userBiography" />
+
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipeRefreshLayout"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/freindsListText">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/friendList"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+    <ImageButton
+        android:id="@+id/editBioButton"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="#00FFFFFF"
+        android:scaleX="1"
+        app:layout_constraintBottom_toTopOf="@+id/freindsListText"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/userBiography"
+        app:layout_constraintTop_toBottomOf="@+id/imgView"
+        app:srcCompat="@android:drawable/ic_menu_edit" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

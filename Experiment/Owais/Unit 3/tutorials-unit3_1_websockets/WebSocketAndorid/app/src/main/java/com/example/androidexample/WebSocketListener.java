@@ -7,7 +7,7 @@ import org.java_websocket.handshake.ServerHandshake;
  * Implement this interface to listen for WebSocket connection,
  * message, closure, and error events.
  */
-public interface WebSocketListener {
+public interface    WebSocketListener {
 
     /**
      * Called when the WebSocket connection is successfully opened.
