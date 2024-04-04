@@ -1,6 +1,7 @@
 package com.project.trivia.User;
 
 import com.project.trivia.Leaderboard.Leaderboard;
+import com.project.trivia.roomChat.Message;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -94,5 +95,10 @@ public class UserController {
         return user.getLeaderboard();
     }
 
-    
+
+
+    @GetMapping(path = "/messagesSent/{userId}")
+    public List<Message> getAllUsersMessages(@PathVariable int userId){
+        return userRepository.findById(userId).getMessages();
+    }
 }

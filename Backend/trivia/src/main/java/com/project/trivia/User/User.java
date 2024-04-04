@@ -5,6 +5,13 @@ import com.project.trivia.MPQuestions.Answer;
 import jakarta.persistence.*;
 
 import java.util.List;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.project.trivia.roomChat.Message;
+import jakarta.persistence.*;
+import org.w3c.dom.stylesheets.LinkStyle;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class User {
@@ -25,11 +32,16 @@ public class User {
     @JoinColumn(name = "leaderboard_id")
     private Leaderboard leaderboard;
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JsonIgnore
+    private List<Message> messages;
+
     public User(String username, String password, String email) {
         this.username = username;
         this.password = password;
         this.email = email;
         points = 0;
+        messages = new ArrayList<>();
     }
 
     public User() {
@@ -78,7 +90,14 @@ public class User {
 
     public Leaderboard getLeaderboard() {return leaderboard;}
 
+    public List<Message> getMessages() {
+        return messages;
+    }
+
     public void setLeaderboard(Leaderboard leaderboard) {
         this.leaderboard = leaderboard;
+    }
+    public void setMessages(List<Message> messages) {
+        this.messages = messages;
     }
 }
