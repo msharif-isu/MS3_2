@@ -1,6 +1,7 @@
 package com.example.androidexample;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.Toast;
@@ -69,11 +70,15 @@ public class UserQuestionActivity extends AppCompatActivity {
                 new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
-                        List<Question> dataSet = new ArrayList<>();
+                        List<UserQuestionListItem> dataSet = new ArrayList<>();
                         for (int i = 0; i < response.length(); i++) {
                             try {
                                 JSONObject questionData = response.getJSONObject(i);
-                                dataSet.add(new Question(questionData));
+                                int id = questionData.getInt("id");
+                                String question = questionData.getString("question");
+                                String answer = questionData.getString("answer");
+                                String questionType = questionData.getString("questionType");
+                                dataSet.add(new UserQuestionListItem(id, question, answer, questionType));
                             } catch (JSONException e) {
                                 throw new RuntimeException(e);
                             }
