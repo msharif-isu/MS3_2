@@ -3,6 +3,7 @@ package com.example.androidexample;
 import androidx.appcompat.app.AppCompatActivity;
 
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -16,6 +17,8 @@ import org.java_websocket.handshake.ServerHandshake;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import url.RequestURLs;
 
 public class MultiplayerActivity extends AppCompatActivity implements WebSocketListener {
 
@@ -67,7 +70,7 @@ public class MultiplayerActivity extends AppCompatActivity implements WebSocketL
         msgTv.setText("User answers will appear here:\n");
 
         //automatically connect to websocket based on username.
-        String chatUrl = "ws://10.0.2.2:8080/chat/" + roomId + "/";
+        String chatUrl = RequestURLs.SERVER_WEBSOCKET_URL_MULTIPLAYER + "/chat/" + roomId + "/";
         //todo if username is blank, give error.
         String serverUrl = chatUrl + username;
 
@@ -126,6 +129,12 @@ public class MultiplayerActivity extends AppCompatActivity implements WebSocketL
                 String question = message.substring("Question: ".length());
                 questionTextView.setText(question);
             //} else if (message.equals("Correct!")) {
+            } else if (message.equals("Game is now over congrats!")) {
+                Intent intent = new Intent(MultiplayerActivity.this, ResultsActivity.class);
+                //TODO fix this, it currently stores in username, when it shoudlnt
+                intent.putExtra("USERNAME", "multiplayer");
+                startActivity(intent);
+
             }
             else {
                 msgTv.setText(s + "\n" + message);

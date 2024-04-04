@@ -12,9 +12,11 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.android.material.slider.Slider;
 
+import org.java_websocket.handshake.ServerHandshake;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -34,7 +36,7 @@ import java.util.List;
 
 import url.RequestURLs;
 
-public class LobbiesActivity extends AppCompatActivity {
+public class LobbiesActivity extends AppCompatActivity implements WebSocketListener {
 
     //TODO MAKE X BUTTON REMOVE USERS FROM LOBBY, ONLY ACCESSABLE BY HOST
     private RecyclerView recyclerView;
@@ -46,7 +48,9 @@ public class LobbiesActivity extends AppCompatActivity {
     private String username;
     private int userId;
     private FriendsListAdapter adapter;
+    private TextView msgTv;
 
+    private WebSocketManager webSocketManager;
 
     private String backendUrl = RequestURLs.SERVER_HTTP_URL + "/";
 
@@ -72,6 +76,9 @@ public class LobbiesActivity extends AppCompatActivity {
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(lobbyAdapter);
 
+        msgTv = findViewById(R.id.textView9);
+
+
         refreshLobbyList();
 
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -92,10 +99,21 @@ public class LobbiesActivity extends AppCompatActivity {
         dialog.show();
 
         getLobbyDetails(roomId);
+
+        SharedPreferences.Editor editor = getSharedPreferences("roomID", MODE_PRIVATE).edit();
+        editor.putInt("ROOM_ID", userId);
+        editor.apply();
+
         Button joinRoom = dialog.findViewById(R.id.buttonJoinRoom);
         Button leaveRoom = dialog.findViewById(R.id.buttonLeaveRoom);
         Button startGame = dialog.findViewById(R.id.buttonStartGame);
         RecyclerView playerListRecyclerView = dialog.findViewById(R.id.recycleView);
+
+        // A little sketchy, but i need a websocket room and i didnt want to make another class.
+        String chatUrl = RequestURLs.SERVER_WEBSOCKET_URL_MULTIPLAYER + "/chat/" + roomId * -1 + "/" + username;
+        WebSocketManager.getInstance().connectWebSocket(chatUrl);
+        WebSocketManager.getInstance().setWebSocketListener(LobbiesActivity.this);
+
 
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
         adapter = new FriendsListAdapter(friendsList, new FriendsListAdapter.OnDeleteClickListener() {
@@ -103,6 +121,10 @@ public class LobbiesActivity extends AppCompatActivity {
             public void onDeleteClick(int position) {
                 UserFriend friend = friendsList.get(position);
                 String friendName = friend.getUsername();
+                getUserIdByUsername(friendName);
+                SharedPreferences sharedPreferences = getSharedPreferences("UserDeleteData", MODE_PRIVATE);
+                int userIdToDelete = sharedPreferences.getInt("USER_DELETE", -1);
+                leaveRoom(roomId, userIdToDelete);
                 // TODO: REMOVE FROM ROOM
             }
         });
@@ -115,7 +137,8 @@ public class LobbiesActivity extends AppCompatActivity {
         startGame.setOnClickListener(v -> {
             joinLobby(roomId, userId);
             getLobbyDetails(roomId);
-            beginGame(roomId);
+            WebSocketManager.getInstance().sendMessage("lobbyStart!");
+//            beginGame(roomId);
         });
         leaveRoom.setOnClickListener(v -> {
             leaveRoom(roomId, userId);
@@ -126,6 +149,8 @@ public class LobbiesActivity extends AppCompatActivity {
             getLobbyDetails(roomId);
             //dialog.dismiss();
         });
+
+
     }
 
     private void beginGame(long roomId) {
@@ -336,4 +361,76 @@ public class LobbiesActivity extends AppCompatActivity {
         });
         queue.add(jsonArrayRequest);
     }
+
+    private void getUserIdByUsername(String username) {
+        String url = backendUrl + "users/getIdByUsername/" + username;
+
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        int usernameId = Integer.parseInt(response);
+                        SharedPreferences.Editor editor = getSharedPreferences("UserDeleteData", MODE_PRIVATE).edit();
+                        editor.putInt("USER_DELETE", userId);
+                        editor.apply();
+                        Log.d("LobbiesActivity", "User ID response: " + response.toString());
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(LobbiesActivity.this, "Failed to get user ID: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+                        Log.e("LobbiesActivity", "Error getting user ID: " + error.toString());
+                    }
+                });
+        Volley.newRequestQueue(this).add(stringRequest);
+    }
+
+
+    public void onWebSocketMessage(String message) {
+        runOnUiThread(() -> {
+            String s = msgTv.getText().toString();
+            msgTv.setText(s + "\n" + message);
+            if (message.contains("lobbyStart!")) {
+                SharedPreferences sharedPreferences = getSharedPreferences("roomID", MODE_PRIVATE);
+                int roomId = sharedPreferences.getInt("ROOM_ID", -1);
+                beginGame(roomId);
+            }
+        });
+    }
+
+    @Override
+    public void onWebSocketOpen(ServerHandshake handshakedata) {
+        // WebSocket connection opened
+    }
+
+    @Override
+    public void onWebSocketClose(int code, String reason, boolean remote) {
+        // WebSocket connection closed
+        String closedBy = remote ? "server" : "local";
+        runOnUiThread(() -> {
+            String s = msgTv.getText().toString();
+            msgTv.setText(s + "---\nconnection closed by " + closedBy + "\nreason: " + reason);
+        });
+    }
+
+    @Override
+    public void onWebSocketError(Exception ex) {
+        // WebSocket error occurred
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        // Close WebSocket connection
+        webSocketManager.closeWebSocket();
+    }
+
+    public void onBackPressed() {
+        super.onBackPressed();
+        // Close WebSocket connection
+        WebSocketManager.getInstance().closeWebSocket();
+    }
+
+
 }

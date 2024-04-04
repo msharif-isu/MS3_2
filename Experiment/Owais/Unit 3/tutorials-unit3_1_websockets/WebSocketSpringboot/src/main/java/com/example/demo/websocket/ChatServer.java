@@ -85,13 +85,10 @@ public class ChatServer {
 
         // get the username by session
         String username = sessionUsernameMap.get(session);
-
         // server side log
         logger.info("[onMessage] " + username + ": " + message);
-
         // Direct message to a user using the format "@username <message>"
         if (message.startsWith("@")) {
-
             // split by space
             String[] split_msg =  message.split("\\s+");
 
