@@ -8,17 +8,16 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.util.List;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
-/**
- * The adapter that binds a leaderboard's dataset to its <code>RecyclerView</code>'s UI elements
- */
 public class LeaderboardAdapter extends RecyclerView.Adapter<LeaderboardAdapter.ViewHolder> {
 
     /**
      * The JSONArray pulled from the database containing the leaderboard data
      */
-    private List<LeaderboardListItem> leaderboardDataSet;
+    private JSONArray leaderboardDataSet;
     /**
      * Keeps track of the type of points to display
      */
@@ -55,7 +54,7 @@ public class LeaderboardAdapter extends RecyclerView.Adapter<LeaderboardAdapter.
      * @param dataSet JSONArray containing the data to populate views to be used
      * by RecyclerView
      */
-    public LeaderboardAdapter(List<LeaderboardListItem> dataSet, LeaderboardTimeFrameEnum time_frame) {
+    public LeaderboardAdapter(JSONArray dataSet, LeaderboardTimeFrameEnum time_frame) {
         leaderboardDataSet = dataSet;
         this.time_frame = time_frame;
     }
@@ -74,34 +73,40 @@ public class LeaderboardAdapter extends RecyclerView.Adapter<LeaderboardAdapter.
     // Replace the contents of a view (invoked by the layout manager)
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, final int position) {
-        LeaderboardListItem userPointData = leaderboardDataSet.get(position);
+        try {
+            JSONObject userData = leaderboardDataSet.getJSONObject(position);
+            viewHolder.getUserNameView().setText(userData.getString("id"));
 
-        viewHolder.getUserNameView().setText(Integer.toString(userPointData.getId()));
+            String points = "";
+            switch (time_frame) {
+                case DAILY:
+                    points = userData.getString("userPoints");
+                    break;
+                case WEEKLY:
+                    points = userData.getString("weeklyPoints");
+                    break;
+                case MONTHLY:
+                    points = userData.getString("monthlyPoints");
+                    break;
+                case YEARLY:
+                    points = userData.getString("yearlyPoints");
+                    break;
+                case LIFETIME:
+                    points = userData.getString("lifetimePoints");
+                    break;
+                default:
+                    return;
+            }
+            viewHolder.getPointsView().setText(points);
 
-        switch (time_frame) {
-            case DAILY:
-                viewHolder.getPointsView().setText(Integer.toString(userPointData.getDailyPoints()));
-                break;
-            case WEEKLY:
-                viewHolder.getPointsView().setText(Integer.toString(userPointData.getWeeklyPoints()));
-                break;
-            case MONTHLY:
-                viewHolder.getPointsView().setText(Integer.toString(userPointData.getMonthlyPoints()));
-                break;
-            case YEARLY:
-                viewHolder.getPointsView().setText(Integer.toString(userPointData.getYearlyPoints()));
-                break;
-            case LIFETIME:
-                viewHolder.getPointsView().setText(Integer.toString(userPointData.getLifetimePoints()));
-                break;
-            default:
-                return;
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
         }
     }
 
     // Return the size of your dataset (invoked by the layout manager)
     @Override
     public int getItemCount() {
-        return leaderboardDataSet.size();
+        return leaderboardDataSet.length();
     }
 }

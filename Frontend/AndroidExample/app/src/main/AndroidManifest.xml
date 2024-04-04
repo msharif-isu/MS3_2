@@ -40,10 +40,6 @@
             android:name=".SinglePlayerQuestionActivity"
             android:exported="false" />
         <activity
-            android:name=".LeaderboardActivity"
-            android:exported="false">
-        </activity>
-        <activity
             android:name=".UserQuestionActivity"
             android:exported="false">
         </activity>
@@ -57,12 +53,6 @@
             android:name=".ResultsActivity"
             android:exported="false" />
         <activity
-            android:name=".QueryActivity"
-            android:exported="false" />
-        <activity
-            android:name=".JeopardyActivity"
-            android:exported="false" />
-        <activity
             android:name=".MultiplayerActivity"
             android:exported="false" />
         <activity
@@ -71,9 +61,5 @@
         <activity
             android:name=".LobbiesActivity"
             android:exported="false" />
-
-        <service
-            android:enabled="true"
-            android:name="com.example.androidexample.LeaderboardWebSocketService" />
     </application>
 </manifest>
