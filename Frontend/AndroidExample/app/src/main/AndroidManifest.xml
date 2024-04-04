@@ -71,5 +71,9 @@
         <activity
             android:name=".LobbiesActivity"
             android:exported="false" />
+
+        <service
+            android:enabled="true"
+            android:name="com.example.androidexample.LeaderboardWebSocketService" />
     </application>
 </manifest>
