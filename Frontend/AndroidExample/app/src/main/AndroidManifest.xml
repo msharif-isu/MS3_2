@@ -67,5 +67,8 @@
         <activity
             android:name=".JeopardyActivity"
             android:exported="false" />
+        <activity
+            android:name=".LeaderboardActivity"
+            android:exported="false" />
     </application>
 </manifest>
