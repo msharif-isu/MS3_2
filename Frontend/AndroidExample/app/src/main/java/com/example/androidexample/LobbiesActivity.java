@@ -54,6 +54,9 @@ public class LobbiesActivity extends AppCompatActivity implements WebSocketListe
 
     private String backendUrl = RequestURLs.SERVER_HTTP_URL + "/";
 
+    private boolean isInLobby = false;
+    private boolean joinedLobby = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -102,7 +105,7 @@ public class LobbiesActivity extends AppCompatActivity implements WebSocketListe
 
 
         SharedPreferences.Editor editor = getSharedPreferences("roomID", MODE_PRIVATE).edit();
-        editor.putInt("ROOM_ID", (int)roomId);
+        editor.putInt("ROOM_ID", (int) roomId);
         editor.apply();
 
         Button joinRoom = dialog.findViewById(R.id.buttonJoinRoom);
@@ -133,17 +136,24 @@ public class LobbiesActivity extends AppCompatActivity implements WebSocketListe
 
         // TODO: Start game
         startGame.setOnClickListener(v -> {
-            joinLobby(roomId, userId);
-            getLobbyDetails(roomId);
-            WebSocketManager.getInstance().sendMessage("lobbyStart!");
-//            beginGame(roomId);
+            if (isInLobby && joinedLobby) {
+                joinLobby(roomId, userId);
+                getLobbyDetails(roomId);
+                WebSocketManager.getInstance().sendMessage("lobbyStart!");
+                beginGame(roomId);
+            } else {
+                Toast.makeText(LobbiesActivity.this, "You must join a lobby first", Toast.LENGTH_SHORT).show();
+            }//            beginGame(roomId);
         });
         leaveRoom.setOnClickListener(v -> {
             leaveRoom(roomId, userId);
+            WebSocketManager.getInstance().closeWebSocket();
+            isInLobby = false;
             dialog.dismiss();
         });
         joinRoom.setOnClickListener(v -> {
             joinLobby(roomId, userId);
+            isInLobby = true;
             getLobbyDetails(roomId);
             //dialog.dismiss();
         });
@@ -301,6 +311,7 @@ public class LobbiesActivity extends AppCompatActivity implements WebSocketListe
     }
 
     private Lobby parseLobbyResponse(JSONObject response) throws JSONException {
+        String playerUsername = username;
         int roomSize = response.getInt("roomSize");
         int playerCount = response.getInt("playerCount");
         String host = response.getString("host");
@@ -315,6 +326,9 @@ public class LobbiesActivity extends AppCompatActivity implements WebSocketListe
             String bio = playerObject.getString("bio");
             UserFriend player = new UserFriend(username, bio, null);
             players.add(player);
+            if (player.getUsername().equals(playerUsername)) {
+                joinedLobby = true;
+            }
         }
         return new Lobby(host, playerCount, roomSize, lobbyId, players);
     }
@@ -377,7 +391,6 @@ public class LobbiesActivity extends AppCompatActivity implements WebSocketListe
                 });
         Volley.newRequestQueue(this).add(stringRequest);
     }
-
 
 
     public void onWebSocketMessage(String message) {
