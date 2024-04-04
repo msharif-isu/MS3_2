@@ -100,8 +100,9 @@ public class LobbiesActivity extends AppCompatActivity implements WebSocketListe
 
         getLobbyDetails(roomId);
 
+
         SharedPreferences.Editor editor = getSharedPreferences("roomID", MODE_PRIVATE).edit();
-        editor.putInt("ROOM_ID", userId);
+        editor.putInt("ROOM_ID", (int)roomId);
         editor.apply();
 
         Button joinRoom = dialog.findViewById(R.id.buttonJoinRoom);
@@ -121,12 +122,9 @@ public class LobbiesActivity extends AppCompatActivity implements WebSocketListe
             public void onDeleteClick(int position) {
                 UserFriend friend = friendsList.get(position);
                 String friendName = friend.getUsername();
-                getUserIdByUsername(friendName);
-                SharedPreferences sharedPreferences = getSharedPreferences("UserDeleteData", MODE_PRIVATE);
-                int userIdToDelete = sharedPreferences.getInt("USER_DELETE", -1);
-                leaveRoom(roomId, userIdToDelete);
-                // TODO: REMOVE FROM ROOM
+                getUserIdByUsername(friendName, roomId); // Pass roomId to the method
             }
+
         });
 
         playerListRecyclerView.setLayoutManager(layoutManager);
@@ -362,18 +360,15 @@ public class LobbiesActivity extends AppCompatActivity implements WebSocketListe
         queue.add(jsonArrayRequest);
     }
 
-    private void getUserIdByUsername(String username) {
+    private void getUserIdByUsername(String username, long roomId) {
         String url = backendUrl + "users/getIdByUsername/" + username;
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        int usernameId = Integer.parseInt(response);
-                        SharedPreferences.Editor editor = getSharedPreferences("UserDeleteData", MODE_PRIVATE).edit();
-                        editor.putInt("USER_DELETE", userId);
-                        editor.apply();
-                        Log.d("LobbiesActivity", "User ID response: " + response.toString());
+                        int userIdToDelete = Integer.parseInt(response);
+                        leaveRoom(roomId, userIdToDelete);
                     }
                 },
                 new Response.ErrorListener() {
@@ -385,6 +380,7 @@ public class LobbiesActivity extends AppCompatActivity implements WebSocketListe
                 });
         Volley.newRequestQueue(this).add(stringRequest);
     }
+
 
 
     public void onWebSocketMessage(String message) {
