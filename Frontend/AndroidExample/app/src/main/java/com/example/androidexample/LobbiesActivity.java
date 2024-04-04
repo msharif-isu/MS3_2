@@ -200,9 +200,6 @@ public class LobbiesActivity extends AppCompatActivity implements WebSocketListe
 
                             // Set players to the lobby object
                             lobby.setPlayers(players);
-
-                            // Add players to the friendsList and notify the adapter
-                            //friendsList.addAll(players);
                             adapter.notifyDataSetChanged();
                         } catch (JSONException e) {
                             e.printStackTrace();
