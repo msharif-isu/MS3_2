@@ -134,6 +134,7 @@ public class LeaderboardActivity extends AppCompatActivity {
             if ("leaderboard".equals(key)){
                 runOnUiThread(() -> {
                     String message = intent.getStringExtra("message");
+                    Log.d("TAG", "onReceive: " + message);
                     displayData.clear();
                     displayData.addAll(parseLeaderboardMessage(message));
                     leaderboardAdapter.notifyDataSetChanged();
@@ -154,7 +155,6 @@ public class LeaderboardActivity extends AppCompatActivity {
         serviceIntent.setAction("CONNECT");
         serviceIntent.putExtra("key", "leaderboard");
         String websocketURL = RequestURLs.SERVER_WEBSOCKET_LEADERBOARD_URL + "/" + new Random().nextFloat();
-        Log.d("WebSocketStartup", "onStart: " + websocketURL);
         serviceIntent.putExtra("url", websocketURL);
         startService(serviceIntent);
     }
