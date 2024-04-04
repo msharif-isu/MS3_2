@@ -62,6 +62,8 @@ public class JeopardyActivity extends AppCompatActivity {
         questionCategory1Buttons = new ArrayList<>();
         questionCategory2Buttons = new ArrayList<>();
 
+        categoryTitles = new ArrayList<>();
+
         Button questionButton00 = findViewById(R.id.jeopardy_button_00);
         Button questionButton10 = findViewById(R.id.jeopardy_button_10);
         Button questionButton20 = findViewById(R.id.jeopardy_button_20);
@@ -139,7 +141,7 @@ public class JeopardyActivity extends AppCompatActivity {
                         List<List<Question>> categoryQuestions = new ArrayList<>();
                         List<String> categoryList = new ArrayList<>(categories);
 
-                        for (int i = 0; i < categoryList.size(); i++) {
+                        for (int i = 0; i < categoryTitles.size(); i++) {
                             String category = categoryList.get(i);
                             List<Question> temp = new ArrayList<>(questions);
                             temp.removeIf(q -> !q.getQuestionType().equals(category));
@@ -149,11 +151,11 @@ public class JeopardyActivity extends AppCompatActivity {
 
                         // Set each button to a random question in their category
                         Random rand = new Random();
-                        for (int i = 0; i < buttonColumns.size(); i++) {
-                            for (Button b : buttonColumns.get(i)) {
-                                int randQuestionIndex = rand.nextInt(buttonColumns.get(i).size());
+                        for (int col = 0; col < buttonColumns.size(); col++) {
+                            for (Button b : buttonColumns.get(col)) {
+                                int randQuestionIndex = rand.nextInt(categoryQuestions.get(col).size());
 
-                                Question q = categoryQuestions.get(i).get(randQuestionIndex);
+                                Question q = categoryQuestions.get(col).get(randQuestionIndex);
                                 b.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View view) {
@@ -202,7 +204,6 @@ public class JeopardyActivity extends AppCompatActivity {
             public void onClick(View view) {
                 String answer = answerText.getText().toString();
                 if (!answer.trim().isEmpty()) {
-                    saveUserAnswer(question.getId(), answer);
                     checkAnswer(button, dialog, question.getId(), answer);
                 } else {
                     Toast.makeText(getApplicationContext(), "Please enter an answer", Toast.LENGTH_SHORT).show();
@@ -216,8 +217,31 @@ public class JeopardyActivity extends AppCompatActivity {
      * @param questionID
      * @param givenAnswer
      */
-    private void saveUserAnswer(int questionID, String givenAnswer) {
-        //TODO post user answer for a given question as a POST request
+    private void saveUserAnswer(int questionID, String givenAnswer, boolean correct) throws JSONException {
+        JsonObjectRequest saveUserRequest = new JsonObjectRequest(
+                Request.Method.POST,
+                String.format("%s/%d", RequestURLs.SERVER_HTTP_CREATE_USER_ANSWER_URL, questionID),
+                new JSONObject() {{
+                    put("id", questionID);
+                    put("userName", username);
+                    put("correct", correct);
+                    put("answer", givenAnswer);
+                }},
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.d("JeopardyActivity", "Successfully added user answer to database");
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.d("JeopardyActivity", "Failed to add user answer to database");
+                    }
+                }
+        );
+
+        VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(saveUserRequest);
     }
 
     /**
@@ -237,23 +261,33 @@ public class JeopardyActivity extends AppCompatActivity {
                         for (int i = 0; i < response.length(); i++) {
                             try {
                                 String correctAnswer = response.getJSONObject(i).getString("answer");
+                                Log.d("JeopardyActivity", "Correct Answer: " + correctAnswer);
                                 if (givenAnswer.equals(correctAnswer)) {
                                     int pointsToAdd = Integer.parseInt(button.getText().toString());
                                     points += pointsToAdd;
                                     pointsText.setText("Total Points: " + points);
                                     addUserPoints(pointsToAdd);
+                                    Log.d("JeopardyActivity", "Saving correct user answer");
+                                    saveUserAnswer(questionID, givenAnswer, true);
+
                                     dialog.dismiss();
                                     button.setEnabled(false);
                                     break;
                                 }
-                                dialog.dismiss();
-                                button.setEnabled(false);
-
 
                             } catch (JSONException e) {
                                 throw new RuntimeException(e);
                             }
                         }
+                        try {
+                            Log.d("JeopardyActivity", "Saving incorrect user answer");
+                            saveUserAnswer(questionID, givenAnswer, false);
+                        } catch (JSONException e) {
+                            throw new RuntimeException(e);
+                        }
+
+                        dialog.dismiss();
+                        button.setEnabled(false);
                     }
                 },
                 new Response.ErrorListener() {
@@ -274,7 +308,7 @@ public class JeopardyActivity extends AppCompatActivity {
     private void addUserPoints(int pointsToAdd) {
         JsonObjectRequest addUserPointsRequest = new JsonObjectRequest(
                 Request.Method.PUT,
-                String.format("%s/%d/%d", RequestURLs.SERVER_HTTP_USER_ADD_POINTS_URL, username, pointsToAdd),
+                String.format("%s/%s/%d", RequestURLs.SERVER_HTTP_USER_ADD_POINTS_URL, username, pointsToAdd),
                 null,
                 new Response.Listener<JSONObject>() {
                     @Override
