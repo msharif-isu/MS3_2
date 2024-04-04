@@ -27,13 +27,13 @@ import org.springframework.stereotype.Component;
  * Represents a WebSocket chat server for handling real-time communication
  * between users. Each user connects to the server using their unique
  * username.
- *
+ * <p>
  * This class is annotated with Spring's `@ServerEndpoint` and `@Component`
  * annotations, making it a WebSocket endpoint that can handle WebSocket
  * connections at the "/chat/{username}" endpoint.
- *
+ * <p>
  * Example URL: ws://localhost:8080/chat/1/username
- *
+ * <p>
  * The server provides functionality for broadcasting messages to all connected
  * users and sending messages to specific users.
  */
@@ -49,8 +49,8 @@ public class QuestionSocket {
 
     // Store all socket session and their corresponding username
     // Two maps for the ease of retrieval by key
-    private static Map < Session, String > sessionUsernameMap = new Hashtable < > ();
-    private static Map < String, Session > usernameSessionMap = new Hashtable < > ();
+    private static Map<Session, String> sessionUsernameMap = new Hashtable<>();
+    private static Map<String, Session> usernameSessionMap = new Hashtable<>();
 
     private static Map<Long, List<Session>> roomSessionsMap = new HashMap<>();
 
@@ -65,14 +65,17 @@ public class QuestionSocket {
     private static QuestionRepository questRepo;
 
     @Autowired
-    public void setQuestionRepository(QuestionRepository repo) {questRepo = repo;}
-
+    public void setQuestionRepository(QuestionRepository repo) {
+        questRepo = repo;
+    }
 
 
     private static AnswerRepository ansRepo;
 
     @Autowired
-    public void setAnswerRepository(AnswerRepository repo) {ansRepo = repo;}
+    public void setAnswerRepository(AnswerRepository repo) {
+        ansRepo = repo;
+    }
 
     //private static UserRepository userRepo;
     // @Autowired
@@ -81,7 +84,7 @@ public class QuestionSocket {
     /**
      * This method is called when a new WebSocket connection is established.
      *
-     * @param session represents the WebSocket session for the connected user.
+     * @param session  represents the WebSocket session for the connected user.
      * @param username username specified in path parameter.
      */
     @OnOpen
@@ -91,33 +94,33 @@ public class QuestionSocket {
         logger.info("[onOpen] " + username);
 
         // Handle the case of a duplicate username
-        if (usernameSessionMap.containsKey(username)) {
-            session.getBasicRemote().sendText("Username already exists. Please choose a different username.");
-            return;
+//        if (usernameSessionMap.containsKey(username)) {
+//            session.getBasicRemote().sendText("Username already exists. Please choose a different username.");
+//            return;
+//        }
+//        else {
+        // map current session with username
+        sessionUsernameMap.put(session, username);
+
+        // map current username with session
+        usernameSessionMap.put(username, session);
+
+        List<Session> sessionsInRoom = roomSessionsMap.get(id);
+        if (sessionsInRoom == null) {
+            sessionsInRoom = new ArrayList<>();
+            roomSessionsMap.put(id, sessionsInRoom);
         }
-        else {
-            // map current session with username
-            sessionUsernameMap.put(session, username);
+        sessionsInRoom.add(session);
 
-            // map current username with session
-            usernameSessionMap.put(username, session);
+        // send to the user joining in
+        sendMessageToPArticularUser(username, "Welcome to room " + id + " " + username);
 
-            List<Session> sessionsInRoom = roomSessionsMap.get(id);
-            if (sessionsInRoom == null) {
-                sessionsInRoom = new ArrayList<>();
-                roomSessionsMap.put(id, sessionsInRoom);
-            }
-            sessionsInRoom.add(session);
+        // send to everyone in the chat
+        broadcastToRoom(id, "User: " + username + " has Joined room " + id);
 
-            // send to the user joining in
-            sendMessageToPArticularUser(username, "Welcome to room " + id + " " + username);
-
-            // send to everyone in the chat
-            broadcastToRoom(id, "User: " + username + " has Joined room " + id);
-
-            // so anyone who joins sees the question
-            showMessageOne(username);
-        }
+        // so anyone who joins sees the question
+        showMessageOne(username);
+//        }
     }
 
     /**
@@ -133,7 +136,7 @@ public class QuestionSocket {
         if (message.contentEquals("/next")) {
             randomize();
             showMessageEveryone(id);
-        //} else if (message.contentEquals("/clear")) {
+            //} else if (message.contentEquals("/clear")) {
             //ansRepo.deleteAll();
         } else if (message.contentEquals("/resetUseValue")) {
             resetUseValue();
@@ -153,9 +156,9 @@ public class QuestionSocket {
             String correctAnswer = questRepo.findById(randInt).getAnswer().toLowerCase();
             if (providedAnswer.equals(correctAnswer)) {
                 Question localQuestRepo = questRepo.findById(randInt);
-                //Answer localAnswer = new Answer(username, message, true);
-                //localQuestRepo.addAnswer(localAnswer);
-                //ansRepo.save(localAnswer);
+                Answer localAnswer = new Answer(username, message, true);
+                localQuestRepo.addAnswer(localAnswer);
+                ansRepo.save(localAnswer);
                 localQuestRepo.setUsed(true);
                 questRepo.save(localQuestRepo);
                 broadcastToRoom(id, "Correct!");
@@ -166,12 +169,12 @@ public class QuestionSocket {
                     showMessageEveryone(id);
                 }
             } else {
-                broadcastToRoom(id,"False!");
-                //Answer localAnswer = new Answer(username, message, false);
+                broadcastToRoom(id, "False!");
+                Answer localAnswer = new Answer(username, message, false);
                 Question localQuestion = questRepo.findById(randInt);
-                //localQuestion.addAnswer(localAnswer);
+                localQuestion.addAnswer(localAnswer);
                 questRepo.save(localQuestion);
-                //ansRepo.save(localAnswer);
+                ansRepo.save(localAnswer);
             }
         }
     }
@@ -277,7 +280,7 @@ public class QuestionSocket {
 
     private void randomize() {
         long amount = questRepo.count();
-        randInt = (int)((Math.random()*amount)+1);
+        randInt = (int) ((Math.random() * amount) + 1);
         while (questRepo.findById(randInt).getUsed()) {
             randomize();
 
@@ -286,7 +289,7 @@ public class QuestionSocket {
 
     private void resetUseValue() {
         List<Question> allQuestion = questRepo.findAll();
-        for(int i=1; i<allQuestion.size()+1; i++) {
+        for (int i = 1; i < allQuestion.size() + 1; i++) {
             Question localQuestRepo = questRepo.findById(i);
             localQuestRepo.setUsed(false);
             questRepo.save(localQuestRepo);
@@ -296,7 +299,7 @@ public class QuestionSocket {
     private boolean allQuestionsUsed() {
         List<Question> allQuestion = questRepo.findAll();
         boolean allUsed = true;
-        for(int i=1; i<allQuestion.size()+1; i++) {
+        for (int i = 1; i < allQuestion.size() + 1; i++) {
             Question localQuestRepo = questRepo.findById(i);
             if (!localQuestRepo.getUsed()) {
                 allUsed = false;

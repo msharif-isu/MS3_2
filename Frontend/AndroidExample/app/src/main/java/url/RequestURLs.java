@@ -19,6 +19,8 @@ public class RequestURLs {
     /**
      * The URL to be used to refer to any WebSocket requests made to the VM server
      */
-    public static final String SERVER_WEBSOCKET_URL = "ws://coms-309-034.class.las.iastate.edu:8080";
+    public static final String SERVER_WEBSOCKET_URL = "ws://10.0.2.2:8080";
+    public static final String SERVER_WEBSOCKET_URL_MULTIPLAYER = "ws://10.0.2.2:8080";
+            //"ws://coms-309-034.class.las.iastate.edu:8080";
     public static final String SERVER_WEBSOCKET_LEADERBOARD_URL = "ws://coms-309-034.class.las.iastate.edu:8080/leaderboard";
 }
