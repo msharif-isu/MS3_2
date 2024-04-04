@@ -49,6 +49,7 @@ public class LeaderboardWebSocketService extends Service {
         LocalBroadcastManager
                 .getInstance(this)
                 .registerReceiver(messageReceiver, new IntentFilter("SendWebSocketMessage"));
+        Log.d("TAG", "onCreate: Happends");
     }
 
     @Override
