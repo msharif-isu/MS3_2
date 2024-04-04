@@ -2,6 +2,7 @@ package com.project.trivia.User;
 
 import com.project.trivia.FriendsList.Friends;
 import com.project.trivia.FriendsList.FriendsRepository;
+import com.project.trivia.Leaderboard.Leaderboard;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -116,6 +117,13 @@ public class UserController {
             return "User not found";
         }
     }
+
+    @GetMapping(path="/users/getPoints/{id}")
+    Leaderboard lb (@PathVariable int id) {
+        User user = userRepository.findById(id);
+        return user.getLeaderboard();
+    }
+
 
 
 }

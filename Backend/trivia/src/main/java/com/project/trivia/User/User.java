@@ -2,6 +2,7 @@ package com.project.trivia.User;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.project.trivia.FriendsList.Friends;
+import com.project.trivia.Leaderboard.Leaderboard;
 import com.project.trivia.Lobby.Lobby;
 import jakarta.persistence.*;
 
@@ -20,6 +21,8 @@ public class User {
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "friends_id"))
     @JsonIgnore
+
+
     private List<Friends> friends;
     private String username;
     private String password;
@@ -27,6 +30,10 @@ public class User {
     private String bio;
     private String filePath;
     private long points;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "leaderboard_id")
+    private Leaderboard leaderboard;
+
 
     @ManyToOne
     @JoinColumn(name="lobby_id")
@@ -110,6 +117,14 @@ public class User {
     public void setFilePath(String filePath) {
         this.filePath = filePath;
     }
+
+
+    public Leaderboard getLeaderboard() {return leaderboard;}
+
+    public void setLeaderboard(Leaderboard leaderboard) {
+        this.leaderboard = leaderboard;
+    }
+
 
 
     public Lobby getLobby() {
