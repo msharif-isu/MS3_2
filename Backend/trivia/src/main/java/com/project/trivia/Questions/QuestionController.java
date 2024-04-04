@@ -3,6 +3,8 @@ package com.project.trivia.Questions;
 import com.project.trivia.MPQuestions.Answer;
 
 import org.hibernate.annotations.Array;
+import com.project.trivia.MPQuestions.AnswerRepository;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import com.project.trivia.Queryboard.Query;
@@ -11,11 +13,15 @@ import java.util.ArrayList;
 import java.util.List;
 import com.project.trivia.Jeopardy.Jeopardy;
 
+
 @RestController
 public class QuestionController {
 
     @Autowired
     QuestionRepository questionRepository;
+
+    @Autowired
+    AnswerRepository answerRepository;
 
     private String success = "{\"message\":\"success\"}";
     private String failure = "{\"message\":\"failure\"}";
@@ -90,4 +96,27 @@ public class QuestionController {
         Question question = questionRepository.findById(id);
         return question.getAnswers();
     }
+
+
+    @PostMapping(path = "/answer/add/{quest_id}")
+    Answer createAnswerToQuestion(@RequestBody Answer answer, @PathVariable int quest_id) {
+        if (answer == null)
+            return null;
+        Question question = questionRepository.findById(quest_id);
+        question.addAnswer(answer);
+        questionRepository.save(question);
+
+        return answer;
+    }
+
+    @PutMapping(path = "/answer/addQuestion/{quest_id}/{ans_id}")
+    Question createAnswerWithID(@PathVariable int quest_id, @PathVariable int ans_id) {
+        Question question = questionRepository.findById(quest_id);
+        Answer ans = answerRepository.findById(ans_id);
+        question.addAnswer(ans);
+        questionRepository.save(question);
+
+        return question;
+    }
+
 }
