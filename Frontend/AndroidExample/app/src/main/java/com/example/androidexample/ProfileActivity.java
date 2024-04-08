@@ -172,37 +172,41 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     private void addFriends(String friendId, Dialog dialog) {
-        JSONObject requestBody = new JSONObject();
-        try {
-            requestBody.put("userId", userId);
-            requestBody.put("friendId", friendId);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        RequestQueue queue = Volley.newRequestQueue(this);
-        String url = backendUrl + userId + "/addFriend/" + friendId;
-        Log.e("ProfileActivity", "URL = " + url);
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, requestBody, new Response.Listener<JSONObject>() {
-            @Override
-            public void onResponse(JSONObject response) {
-                try {
-                    String message = response.getString("message");
-                    Toast.makeText(ProfileActivity.this, message, Toast.LENGTH_SHORT).show();
-                    Toast.makeText(ProfileActivity.this, "Friend added", Toast.LENGTH_SHORT).show();
-                    dialog.dismiss();
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                    Log.e("ProfileActivity", "Error parsing response: " + e.getMessage());
+        if (username.equals(friendId)) {
+            Toast.makeText(ProfileActivity.this, "You can't friend yourself!", Toast.LENGTH_SHORT).show();
+        } else {
+            JSONObject requestBody = new JSONObject();
+            try {
+                requestBody.put("userId", userId);
+                requestBody.put("friendId", friendId);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            RequestQueue queue = Volley.newRequestQueue(this);
+            String url = backendUrl + userId + "/addFriend/" + friendId;
+            Log.e("ProfileActivity", "URL = " + url);
+            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, requestBody, new Response.Listener<JSONObject>() {
+                @Override
+                public void onResponse(JSONObject response) {
+                    try {
+                        String message = response.getString("message");
+                        Toast.makeText(ProfileActivity.this, message, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(ProfileActivity.this, "Friend added", Toast.LENGTH_SHORT).show();
+                        dialog.dismiss();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                        Log.e("ProfileActivity", "Error parsing response: " + e.getMessage());
+                    }
                 }
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                //    Toast.makeText(ProfileActivity.this, "Error adding friend", Toast.LENGTH_SHORT).show();
-                Log.e("ProfileActivity", "Error adding friend: " + error.getMessage());
-            }
-        });
-        queue.add(jsonObjectRequest);
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    //    Toast.makeText(ProfileActivity.this, "Error adding friend", Toast.LENGTH_SHORT).show();
+                    Log.e("ProfileActivity", "Error adding friend: " + error.getMessage());
+                }
+            });
+            queue.add(jsonObjectRequest);
+        }
     }
 
     private FriendsListAdapter adapter;
