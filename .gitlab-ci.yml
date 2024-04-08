@@ -43,7 +43,7 @@ android-build:
     - export GRADLE_USER_HOME=`pwd`/.gradle
     - chmod +x ./Frontend/gradlew
   script:
-    - cd Frontend                   # change 'Frontend' to where you have 'gradlew' (do not add / in the beginning)
+    - cd Frontend/AndroidExample                   # change 'Frontend' to where you have 'gradlew' (do not add / in the beginning)
     - ./gradlew build               # gradle build
 
 android-test:
@@ -55,5 +55,5 @@ android-test:
      - export GRADLE_USER_HOME=`pwd`/.gradle
      - chmod +x ./Frontend/gradlew
    script:
-     - cd Frontend                  # change 'Frontend' to where you have 'gradlew' (do not add / in the beginning)
+     - cd Frontend/AndroidExample                  # change 'Frontend' to where you have 'gradlew' (do not add / in the beginning)
      - ./gradlew test               # gradle test
