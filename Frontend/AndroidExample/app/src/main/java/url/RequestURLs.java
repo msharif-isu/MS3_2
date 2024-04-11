@@ -16,7 +16,7 @@ public class RequestURLs {
     public static final String SERVER_HTTP_QUESTION_QUERY_URL = SERVER_HTTP_URL + "/query";
     public static final String SERVER_HTTP_ANSWER_CHECKER_URL = SERVER_HTTP_URL + "/question/answers";
     public static final String SERVER_HTTP_CREATE_USER_ANSWER_URL = SERVER_HTTP_URL + "/answer/add";
-    public static final String SERVER_HTTP_USER_ADD_POINTS_URL = SERVER_HTTP_URL + "/users";
+    public static final String SERVER_HTTP_USER_ADD_POINTS_URL = SERVER_HTTP_URL + "/leaderboard/addpoints";
 
     /**
      * The URL to be used to refer to any WebSocket requests made to the VM server
