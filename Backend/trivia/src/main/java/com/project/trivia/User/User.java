@@ -21,8 +21,6 @@ public class User {
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "friends_id"))
     @JsonIgnore
-
-
     private List<Friends> friends;
     private String username;
     private String password;
@@ -31,9 +29,8 @@ public class User {
     private String filePath;
     private long points;
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "leaderboard_id")
+    @JoinColumn(name = "leaderboard_id", referencedColumnName = "id")
     private Leaderboard leaderboard;
-
 
     @ManyToOne
     @JoinColumn(name="lobby_id")

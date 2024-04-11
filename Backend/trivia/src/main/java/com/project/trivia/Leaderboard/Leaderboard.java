@@ -16,7 +16,7 @@ public class Leaderboard {
     private int yearlyPoints;
     private int lifetimePoints;
     private String name;
-    @OneToOne
+    @OneToOne(mappedBy = "leaderboard")
     @JsonIgnore
     private User user;
 
