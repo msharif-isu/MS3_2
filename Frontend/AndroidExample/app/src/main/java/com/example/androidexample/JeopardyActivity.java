@@ -204,7 +204,7 @@ public class JeopardyActivity extends AppCompatActivity {
             public void onClick(View view) {
                 String answer = answerText.getText().toString();
                 if (!answer.trim().isEmpty()) {
-                    checkAnswer(button, dialog, question.getId(), answer);
+                    checkAnswer(button, dialog, question, answer);
                 } else {
                     Toast.makeText(getApplicationContext(), "Please enter an answer", Toast.LENGTH_SHORT).show();
                 }
@@ -222,7 +222,6 @@ public class JeopardyActivity extends AppCompatActivity {
                 Request.Method.POST,
                 String.format("%s/%d", RequestURLs.SERVER_HTTP_CREATE_USER_ANSWER_URL, questionID),
                 new JSONObject() {{
-                    put("id", questionID);
                     put("userName", username);
                     put("correct", correct);
                     put("answer", givenAnswer);
@@ -247,58 +246,34 @@ public class JeopardyActivity extends AppCompatActivity {
     /**
      * Checks to see if an answer to a question is correct
      * @param dialog
-     * @param questionID
+     * @param question
      * @param givenAnswer
      */
-    private void checkAnswer(Button button, Dialog dialog, int questionID, String givenAnswer) {
-        JsonArrayRequest answerRequest = new JsonArrayRequest(
-                Request.Method.GET,
-                String.format("%s/%d", RequestURLs.SERVER_HTTP_ANSWER_CHECKER_URL, questionID),
-                null,
-                new Response.Listener<JSONArray>() {
-                    @Override
-                    public void onResponse(JSONArray response) {
-                        for (int i = 0; i < response.length(); i++) {
-                            try {
-                                String correctAnswer = response.getJSONObject(i).getString("answer");
-                                Log.d("JeopardyActivity", "Correct Answer: " + correctAnswer);
-                                if (givenAnswer.equals(correctAnswer)) {
-                                    int pointsToAdd = Integer.parseInt(button.getText().toString());
-                                    points += pointsToAdd;
-                                    pointsText.setText("Total Points: " + points);
-                                    addUserPoints(pointsToAdd);
-                                    Log.d("JeopardyActivity", "Saving correct user answer");
-                                    saveUserAnswer(questionID, givenAnswer, true);
+    private void checkAnswer(Button button, Dialog dialog, Question question, String givenAnswer) {
+        if (givenAnswer.equals(question.getAnswer())) {
+            int pointsToAdd = Integer.parseInt(button.getText().toString());
+            points += pointsToAdd;
+            pointsText.setText("Total Points: " + points);
+            addUserPoints(pointsToAdd);
 
-                                    dialog.dismiss();
-                                    button.setEnabled(false);
-                                    break;
-                                }
-
-                            } catch (JSONException e) {
-                                throw new RuntimeException(e);
-                            }
-                        }
-                        try {
-                            Log.d("JeopardyActivity", "Saving incorrect user answer");
-                            saveUserAnswer(questionID, givenAnswer, false);
-                        } catch (JSONException e) {
-                            throw new RuntimeException(e);
-                        }
-
-                        dialog.dismiss();
-                        button.setEnabled(false);
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Log.d("JeopardyActivity", "Failed to check answer: " + givenAnswer);
-                    }
-                }
-        );
-
-        VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(answerRequest);
+            Log.d("JeopardyActivity", "Saving correct user answer");
+            try {
+                saveUserAnswer(question.getId(), givenAnswer, true);
+            } catch (JSONException e) {
+                throw new RuntimeException(e);
+            }
+            dialog.dismiss();
+            button.setEnabled(false);
+        } else {
+            Log.d("JeopardyActivity", "Saving incorrect user answer");
+            try {
+                saveUserAnswer(question.getId(), givenAnswer, false);
+            } catch (JSONException e) {
+                throw new RuntimeException(e);
+            }
+            dialog.dismiss();
+            button.setEnabled(false);
+        }
     }
 
     /**
@@ -307,8 +282,8 @@ public class JeopardyActivity extends AppCompatActivity {
      */
     private void addUserPoints(int pointsToAdd) {
         JsonObjectRequest addUserPointsRequest = new JsonObjectRequest(
-                Request.Method.PUT,
-                String.format("%s/%s/%d", RequestURLs.SERVER_HTTP_USER_ADD_POINTS_URL, username, pointsToAdd),
+                Request.Method.POST,
+                String.format("%s/%s/%d", RequestURLs.SERVER_HTTP_USER_ADD_POINTS_URL, userID, pointsToAdd),
                 null,
                 new Response.Listener<JSONObject>() {
                     @Override
