@@ -32,7 +32,7 @@ auto-deploy:
     - sudo systemctl stop system-web-demo
     - sudo systemctl start system-web-demo
     - sudo systemctl status system-web-demo
-    - sudo systemctl stop system-web-demo
+
 
     #- sudo java -jar /target/web-demo.jar
 
