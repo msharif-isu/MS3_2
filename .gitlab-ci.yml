@@ -31,5 +31,5 @@ auto-deploy:
     - sudo mv target/*.jar /target/web-demo.jar 
     - sudo systemctl stop system-web-demo
     - sudo systemctl start system-web-demo
-    - sudo java -jar target/web-demo.jar
+    - sudo java -jar /target/web-demo.jar
 
