@@ -7,6 +7,8 @@
     <list default="true" id="aa247b61-3439-49d8-9853-376a5b7b168c" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/trivia/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/trivia/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/trivia/src/main/java/com/project/trivia/MPQuestions/QuestionSocketConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/trivia/src/main/java/com/project/trivia/MPQuestions/QuestionSocketConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/trivia/src/test/java/com/project/trivia/raphaelTests/TriviaApplicationTests.java" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -32,6 +34,7 @@
     "JUnit.TriviaApplicationTests (1).executor": "Run",
     "JUnit.TriviaApplicationTests.executor": "Coverage",
     "JUnit.leadboardTest.executor": "Run",
+    "JUnit.leaderboardTest.executor": "Run",
     "JUnit.trivia in trivia.executor": "Run",
     "Maven.trivia [package].executor": "Run",
     "RequestMappingsPanelOrder0": "0",
@@ -118,7 +121,6 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="JUnit.TriviaApplicationTests (1)" />
         <item itemvalue="JUnit.TriviaApplicationTests.contextLoads" />
         <item itemvalue="JUnit.TriviaApplicationTests" />
         <item itemvalue="JUnit.trivia in trivia" />
@@ -150,6 +152,7 @@
       <workItem from="1711510687419" duration="604000" />
       <workItem from="1711511345190" duration="9482000" />
       <workItem from="1712608069212" duration="952000" />
+      <workItem from="1713155416905" duration="1380000" />
     </task>
     <servers />
   </component>
