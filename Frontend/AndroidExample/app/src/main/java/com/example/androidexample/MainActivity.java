@@ -16,7 +16,7 @@ import android.widget.Toast;
 
 import com.example.androidexample.databinding.ActivityMainBinding;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+public class MainActivity extends AppCompatActivity {
 
     private String username;
     private int userId;
@@ -48,40 +48,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
             return true;
         });
-
-    }
-
-    @Override
-    public void onClick(View v) {
-        int id = v.getId();
-//        if (id == R.id.btnStringRequest) {
-//            startActivity(new Intent(MainActivity.this, LobbiesActivity.class));
-//        } else if (id == R.id.btnJsonObjRequest) {
-//            startActivity(new Intent(MainActivity.this, SinglePlayerQuestionActivity.class));
-//        } else if (id == R.id.btnJsonArrRequest) {
-//            startActivity(new Intent(MainActivity.this, UserQuestionActivity.class));
-//        } else if (id == R.id.btnImageRequest) {
-//            startActivity(new Intent(MainActivity.this, LeaderboardActivity.class));
-//        } else if (id == R.id.btnQuestionSinglePlayer) {
-//            startActivity(new Intent(MainActivity.this, LoginActivity.class));
-//        } else if (id == R.id.profileButton) {
-//            startActivity(new Intent(MainActivity.this, ProfileActivity.class));
-//        } else if (id == R.id.btnQuery) {
-//            startActivity(new Intent(MainActivity.this, QueryActivity.class));
-//        } else if (id == R.id.btnJeopardy) {
-//            startActivity(new Intent(MainActivity.this, JeopardyActivity.class));
-//        }
-        if (id == R.id.play) {
-            replaceFragment(new PlayFragment());
-        } else if (id == R.id.edit) {
-            replaceFragment(new EditFragment());
-        } else if (id == R.id.leaderboard) {
-            replaceFragment(new LeaderboardFragment());
-        } else if (id == R.id.profile) {
-            replaceFragment(new ProfileFragment());
-        }
-
-
     }
 
     private void replaceFragment(Fragment fragment) {
@@ -91,3 +57,4 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         fragmentTransaction.commit();
     }
 }
+
