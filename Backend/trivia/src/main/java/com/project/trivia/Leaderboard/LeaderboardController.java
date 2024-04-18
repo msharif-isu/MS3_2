@@ -68,6 +68,7 @@ public class LeaderboardController {
         lb.setMonthlyPoints(request.getMonthlyPoints());
         lb.setYearlyPoints(request.getYearlyPoints());
         lb.setLifetimePoints(request.getLifetimePoints());
+        leaderboardRepository.save(lb);
         return leaderboardRepository.findById(id);
     }
 
