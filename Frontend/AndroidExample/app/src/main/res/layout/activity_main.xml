@@ -7,95 +7,6 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Volley Examples"
-        android:textSize="30sp"
-        app:layout_constraintBottom_toTopOf="@+id/btnStringRequest"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnQuery"></TextView>
-
-    <Button
-        android:id="@+id/btnStringRequest"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:text="Multiplayer"
-        app:layout_constraintBottom_toTopOf="@+id/btnJeopardy"
-        app:layout_constraintEnd_toEndOf="@+id/btnJeopardy"
-        app:layout_constraintStart_toStartOf="@+id/btnJeopardy"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
-
-    <Button
-        android:id="@+id/btnQuestionSinglePlayer"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Log in"
-        app:layout_constraintBottom_toTopOf="@+id/btnImageRequest"
-        app:layout_constraintEnd_toEndOf="@+id/btnJsonArrRequest"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/btnJsonArrRequest"
-        app:layout_constraintTop_toBottomOf="@+id/btnJsonArrRequest" />
-
-    <Button
-        android:id="@+id/btnJsonObjRequest"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:text="Single Player"
-        app:layout_constraintBottom_toTopOf="@+id/btnJsonArrRequest"
-        app:layout_constraintEnd_toEndOf="@+id/btnJeopardy"
-        app:layout_constraintStart_toStartOf="@+id/btnJeopardy"
-        app:layout_constraintTop_toBottomOf="@+id/btnJeopardy" />
-
-    <Button
-        android:id="@+id/btnJsonArrRequest"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:text="User Questions"
-        app:layout_constraintBottom_toTopOf="@+id/btnQuestionSinglePlayer"
-        app:layout_constraintEnd_toEndOf="@+id/btnJsonObjRequest"
-        app:layout_constraintStart_toStartOf="@+id/btnJsonObjRequest"
-        app:layout_constraintTop_toBottomOf="@+id/btnJsonObjRequest" />
-
-    <Button
-        android:id="@+id/btnImageRequest"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:text="Leaderboard"
-        app:layout_constraintBottom_toTopOf="@+id/bottomNavigationView"
-        app:layout_constraintEnd_toEndOf="@+id/btnQuestionSinglePlayer"
-        app:layout_constraintStart_toStartOf="@+id/btnQuestionSinglePlayer"
-        app:layout_constraintTop_toBottomOf="@+id/btnQuestionSinglePlayer" />
-
-    <ImageButton
-        android:id="@+id/profileButton"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:srcCompat="@tools:sample/avatars" />
-
-    <Button
-        android:id="@+id/btnQuery"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Question Search"
-        app:layout_constraintBottom_toTopOf="@+id/textView"
-        app:layout_constraintEnd_toEndOf="@+id/btnStringRequest"
-        app:layout_constraintStart_toStartOf="@+id/btnStringRequest"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <Button
-        android:id="@+id/btnJeopardy"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:text="Jeopardy"
-        app:layout_constraintBottom_toTopOf="@+id/btnJsonObjRequest"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnStringRequest" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNavigationView"
@@ -120,5 +31,15 @@
         app:layout_constraintTop_toTopOf="parent">
 
     </FrameLayout>
+
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/fragmentContainerView"
+        android:name="com.example.androidexample.PlayFragment"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/bottomNavigationView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

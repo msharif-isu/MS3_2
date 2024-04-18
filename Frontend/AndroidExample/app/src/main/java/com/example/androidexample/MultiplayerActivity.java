@@ -57,7 +57,7 @@ public class MultiplayerActivity extends AppCompatActivity implements WebSocketL
         timeLeftTextView = findViewById(R.id.time_left);
         msgTv = findViewById(R.id.friendsList);
 
-        // Set initial time in minutes
+        // Set initial time in minutes TODO make customizable?
         int timeInMinutes = 10;
         timeLeftInMillis = timeInMinutes * 60 * 1000;
         startCountDownTimer();

@@ -7,18 +7,25 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
+import android.content.Intent;
+
 
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link PlayFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class PlayFragment extends Fragment {
+public class PlayFragment extends Fragment implements View.OnClickListener {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+
+    private ImageButton singlePlayerButton;
+    private ImageButton multiPlayerButton;
+    private ImageButton jeopardyButton;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -58,7 +65,27 @@ public class PlayFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_play, container, false);
+
+        View view = inflater.inflate(R.layout.fragment_play, container, false);
+
+        singlePlayerButton = view.findViewById(R.id.singlePlayerButton);
+        multiPlayerButton = view.findViewById(R.id.multiPlayerButton);
+        jeopardyButton = view.findViewById(R.id.jeopardyButton);
+
+        singlePlayerButton.setOnClickListener(this);
+        multiPlayerButton.setOnClickListener(this);
+        jeopardyButton.setOnClickListener(this);
+
+        return view;
+    }
+
+    public void onClick(View v) {
+        if (v.getId() == R.id.singlePlayerButton) {
+            startActivity(new Intent(getActivity(), SinglePlayerQuestionActivity.class));
+        } else if (v.getId() == R.id.multiPlayerButton) {
+            startActivity(new Intent(getActivity(), LobbiesActivity.class));
+        } else if (v.getId() == R.id.jeopardyButton) {
+            startActivity(new Intent(getActivity(), JeopardyActivity.class));
+        }
     }
 }

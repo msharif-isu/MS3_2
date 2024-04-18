@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<font-family xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <font
+        android:font="@font/aileron_regular"
+        android:fontStyle="normal"
+        android:fontWeight="400" />
+
+    <font
+        android:font="@font/aileron_black"
+        android:fontStyle="italic"
+        android:fontWeight="400" />
+
+    <font
+        android:font="@font/aileron_bold"
+        android:fontStyle="normal"
+        android:fontWeight="700" />
+    <font
+        android:font="@font/aileron_heavy"
+        android:fontStyle="italic"
+        android:fontWeight="700" />
+    <font
+        android:font="@font/aileron_light"
+        android:fontStyle="normal"
+        android:fontWeight="300" />
+
+    <font
+        android:font="@font/aileron_regular"
+        android:fontStyle="italic"
+        android:fontWeight="300" />
+
+
+    <font
+        android:font="@font/aileron_semibold"
+        android:fontStyle="italic"
+        android:fontWeight="300" />
+
+
+    <font
+        android:font="@font/aileron_thin"
+        android:fontStyle="italic"
+        android:fontWeight="300" />
+
+</font-family>
