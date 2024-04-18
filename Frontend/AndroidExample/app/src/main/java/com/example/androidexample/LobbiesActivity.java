@@ -62,6 +62,9 @@ public class LobbiesActivity extends AppCompatActivity implements WebSocketListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lobby);
 
+        webSocketManager = WebSocketManager.getInstance();
+
+
         SharedPreferences prefs = getSharedPreferences("UserData", MODE_PRIVATE);
         username = prefs.getString("USERNAME", "");
         userId = prefs.getInt("USER_ID", 0);
@@ -432,11 +435,21 @@ public class LobbiesActivity extends AppCompatActivity implements WebSocketListe
         webSocketManager.closeWebSocket();
     }
 
+    @Override
     public void onBackPressed() {
         super.onBackPressed();
+        Log.d("LobbiesActivity", "Back button pressed");
         // Close WebSocket connection
-        WebSocketManager.getInstance().closeWebSocket();
+        WebSocketManager webSocketManager = WebSocketManager.getInstance();
+        if (webSocketManager != null) {
+            webSocketManager.closeWebSocket();
+            Log.d("LobbiesActivity", "WebSocket connection closed");
+        } else {
+            Log.e("LobbiesActivity", "WebSocketManager is null");
+        }
     }
+
+
 
 
 }
