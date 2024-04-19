@@ -1,64 +1,323 @@
 package com.example.androidexample;
 
+import android.app.Dialog;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
+import android.text.style.TtsSpan;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link ProfileFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+
+import url.RequestURLs;
+
 public class ProfileFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    //TODO removing friends!
+    private ArrayList<UserFriend> friendsList;
+    private RecyclerView recyclerView;
+    ImageView imgView;
+    ImageButton addFriends, editBioButton;
+    //Button addFriend = findViewById(R.id.addFriend);
+    TextView questionsAnswered, achievementsUnlocked, userBiography, usernameText, friendsListText;
+    private String username;
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private int userId;
+    private String backendUrl = RequestURLs.SERVER_HTTP_URL + "/";
+    //"http://localhost:8080/";
+    //RequestURLs.SERVER_HTTP_URL;
+    private SwipeRefreshLayout swipeRefreshLayout;
 
-    public ProfileFragment() {
-        // Required empty public constructor
+
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_profile, container, false);
+        SharedPreferences prefs = requireActivity().getSharedPreferences("UserData", Context.MODE_PRIVATE);
+        username = prefs.getString("USERNAME", "");
+        userId = prefs.getInt("USER_ID", 0);
+        friendsList = new ArrayList<>();
+
+        swipeRefreshLayout = view.findViewById(R.id.swipeRefreshLayout);
+        imgView = view.findViewById(R.id.imgView);
+        addFriends = view.findViewById(R.id.addFriends);
+        questionsAnswered = view.findViewById(R.id.questionsAnswered);
+        achievementsUnlocked = view.findViewById(R.id.AcheivementsUnlocked);
+        userBiography = view.findViewById(R.id.userBiography);
+        usernameText = view.findViewById(R.id.username);
+        friendsListText = view.findViewById(R.id.freindsListText);
+        recyclerView = view.findViewById(R.id.friendList);
+        editBioButton = view.findViewById(R.id.editBioButton);
+
+        questionsAnswered.setText("Add Friends");
+        achievementsUnlocked.setText("");
+        getBio();
+//        userBiography.setText(temp);
+        usernameText.setText(username);
+        //friendsListText.setText("Friends:");
+
+
+        setFriendInfo();
+        setAdapter();
+
+        addFriends.setOnClickListener(v -> {
+            addFriendsDialog();
+        });
+        editBioButton.setOnClickListener(v -> {
+            editButtonDialog();
+        });
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                setFriendInfo();
+                swipeRefreshLayout.setRefreshing(false);
+            }
+        });
+        return view;
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment ProfileFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static ProfileFragment newInstance(String param1, String param2) {
-        ProfileFragment fragment = new ProfileFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
+
+    private void editButtonDialog() {
+        Dialog dialog = new Dialog(requireContext());
+        dialog.setContentView(R.layout.edit_bio);
+        dialog.show();
+
+        Button save = dialog.findViewById(R.id.save);
+        Button cancelButton = dialog.findViewById(R.id.cancel);
+        EditText bioEdit = dialog.findViewById(R.id.bioEdit);
+
+        cancelButton.setOnClickListener(v -> dialog.dismiss());
+        save.setOnClickListener(v -> {
+
+            String newBio = bioEdit.getText().toString();
+            editBio(newBio);
+            dialog.dismiss();
+        });
+
+
     }
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+    private void editBio(String newBio) {
+        JSONObject requestBody = new JSONObject();
+        try {
+            requestBody.put("bio", newBio);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        RequestQueue queue = Volley.newRequestQueue(requireContext());
+        String url = backendUrl + "editBio/" + username + "/" + newBio;
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.PUT, url, requestBody, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    String message = response.getString("message");
+                    userBiography.setText(newBio);
+                    Toast.makeText(requireActivity(), message, Toast.LENGTH_SHORT).show();
+                    Log.e("ProfileActivity", "find this:" + newBio);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    Log.e("ProfileActivity", "Error parsing response: " + e.getMessage());
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e("ProfileActivity", "Error editing bio: " + error.getMessage());
+            }
+        });
+        queue.add(jsonObjectRequest);
+    }
+
+    private void addFriendsDialog() {
+        Dialog dialog = new Dialog(requireContext());
+        dialog.setContentView(R.layout.add_friend);
+        dialog.show();
+
+        Button addFriend = dialog.findViewById(R.id.addFriend);
+        Button cancelButton = dialog.findViewById(R.id.Cancel);
+        EditText friendUsernameEdit = dialog.findViewById(R.id.friendUsernameEdit);
+
+        cancelButton.setOnClickListener(v -> dialog.dismiss());
+        addFriend.setOnClickListener(v -> {
+
+            String friend = friendUsernameEdit.getText().toString();
+            addFriends(friend, dialog);
+            dialog.dismiss();
+        });
+    }
+
+    private void addFriends(String friendId, Dialog dialog) {
+        if (username.equals(friendId)) {
+            Toast.makeText(requireContext(), "You can't friend yourself!", Toast.LENGTH_SHORT).show();
+        } else {
+            JSONObject requestBody = new JSONObject();
+            try {
+                requestBody.put("userId", userId);
+                requestBody.put("friendId", friendId);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            RequestQueue queue = Volley.newRequestQueue(requireContext());
+            String url = backendUrl + userId + "/addFriend/" + friendId;
+            Log.e("ProfileActivity", "URL = " + url);
+            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, requestBody, new Response.Listener<JSONObject>() {
+                @Override
+                public void onResponse(JSONObject response) {
+                    try {
+                        String message = response.getString("message");
+                        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(requireContext(), "Friend added", Toast.LENGTH_SHORT).show();
+                        dialog.dismiss();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                        Log.e("ProfileActivity", "Error parsing response: " + e.getMessage());
+                    }
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    //    Toast.makeText(ProfileActivity.this, "Error adding friend", Toast.LENGTH_SHORT).show();
+                    Log.e("ProfileActivity", "Error adding friend: " + error.getMessage());
+                }
+            });
+            queue.add(jsonObjectRequest);
         }
     }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_profile, container, false);
+    private FriendsListAdapter adapter;
+
+    private void setAdapter() {
+        adapter = new FriendsListAdapter(friendsList, new FriendsListAdapter.OnDeleteClickListener() {
+            @Override
+            public void onDeleteClick(int position) {
+                UserFriend friend = friendsList.get(position);
+                String friendName = friend.getUsername();
+                friendsList.remove(position);
+
+                removeFriendFromDatabase(friendName);
+                adapter.notifyItemRemoved(position);
+            }
+        });
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(requireContext());
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        recyclerView.setAdapter(adapter);
     }
+
+    private void removeFriendFromDatabase(String friendName) {
+        RequestQueue queue = Volley.newRequestQueue(requireContext());
+        String url = backendUrl + userId + "/removeFriend/" + friendName; // Adjust the URL according to your backend API
+        Log.d("ProfileActivity", "Removing friend from database: " + url);
+        StringRequest stringRequest = new StringRequest(Request.Method.DELETE, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                Log.d("ProfileActivity", "Unfriended " + friendName);
+                Toast.makeText(requireContext(), "Unfriended " + friendName, Toast.LENGTH_SHORT).show();
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e("ProfileActivity", "Error removing friend from database: " + error.getMessage());
+            }
+        });
+        queue.add(stringRequest);
+    }
+
+
+    private void setFriendInfo() {
+//        friendsList.add(new UserFriend("Alok1", "This is the real alok", null));
+//        friendsList.add(new UserFriend("Alok2", "This is actually the real alok", null));
+//        friendsList.add(new UserFriend("Alok3", "Nah, This is the real alok!", null));
+//        friendsList.add(new UserFriend("Mahdi", "I will give Owais an A on this demo.", null));
+//        friendsList.add(new UserFriend("Alok4", "Nope, its actually me", null));
+//        friendsList.add(new UserFriend("Alok5", "Alok4 is lying.", null));
+//        friendsList.add(new UserFriend("Osamson", "I agree with Alok5", null));
+//        friendsList.add(new UserFriend("Aldaco", "Hello, I am definitly the real Dr. Aldaco", null));
+//        friendsList.add(new UserFriend("Alok8", "I am the real alok", null));
+//        friendsList.add(new UserFriend("Alok9", "Nah.", null));
+        RequestQueue queue = Volley.newRequestQueue(requireContext());
+        String url = backendUrl + "friends/" + userId;
+        Log.d("ProfileActivity", "Fetching friend details: " + url);
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                String jsonResponse = response.toString();
+                Log.d("ProfileActivity", "Friend Details JSON Response: " + jsonResponse);
+                try {
+                    // Clear the existing data in the friendsList. This avoids duplicate entries.
+                    friendsList.clear();
+                    JSONArray userArray = response.getJSONArray("user");
+                    for (int i = 0; i < userArray.length(); i++) {
+                        JSONObject userObject = userArray.getJSONObject(i);
+                        String username = userObject.getString("username");
+                        String bio = userObject.isNull("bio") ? "" : userObject.getString("bio");
+                        String filePath = userObject.optString("filePath", "");
+                        Log.d("ProfileActivity", "Username: " + username);
+                        Log.d("ProfileActivity", "Bio: " + bio);
+                        Log.d("ProfileActivity", "File Path: " + filePath);
+                        friendsList.add(new UserFriend(username, bio, filePath));
+                    }
+
+                    // Notify the adapter that the data has changed
+                    recyclerView.getAdapter().notifyDataSetChanged();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    Log.e("ProfileActivity", "Error parsing friend details JSON: " + e.getMessage());
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e("ProfileActivity", "Error fetching friend details: " + error.getMessage());
+            }
+        });
+        queue.add(jsonObjectRequest);
+    }
+
+    private void getBio() {
+        RequestQueue queue = Volley.newRequestQueue(requireContext());
+        String url = backendUrl + "users/getBio/" + username;
+        Log.e("ProfileActivity", "Bio url:" + url);
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                userBiography.setText(response);
+                Log.e("ProfileActivity", "Bio received:" + response);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e("ProfileActivity", "Error fetching bio: " + error.getMessage());
+            }
+        });
+        queue.add(stringRequest);
+    }
+
 }
