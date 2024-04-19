@@ -4,11 +4,13 @@ import com.project.trivia.FriendsList.Friends;
 import com.project.trivia.FriendsList.FriendsRepository;
 import com.project.trivia.Leaderboard.Leaderboard;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -127,6 +129,14 @@ public class UserController {
     Leaderboard lb (@PathVariable int id) {
         User user = userRepository.findById(id);
         return user.getLeaderboard();
+    }
+
+
+    @GetMapping(value = "/images/{id}", produces = MediaType.IMAGE_JPEG_VALUE)
+    byte[] getImageById(@PathVariable int id) throws IOException {
+        User user = userRepository.findById(id);
+        File imageFile = new File(user.getFilePath());
+        return Files.readAllBytes(imageFile.toPath());
     }
 
     @PostMapping("/setPfp/{id}")
