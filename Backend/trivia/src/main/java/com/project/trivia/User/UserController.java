@@ -4,8 +4,13 @@ import com.project.trivia.FriendsList.Friends;
 import com.project.trivia.FriendsList.FriendsRepository;
 import com.project.trivia.Leaderboard.Leaderboard;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,6 +22,8 @@ public class UserController {
 
     @Autowired
     FriendsRepository friendRepo;
+
+    private static String directory = System.getProperty("user.dir");
 
     private String success = "{\"message\":\"success\"}";
     private String failure = "{\"message\":\"failure\"}";
@@ -124,6 +131,30 @@ public class UserController {
         return user.getLeaderboard();
     }
 
+
+    @GetMapping(value = "/images/{id}", produces = MediaType.IMAGE_JPEG_VALUE)
+    byte[] getImageById(@PathVariable int id) throws IOException {
+        User user = userRepository.findById(id);
+        File imageFile = new File(user.getFilePath());
+        return Files.readAllBytes(imageFile.toPath());
+    }
+
+    @PostMapping("/setPfp/{id}")
+    public String handleFileUpload(@RequestParam("image") MultipartFile imageFile, @PathVariable int id)  {
+
+        try {
+            File destinationFile = new File(directory + File.separator + imageFile.getOriginalFilename());
+            imageFile.transferTo(destinationFile);  // save file to disk
+
+            User user = userRepository.findById(id);
+            user.setFilePath(destinationFile.getAbsolutePath());
+            userRepository.save(user);
+
+            return "File uploaded successfully: " + destinationFile.getAbsolutePath();
+        } catch (IOException e) {
+            return "Failed to upload file: " + e.getMessage();
+        }
+    }
 
 
 }
