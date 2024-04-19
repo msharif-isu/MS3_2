@@ -5,7 +5,10 @@ import com.project.trivia.FriendsList.FriendsRepository;
 import com.project.trivia.Leaderboard.Leaderboard;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,6 +20,8 @@ public class UserController {
 
     @Autowired
     FriendsRepository friendRepo;
+
+    private static String directory = System.getProperty("user.dir");
 
     private String success = "{\"message\":\"success\"}";
     private String failure = "{\"message\":\"failure\"}";
@@ -124,6 +129,22 @@ public class UserController {
         return user.getLeaderboard();
     }
 
+    @PostMapping("/setPfp/{id}")
+    public String handleFileUpload(@RequestParam("image") MultipartFile imageFile, @PathVariable int id)  {
+
+        try {
+            File destinationFile = new File(directory + File.separator + imageFile.getOriginalFilename());
+            imageFile.transferTo(destinationFile);  // save file to disk
+
+            User user = userRepository.findById(id);
+            user.setFilePath(destinationFile.getAbsolutePath());
+            userRepository.save(user);
+
+            return "File uploaded successfully: " + destinationFile.getAbsolutePath();
+        } catch (IOException e) {
+            return "Failed to upload file: " + e.getMessage();
+        }
+    }
 
 
 }
