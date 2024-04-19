@@ -3,6 +3,7 @@ package com.example.androidexample;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.style.TtsSpan;
 import android.util.Log;
@@ -16,6 +17,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DefaultItemAnimator;
@@ -36,6 +39,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 
 import url.RequestURLs;
@@ -46,17 +52,21 @@ public class ProfileFragment extends Fragment {
     private ArrayList<UserFriend> friendsList;
     private RecyclerView recyclerView;
     ImageView imgView;
-    ImageButton addFriends, editBioButton;
+    ImageButton addFriends, editBioButton, editProfilePictureButton;
     //Button addFriend = findViewById(R.id.addFriend);
     TextView questionsAnswered, achievementsUnlocked, userBiography, usernameText, friendsListText;
     private String username;
 
     private int userId;
     private String backendUrl = RequestURLs.SERVER_HTTP_URL + "/";
-    //"http://localhost:8080/";
-    //RequestURLs.SERVER_HTTP_URL;
     private SwipeRefreshLayout swipeRefreshLayout;
 
+    private String UPLOAD_URL = RequestURLs.SERVER_HTTP_URL + "/setPfp/";
+
+    private Uri mImageUri, selectedUri;
+
+
+    private ActivityResultLauncher<String> mGetContent;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
@@ -64,9 +74,9 @@ public class ProfileFragment extends Fragment {
         username = prefs.getString("USERNAME", "");
         userId = prefs.getInt("USER_ID", 0);
         friendsList = new ArrayList<>();
+        UPLOAD_URL = UPLOAD_URL + userId;
 
         swipeRefreshLayout = view.findViewById(R.id.swipeRefreshLayout);
-        imgView = view.findViewById(R.id.imgView);
         addFriends = view.findViewById(R.id.addFriends);
         questionsAnswered = view.findViewById(R.id.questionsAnswered);
         achievementsUnlocked = view.findViewById(R.id.AcheivementsUnlocked);
@@ -76,6 +86,10 @@ public class ProfileFragment extends Fragment {
         recyclerView = view.findViewById(R.id.friendList);
         editBioButton = view.findViewById(R.id.editBioButton);
 
+        //Profile Picture
+        imgView = view.findViewById(R.id.imgView);
+        editProfilePictureButton = view.findViewById(R.id.editProfilePictureButton);
+
         questionsAnswered.setText("Add Friends");
         achievementsUnlocked.setText("");
         getBio();
@@ -83,6 +97,20 @@ public class ProfileFragment extends Fragment {
         usernameText.setText(username);
         //friendsListText.setText("Friends:");
 
+
+        mGetContent = registerForActivityResult(new ActivityResultContracts.GetContent(), uri -> {
+            // Handle the returned Uri
+            if (uri != null) {
+                selectedUri = uri;
+                ImageView imageView = requireView().findViewById(R.id.imgView);
+                imageView.setImageURI(uri);
+            }
+        });
+
+        editProfilePictureButton.setOnClickListener(v -> {
+            mGetContent.launch("image/*");
+            uploadImage();
+        });
 
         setFriendInfo();
         setAdapter();
@@ -101,8 +129,89 @@ public class ProfileFragment extends Fragment {
             }
         });
         return view;
+
     }
 
+    /**
+     * Uploads an image to a remote server using a multipart Volley request.
+     *
+     * This method creates and executes a multipart request using the Volley library to upload
+     * an image to a predefined server endpoint. The image data is sent as a byte array and the
+     * request is configured to handle multipart/form-data content type. The server is expected
+     * to accept the image with a specific key ("image") in the request.
+     *
+     */
+    private void uploadImage() {
+        if (selectedUri != null) {
+            byte[] imageData = convertImageUriToBytes(selectedUri);
+            if (imageData != null) {
+                MultipartRequest multipartRequest = new MultipartRequest(
+                        Request.Method.POST,
+                        UPLOAD_URL,
+                        imageData,
+                        response -> {
+                            // Handle response
+                            if (response != null && !response.isEmpty()) {
+                                Toast.makeText(requireContext(), response, Toast.LENGTH_LONG).show();
+                            } else {
+                                Toast.makeText(requireContext(), "Unknown response", Toast.LENGTH_LONG).show();
+                                Log.e("Upload", "Empty response");
+                            }
+                            Log.d("Upload", "Response: " + response);
+                        },
+                        error -> {
+                            // Handle error
+                            if (error != null && error.getMessage() != null && !error.getMessage().isEmpty()) {
+                                Toast.makeText(requireContext(), error.getMessage(), Toast.LENGTH_LONG).show();
+                            } else {
+                                Toast.makeText(requireContext(), "Unknown error", Toast.LENGTH_LONG).show();
+                                Log.e("Upload", "Empty error message");
+                            }
+                            Log.e("Upload", "Error: " + error.getMessage());
+                        }
+                );
+                VolleySingleton.getInstance(requireContext()).addToRequestQueue(multipartRequest);
+            } else {
+                Log.e("ProfileFragment", "Image data is null");
+            }
+        } else {
+            Log.e("ProfileFragment", "Selected URI is null");
+        }
+    }
+
+
+    /**
+     * Converts the given image URI to a byte array.
+     *
+     * This method takes a URI pointing to an image and converts it into a byte array. The conversion
+     * involves opening an InputStream from the content resolver using the provided URI, and then
+     * reading the content into a byte array. This byte array represents the binary data of the image,
+     * which can be used for various purposes such as uploading the image to a server.
+     *
+     * @param imageUri The URI of the image to be converted. This should be a content URI that points
+     *                 to an image resource accessible through the content resolver.
+     * @return A byte array representing the image data, or null if the conversion fails.
+     * @throws IOException If an I/O error occurs while reading from the InputStream.
+     */
+    private byte[] convertImageUriToBytes(Uri imageUri) {
+        try {
+            InputStream inputStream = requireContext().getContentResolver().openInputStream(imageUri);
+            ByteArrayOutputStream byteBuffer = new ByteArrayOutputStream();
+
+            int bufferSize = 1024;
+            byte[] buffer = new byte[bufferSize];
+
+            int len;
+            while ((len = inputStream.read(buffer)) != -1) {
+                byteBuffer.write(buffer, 0, len);
+            }
+
+            return byteBuffer.toByteArray();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 
     private void editButtonDialog() {
         Dialog dialog = new Dialog(requireContext());
