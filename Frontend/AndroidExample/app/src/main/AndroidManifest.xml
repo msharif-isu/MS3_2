@@ -66,7 +66,7 @@
             android:name=".JeopardyActivity"
             android:exported="false" />
         <activity
-            android:name=".LeaderboardActivity"
+            android:name=".LeaderboardFragment"
             android:exported="false" />
 
         <service
