@@ -123,15 +123,16 @@ public class LobbiesActivity extends AppCompatActivity implements WebSocketListe
 
 
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
-        adapter = new FriendsListAdapter(friendsList, new FriendsListAdapter.OnDeleteClickListener() {
-            @Override
-            public void onDeleteClick(int position) {
-                UserFriend friend = friendsList.get(position);
-                String friendName = friend.getUsername();
-                getUserIdByUsername(friendName, roomId); // Pass roomId to the method
-            }
-
-        });
+//TODO UNCOMMENT
+        //        adapter = new FriendsListAdapter(friendsList, new FriendsListAdapter.OnDeleteClickListener() {
+//            @Override
+//            public void onDeleteClick(int position) {
+//                UserFriend friend = friendsList.get(position);
+//                String friendName = friend.getUsername();
+//                getUserIdByUsername(friendName, roomId); // Pass roomId to the method
+//            }
+//
+//        });
 
         playerListRecyclerView.setLayoutManager(layoutManager);
         playerListRecyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -205,10 +206,11 @@ public class LobbiesActivity extends AppCompatActivity implements WebSocketListe
                                 JSONObject playerObject = playersArray.getJSONObject(i);
                                 String username = playerObject.getString("username");
                                 String bio = playerObject.getString("bio");
-                                UserFriend player = new UserFriend(username, bio, null);
+                                //TODO UNCOMMENT THESE LINES
+//                                UserFriend player = new UserFriend(username, bio, null, );
                                 Log.d("PlayerInfo", "Username: " + username + ", Bio: " + bio);
-                                friendsList.add(new UserFriend(username, bio, null));
-                                players.add(player);
+  //                              friendsList.add(new UserFriend(username, bio, null,));
+//                                players.add(player);
                             }
 
                             // Set players to the lobby object
@@ -327,11 +329,12 @@ public class LobbiesActivity extends AppCompatActivity implements WebSocketListe
             JSONObject playerObject = playersArray.getJSONObject(i);
             String username = playerObject.getString("username");
             String bio = playerObject.getString("bio");
-            UserFriend player = new UserFriend(username, bio, null);
-            players.add(player);
-            if (player.getUsername().equals(playerUsername)) {
-                joinedLobby = true;
-            }
+//TODO THIS AS WELL
+//            UserFriend player = new UserFriend(username, bio, null);
+//            players.add(player);
+//            if (player.getUsername().equals(playerUsername)) {
+//                joinedLobby = true;
+//            }
         }
         return new Lobby(host, playerCount, roomSize, lobbyId, players);
     }

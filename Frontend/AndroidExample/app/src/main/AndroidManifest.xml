@@ -57,9 +57,6 @@
             android:name=".MultiplayerActivity"
             android:exported="false" />
         <activity
-            android:name=".ProfileActivity"
-            android:exported="false" />
-        <activity
             android:name=".LobbiesActivity"
             android:exported="false" />
         <activity

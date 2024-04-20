@@ -92,7 +92,7 @@
         android:id="@+id/swipeRefreshLayout"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/logoutImageButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/freindsListText">
@@ -125,6 +125,42 @@
         app:layout_constraintBottom_toBottomOf="@+id/imgView"
         app:layout_constraintEnd_toEndOf="@+id/imgView"
         app:srcCompat="@android:drawable/ic_menu_edit" />
+
+    <ImageButton
+        android:id="@+id/logoutImageButton"
+        style="?android:attr/borderlessButtonStyle"
+        android:layout_width="320dp"
+        android:layout_height="80dp"
+        android:contentDescription="logout"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@drawable/loginbox" />
+
+    <Button
+        android:id="@+id/login_btn"
+        style="?android:attr/borderlessButtonStyle"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:fontFamily="@font/aileron_bold"
+        android:text="Sign out"
+        android:textColor="#ffffff"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="@+id/logoutImageButton"
+        app:layout_constraintEnd_toEndOf="@+id/logoutImageButton"
+        app:layout_constraintStart_toStartOf="@+id/logoutImageButton"
+        app:layout_constraintTop_toTopOf="@+id/logoutImageButton" />
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@+id/imgView"
+        app:layout_constraintEnd_toEndOf="@+id/imgView"
+        app:layout_constraintStart_toStartOf="@+id/imgView"
+        app:layout_constraintTop_toTopOf="@+id/imgView" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

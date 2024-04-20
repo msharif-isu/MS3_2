@@ -20,7 +20,7 @@
         android:layout_height="75dp"
         android:layout_gravity="center"
         android:layout_marginStart="10dp"
-        android:scaleType="fitCenter"
+        android:scaleType="centerCrop"
         app:layout_constraintBottom_toBottomOf="@+id/box"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"

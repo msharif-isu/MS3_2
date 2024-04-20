@@ -2,7 +2,9 @@ package com.example.androidexample;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.style.TtsSpan;
@@ -14,6 +16,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+//import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,6 +33,7 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.ImageRequest;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
@@ -53,6 +57,8 @@ public class ProfileFragment extends Fragment {
     private RecyclerView recyclerView;
     ImageView imgView;
     ImageButton addFriends, editBioButton, editProfilePictureButton;
+
+    Button signOut;
     //Button addFriend = findViewById(R.id.addFriend);
     TextView questionsAnswered, achievementsUnlocked, userBiography, usernameText, friendsListText;
     private String username;
@@ -65,7 +71,6 @@ public class ProfileFragment extends Fragment {
 
     private Uri mImageUri, selectedUri;
 
-
     private ActivityResultLauncher<String> mGetContent;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -76,6 +81,7 @@ public class ProfileFragment extends Fragment {
         friendsList = new ArrayList<>();
         UPLOAD_URL = UPLOAD_URL + userId;
 
+
         swipeRefreshLayout = view.findViewById(R.id.swipeRefreshLayout);
         addFriends = view.findViewById(R.id.addFriends);
         questionsAnswered = view.findViewById(R.id.questionsAnswered);
@@ -85,10 +91,12 @@ public class ProfileFragment extends Fragment {
         friendsListText = view.findViewById(R.id.freindsListText);
         recyclerView = view.findViewById(R.id.friendList);
         editBioButton = view.findViewById(R.id.editBioButton);
+        signOut = view.findViewById(R.id.login_btn);
 
         //Profile Picture
         imgView = view.findViewById(R.id.imgView);
         editProfilePictureButton = view.findViewById(R.id.editProfilePictureButton);
+        getProfilePic();
 
         questionsAnswered.setText("Add Friends");
         achievementsUnlocked.setText("");
@@ -104,11 +112,14 @@ public class ProfileFragment extends Fragment {
                 selectedUri = uri;
                 ImageView imageView = requireView().findViewById(R.id.imgView);
                 imageView.setImageURI(uri);
+                // Call uploadImage() here
+                uploadImage();
             }
         });
 
+
         editProfilePictureButton.setOnClickListener(v -> {
-            mGetContent.launch("image/*");
+            editProfilePicture();
             uploadImage();
         });
 
@@ -121,16 +132,27 @@ public class ProfileFragment extends Fragment {
         editBioButton.setOnClickListener(v -> {
             editButtonDialog();
         });
+        signOut.setOnClickListener(v -> {
+            startActivity(new Intent(getActivity(), LoginActivity.class));
+        });
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 setFriendInfo();
+                getBio();
+//                getProfilePic();
                 swipeRefreshLayout.setRefreshing(false);
             }
         });
         return view;
 
     }
+
+    private void editProfilePicture() {
+        mGetContent.launch("image/*");
+        uploadImage();
+    }
+
 
     /**
      * Uploads an image to a remote server using a multipart Volley request.
@@ -153,6 +175,7 @@ public class ProfileFragment extends Fragment {
                             // Handle response
                             if (response != null && !response.isEmpty()) {
                                 Toast.makeText(requireContext(), response, Toast.LENGTH_LONG).show();
+                                getProfilePic();
                             } else {
                                 Toast.makeText(requireContext(), "Unknown response", Toast.LENGTH_LONG).show();
                                 Log.e("Upload", "Empty response");
@@ -178,6 +201,8 @@ public class ProfileFragment extends Fragment {
             Log.e("ProfileFragment", "Selected URI is null");
         }
     }
+
+
 
 
     /**
@@ -250,6 +275,7 @@ public class ProfileFragment extends Fragment {
                     userBiography.setText(newBio);
                     Toast.makeText(requireActivity(), message, Toast.LENGTH_SHORT).show();
                     Log.e("ProfileActivity", "find this:" + newBio);
+                    getBio();
                 } catch (JSONException e) {
                     e.printStackTrace();
                     Log.e("ProfileActivity", "Error parsing response: " + e.getMessage());
@@ -318,20 +344,20 @@ public class ProfileFragment extends Fragment {
             });
             queue.add(jsonObjectRequest);
         }
+        setFriendInfo();
     }
 
     private FriendsListAdapter adapter;
 
     private void setAdapter() {
-        adapter = new FriendsListAdapter(friendsList, new FriendsListAdapter.OnDeleteClickListener() {
+        adapter = new FriendsListAdapter(requireContext(), friendsList, new FriendsListAdapter.OnDeleteClickListener() {
             @Override
             public void onDeleteClick(int position) {
                 UserFriend friend = friendsList.get(position);
                 String friendName = friend.getUsername();
                 friendsList.remove(position);
-
-                removeFriendFromDatabase(friendName);
-                adapter.notifyItemRemoved(position);
+                removeFriendFromDatabase(friendName); // Remove friend from database
+                adapter.notifyItemRemoved(position); // Notify adapter of data change
             }
         });
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(requireContext());
@@ -357,8 +383,8 @@ public class ProfileFragment extends Fragment {
             }
         });
         queue.add(stringRequest);
+        setFriendInfo();
     }
-
 
     private void setFriendInfo() {
 //        friendsList.add(new UserFriend("Alok1", "This is the real alok", null));
@@ -391,6 +417,9 @@ public class ProfileFragment extends Fragment {
                         Log.d("ProfileActivity", "Username: " + username);
                         Log.d("ProfileActivity", "Bio: " + bio);
                         Log.d("ProfileActivity", "File Path: " + filePath);
+
+                        String profilePicUrl = userObject.optString("profilePicUrl", "");
+
                         friendsList.add(new UserFriend(username, bio, filePath));
                     }
 
@@ -427,6 +456,35 @@ public class ProfileFragment extends Fragment {
             }
         });
         queue.add(stringRequest);
+    }
+
+    /**
+     * Fetches the user's profile picture from the server.
+     */
+    //backendUrl + "users/" + userId + "/profilePicture"
+    private void getProfilePic() {
+        // Make a request to fetch the profile picture
+        ImageRequest request = new ImageRequest(
+                backendUrl + "images/" + username,
+                new Response.Listener<Bitmap>() {
+                    @Override
+                    public void onResponse(Bitmap response) {
+                        // Set the retrieved profile picture to the ImageView
+                        imgView.setImageBitmap(response);
+                    }
+                },
+                0,
+                0,
+                ImageView.ScaleType.CENTER_INSIDE,
+                null,
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        //imgView.setImageResource(R.drawable.default_profile_image);
+                    }
+                });
+        // Add the request to the RequestQueue
+        Volley.newRequestQueue(requireContext()).add(request);
     }
 
 }
