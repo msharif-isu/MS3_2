@@ -4,7 +4,9 @@ import com.project.trivia.FriendsList.Friends;
 import com.project.trivia.FriendsList.FriendsRepository;
 import com.project.trivia.Leaderboard.Leaderboard;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -132,21 +134,31 @@ public class UserController {
     }
 
 
-    @GetMapping(value = "/images/{id}", produces = MediaType.IMAGE_JPEG_VALUE)
-    byte[] getImageById(@PathVariable int id) throws IOException {
-        User user = userRepository.findById(id);
+    @GetMapping(value = "/images/{username}", produces = MediaType.IMAGE_JPEG_VALUE)
+    byte[] getImageById(@PathVariable String username) throws IOException {
+        User user = userRepository.findByUsername(username);
         File imageFile = new File(user.getFilePath());
         return Files.readAllBytes(imageFile.toPath());
     }
 
     @PostMapping("/setPfp/{id}")
     public String handleFileUpload(@RequestParam("image") MultipartFile imageFile, @PathVariable int id)  {
-
         try {
-            File destinationFile = new File(directory + File.separator + imageFile.getOriginalFilename());
+            User user = userRepository.findById(id);
+            String username = user.getUsername();
+
+            // Create a directory with the username if it doesn't exist
+            String userDirectory = directory + File.separator + username;
+            File directoryFile = new File(userDirectory);
+            if (!directoryFile.exists()) {
+                directoryFile.mkdirs(); // Creates the directory including any necessary but nonexistent parent directories.
+            }
+
+            // Save the image in the user's directory
+            File destinationFile = new File(userDirectory + File.separator + imageFile.getOriginalFilename());
             imageFile.transferTo(destinationFile);  // save file to disk
 
-            User user = userRepository.findById(id);
+            // Update the user's file path in the database
             user.setFilePath(destinationFile.getAbsolutePath());
             userRepository.save(user);
 
