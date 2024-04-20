@@ -42,6 +42,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.SimpleTarget;
@@ -115,12 +116,10 @@ public class ProfileFragment extends Fragment {
 
 
         mGetContent = registerForActivityResult(new ActivityResultContracts.GetContent(), uri -> {
-            // Handle the returned Uri
             if (uri != null) {
                 selectedUri = uri;
                 ImageView imageView = requireView().findViewById(R.id.imgView);
                 imageView.setImageURI(uri);
-                // Call uploadImage() here
                 uploadImage();
             }
         });
@@ -158,7 +157,6 @@ public class ProfileFragment extends Fragment {
 
     private void editProfilePicture() {
         mGetContent.launch("image/*");
-        uploadImage();
     }
 
 
@@ -480,6 +478,8 @@ public class ProfileFragment extends Fragment {
                 .asBitmap()
                 .load(imageUrl)
                 .apply(requestOptions)
+                .skipMemoryCache(true)  // Disable memory caching
+                .diskCacheStrategy(DiskCacheStrategy.NONE)  // Disable disk caching
                 .into(new SimpleTarget<Bitmap>() {
                     @Override
                     public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
