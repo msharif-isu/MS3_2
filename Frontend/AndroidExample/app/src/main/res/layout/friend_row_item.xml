@@ -2,17 +2,18 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
     <ImageView
         android:id="@+id/box"
-        android:layout_width="411dp"
+        android:layout_width="0dp"
         android:layout_height="90dp"
+        android:layout_marginTop="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/rectangle" />
+        app:srcCompat="@drawable/playerlist_box" />
 
     <ImageView
         android:id="@+id/profilePic"
@@ -25,15 +26,15 @@
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/box"
-        app:srcCompat="@drawable/ic_launcher_foreground"></ImageView>
+        app:srcCompat="@drawable/profile"></ImageView>
 
     <TextView
         android:id="@+id/friendBio"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:fontFamily="@font/m_plus_rounded_1c_bold"
+        android:fontFamily="@font/aileron"
         android:text="TextView"
-        android:textColor="@color/white"
+        android:textColor="@color/black"
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="@+id/profilePic"
         app:layout_constraintEnd_toStartOf="@+id/removeFriend"
@@ -45,12 +46,12 @@
         android:id="@+id/friendUsername"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/m_plus_rounded_1c_bold"
+        android:fontFamily="@font/aileron_bold"
         android:text="TextView"
-        android:textColor="@color/white"
+        android:textColor="@color/black"
         android:textSize="20sp"
         app:layout_constraintStart_toEndOf="@+id/profilePic"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="@+id/box" />
 
     <ImageButton
         android:id="@+id/removeFriend"

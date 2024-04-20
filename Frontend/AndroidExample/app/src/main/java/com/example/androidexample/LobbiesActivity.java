@@ -62,9 +62,6 @@ public class LobbiesActivity extends AppCompatActivity implements WebSocketListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lobby);
 
-        webSocketManager = WebSocketManager.getInstance();
-
-
         SharedPreferences prefs = getSharedPreferences("UserData", MODE_PRIVATE);
         username = prefs.getString("USERNAME", "");
         userId = prefs.getInt("USER_ID", 0);
@@ -123,16 +120,15 @@ public class LobbiesActivity extends AppCompatActivity implements WebSocketListe
 
 
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
-//TODO UNCOMMENT
-        //        adapter = new FriendsListAdapter(friendsList, new FriendsListAdapter.OnDeleteClickListener() {
-//            @Override
-//            public void onDeleteClick(int position) {
-//                UserFriend friend = friendsList.get(position);
-//                String friendName = friend.getUsername();
-//                getUserIdByUsername(friendName, roomId); // Pass roomId to the method
-//            }
-//
-//        });
+        adapter = new FriendsListAdapter(getApplicationContext(), friendsList, new FriendsListAdapter.OnDeleteClickListener() {
+            @Override
+            public void onDeleteClick(int position) {
+                UserFriend friend = friendsList.get(position);
+                String friendName = friend.getUsername();
+                getUserIdByUsername(friendName, roomId); // Pass roomId to the method
+            }
+
+        });
 
         playerListRecyclerView.setLayoutManager(layoutManager);
         playerListRecyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -206,11 +202,10 @@ public class LobbiesActivity extends AppCompatActivity implements WebSocketListe
                                 JSONObject playerObject = playersArray.getJSONObject(i);
                                 String username = playerObject.getString("username");
                                 String bio = playerObject.getString("bio");
-                                //TODO UNCOMMENT THESE LINES
-//                                UserFriend player = new UserFriend(username, bio, null, );
+                                UserFriend player = new UserFriend(username, bio, null);
                                 Log.d("PlayerInfo", "Username: " + username + ", Bio: " + bio);
-  //                              friendsList.add(new UserFriend(username, bio, null,));
-//                                players.add(player);
+                                friendsList.add(new UserFriend(username, bio, null));
+                                players.add(player);
                             }
 
                             // Set players to the lobby object
@@ -329,12 +324,11 @@ public class LobbiesActivity extends AppCompatActivity implements WebSocketListe
             JSONObject playerObject = playersArray.getJSONObject(i);
             String username = playerObject.getString("username");
             String bio = playerObject.getString("bio");
-//TODO THIS AS WELL
-//            UserFriend player = new UserFriend(username, bio, null);
-//            players.add(player);
-//            if (player.getUsername().equals(playerUsername)) {
-//                joinedLobby = true;
-//            }
+            UserFriend player = new UserFriend(username, bio, null);
+            players.add(player);
+            if (player.getUsername().equals(playerUsername)) {
+                joinedLobby = true;
+            }
         }
         return new Lobby(host, playerCount, roomSize, lobbyId, players);
     }
@@ -438,21 +432,11 @@ public class LobbiesActivity extends AppCompatActivity implements WebSocketListe
         webSocketManager.closeWebSocket();
     }
 
-    @Override
     public void onBackPressed() {
         super.onBackPressed();
-        Log.d("LobbiesActivity", "Back button pressed");
         // Close WebSocket connection
-        WebSocketManager webSocketManager = WebSocketManager.getInstance();
-        if (webSocketManager != null) {
-            webSocketManager.closeWebSocket();
-            Log.d("LobbiesActivity", "WebSocket connection closed");
-        } else {
-            Log.e("LobbiesActivity", "WebSocketManager is null");
-        }
+        WebSocketManager.getInstance().closeWebSocket();
     }
-
-
 
 
 }
