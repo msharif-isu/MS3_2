@@ -30,7 +30,7 @@ public class LeaderboardWebSocketService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         if (intent != null) {
             String action = intent.getAction();
-            Log.d("onStartCommand", action);
+            Log.d("LeaderboardWebSocketService", "onStartCommand: Trying to " + action.toLowerCase());
             if ("CONNECT".equals(action)) {
                 String url = intent.getStringExtra("url");      // eg, "ws://localhost:8080/leaderboard/uname"
                 String key = intent.getStringExtra("key");      // eg, "chat1" - refer to MainActivity where this Intent was called
@@ -49,7 +49,6 @@ public class LeaderboardWebSocketService extends Service {
         LocalBroadcastManager
                 .getInstance(this)
                 .registerReceiver(messageReceiver, new IntentFilter("SendWebSocketMessage"));
-        Log.d("TAG", "onCreate: Happends");
     }
 
     @Override
@@ -73,7 +72,7 @@ public class LeaderboardWebSocketService extends Service {
             WebSocketClient webSocketClient = new WebSocketClient(serverUrl) {
                 @Override
                 public void onOpen(ServerHandshake handshake) {
-                    Log.d(key, "Connected");
+                    Log.d(key, "Connected to websocket server");
                 }
 
                 @Override

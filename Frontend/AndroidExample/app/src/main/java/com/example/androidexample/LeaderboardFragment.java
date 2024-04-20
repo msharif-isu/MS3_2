@@ -59,7 +59,7 @@ public class LeaderboardFragment extends Fragment {
                     String message = intent.getStringExtra("message");
                     Log.d("TAG", "onReceive: " + message);
                     displayData.clear();
-                    displayData.addAll(parseLeaderboardMessage(message));
+                    displayData.addAll(LeaderboardListItem.parseLeaderboardMessage(message));
                     leaderboardAdapter.notifyDataSetChanged();
                 });
             }
@@ -69,14 +69,15 @@ public class LeaderboardFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-
-        Intent serviceIntent = new Intent(requireActivity(), LeaderboardWebSocketService.class);
+        Intent serviceIntent = new Intent(requireActivity(), LeaderboardWebSocketService.class) {{
+            setAction("CONNECT");
+            putExtra("key", "leaderboard");
+        }};
 
         LocalBroadcastManager
                 .getInstance(requireActivity())
                 .registerReceiver(messageReceiver, new IntentFilter("WebSocketMessageReceived"));
-        serviceIntent.setAction("CONNECT");
-        serviceIntent.putExtra("key", "leaderboard");
+
         String websocketURL = RequestURLs.SERVER_WEBSOCKET_LEADERBOARD_URL + "/" + new Random().nextFloat();
         serviceIntent.putExtra("url", websocketURL);
         requireActivity().startService(serviceIntent);
@@ -84,40 +85,9 @@ public class LeaderboardFragment extends Fragment {
 
     @Override
     public void onStop() {
-        LocalBroadcastManager.getInstance(requireActivity()).unregisterReceiver(messageReceiver);
         super.onStop();
-    }
-
-    /**
-     * Parses a WebSocket message into the appropriate list of LeaderboardListItems
-     * @param message - WebSocket message
-     * @return list of LeaderboardListItems
-     */
-    private List<LeaderboardListItem> parseLeaderboardMessage(String message) {
-        Scanner scnr = new Scanner(message);
-
-        ArrayList<LeaderboardListItem> data = new ArrayList<>();
-
-        while(scnr.hasNextLine()) {
-            String lbString = scnr.nextLine();
-            Scanner parser = new Scanner(lbString);
-
-            int id = Integer.parseInt(parser.next());
-
-            HashMap<LeaderboardTimeFrameEnum, Integer> points = new HashMap<>();
-
-            points.put(LeaderboardTimeFrameEnum.DAILY, Integer.parseInt(parser.next()));
-            points.put(LeaderboardTimeFrameEnum.WEEKLY, Integer.parseInt(parser.next()));
-            points.put(LeaderboardTimeFrameEnum.MONTHLY, Integer.parseInt(parser.next()));
-            points.put(LeaderboardTimeFrameEnum.YEARLY, Integer.parseInt(parser.next()));
-            points.put(LeaderboardTimeFrameEnum.LIFETIME, Integer.parseInt(parser.next()));
-            parser.close();
-
-            LeaderboardListItem item = new LeaderboardListItem(id, points);
-            data.add(item);
-        }
-        scnr.close();
-
-        return data;
+        LocalBroadcastManager
+                .getInstance(requireActivity())
+                .unregisterReceiver(messageReceiver);
     }
 }
