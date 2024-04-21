@@ -30,6 +30,13 @@ public class MainActivity extends AppCompatActivity {
         userId = prefs.getInt("USER_ID", 0);
         Log.d("MainActivity", "Username from SharedPreferences: " + userId + username);
 
+        if (username.isEmpty()) {
+            Intent intent = new Intent(this, LoginActivity.class);
+            startActivity(intent);
+            finish();
+            return;
+        }
+
         super.onCreate(savedInstanceState);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
