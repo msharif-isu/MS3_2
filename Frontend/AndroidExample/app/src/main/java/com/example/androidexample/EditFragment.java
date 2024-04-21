@@ -1,64 +1,128 @@
 package com.example.androidexample;
 
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
+import android.widget.EditText;
+import android.widget.Toast;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link EditFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+import androidx.fragment.app.Fragment;
+
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import url.RequestURLs;
+
+
 public class EditFragment extends Fragment {
-
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-    public EditFragment() {
-        // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment EditFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static EditFragment newInstance(String param1, String param2) {
-        EditFragment fragment = new EditFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-    }
+    private EditText questionInput;
+    private EditText answerInput;
+    private AutoCompleteTextView questionTypeInput;
+    private FloatingActionButton submitButton;
+    private ArrayAdapter<String> questionTypeAdapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_edit, container, false);
+        View view = inflater.inflate(R.layout.fragment_question_submission, container, false);
+
+        questionInput = view.findViewById(R.id.question_submission_question_input);
+        answerInput = view.findViewById(R.id.question_submission_answer_input);
+        questionTypeInput = view.findViewById(R.id.question_submission_question_type_input);
+        submitButton = view.findViewById(R.id.question_submission_submit_button);
+
+        questionTypeAdapter = new ArrayAdapter<>(requireContext(), androidx.appcompat.R.layout.support_simple_spinner_dropdown_item);
+        getQuestionTypes();
+
+        questionTypeInput.setAdapter(questionTypeAdapter);
+
+        submitButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String question = questionInput.getText().toString();
+                String answer = answerInput.getText().toString();
+                String questionType = questionTypeInput.getText().toString();
+
+                Question submission = new Question(-1, question, answer, questionType, false, true);
+
+                try {
+                    submitQuestion(submission);
+                } catch (JSONException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        });
+
+        return view;
+    }
+
+    private void submitQuestion(Question question) throws JSONException {
+        JsonObjectRequest questionSubmissionRequest = new JsonObjectRequest(
+                Request.Method.POST,
+                String.format("%s/question", RequestURLs.SERVER_HTTP_URL),
+                question.toJSON(),
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject jsonObject) {
+                        Toast.makeText(requireContext(), "Question successfully submitted to database", Toast.LENGTH_SHORT).show();
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError volleyError) {
+                        Log.d("EditFragment", "Failed to submit question");
+                        Toast.makeText(requireContext(), "Failed to submit question", Toast.LENGTH_SHORT).show();
+                    }
+                }
+        );
+
+        VolleySingleton.getInstance(requireContext()).addToRequestQueue(questionSubmissionRequest);
+    }
+
+    private void getQuestionTypes() {
+        JsonArrayRequest questionTypesRequest = new JsonArrayRequest(
+                Request.Method.GET,
+                String.format("%s/query/topic", RequestURLs.SERVER_HTTP_URL),
+                null,
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray jsonArray) {
+                        List<String> questionTypes = new ArrayList<>();
+                        for (int i = 0; i < jsonArray.length(); i++) {
+                            try {
+                                questionTypes.add(jsonArray.get(i).toString());
+                            } catch (JSONException e) {
+                                throw new RuntimeException(e);
+                            }
+                        }
+
+                        questionTypeAdapter.addAll(questionTypes);
+                        questionTypeAdapter.notifyDataSetChanged();
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError volleyError) {
+
+                    }
+                }
+        );
+
+        VolleySingleton.getInstance(requireContext()).addToRequestQueue(questionTypesRequest);
     }
 }
