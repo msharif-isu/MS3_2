@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -66,11 +67,13 @@ public class SignupActivity extends AppCompatActivity {
                 String password = passwordEditText.getText().toString();
                 String confirm = confirmEditText.getText().toString();
                 if (isValidEmail(email)) {
+                    emailEditText.setError(null);
                     if (password.equals(confirm)) {
                         Toast.makeText(getApplicationContext(), "Signing up", Toast.LENGTH_LONG).show();
                         sendSignupRequest(username, password, email);
                     } else {
-                        Toast.makeText(getApplicationContext(), "Password don't match", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), "Passwords don't match", Toast.LENGTH_LONG).show();
+                        passwordEditText.setError("Passwords don't match");
                     }
                 } else {
                     emailEditText.setError("Enter a valid email address");
@@ -83,7 +86,7 @@ public class SignupActivity extends AppCompatActivity {
         return Patterns.EMAIL_ADDRESS.matcher(email).matches();
     }
 
-    private void sendSignupRequest(String username, String password, String email) {
+    private void sendSignupRequest(final String username, final String password, final String email) {
         String url = backendUrl;
 
         JSONObject jsonObject = new JSONObject();
@@ -99,17 +102,40 @@ public class SignupActivity extends AppCompatActivity {
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        // success
-                        Toast.makeText(getApplicationContext(), "Signup successful", Toast.LENGTH_SHORT).show();
+                        try {
+                            String message = response.getString("message");
+                            if ("success".equals(message)) {
+                                Toast.makeText(getApplicationContext(), "Signup successful", Toast.LENGTH_SHORT).show();
+                                Intent intent = new Intent(SignupActivity.this, LoginActivity.class);
+                                startActivity(intent);
+                                finish();
+                            } else {
+                                handleErrorResponse(message);
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            Toast.makeText(getApplicationContext(), "Unexpected response format", Toast.LENGTH_SHORT).show();
+                        }
                     }
                 },
+
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        // fail
-                        Toast.makeText(getApplicationContext(), "Signup failed", Toast.LENGTH_SHORT).show();
+                        // Handle error
+                        Toast.makeText(getApplicationContext(), "Signup failed: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+                        error.printStackTrace();
                     }
                 });
         requestQueue.add(request);
+    }
+
+    private void handleErrorResponse(String message) {
+        if ("Username already exists".equals(message)) {
+            Toast.makeText(getApplicationContext(), "Signup failed: " + message, Toast.LENGTH_SHORT).show();
+            usernameEditText.setError("Username already exists");
+        } else {
+            Toast.makeText(getApplicationContext(), "Signup failed: " + message, Toast.LENGTH_SHORT).show();
+        }
     }
 }
