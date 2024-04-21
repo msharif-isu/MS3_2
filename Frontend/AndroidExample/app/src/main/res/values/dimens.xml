@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="leaderboard_list_height">32dp</dimen>
+    <dimen name="leaderboard_list_height">100dp</dimen>
+    <dimen name="leaderboard_image_width">60dp</dimen>
     <dimen name="leaderboard_button_text_size">10sp</dimen>
     <dimen name="question_set_list_height">300dp</dimen>
     <dimen name="question_number_text_size">20sp</dimen>
