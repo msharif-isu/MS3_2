@@ -11,9 +11,10 @@ import java.util.Scanner;
  */
 public class LeaderboardListItem implements Serializable {
     /**
-     * User id
+     * Username
      */
-    private int id;
+    private String username;
+
     /**
      * HashMap representing daily, weekly, monthly, yearly, and lifetime points
      */
@@ -21,21 +22,13 @@ public class LeaderboardListItem implements Serializable {
 
     /**
      * Constructs a list item to store user points to display
-     * @param id - user id
+     * @param username - user name
      * @param points - A HashMap of <LeaderboardTimeFrameEnum, Integer> to represent
      *               daily, weekly, monthly, yearly, and lifetime points
      */
-    public LeaderboardListItem(int id, HashMap<LeaderboardTimeFrameEnum, Integer> points) {
-        this.id = id;
+    public LeaderboardListItem(String username, HashMap<LeaderboardTimeFrameEnum, Integer> points) {
+        this.username = username;
         this.points = points;
-    }
-
-    /**
-     * Return's the id of the user
-     * @return user id
-     */
-    public int getId() {
-        return id;
     }
 
     /**
@@ -85,6 +78,14 @@ public class LeaderboardListItem implements Serializable {
     }
 
     /**
+     * Returns the username of this user
+     * @return user name
+     */
+    public String getUsername() {
+        return username;
+    }
+
+    /**
      * Parses a WebSocket message into the appropriate list of LeaderboardListItems
      * @param message - WebSocket message
      * @return list of LeaderboardListItems
@@ -98,7 +99,7 @@ public class LeaderboardListItem implements Serializable {
             String lbString = scnr.nextLine();
             Scanner parser = new Scanner(lbString);
 
-            int id = Integer.parseInt(parser.next());
+            String username = parser.next();
 
             HashMap<LeaderboardTimeFrameEnum, Integer> points = new HashMap<>();
 
@@ -109,7 +110,7 @@ public class LeaderboardListItem implements Serializable {
             points.put(LeaderboardTimeFrameEnum.LIFETIME, Integer.parseInt(parser.next()));
             parser.close();
 
-            LeaderboardListItem item = new LeaderboardListItem(id, points);
+            LeaderboardListItem item = new LeaderboardListItem(username, points);
             data.add(item);
         }
         scnr.close();
