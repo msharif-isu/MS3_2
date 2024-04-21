@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Adapter;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
@@ -34,7 +35,6 @@ public class EditFragment extends Fragment {
     private EditText answerInput;
     private AutoCompleteTextView questionTypeInput;
     private FloatingActionButton submitButton;
-    private ArrayAdapter<String> questionTypeAdapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -46,8 +46,8 @@ public class EditFragment extends Fragment {
         questionTypeInput = view.findViewById(R.id.question_submission_question_type_input);
         submitButton = view.findViewById(R.id.question_submission_submit_button);
 
-        questionTypeAdapter = new ArrayAdapter<>(requireContext(), androidx.appcompat.R.layout.support_simple_spinner_dropdown_item);
-        getQuestionTypes();
+        ArrayAdapter<String> questionTypeAdapter = new ArrayAdapter<>(requireContext(), androidx.appcompat.R.layout.support_simple_spinner_dropdown_item);
+        getQuestionTypes(questionTypeAdapter);
 
         questionTypeInput.setAdapter(questionTypeAdapter);
 
@@ -94,7 +94,7 @@ public class EditFragment extends Fragment {
         VolleySingleton.getInstance(requireContext()).addToRequestQueue(questionSubmissionRequest);
     }
 
-    private void getQuestionTypes() {
+    private void getQuestionTypes(ArrayAdapter<String> adapter) {
         JsonArrayRequest questionTypesRequest = new JsonArrayRequest(
                 Request.Method.GET,
                 String.format("%s/query/topic", RequestURLs.SERVER_HTTP_URL),
@@ -111,8 +111,8 @@ public class EditFragment extends Fragment {
                             }
                         }
 
-                        questionTypeAdapter.addAll(questionTypes);
-                        questionTypeAdapter.notifyDataSetChanged();
+                        adapter.addAll(questionTypes);
+                        adapter.notifyDataSetChanged();
                     }
                 },
                 new Response.ErrorListener() {

@@ -3,13 +3,17 @@ package com.example.androidexample;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
-import android.widget.EditText;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -22,31 +26,33 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
-import java.util.Optional;
 
 import url.RequestURLs;
 
-public class QueryActivity extends AppCompatActivity {
+public class QueryFragment extends Fragment {
     private boolean attemptedRefresh = false;
     private List<Question> questionDataset;
     private QueryListAdapter questionListAdapter;
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_query);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_query, container, false);
 
 
-        RecyclerView questionList = findViewById(R.id.query_list);
-        questionList.setLayoutManager(new LinearLayoutManager(this));
+        RecyclerView questionList = view.findViewById(R.id.query_list);
+        AutoCompleteTextView searchBar = view.findViewById(R.id.query_type_search_bar);
+        CheckBox userGenerated = view.findViewById(R.id.query_user_generated_check_box);
+        Button addQuestionButton = view.findViewById(R.id.query_add_question_button);
 
         questionDataset = new ArrayList<>();
         questionListAdapter = new QueryListAdapter(questionDataset);
         questionList.setAdapter(questionListAdapter);
+        questionList.setLayoutManager(new LinearLayoutManager(requireContext()));
 
-        EditText searchBar = findViewById(R.id.query_type_search_bar);
-        CheckBox userGenerated = findViewById(R.id.query_user_generated_check_box);
+        ArrayAdapter<String> searchBarAdapter = new ArrayAdapter<>(requireContext(), androidx.appcompat.R.layout.support_simple_spinner_dropdown_item);
+        getQuestionTypes(searchBarAdapter);
+        searchBar.setAdapter(searchBarAdapter);
 
         searchBar.addTextChangedListener(new TextWatcher() {
             @Override
@@ -67,17 +73,25 @@ public class QueryActivity extends AppCompatActivity {
         userGenerated.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                requestQuestions(searchBar.getText().toString(), userGenerated.isChecked());
+                requestQuestions(searchBar.getText().toString(), b);
+            }
+        });
+        requestQuestions(searchBar.getText().toString(), false);
+
+        addQuestionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ((MainActivity) requireActivity()).replaceFragment(new EditFragment());
             }
         });
 
-        requestQuestions(searchBar.getText().toString(), false);
+        return view;
     }
 
     /**
      * Makes a request to the server to get all questions based on given filters
      */
-    public void requestQuestions(String type, boolean isUserGenerated) {
+    private void requestQuestions(String type, boolean isUserGenerated) {
         String serverUrl = RequestURLs.SERVER_HTTP_QUESTION_QUERY_URL;
 
         if (type.trim().isEmpty()) {
@@ -86,7 +100,6 @@ public class QueryActivity extends AppCompatActivity {
             } else {
                 serverUrl = RequestURLs.SERVER_HTTP_QUESTION_URL;
             }
-
         } else {
             serverUrl = String.format("%s/multiple/%s/%d", serverUrl, type, (isUserGenerated) ? 1 : 0);
         }
@@ -107,12 +120,6 @@ public class QueryActivity extends AppCompatActivity {
                                     throw new RuntimeException(e);
                                 }
                             }
-                            questionDataset.sort(new Comparator<Question>() {
-                                @Override
-                                public int compare(Question q1, Question q2) {
-                                    return q1.getQuestion().compareTo(q2.getQuestion());
-                                }
-                            });
 
                             if (questionListAdapter != null) {
                                 questionListAdapter.notifyDataSetChanged();
@@ -123,16 +130,48 @@ public class QueryActivity extends AppCompatActivity {
                         @Override
                         public void onErrorResponse(VolleyError error) {
                             if (!attemptedRefresh) {
-                                Toast.makeText(getApplicationContext(), "Leaderboard failed to load, reattempting to get data from server", Toast.LENGTH_LONG).show();
+                                Toast.makeText(requireContext(), "Leaderboard failed to load, reattempting to get data from server", Toast.LENGTH_LONG).show();
                                 requestQuestions(type, isUserGenerated);
                                 attemptedRefresh = true;
                             } else {
-                                Toast.makeText(getApplicationContext(), "Unable to reach server", Toast.LENGTH_LONG).show();
+                                Toast.makeText(requireContext(), "Unable to reach server", Toast.LENGTH_LONG).show();
                             }
                         }
                     }
             );
 
-            VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(questionRequest);
+            VolleySingleton.getInstance(requireContext()).addToRequestQueue(questionRequest);
+    }
+
+    private void getQuestionTypes(ArrayAdapter<String> adapter) {
+        JsonArrayRequest questionTypesRequest = new JsonArrayRequest(
+                Request.Method.GET,
+                String.format("%s/query/topic", RequestURLs.SERVER_HTTP_URL),
+                null,
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray jsonArray) {
+                        List<String> questionTypes = new ArrayList<>();
+                        for (int i = 0; i < jsonArray.length(); i++) {
+                            try {
+                                questionTypes.add(jsonArray.get(i).toString());
+                            } catch (JSONException e) {
+                                throw new RuntimeException(e);
+                            }
+                        }
+
+                        adapter.addAll(questionTypes);
+                        adapter.notifyDataSetChanged();
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError volleyError) {
+
+                    }
+                }
+        );
+
+        VolleySingleton.getInstance(requireContext()).addToRequestQueue(questionTypesRequest);
     }
 }
