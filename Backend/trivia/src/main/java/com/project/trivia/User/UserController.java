@@ -142,31 +142,28 @@ public class UserController {
     }
 
     @PostMapping("/setPfp/{id}")
-    public String handleFileUpload(@RequestParam("image") MultipartFile imageFile, @PathVariable int id)  {
+    public String handleFileUpload(@RequestParam("image") MultipartFile imageFile, @PathVariable int id) {
         try {
             User user = userRepository.findById(id);
             String username = user.getUsername();
 
-            // Create a directory with the username if it doesn't exist
-            String userDirectory = directory + File.separator + username;
-            File directoryFile = new File(userDirectory);
-            if (!directoryFile.exists()) {
-                directoryFile.mkdirs(); // Creates the directory including any necessary but nonexistent parent directories.
+            // Create a directory for profile pictures if it doesn't exist
+            String profilePicturesDirectory = directory + File.separator + "profile_pictures";
+            File profilePicturesDir = new File(profilePicturesDirectory);
+            if (!profilePicturesDir.exists()) {
+                profilePicturesDir.mkdirs();
             }
-
-            // Save the image in the user's directory
-            File destinationFile = new File(userDirectory + File.separator + imageFile.getOriginalFilename());
-            imageFile.transferTo(destinationFile);  // save file to disk
-
-            // Update the user's file path in the database
+            String imageFileName = id + "_" + username + ".jpg";
+            File destinationFile = new File(profilePicturesDirectory + File.separator + imageFileName);
+            imageFile.transferTo(destinationFile);
             user.setFilePath(destinationFile.getAbsolutePath());
             userRepository.save(user);
-
             return "File uploaded successfully: " + destinationFile.getAbsolutePath();
         } catch (IOException e) {
             return "Failed to upload file: " + e.getMessage();
         }
     }
+
 
 
 }
