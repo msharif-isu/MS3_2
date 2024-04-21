@@ -139,7 +139,7 @@ public class LeaderboardServer {
         StringBuilder sb = new StringBuilder();
         if(!leaderboardData.isEmpty()) {
             for (Leaderboard lb : leaderboardData) {
-                sb.append(lb.getId() + " " +
+                sb.append(lb.getName() + " " +
                         lb.getUserPoints() + " " +
                         lb.getWeeklyPoints() + " " +
                         lb.getMonthlyPoints() + " " +

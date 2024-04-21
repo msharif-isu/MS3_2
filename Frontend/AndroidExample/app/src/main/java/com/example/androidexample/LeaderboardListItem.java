@@ -1,16 +1,20 @@
 package com.example.androidexample;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Scanner;
 
 /**
  * A class to represent a user's points in the leaderboard list
  */
 public class LeaderboardListItem implements Serializable {
     /**
-     * User id
+     * Username
      */
-    private int id;
+    private String username;
+
     /**
      * HashMap representing daily, weekly, monthly, yearly, and lifetime points
      */
@@ -18,21 +22,13 @@ public class LeaderboardListItem implements Serializable {
 
     /**
      * Constructs a list item to store user points to display
-     * @param id - user id
+     * @param username - user name
      * @param points - A HashMap of <LeaderboardTimeFrameEnum, Integer> to represent
      *               daily, weekly, monthly, yearly, and lifetime points
      */
-    public LeaderboardListItem(int id, HashMap<LeaderboardTimeFrameEnum, Integer> points) {
-        this.id = id;
+    public LeaderboardListItem(String username, HashMap<LeaderboardTimeFrameEnum, Integer> points) {
+        this.username = username;
         this.points = points;
-    }
-
-    /**
-     * Return's the id of the user
-     * @return user id
-     */
-    public int getId() {
-        return id;
     }
 
     /**
@@ -79,5 +75,46 @@ public class LeaderboardListItem implements Serializable {
      */
     public int getLifetimePoints() throws NullPointerException{
         return points.get(LeaderboardTimeFrameEnum.LIFETIME);
+    }
+
+    /**
+     * Returns the username of this user
+     * @return user name
+     */
+    public String getUsername() {
+        return username;
+    }
+
+    /**
+     * Parses a WebSocket message into the appropriate list of LeaderboardListItems
+     * @param message - WebSocket message
+     * @return list of LeaderboardListItems
+     */
+    public static List<LeaderboardListItem> parseLeaderboardMessage(String message) {
+        Scanner scnr = new Scanner(message);
+
+        ArrayList<LeaderboardListItem> data = new ArrayList<>();
+
+        while(scnr.hasNextLine()) {
+            String lbString = scnr.nextLine();
+            Scanner parser = new Scanner(lbString);
+
+            String username = parser.next();
+
+            HashMap<LeaderboardTimeFrameEnum, Integer> points = new HashMap<>();
+
+            points.put(LeaderboardTimeFrameEnum.DAILY, Integer.parseInt(parser.next()));
+            points.put(LeaderboardTimeFrameEnum.WEEKLY, Integer.parseInt(parser.next()));
+            points.put(LeaderboardTimeFrameEnum.MONTHLY, Integer.parseInt(parser.next()));
+            points.put(LeaderboardTimeFrameEnum.YEARLY, Integer.parseInt(parser.next()));
+            points.put(LeaderboardTimeFrameEnum.LIFETIME, Integer.parseInt(parser.next()));
+            parser.close();
+
+            LeaderboardListItem item = new LeaderboardListItem(username, points);
+            data.add(item);
+        }
+        scnr.close();
+
+        return data;
     }
 }
