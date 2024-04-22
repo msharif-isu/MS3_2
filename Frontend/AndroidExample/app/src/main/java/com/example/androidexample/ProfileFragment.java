@@ -209,8 +209,6 @@ public class ProfileFragment extends Fragment {
     }
 
 
-
-
     /**
      * Converts the given image URI to a byte array.
      *
@@ -255,7 +253,10 @@ public class ProfileFragment extends Fragment {
 
         cancelButton.setOnClickListener(v -> dialog.dismiss());
         save.setOnClickListener(v -> {
-
+            if(bioEdit.getText().toString().equals("")) {
+                bioEdit.setError("Please enter a bio.");
+                return;
+            }
             String newBio = bioEdit.getText().toString();
             editBio(newBio);
             dialog.dismiss();
