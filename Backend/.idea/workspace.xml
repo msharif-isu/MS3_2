@@ -6,7 +6,10 @@
   <component name="ChangeListManager">
     <list default="true" id="aa247b61-3439-49d8-9853-376a5b7b168c" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/trivia/src/test/java/com/project/trivia/raphaelTests/leaderboardTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/trivia/src/test/java/com/project/trivia/raphaelTests/leaderboardTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/trivia/src/main/java/com/project/trivia/Queryboard/Query.java" beforeDir="false" afterPath="$PROJECT_DIR$/trivia/src/main/java/com/project/trivia/Queryboard/Query.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/trivia/src/main/java/com/project/trivia/Questions/Question.java" beforeDir="false" afterPath="$PROJECT_DIR$/trivia/src/main/java/com/project/trivia/Questions/Question.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/trivia/src/main/java/com/project/trivia/User/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/trivia/src/main/java/com/project/trivia/User/User.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/trivia/src/test/java/com/project/trivia/raphaelTests/leaderboardTest.java" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -34,6 +37,7 @@
     "JUnit.java in trivia.executor": "Coverage",
     "JUnit.leadboardTest.executor": "Run",
     "JUnit.leaderboardTest.executor": "Run",
+    "JUnit.raphaelTest.executor": "Run",
     "JUnit.trivia in trivia.executor": "Run",
     "Maven.trivia [package].executor": "Run",
     "RequestMappingsPanelOrder0": "0",
@@ -57,7 +61,7 @@
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
-  <component name="RunManager">
+  <component name="RunManager" selected="JUnit.java in trivia">
     <configuration name="TriviaApplicationTests" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <extension name="coverage">
         <pattern>
@@ -164,7 +168,7 @@
       <workItem from="1713279067415" duration="3595000" />
       <workItem from="1713757098079" duration="298000" />
       <workItem from="1713757540193" duration="1111000" />
-      <workItem from="1713758675022" duration="3180000" />
+      <workItem from="1713758675022" duration="9981000" />
     </task>
     <servers />
   </component>
@@ -175,6 +179,6 @@
     <SUITE FILE_PATH="coverage/Backend$TriviaApplicationTests.ic" NAME="TriviaApplicationTests Coverage Results" MODIFIED="1712864684884" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
       <FILTER>com.project.trivia.*</FILTER>
     </SUITE>
-    <SUITE FILE_PATH="coverage/Backend$java_in_trivia.ic" NAME="java in trivia Coverage Results" MODIFIED="1713213644221" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
+    <SUITE FILE_PATH="coverage/Backend$java_in_trivia.ic" NAME="java in trivia Coverage Results" MODIFIED="1713768388257" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
   </component>
 </project>

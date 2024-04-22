@@ -1,6 +1,7 @@
 package com.project.trivia.Questions;
 
 import com.project.trivia.MPQuestions.Answer;
+import com.project.trivia.User.User;
 import jakarta.persistence.*;
 import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.Fetch;
@@ -87,6 +88,17 @@ public class Question {
     public boolean getUserCreated() {return userCreated;}
 
     public void setUserCreated(boolean userCreated) {this.userCreated = userCreated;}
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null) {return false;}
+        if (o.getClass() != this.getClass()) {return false;}
+        final Question other = (Question) o;
+        if ((this.question == null) ? (other.question != null) : !this.question.equals(other.question)) {return false;}
+        if ((this.answer == null) ? (other.answer != null) : !this.answer.equals(other.answer)) {return false;}
+        return true;
+
+    }
 
 
 
