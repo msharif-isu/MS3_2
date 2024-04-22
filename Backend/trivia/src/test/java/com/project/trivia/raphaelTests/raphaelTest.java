@@ -18,6 +18,7 @@ import com.project.trivia.Leaderboard.*;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -157,7 +158,8 @@ class raphaelTest {
 
 	@Test
 	void putAnswer() {
-		ResponseEntity<Answer> ansTest = restTemplate.exchange();
+		answerInit = new Answer("Aloks the real one", "Thales of Miletusss", false);
+		//ResponseEntity<Answer> ansTest = restTemplate.exchange("/answer", HttpMethod.PUT, answerInit, Void.class);
 	}
 
 

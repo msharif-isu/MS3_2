@@ -38,6 +38,17 @@ public class AnswerController {
         return success;
     }
 
+    @PutMapping(path = "/answer/{id}")
+    String createAnswer(@PathVariable int id, @RequestBody Answer answer){
+        Answer newAnswer = answerRepository.findById(id);
+        newAnswer.setQuestion(answer.getQuestion());
+        newAnswer.setUserName(answer.getUserName());
+        newAnswer.setAnswer(answer.getAnswer());
+
+        answerRepository.save(newAnswer);
+        return success;
+    }
+
     @PostMapping(path = "/answer/create/add/{quest_id}")
     Answer createAnswerToQuestion(@RequestBody Answer answer, @PathVariable int quest_id) {
         if (answer == null)
