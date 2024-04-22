@@ -42,16 +42,17 @@ public class UserController {
 
     @PostMapping(path = "/users")
     public String createUser(@RequestBody User user){
+        Friends temp = new Friends(user.getUsername());
         if (user == null)
             return failure;
         else if(userRepository.existsByUsername(user.getUsername())){
-            return "Username already exists";
+            return "Username is already taken.";
         }
-        Friends temp = new Friends(user.getUsername());
         userRepository.save(user);
         friendRepo.save(temp);
         return success;
     }
+
 
 
 
