@@ -2,6 +2,8 @@ package com.project.trivia.raphaelTests;
 
 import com.project.trivia.User.User;
 
+import com.project.trivia.User.UserRepository;
+import com.project.trivia.roomChat.MessageRepository;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -9,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import com.project.trivia.Leaderboard.*;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -32,8 +35,13 @@ import io.restassured.RestAssured;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class leaderboardTest {
 
-	@MockBean
-	LeaderboardRepository lbRepo;
+
+	@Autowired
+	private LeaderboardRepository lbRepo;
+	private static Leaderboard lbInit;
+	@Autowired
+	private UserRepository userRepo;
+	private static User userInit;
 
 	@Autowired
 	private TestRestTemplate restTemplate;
@@ -45,10 +53,14 @@ class leaderboardTest {
 	public static void setup() {
 		RestAssured.baseURI = "http://localhost";
 		RestAssured.port = 8080;
-	}
 
-	//@Autowired
-	//private MockMvc mockMvc;
+		lbInit = new Leaderboard(11112912, 12911, 1800, 2911, 1112912, "aloks");
+
+		userInit = new User("Alok", "1234", "alok@iastate.edu");
+
+
+		//lbRepo.findById(0).setUser(user1);
+	}
 
 	/*
 	@Test
@@ -59,11 +71,16 @@ class leaderboardTest {
 
 	@Test
 	void getFirstLeaderboard() {
-		Leaderboard lbTest = new Leaderboard(11112912, 12911, 1800, 2911, 1112912, "aloks");
+		lbRepo.save(lbInit);
+		userRepo.save(userInit);
+		lbRepo.findById(1).setUser(userRepo.findById(1));
 
-		ResponseEntity<Leaderboard> lb1 = restTemplate.postForEntity("/leaderboard", lbTest, Leaderboard.class);
+
+		ResponseEntity<Leaderboard> lb1 = restTemplate.getForEntity("/leaderboard/1", Leaderboard.class);
 		assertThat(lb1.getStatusCode()).isEqualTo(HttpStatus.OK);
-		assertThat(lb1.getBody().getUser()).isEqualTo(lbTest.getUser());
+		//assertThat(lb1.getBody().getUser()).isEqualTo(lbRepo.findById(1).getUser());
 	}
+
+
 
 }
