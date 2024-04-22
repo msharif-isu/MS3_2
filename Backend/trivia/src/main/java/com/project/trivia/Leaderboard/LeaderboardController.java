@@ -50,11 +50,9 @@ public class LeaderboardController {
     }
 
     @PostMapping(path = "/leaderboard")
-    String createLeaderboardUser(@RequestBody Leaderboard lb){
-        if (lb == null)
-            return failure;
+    Leaderboard createLeaderboardUser(@RequestBody Leaderboard lb){
         leaderboardRepository.save(lb);
-        return success;
+        return lb;
     }
 
     @PutMapping(path = "/leaderboard/{id}")

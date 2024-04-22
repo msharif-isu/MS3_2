@@ -1,22 +1,32 @@
 package com.project.trivia.raphaelTests;
 
-import org.hamcrest.MatcherAssert;
+import com.project.trivia.User.User;
+
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import com.project.trivia.Leaderboard.*;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import static org.assertj.core.api.Assertions.assertThat;
+
+import io.restassured.RestAssured;
+import io.restassured.response.Response;
+
+
+import io.restassured.RestAssured;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -26,7 +36,16 @@ class leaderboardTest {
 	LeaderboardRepository lbRepo;
 
 	@Autowired
+	private TestRestTemplate restTemplate;
+
+	@Autowired
 	private LeaderboardController controller;
+
+	@BeforeAll
+	public static void setup() {
+		RestAssured.baseURI = "http://localhost";
+		RestAssured.port = 8080;
+	}
 
 	//@Autowired
 	//private MockMvc mockMvc;
@@ -42,10 +61,9 @@ class leaderboardTest {
 	void getFirstLeaderboard() {
 		Leaderboard lbTest = new Leaderboard(11112912, 12911, 1800, 2911, 1112912, "aloks");
 
-		lbRepo.save(lbTest);
-		Leaderboard lb1 = lbRepo.findById(1);
-
-		//assertThat(lb1).isEqualToComparingFieldByFieldRecursively(lbTest);
+		ResponseEntity<Leaderboard> lb1 = restTemplate.postForEntity("/leaderboard", lbTest, Leaderboard.class);
+		assertThat(lb1.getStatusCode()).isEqualTo(HttpStatus.OK);
+		assertThat(lb1.getBody().getUser()).isEqualTo(lbTest.getUser());
 	}
 
 }

@@ -33,7 +33,7 @@
   &quot;keyToString&quot;: {
     &quot;JUnit.TriviaApplicationTests (1).executor&quot;: &quot;Run&quot;,
     &quot;JUnit.TriviaApplicationTests.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.java in trivia.executor&quot;: &quot;Coverage&quot;,
+    &quot;JUnit.java in trivia.executor&quot;: &quot;Run&quot;,
     &quot;JUnit.leadboardTest.executor&quot;: &quot;Run&quot;,
     &quot;JUnit.leaderboardTest.executor&quot;: &quot;Run&quot;,
     &quot;JUnit.trivia in trivia.executor&quot;: &quot;Run&quot;,
@@ -130,8 +130,8 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="JUnit.TriviaApplicationTests" />
         <item itemvalue="JUnit.java in trivia" />
+        <item itemvalue="JUnit.TriviaApplicationTests" />
         <item itemvalue="JUnit.TriviaApplicationTests.contextLoads" />
         <item itemvalue="JUnit.trivia in trivia" />
       </list>
@@ -163,7 +163,10 @@
       <workItem from="1711511345190" duration="9482000" />
       <workItem from="1712608069212" duration="952000" />
       <workItem from="1713155416905" duration="2497000" />
-      <workItem from="1713279067415" duration="3457000" />
+      <workItem from="1713279067415" duration="3595000" />
+      <workItem from="1713757098079" duration="298000" />
+      <workItem from="1713757540193" duration="1111000" />
+      <workItem from="1713758675022" duration="1224000" />
     </task>
     <servers />
   </component>
