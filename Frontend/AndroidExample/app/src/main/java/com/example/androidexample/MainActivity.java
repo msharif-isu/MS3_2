@@ -25,6 +25,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         SharedPreferences prefs = getSharedPreferences("UserData", MODE_PRIVATE);
         username = prefs.getString("USERNAME", "");
         userId = prefs.getInt("USER_ID", 0);
@@ -37,7 +38,6 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
 
-        super.onCreate(savedInstanceState);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         replaceFragment(new PlayFragment());

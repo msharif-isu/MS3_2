@@ -67,7 +67,6 @@ public class OwaisSystemTest {
         Espresso.closeSoftKeyboard();
         Espresso.onView(withId(R.id.signup_signup_btn)).perform(ViewActions.click());
         try {
-
             Thread.sleep(1000);
         } catch (InterruptedException e) {
             e.printStackTrace();
