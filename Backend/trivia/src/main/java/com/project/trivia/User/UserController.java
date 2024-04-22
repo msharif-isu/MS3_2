@@ -29,7 +29,7 @@ public class UserController {
     private String failure = "{\"message\":\"failure\"}";
 
     @GetMapping(path = "/users")
-    List<User> getAllUser() {
+    public List<User> getAllUser() {
         return userRepository.findAll();
     }
 
