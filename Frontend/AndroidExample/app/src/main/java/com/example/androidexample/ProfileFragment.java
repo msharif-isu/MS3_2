@@ -65,9 +65,9 @@ public class ProfileFragment extends Fragment {
     private ArrayList<UserFriend> friendsList;
     private RecyclerView recyclerView;
     ImageView imgView;
-    ImageButton addFriends, editBioButton, editProfilePictureButton;
+    ImageButton editBioButton, editProfilePictureButton;
 
-    Button signOut;
+    Button signOut, addFriends;
     //Button addFriend = findViewById(R.id.addFriend);
     TextView questionsAnswered, achievementsUnlocked, userBiography, usernameText, friendsListText;
     private String username;
@@ -83,7 +83,7 @@ public class ProfileFragment extends Fragment {
     private ActivityResultLauncher<String> mGetContent;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_profile, container, false);
+        View view = inflater.inflate(R.layout.fragment_profile_new, container, false);
         SharedPreferences prefs = requireActivity().getSharedPreferences("UserData", Context.MODE_PRIVATE);
         username = prefs.getString("USERNAME", "");
         userId = prefs.getInt("USER_ID", 0);
@@ -93,8 +93,8 @@ public class ProfileFragment extends Fragment {
 
         swipeRefreshLayout = view.findViewById(R.id.swipeRefreshLayout);
         addFriends = view.findViewById(R.id.addFriends);
-        questionsAnswered = view.findViewById(R.id.questionsAnswered);
-        achievementsUnlocked = view.findViewById(R.id.AcheivementsUnlocked);
+//        questionsAnswered = view.findViewById(R.id.questionsAnswered);
+//        achievementsUnlocked = view.findViewById(R.id.AcheivementsUnlocked);
         userBiography = view.findViewById(R.id.userBiography);
         usernameText = view.findViewById(R.id.username);
         friendsListText = view.findViewById(R.id.freindsListText);
@@ -107,8 +107,8 @@ public class ProfileFragment extends Fragment {
         editProfilePictureButton = view.findViewById(R.id.editProfilePictureButton);
         getProfilePic();
 
-        questionsAnswered.setText("Add Friends");
-        achievementsUnlocked.setText("");
+//        questionsAnswered.setText("Add Friends");
+//        achievementsUnlocked.setText("");
         getBio();
 //        userBiography.setText(temp);
         usernameText.setText(username);
@@ -256,9 +256,18 @@ public class ProfileFragment extends Fragment {
             if(bioEdit.getText().toString().equals("")) {
                 bioEdit.setError("Please enter a bio.");
                 return;
+            } else if (bioEdit.getText().toString().length() > 100) {
+                bioEdit.setError("Please enter shorter bio. Maximum 100 characters.");
+                return;
             }
             String newBio = bioEdit.getText().toString();
             editBio(newBio);
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            getBio();
             dialog.dismiss();
         });
 
@@ -295,6 +304,7 @@ public class ProfileFragment extends Fragment {
             }
         });
         queue.add(jsonObjectRequest);
+        getBio();
     }
 
     private void addFriendsDialog() {

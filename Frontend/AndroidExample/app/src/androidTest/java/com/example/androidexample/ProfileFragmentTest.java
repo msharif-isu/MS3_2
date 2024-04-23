@@ -45,6 +45,8 @@ public class ProfileFragmentTest {
     private static final int VALID_USER_ID = 1;
     private static final String VALID_BIO = "This is a valid bio";
 
+    private static final String NEW_BIO = "I am the REAL Alok. No other Alok will ever come close to me. I am the one true Alok.";
+
     private static final String FRIEND_NAME = "aloks1";
 
     @Test
@@ -79,6 +81,31 @@ public class ProfileFragmentTest {
     }
 
     @Test
+    public void testReEditBio() {
+        ActivityScenario<MainActivity> scenario = activityScenarioRule.getScenario();
+        scenario.onActivity(activity -> {
+            Context context = activity.getApplicationContext();
+            SharedPreferences prefs = context.getSharedPreferences("UserData", Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = prefs.edit();
+            editor.putString("USERNAME", VALID_USERNAME);
+            editor.putInt("USER_ID", VALID_USER_ID);
+            editor.apply();
+        });
+        Espresso.onView(withId(R.id.bottomNavigationView)).perform(ViewActions.click());
+        Espresso.onView(withId(R.id.profile)).perform(ViewActions.click());
+        Espresso.onView(withId(R.id.editBioButton)).perform(ViewActions.click());
+        Espresso.onView(withId(R.id.bioEdit)).perform(ViewActions.typeText(NEW_BIO));
+        Espresso.closeSoftKeyboard();
+        Espresso.onView(withId(R.id.save)).perform(ViewActions.click());
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        Espresso.onView(withId(R.id.userBiography)).check(ViewAssertions.matches(withText(NEW_BIO)));
+    }
+
+    @Test
     public void testEmptyBio() {
         ActivityScenario<MainActivity> scenario = activityScenarioRule.getScenario();
         scenario.onActivity(activity -> {
@@ -101,6 +128,56 @@ public class ProfileFragmentTest {
             e.printStackTrace();
         }
         Espresso.onView(withId(R.id.bioEdit)).check(matches(hasErrorText("Please enter a bio.")));
+    }
+
+    @Test
+    public void testMaxLengthBio() {
+        ActivityScenario<MainActivity> scenario = activityScenarioRule.getScenario();
+        scenario.onActivity(activity -> {
+            Context context = activity.getApplicationContext();
+            SharedPreferences prefs = context.getSharedPreferences("UserData", Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = prefs.edit();
+            editor.putString("USERNAME", VALID_USERNAME);
+            editor.putInt("USER_ID", VALID_USER_ID);
+            editor.apply();
+        });
+        Espresso.onView(withId(R.id.bottomNavigationView)).perform(ViewActions.click());
+        Espresso.onView(withId(R.id.profile)).perform(ViewActions.click());
+        Espresso.onView(withId(R.id.editBioButton)).perform(ViewActions.click());
+        Espresso.onView(withId(R.id.bioEdit)).perform(ViewActions.typeText("I am the only real Alok. No other Alok will ever come close to the level of real that I have become."));
+        Espresso.closeSoftKeyboard();
+        Espresso.onView(withId(R.id.save)).perform(ViewActions.click());
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        Espresso.onView(withId(R.id.userBiography)).check(ViewAssertions.matches(withText("I am the only real Alok. No other Alok will ever come close to the level of real that I have become.")));
+    }
+
+    @Test
+    public void testTooLongBio() {
+        ActivityScenario<MainActivity> scenario = activityScenarioRule.getScenario();
+        scenario.onActivity(activity -> {
+            Context context = activity.getApplicationContext();
+            SharedPreferences prefs = context.getSharedPreferences("UserData", Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = prefs.edit();
+            editor.putString("USERNAME", VALID_USERNAME);
+            editor.putInt("USER_ID", VALID_USER_ID);
+            editor.apply();
+        });
+        Espresso.onView(withId(R.id.bottomNavigationView)).perform(ViewActions.click());
+        Espresso.onView(withId(R.id.profile)).perform(ViewActions.click());
+        Espresso.onView(withId(R.id.editBioButton)).perform(ViewActions.click());
+        Espresso.onView(withId(R.id.bioEdit)).perform(ViewActions.typeText("I am the only real Alok. No other Alok will ever come close to the level of real that I have achieved"));
+        Espresso.closeSoftKeyboard();
+        Espresso.onView(withId(R.id.save)).perform(ViewActions.click());
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        Espresso.onView(withId(R.id.bioEdit)).check(matches(hasErrorText("Please enter shorter bio. Maximum 100 characters.")));
     }
 
 //    @Test

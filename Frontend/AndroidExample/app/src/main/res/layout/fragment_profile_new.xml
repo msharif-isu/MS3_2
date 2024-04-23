@@ -10,114 +10,32 @@
 
     <!-- TODO: Update blank fragment layout -->
 
+
+    <ImageView
+        android:id="@+id/userInfoBox"
+        android:layout_width="0dp"
+        android:layout_height="220dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="24dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/playerlist_box" />
+
     <ImageView
         android:id="@+id/imgView"
-        android:layout_width="200dp"
-        android:layout_height="200dp"
-        android:layout_gravity="center"
-        android:scaleType="fitCenter"
-        app:layout_constraintBottom_toTopOf="@+id/username"
-        app:layout_constraintEnd_toStartOf="@+id/questionsAnswered"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"></ImageView>
-
-    <TextView
-        android:id="@+id/questionsAnswered"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="TextView"
-        android:textSize="20dp"
-        app:layout_constraintBottom_toBottomOf="@+id/imgView"
-        app:layout_constraintEnd_toStartOf="@+id/AcheivementsUnlocked"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/imgView" />
-
-    <TextView
-        android:id="@+id/AcheivementsUnlocked"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="TextView"
-        android:textSize="20dp"
-        app:layout_constraintBottom_toBottomOf="@+id/questionsAnswered"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/questionsAnswered" />
-
-    <ImageButton
-        android:id="@+id/addFriends"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:background="#00FFFFFF"
-        app:layout_constraintBottom_toTopOf="@+id/questionsAnswered"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/imgView"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@android:drawable/ic_menu_add" />
-
-    <TextView
-        android:id="@+id/userBiography"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="TextView"
-        android:textSize="20dp"
-        app:layout_constraintEnd_toEndOf="@+id/addFriends"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/username" />
-
-
-    <TextView
-        android:id="@+id/username"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="-16dp"
-        android:text="TextView"
-        android:textSize="20dp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="@+id/imgView"
-        app:layout_constraintStart_toStartOf="@+id/imgView"
-        app:layout_constraintTop_toBottomOf="@+id/imgView" />
-
-    <TextView
-        android:id="@+id/freindsListText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="20dp"
-        android:text="Friends:"
-        android:textSize="20dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/userBiography" />
-
-    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-        android:id="@+id/swipeRefreshLayout"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        app:layout_constraintBottom_toTopOf="@+id/logoutImageButton"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/freindsListText">
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/friendList"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
-    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
-
-    <ImageButton
-        android:id="@+id/editBioButton"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:background="#00FFFFFF"
-        android:scaleX="1"
-        app:layout_constraintBottom_toTopOf="@+id/freindsListText"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/userBiography"
-        app:layout_constraintTop_toBottomOf="@+id/imgView"
-        app:srcCompat="@android:drawable/ic_menu_edit" />
+        android:layout_gravity="center"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginBottom="8dp"
+        android:scaleType="fitCenter"
+        app:layout_constraintBottom_toTopOf="@+id/login_btn"
+        app:layout_constraintEnd_toEndOf="@+id/userInfoBox"
+        app:layout_constraintTop_toTopOf="@+id/userInfoBox"></ImageView>
 
     <ImageButton
         android:id="@+id/editProfilePictureButton"
@@ -129,41 +47,109 @@
         app:layout_constraintEnd_toEndOf="@+id/imgView"
         app:srcCompat="@android:drawable/ic_menu_edit" />
 
+    <TextView
+        android:id="@+id/username"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="24dp"
+        android:fontFamily="@font/aileron_bold"
+        android:text="Username"
+        android:textColor="@color/black"
+        android:textSize="34dp"
+        app:layout_constraintStart_toStartOf="@+id/userInfoBox"
+        app:layout_constraintTop_toTopOf="@+id/userInfoBox" />
+
     <ImageButton
-        android:id="@+id/logoutImageButton"
-        style="?android:attr/borderlessButtonStyle"
-        android:layout_width="320dp"
-        android:layout_height="80dp"
-        android:contentDescription="logout"
+        android:id="@+id/editBioButton"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:background="#00FFFFFF"
+        app:layout_constraintBottom_toBottomOf="@+id/scrollView3"
+        app:layout_constraintEnd_toStartOf="@+id/addFriends"
+        app:layout_constraintTop_toBottomOf="@+id/username"
+        app:srcCompat="@android:drawable/ic_menu_edit" />
+
+    <ScrollView
+        android:id="@+id/scrollView3"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+
+        android:layout_marginTop="24dp"
+        android:layout_marginBottom="24dp"
+        app:layout_constraintBottom_toBottomOf="@+id/userInfoBox"
+        app:layout_constraintEnd_toStartOf="@+id/editBioButton"
+        app:layout_constraintStart_toStartOf="@+id/username"
+        app:layout_constraintTop_toBottomOf="@+id/username">
+
+        <TextView
+            android:id="@+id/userBiography"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/aileron_semibold"
+            android:text="User Biography"
+            android:textAlignment="viewStart"
+            android:textColor="@color/black"
+            android:textSize="18sp" />
+
+    </ScrollView>
+
+    <TextView
+        android:id="@+id/freindsListText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:fontFamily="@font/aileron_bold"
+        android:text="Friends:"
+        android:textColor="@color/black"
+        android:textSize="24dp"
+        app:layout_constraintStart_toStartOf="@+id/userInfoBox"
+        app:layout_constraintTop_toBottomOf="@+id/userInfoBox" />
+
+
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipeRefreshLayout"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="24dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:srcCompat="@drawable/loginbox" />
+        app:layout_constraintTop_toBottomOf="@+id/freindsListText">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/friendList"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        </androidx.recyclerview.widget.RecyclerView>
+
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
 
     <Button
         android:id="@+id/login_btn"
-        style="?android:attr/borderlessButtonStyle"
         android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:fontFamily="@font/aileron_bold"
-        android:text="Sign out"
-        android:textColor="#ffffff"
-        android:textSize="16sp"
-        app:layout_constraintBottom_toBottomOf="@+id/logoutImageButton"
-        app:layout_constraintEnd_toEndOf="@+id/logoutImageButton"
-        app:layout_constraintStart_toStartOf="@+id/logoutImageButton"
-        app:layout_constraintTop_toTopOf="@+id/logoutImageButton" />
+        android:layout_height="wrap_content"
+        android:backgroundTint="#6B3D99"
+        android:text="Sign Out"
+        app:layout_constraintBottom_toTopOf="@+id/addFriends"
+        app:layout_constraintEnd_toEndOf="@+id/addFriends"
+        app:layout_constraintStart_toStartOf="@+id/addFriends" />
 
-    <ProgressBar
-        android:id="@+id/progressBar"
+    <Button
+        android:id="@+id/addFriends"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:visibility="invisible"
-        app:layout_constraintBottom_toBottomOf="@+id/imgView"
+        android:layout_marginBottom="8dp"
+        android:backgroundTint="#6B3D99"
+        android:text="Add Friends"
+        app:layout_constraintBottom_toBottomOf="@+id/userInfoBox"
         app:layout_constraintEnd_toEndOf="@+id/imgView"
-        app:layout_constraintStart_toStartOf="@+id/imgView"
-        app:layout_constraintTop_toTopOf="@+id/imgView" />
+        app:layout_constraintStart_toStartOf="@+id/imgView" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

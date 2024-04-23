@@ -38,7 +38,7 @@
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="@+id/profilePic"
         app:layout_constraintEnd_toStartOf="@+id/removeFriend"
-        app:layout_constraintStart_toEndOf="@+id/profilePic"
+        app:layout_constraintStart_toStartOf="@+id/friendUsername"
         app:layout_constraintTop_toBottomOf="@+id/friendUsername"
         app:layout_constraintVertical_bias="0.0" />
 
@@ -46,6 +46,7 @@
         android:id="@+id/friendUsername"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
         android:fontFamily="@font/aileron_bold"
         android:text="TextView"
         android:textColor="@color/black"
