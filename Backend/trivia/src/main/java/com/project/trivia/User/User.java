@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.project.trivia.FriendsList.Friends;
 import com.project.trivia.Leaderboard.Leaderboard;
 import com.project.trivia.Lobby.Lobby;
+import com.project.trivia.UserStats.UserStats;
 import jakarta.persistence.*;
 
 
@@ -36,6 +37,10 @@ public class User {
     @JoinColumn(name="lobby_id")
     @JsonIgnore
     private Lobby lobby;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "statistics_id", referencedColumnName = "id")
+    private UserStats stats;
 
 
     public User(String username, String password, String email) {

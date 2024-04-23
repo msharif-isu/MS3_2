@@ -1,23 +1,25 @@
 package com.project.trivia.UserStats;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.project.trivia.User.User;
+import jakarta.persistence.*;
 
 @Entity
-public class Statstics {
+public class UserStats {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    private int totalAnswered;
+    private double totalAnswered;
 
-    private int totalCorrect;
+    private double totalCorrect;
 
-    private int totalIncorrect;
+    private double totalIncorrect;
 
     private int winStreak;
+
+    private double wins;
+
+    private double losses;
 
     private int questionsSumbitted;
 
@@ -25,7 +27,19 @@ public class Statstics {
 
     private int gamesPlayed;
 
+    @OneToOne(mappedBy = "stats")
+    private User user;
 
+    public UserStats() {
+        totalAnswered = 0;
+        totalCorrect = 0;
+        totalIncorrect = 0;
+        winStreak = 0;
+        wins = 0;
+        losses = 0;
+        questionsSumbitted = 0;
+        gamesPlayed = 0;
+    }
 
     public int getId() {
         return id;
@@ -35,7 +49,7 @@ public class Statstics {
         this.id = id;
     }
 
-    public int getTotalAnswered() {
+    public double getTotalAnswered() {
         return totalAnswered;
     }
 
@@ -43,7 +57,7 @@ public class Statstics {
         this.totalAnswered = totalAnswered;
     }
 
-    public int getTotalCorrect() {
+    public double getTotalCorrect() {
         return totalCorrect;
     }
 
@@ -51,7 +65,7 @@ public class Statstics {
         this.totalCorrect = totalCorrect;
     }
 
-    public int getTotalIncorrect() {
+    public double getTotalIncorrect() {
         return totalIncorrect;
     }
 
@@ -89,5 +103,21 @@ public class Statstics {
 
     public void setGamesPlayed(int gamesPlayed) {
         this.gamesPlayed = gamesPlayed;
+    }
+
+    public double getLosses() {
+        return losses;
+    }
+
+    public void setLosses(double losses) {
+        this.losses = losses;
+    }
+
+    public double getWins() {
+        return wins;
+    }
+
+    public void setWins(double wins) {
+        this.wins = wins;
     }
 }

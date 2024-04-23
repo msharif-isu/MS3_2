@@ -3,6 +3,8 @@ package com.project.trivia.User;
 import com.project.trivia.FriendsList.Friends;
 import com.project.trivia.FriendsList.FriendsRepository;
 import com.project.trivia.Leaderboard.Leaderboard;
+import com.project.trivia.UserStats.UserStats;
+import com.project.trivia.UserStats.UserStatsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -22,6 +24,9 @@ public class UserController {
 
     @Autowired
     FriendsRepository friendRepo;
+
+    @Autowired
+    UserStatsRepository statsRepo;
 
     private static String directory = System.getProperty("user.dir");
 
