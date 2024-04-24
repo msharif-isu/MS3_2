@@ -49,14 +49,17 @@
 
     <TextView
         android:id="@+id/username"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
         android:layout_marginTop="24dp"
+        android:maxLines="1"
         android:fontFamily="@font/aileron_bold"
         android:text="Username"
         android:textColor="@color/black"
         android:textSize="34dp"
+        app:autoSizeTextType="uniform"
+        app:layout_constraintEnd_toStartOf="@+id/imgView"
         app:layout_constraintStart_toStartOf="@+id/userInfoBox"
         app:layout_constraintTop_toTopOf="@+id/userInfoBox" />
 

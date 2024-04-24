@@ -24,8 +24,8 @@ public class OwaisSystemTest {
 
     @Rule
     public ActivityScenarioRule<SignupActivity> activityScenarioRule = new ActivityScenarioRule<>(SignupActivity.class);
-    private static final String VALID_EMAIL = "alok@alok.com";
-    private static final String VALID_USERNAME = "alok2";
+    private static final String VALID_EMAIL = "mahdi@mahdi.com";
+    private static final String VALID_USERNAME = "Mahdi";
     private static final String VALID_PASSWORD = "password";
     private static final String INVALID_EMAIL = "invalid_email";
     private static final String INVALID_PASSWORD = "password1";
