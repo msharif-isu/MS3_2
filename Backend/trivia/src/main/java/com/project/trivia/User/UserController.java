@@ -4,9 +4,11 @@ import com.project.trivia.FriendsList.Friends;
 import com.project.trivia.FriendsList.FriendsRepository;
 import com.project.trivia.Leaderboard.Leaderboard;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.io.File;
 import java.io.IOException;
@@ -39,11 +41,11 @@ public class UserController {
     }
 
     @PostMapping(path = "/users")
-    public String createUser(@RequestBody User user){
-        Friends temp = new Friends(user.getUsername());
-        if (user == null)
+    public String createUser(@RequestBody User user) {
+        if (user.getUsername() == null)
             return failure;
-        else if(userRepository.existsByUsername(user.getUsername())){
+        Friends temp = new Friends(user.getUsername());
+        if(userRepository.existsByUsername(user.getUsername())){
             return failure;
         }
         userRepository.save(user);
@@ -56,6 +58,9 @@ public class UserController {
         User user = userRepository.findById(id);
         if(user == null)
             return null;
+        if(request.getUsername() == null || userRepository.existsByUsername(request.getUsername())){
+            throw new ResponseStatusException(HttpStatus.I_AM_A_TEAPOT, "Username already Taken");
+        }
         userRepository.save(request);
         return userRepository.findById(id);
     }
