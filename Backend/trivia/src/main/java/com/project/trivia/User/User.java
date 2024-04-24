@@ -7,6 +7,7 @@ import com.project.trivia.Lobby.Lobby;
 import jakarta.persistence.*;
 
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -44,10 +45,15 @@ public class User {
         this.email = email;
         bio = "";
         points = 0;
+        friends = new ArrayList<>();
+        lobby = null;
     }
 
     public User() {
-
+        bio = "";
+        points = 0;
+        friends = new ArrayList<>();
+        lobby = null;
     }
 
     public int getId() {

@@ -1,6 +1,7 @@
 package com.project.trivia;
 
 
+import com.project.trivia.User.User;
 import com.project.trivia.User.UserRepository;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
@@ -18,6 +19,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import static io.restassured.RestAssured.when;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 
@@ -86,6 +88,63 @@ public class AdamSystemTest {
 
         int statusCode = response.getStatusCode();
         assertEquals(200, statusCode);
+
+        String returnString = response.getBody().asString();
+        assertEquals("{\"message\":\"success\"}", returnString);
+        assertEquals(userRepo.findByUsername("TestAlok").getPoints(), 0);
+
+
+        User testUser = userRepo.findByUsername("TestAlok");
+
+        response = RestAssured.given().
+                contentType(ContentType.JSON).
+                body(testUser).
+                when().
+                post("/users");
+
+        statusCode = response.getStatusCode();
+        assertEquals(200, statusCode);
+
+        returnString = response.getBody().asString();
+        assertEquals("{\"message\":\"failure\"}", returnString);
+
+        userRepo.deleteById(userRepo.findByUsername("TestAlok").getId());
+        assertNull(userRepo.findByUsername("TestAlok"));
+    }
+
+    @Test
+    public void updatingUserBioTest(){
+        String user = "{" +
+                "\"username\":\"TestAlok\", " +
+                "\"password\":\"password456\", " +
+                "\"email\":\"aloks@iastate.edu\"" +
+                "}";
+        Response response = RestAssured.given().
+                contentType(ContentType.JSON).
+                body(user).
+                when().
+                post("/users");
+
+        int statusCode = response.getStatusCode();
+        assertEquals(200, statusCode);
+
+        response = RestAssured.given().
+                put("/editBio/TestAlok/this is a test bio");
+
+        statusCode = response.getStatusCode();
+        assertEquals(200, statusCode);
+
+        assertEquals("this is a test bio", userRepo.findByUsername("TestAlok").getBio());
+
+        userRepo.deleteById(userRepo.findByUsername("TestAlok").getId());
+        assertNull(userRepo.findByUsername("TestAlok"));
+
+        response = RestAssured.given().
+                put("/editBio/TestAlok/this is a test bio");
+
+        statusCode = response.getStatusCode();
+        assertEquals(200, statusCode);
+        assertNull(userRepo.findByUsername("TestAlok"));
 
     }
 
