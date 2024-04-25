@@ -90,6 +90,14 @@ public class LobbiesActivity extends AppCompatActivity implements WebSocketListe
         msgTv = findViewById(R.id.textView9);
         webSocketManager = new WebSocketManager();
 
+        adapter = new LobbyPlayerAdapter(getApplicationContext(), friendsList, new LobbyPlayerAdapter.OnDeleteClickListener() {
+            @Override
+            public void onDeleteClick(int position) {
+                UserFriend friend = friendsList.get(position);
+                String friendName = friend.getUsername();
+//                getUserIdByUsername(friendName, roomId);
+            }
+        });
 
         refreshLobbyList();
 
@@ -163,6 +171,7 @@ public class LobbiesActivity extends AppCompatActivity implements WebSocketListe
                 joinLobby(roomId, userId);
                 getLobbyDetails(roomId);
                 WebSocketManager.getInstance().sendMessage("lobbyStart!");
+                WebSocketManager.getInstance().closeWebSocket();
                 beginGame(roomId);
             } else {
                 Toast.makeText(LobbiesActivity.this, "You must join a lobby first", Toast.LENGTH_SHORT).show();
@@ -281,6 +290,7 @@ public class LobbiesActivity extends AppCompatActivity implements WebSocketListe
                         try {
                             friendsList.clear();
                             Lobby lobby = parseLobbyResponse(response);
+
                             // Parse players from the JSON response
                             JSONArray playersArray = response.getJSONArray("players");
                             List<UserFriend> players = new ArrayList<>();
@@ -293,10 +303,13 @@ public class LobbiesActivity extends AppCompatActivity implements WebSocketListe
                                 friendsList.add(new UserFriend(username, bio, null));
                                 players.add(player);
                             }
-//                            String host = playersArray.getString("host");
+
                             // Set players to the lobby object
                             lobby.setPlayers(players);
-                            adapter.notifyDataSetChanged();
+                            adapter.notifyDataSetChanged(); // Update RecyclerView
+
+                            // Populate spinner after data is fetched
+                            getUsernamesInLobby(adapter); // This also updates the spinner adapter
                         } catch (JSONException e) {
                             e.printStackTrace();
                             Toast.makeText(LobbiesActivity.this, "Failed to parse lobby details", Toast.LENGTH_SHORT).show();
@@ -304,7 +317,6 @@ public class LobbiesActivity extends AppCompatActivity implements WebSocketListe
                         Log.d("LobbiesActivity", "Lobby details response: " + response.toString());
                     }
                 },
-
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
@@ -312,7 +324,6 @@ public class LobbiesActivity extends AppCompatActivity implements WebSocketListe
                         Log.e("LobbiesActivity", "Error getting lobby details: " + error.toString());
                     }
                 });
-
         Volley.newRequestQueue(this).add(request);
     }
 
