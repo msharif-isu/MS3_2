@@ -1,6 +1,7 @@
 package com.example.androidexample;
 
 import androidx.test.espresso.Espresso;
+import static androidx.test.espresso.Espresso.onView;
 import androidx.test.espresso.action.ViewActions;
 import androidx.test.espresso.assertion.ViewAssertions;
 import androidx.test.espresso.matcher.ViewMatchers;
@@ -30,10 +31,10 @@ public class LoginActivityTest {
 
     @Test
     public void testValidLogin() {
-        Espresso.onView(withId(R.id.login_username_edt)).perform(ViewActions.typeText(VALID_USERNAME));
-        Espresso.onView(withId(R.id.login_password_edt)).perform(ViewActions.typeText(VALID_PASSWORD));
+        onView(withId(R.id.login_username_edt)).perform(ViewActions.typeText(VALID_USERNAME));
+        onView(withId(R.id.login_password_edt)).perform(ViewActions.typeText(VALID_PASSWORD));
         Espresso.closeSoftKeyboard();
-        Espresso.onView(withId(R.id.login_btn)).perform(ViewActions.click());
+        onView(withId(R.id.login_btn)).perform(ViewActions.click());
         try {
             Thread.sleep(1000);
         } catch (InterruptedException e) {
@@ -44,31 +45,31 @@ public class LoginActivityTest {
 
     @Test
     public void testInvalidLogin() {
-        Espresso.onView(withId(R.id.login_username_edt)).perform(ViewActions.typeText(INVALID_USERNAME));
-        Espresso.onView(withId(R.id.login_password_edt)).perform(ViewActions.typeText(INVALID_PASSWORD));
+        onView(withId(R.id.login_username_edt)).perform(ViewActions.typeText(INVALID_USERNAME));
+        onView(withId(R.id.login_password_edt)).perform(ViewActions.typeText(INVALID_PASSWORD));
         Espresso.closeSoftKeyboard();
-        Espresso.onView(withId(R.id.login_btn)).perform(ViewActions.click());
+        onView(withId(R.id.login_btn)).perform(ViewActions.click());
         try {
             Thread.sleep(1000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        Espresso.onView(withId(R.id.login_username_edt)).check(matches(hasErrorText("Invalid username or password.")));
+        onView(withId(R.id.login_username_edt)).check(matches(hasErrorText("Invalid username or password.")));
     }
 
     @Test
     public void testEmptyUsername() {
-        Espresso.onView(withId(R.id.login_password_edt)).perform(ViewActions.typeText(VALID_PASSWORD));
+        onView(withId(R.id.login_password_edt)).perform(ViewActions.typeText(VALID_PASSWORD));
         Espresso.closeSoftKeyboard();
-        Espresso.onView(withId(R.id.login_btn)).perform(ViewActions.click());
-        Espresso.onView(withId(R.id.login_username_edt)).check(matches(hasErrorText("Please type a username.")));
+        onView(withId(R.id.login_btn)).perform(ViewActions.click());
+        onView(withId(R.id.login_username_edt)).check(matches(hasErrorText("Please type a username.")));
     }
 
     @Test
     public void testEmptyPassword() {
-        Espresso.onView(withId(R.id.login_username_edt)).perform(ViewActions.typeText(VALID_USERNAME));
+        onView(withId(R.id.login_username_edt)).perform(ViewActions.typeText(VALID_USERNAME));
         Espresso.closeSoftKeyboard();
-        Espresso.onView(withId(R.id.login_btn)).perform(ViewActions.click());
-        Espresso.onView(withId(R.id.login_password_edt)).check(matches(hasErrorText("Please type a password.")));
+        onView(withId(R.id.login_btn)).perform(ViewActions.click());
+        onView(withId(R.id.login_password_edt)).check(matches(hasErrorText("Please type a password.")));
     }
 }
