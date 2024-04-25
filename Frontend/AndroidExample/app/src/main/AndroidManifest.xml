@@ -42,10 +42,6 @@
             android:name=".SinglePlayerQuestionActivity"
             android:exported="false" />
         <activity
-            android:name=".UserQuestionActivity"
-            android:exported="false">
-        </activity>
-        <activity
             android:name=".LoginActivity"
             android:exported="false" />
         <activity
@@ -59,9 +55,6 @@
             android:exported="false" />
         <activity
             android:name=".LobbiesActivity"
-            android:exported="false" />
-        <activity
-            android:name=".QueryFragment"
             android:exported="false" />
         <activity
             android:name=".JeopardyActivity"
