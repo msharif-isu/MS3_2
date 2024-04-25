@@ -5,7 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="aa247b61-3439-49d8-9853-376a5b7b168c" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/trivia/src/main/java/com/project/trivia/MPQuestions/AnswerController.java" beforeDir="false" afterPath="$PROJECT_DIR$/trivia/src/main/java/com/project/trivia/MPQuestions/AnswerController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/trivia/src/main/java/com/project/trivia/Questions/Question.java" beforeDir="false" afterPath="$PROJECT_DIR$/trivia/src/main/java/com/project/trivia/Questions/Question.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/trivia/src/test/java/com/project/trivia/raphaelTests/raphaelTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/trivia/src/test/java/com/project/trivia/raphaelTests/raphaelTest.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -27,38 +29,38 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "JUnit.TriviaApplicationTests (1).executor": "Run",
-    "JUnit.TriviaApplicationTests.executor": "Run",
-    "JUnit.java in trivia.executor": "Coverage",
-    "JUnit.leadboardTest.executor": "Run",
-    "JUnit.leaderboardTest.executor": "Run",
-    "JUnit.raphaelTest.executor": "Run",
-    "JUnit.trivia in trivia.executor": "Run",
-    "Maven.trivia [package].executor": "Run",
-    "RequestMappingsPanelOrder0": "0",
-    "RequestMappingsPanelOrder1": "1",
-    "RequestMappingsPanelWidth0": "75",
-    "RequestMappingsPanelWidth1": "75",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "Spring Boot.TriviaApplication.executor": "Run",
-    "git-widget-placeholder": "39-raphael-test-cases",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/rapra/ms312/ms3_2/Experiment/raphaelb/ex2/SB3/tutorials-springboot_unit2_2_onetomany",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "project.structure.last.edited": "Modules",
-    "project.structure.proportion": "0.15",
-    "project.structure.side.proportion": "0.2",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;JUnit.TriviaApplicationTests (1).executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.TriviaApplicationTests.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.java in trivia.executor&quot;: &quot;Debug&quot;,
+    &quot;JUnit.leadboardTest.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.leaderboardTest.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.raphaelTest.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.trivia in trivia.executor&quot;: &quot;Run&quot;,
+    &quot;Maven.trivia [package].executor&quot;: &quot;Run&quot;,
+    &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
+    &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
+    &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
+    &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;Spring Boot.TriviaApplication.executor&quot;: &quot;Run&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;39-raphael-test-cases&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/rapra/ms312/ms3_2/Experiment/raphaelb/ex2/SB3/tutorials-springboot_unit2_2_onetomany&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
-  <component name="RunManager" selected="JUnit.java in trivia">
+}</component>
+  <component name="RunManager">
     <configuration name="TriviaApplicationTests" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <extension name="coverage">
         <pattern>
@@ -165,7 +167,8 @@
       <workItem from="1713279067415" duration="3595000" />
       <workItem from="1713757098079" duration="298000" />
       <workItem from="1713757540193" duration="1111000" />
-      <workItem from="1713758675022" duration="10611000" />
+      <workItem from="1713758675022" duration="10649000" />
+      <workItem from="1714018060978" duration="2649000" />
     </task>
     <servers />
   </component>

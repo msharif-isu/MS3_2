@@ -97,7 +97,6 @@ public class Question {
         if ((this.question == null) ? (other.question != null) : !this.question.equals(other.question)) {return false;}
         if ((this.answer == null) ? (other.answer != null) : !this.answer.equals(other.answer)) {return false;}
         return true;
-
     }
 
 

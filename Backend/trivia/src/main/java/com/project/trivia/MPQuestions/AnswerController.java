@@ -31,11 +31,9 @@ public class AnswerController {
     }
 
     @PostMapping(path = "/answer")
-    String createAnswer(@RequestBody Answer answer){
-        if (answer == null)
-            return failure;
+    Answer createAnswer(@RequestBody Answer answer){
         answerRepository.save(answer);
-        return success;
+        return answer;
     }
 
     @PutMapping(path = "/answer/{id}")

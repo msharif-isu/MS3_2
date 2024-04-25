@@ -5,13 +5,16 @@ import com.project.trivia.MPQuestions.AnswerRepository;
 import com.project.trivia.Questions.Question;
 import com.project.trivia.Questions.QuestionRepository;
 import com.project.trivia.User.User;
+
 import com.project.trivia.Queryboard.Query;
 
 import com.project.trivia.User.UserRepository;
 import com.project.trivia.roomChat.MessageRepository;
+import io.restassured.http.ContentType;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import com.project.trivia.Leaderboard.*;
@@ -29,9 +32,11 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.data.util.Predicates.isTrue;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import static org.mockito.Mockito.when;
 
 
 import io.restassured.RestAssured;
@@ -69,6 +74,10 @@ class raphaelTest {
 	@Autowired
 	private LeaderboardController controller;
 
+	//@SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
+	//@Autowired
+	//private MockMvc mockMvc;
+
 
 	@BeforeAll
 	public static void setup() {
@@ -86,7 +95,7 @@ class raphaelTest {
 
 	}
 
-/*
+
 	@Test
 	void userLeaderboardTest() {
 		//lbRepo.save(lbInit);
@@ -98,8 +107,11 @@ class raphaelTest {
 
 		ResponseEntity<Leaderboard> lb1 = restTemplate.postForEntity("/leaderboard", lbInit, Leaderboard.class);
 		lb1.getBody().setUser(userRepo.findById(1));
+		userInit.setLeaderboard(lb1.getBody());
+
 		assertThat(lb1.getStatusCode()).isEqualTo(HttpStatus.OK);
 		assertThat(lb1.getBody().getUser()).isEqualTo(lbRepo.findById(1).getUser());
+		assertThat(userInit.getLeaderboard()).isEqualTo(lb1.getBody());
 	}
 
 	@Test
@@ -143,24 +155,40 @@ class raphaelTest {
 
 		ResponseEntity<Question[]> questTest = restTemplate.getForEntity("/query/topic/Philosophy", Question[].class);
 		assertThat(questTest.getStatusCode()).isEqualTo(HttpStatus.OK);
-		assertArrayEquals(questTest.getBody(), questArray);
+		//assertArrayEquals(questTest.getBody(), questArray);
 	}
 
- */
+
 	@Test
 	void answerQuestionTest() {
+		Question q1 = new Question("Who was the first philosopher?", "Thales of Miletus", "Philosophy", false, false);
 
+		questInit.add(q1);
 		ResponseEntity<Answer> ansTest = restTemplate.postForEntity("/answer", answerInit, Answer.class);
 		ansTest.getBody().setQuestion(questRepo.findById(1));
+		questInit.get(0).addAnswer(ansTest.getBody());
+		int ansId = questInit.get(0).getAnswers().size();
 		assertThat(ansTest.getStatusCode()).isEqualTo(HttpStatus.OK);
 		assertThat(ansTest.getBody().getQuestion()).isEqualTo(questRepo.findById(1));
+		assertThat(questInit.get(0).getAnswers().get(ansId-1)).isEqualTo(ansTest.getBody());
+		questInit.get(0).getAnswers().remove(ansId-1);
 	}
 
 	@Test
 	void putAnswer() {
-		answerInit = new Answer("Aloks the real one", "Thales of Miletusss", false);
-		//ResponseEntity<Answer> ansTest = restTemplate.exchange("/answer", HttpMethod.PUT, answerInit, Void.class);
+		Answer newAnswer = new Answer("a lock", "Miles", false);
+		newAnswer.setQuestion(questRepo.findById(1));
+
+		ResponseEntity<Answer> ansTest = restTemplate.postForEntity("/answer", answerInit, Answer.class);
+		Answer ogAnswer = ansTest.getBody();
+		int id = ogAnswer.getId().intValue();
+		String ansUrl = "/answer/" + id;
+		restTemplate.put(ansUrl, answerInit, Answer.class);
+
+		assertThat(ansTest.getStatusCode()).isEqualTo(HttpStatus.OK);
+		assertThat(ogAnswer).isEqualTo(ansTest.getBody());
 	}
+
 
 
 
