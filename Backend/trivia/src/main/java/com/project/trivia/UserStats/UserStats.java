@@ -53,7 +53,7 @@ public class UserStats {
         return totalAnswered;
     }
 
-    public void setTotalAnswered(int totalAnswered) {
+    public void setTotalAnswered(double totalAnswered) {
         this.totalAnswered = totalAnswered;
     }
 
@@ -61,7 +61,7 @@ public class UserStats {
         return totalCorrect;
     }
 
-    public void setTotalCorrect(int totalCorrect) {
+    public void setTotalCorrect(double totalCorrect) {
         this.totalCorrect = totalCorrect;
     }
 
@@ -69,7 +69,7 @@ public class UserStats {
         return totalIncorrect;
     }
 
-    public void setTotalIncorrect(int totalIncorrect) {
+    public void setTotalIncorrect(double totalIncorrect) {
         this.totalIncorrect = totalIncorrect;
     }
 

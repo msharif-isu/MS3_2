@@ -10,4 +10,5 @@ public interface UserStatsRepository extends JpaRepository<UserStats, Long> {
 
     @Transactional
     void deleteById(int id);
+
 }

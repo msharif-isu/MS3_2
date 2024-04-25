@@ -38,6 +38,8 @@ public class User {
     @JsonIgnore
     private Lobby lobby;
 
+
+
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "statistics_id", referencedColumnName = "id")
     private UserStats stats;
@@ -127,13 +129,20 @@ public class User {
         this.leaderboard = leaderboard;
     }
 
-
-
     public Lobby getLobby() {
         return lobby;
     }
+
     public void setLobby(Lobby lobbyId) {
         this.lobby = lobbyId;
+    }
+
+    public UserStats getStats() {
+        return stats;
+    }
+
+    public void setStats(UserStats stats) {
+        this.stats = stats;
     }
 
 }
