@@ -126,16 +126,7 @@ class raphaelTest {
 		Question q8 = new Question("What was the main book of Taoism?", "Tao Te Ching", "Philosophy", false, false);
 		Question q9 = new Question("Who wrote the Tao Te Ching?", "Laozi", "Philosophy", false, false);
 		Question q10 = new Question("Who is Raphael's favorite philsopher?", "Philosophocles", "Personal", false, false);
-		//questRepo.save(q1);
-		//questRepo.save(q2);
-		//questRepo.save(q3);
-		//questRepo.save(q4);
-		//questRepo.save(q5);
-		//questRepo.save(q6);
-		//questRepo.save(q7);
-		//questRepo.save(q8);
-		//questRepo.save(q9);
-		//questRepo.save(q10);
+
 		questInit.add(q1);
 		questInit.add(q2);
 		questInit.add(q3);
@@ -155,7 +146,8 @@ class raphaelTest {
 
 		ResponseEntity<Question[]> questTest = restTemplate.getForEntity("/query/topic/Philosophy", Question[].class);
 		assertThat(questTest.getStatusCode()).isEqualTo(HttpStatus.OK);
-		//assertArrayEquals(questTest.getBody(), questArray);
+		assertArrayEquals(questTest.getBody(), questArray);
+		//assertArrayEquals(questRepo.findById(1).getAnswers().toArray(), questArray[0].getAnswers().toArray());
 	}
 
 
@@ -163,15 +155,14 @@ class raphaelTest {
 	void answerQuestionTest() {
 		Question q1 = new Question("Who was the first philosopher?", "Thales of Miletus", "Philosophy", false, false);
 
-		questInit.add(q1);
 		ResponseEntity<Answer> ansTest = restTemplate.postForEntity("/answer", answerInit, Answer.class);
 		ansTest.getBody().setQuestion(questRepo.findById(1));
-		questInit.get(0).addAnswer(ansTest.getBody());
-		int ansId = questInit.get(0).getAnswers().size();
+		q1.addAnswer(ansTest.getBody());
+		int ansId = q1.getAnswers().size();
 		assertThat(ansTest.getStatusCode()).isEqualTo(HttpStatus.OK);
 		assertThat(ansTest.getBody().getQuestion()).isEqualTo(questRepo.findById(1));
-		assertThat(questInit.get(0).getAnswers().get(ansId-1)).isEqualTo(ansTest.getBody());
-		questInit.get(0).getAnswers().remove(ansId-1);
+		assertThat(q1.getAnswers().get(ansId-1)).isEqualTo(ansTest.getBody());
+		q1.getAnswers().remove(ansId-1);
 	}
 
 	@Test

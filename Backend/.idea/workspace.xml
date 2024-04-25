@@ -6,8 +6,6 @@
   <component name="ChangeListManager">
     <list default="true" id="aa247b61-3439-49d8-9853-376a5b7b168c" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/trivia/src/main/java/com/project/trivia/MPQuestions/AnswerController.java" beforeDir="false" afterPath="$PROJECT_DIR$/trivia/src/main/java/com/project/trivia/MPQuestions/AnswerController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/trivia/src/main/java/com/project/trivia/Questions/Question.java" beforeDir="false" afterPath="$PROJECT_DIR$/trivia/src/main/java/com/project/trivia/Questions/Question.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/trivia/src/test/java/com/project/trivia/raphaelTests/raphaelTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/trivia/src/test/java/com/project/trivia/raphaelTests/raphaelTest.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -168,7 +166,7 @@
       <workItem from="1713757098079" duration="298000" />
       <workItem from="1713757540193" duration="1111000" />
       <workItem from="1713758675022" duration="10649000" />
-      <workItem from="1714018060978" duration="2649000" />
+      <workItem from="1714018060978" duration="3379000" />
     </task>
     <servers />
   </component>
