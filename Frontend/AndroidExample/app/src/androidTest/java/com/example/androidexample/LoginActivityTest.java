@@ -30,19 +30,15 @@ public class LoginActivityTest {
 
     @Test
     public void testValidLogin() {
-        // Enter valid username and password
         Espresso.onView(withId(R.id.login_username_edt)).perform(ViewActions.typeText(VALID_USERNAME));
         Espresso.onView(withId(R.id.login_password_edt)).perform(ViewActions.typeText(VALID_PASSWORD));
         Espresso.closeSoftKeyboard();
-
-        // Click the login button
         Espresso.onView(withId(R.id.login_btn)).perform(ViewActions.click());
         try {
             Thread.sleep(1000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        // Check if the next activity is displayed (assuming it's MainActivity)
         Espresso.onView(withId(R.id.bottomNavigationView)).check(matches(isDisplayed()));
     }
 
@@ -62,27 +58,17 @@ public class LoginActivityTest {
 
     @Test
     public void testEmptyUsername() {
-        // Leave username field empty
         Espresso.onView(withId(R.id.login_password_edt)).perform(ViewActions.typeText(VALID_PASSWORD));
         Espresso.closeSoftKeyboard();
-
-        // Click the login button
         Espresso.onView(withId(R.id.login_btn)).perform(ViewActions.click());
-
-        // Check if the error message is displayed
         Espresso.onView(withId(R.id.login_username_edt)).check(matches(hasErrorText("Please type a username.")));
     }
 
     @Test
     public void testEmptyPassword() {
-        // Leave password field empty
         Espresso.onView(withId(R.id.login_username_edt)).perform(ViewActions.typeText(VALID_USERNAME));
         Espresso.closeSoftKeyboard();
-
-        // Click the login button
         Espresso.onView(withId(R.id.login_btn)).perform(ViewActions.click());
-
-        // Check if the error message is displayed
         Espresso.onView(withId(R.id.login_password_edt)).check(matches(hasErrorText("Please type a password.")));
     }
 }
