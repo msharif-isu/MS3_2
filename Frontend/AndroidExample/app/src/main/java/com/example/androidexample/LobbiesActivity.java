@@ -125,6 +125,8 @@ public class LobbiesActivity extends AppCompatActivity implements WebSocketListe
         editor.putInt("ROOM_ID", (int) roomId);
         editor.apply();
 
+        Log.e("Room id", "Room ID is currently " + roomId);
+
         Button joinRoom = dialog.findViewById(R.id.buttonJoinRoom);
         Button leaveRoom = dialog.findViewById(R.id.buttonLeaveRoom);
         Button startGame = dialog.findViewById(R.id.buttonStartGame);
@@ -179,9 +181,10 @@ public class LobbiesActivity extends AppCompatActivity implements WebSocketListe
         });
         leaveRoom.setOnClickListener(v -> {
             leaveRoom(roomId, userId);
-            WebSocketManager.getInstance().closeWebSocket();
             isInLobby = false;
             isHost = false;
+            WebSocketManager.getInstance().sendMessage("leftLobby");
+            WebSocketManager.getInstance().closeWebSocket();
             //TODO assign random host
             dialog.dismiss();
         });
@@ -190,7 +193,7 @@ public class LobbiesActivity extends AppCompatActivity implements WebSocketListe
             isInLobby = true;
             getLobbyDetails(roomId);
             refreshLobbyList();
-            //dialog.dismiss();
+            WebSocketManager.getInstance().sendMessage("joinedLobby");
         });
         changeHost.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -337,7 +340,6 @@ public class LobbiesActivity extends AppCompatActivity implements WebSocketListe
                     Lobby lobby = parseLobbyResponse(response);
                     if (lobby != null) {
                         //TODO FIX THIS Toast.makeText(LobbiesActivity.this, "Joined lobby successfully", Toast.LENGTH_SHORT).show();
-
                     } else {
                         Toast.makeText(LobbiesActivity.this, "Failed to join lobby", Toast.LENGTH_SHORT).show();
                     }
@@ -352,6 +354,7 @@ public class LobbiesActivity extends AppCompatActivity implements WebSocketListe
             }
         });
         Volley.newRequestQueue(this).add(request);
+        getLobbyDetails(roomId);
     }
 
     private void createLobbyDialog() {
@@ -494,12 +497,26 @@ public class LobbiesActivity extends AppCompatActivity implements WebSocketListe
 
     public void onWebSocketMessage(String message) {
         runOnUiThread(() -> {
+            SharedPreferences sharedPreferences = getSharedPreferences("roomID", MODE_PRIVATE);
+            int roomId = sharedPreferences.getInt("ROOM_ID", -1);
             String s = msgTv.getText().toString();
             msgTv.setText(s + "\n" + message);
             if (message.contains("lobbyStart!")) {
-                SharedPreferences sharedPreferences = getSharedPreferences("roomID", MODE_PRIVATE);
-                int roomId = sharedPreferences.getInt("ROOM_ID", -1);
                 beginGame(roomId);
+            } else if (message.contains("joinedLobby")) {
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                getLobbyDetails(roomId);
+            } else if (message.contains("leftLobby")) {
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                getLobbyDetails(roomId);
             }
         });
     }
