@@ -61,7 +61,16 @@ public class UserController {
         if(request.getUsername() == null || userRepository.existsByUsername(request.getUsername())){
             throw new ResponseStatusException(HttpStatus.I_AM_A_TEAPOT, "Username already Taken");
         }
-        userRepository.save(request);
+        if(request.getUsername() != null) {
+            user.setUsername(request.getUsername());
+        }
+        if(request.getPassword() != null) {
+            user.setPassword(request.getPassword());
+        }
+        if(request.getEmail() != null) {
+            user.setEmail(request.getEmail());
+        }
+        userRepository.save(user);
         return userRepository.findById(id);
     }
 

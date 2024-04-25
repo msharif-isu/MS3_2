@@ -145,10 +145,68 @@ public class AdamSystemTest {
 
     }
 
+    @Test
+    public void updatingUserInfoTest(){
+        //User to update bio of
+        String user = "{" +
+                "\"username\":\"TestAlok\", " +
+                "\"password\":\"password456\", " +
+                "\"email\":\"aloks@iastate.edu\"" +
+                "}";
+        //Creates user
+        Response response = RestAssured.given().
+                contentType(ContentType.JSON).
+                body(user).
+                when().
+                post("/users");
 
+        //Status response
+        int statusCode = response.getStatusCode();
+        assertEquals(200, statusCode);
+
+        //Id of test user
+        int userId = userRepo.findByUsername("TestAlok").getId();
+
+        //New username to change
+        String newUsername = "{" +
+                "\"username\":\"alokTest\", " +
+                "\"password\":\"password123\", " +
+                "\"email\":\"osamman@iastate.edu\"" +
+                "}";
+
+        //http of put test user with id
+        String testUserEndpoint = "/users/" + userId;
+
+        response = RestAssured.given().
+                contentType(ContentType.JSON).
+                body(newUsername).
+                when().
+                put(testUserEndpoint);
+
+        statusCode = response.getStatusCode();
+        assertEquals(200, statusCode);
+
+        String returnString = response.getBody().asString();
+        try {
+            // Parse the response as a JSONObject
+            JSONObject returnObj = new JSONObject(returnString);
+
+            // Access the username directly from the JSONObject
+            assertEquals("alokTest", returnObj.getString("username"));
+            assertEquals("password123", returnObj.getString("password"));
+            assertEquals("osamman@iastate.edu", returnObj.getString("email"));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        //Make sure to remove the user from the table because it should be null
+        userRepo.deleteById(userRepo.findByUsername("alokTest").getId());
+        assertNull(userRepo.findByUsername("TestAlok"));
+
+
+    }
 
     //Trival test
-
     @Test
     public void testFindById(){
         Response response = RestAssured.given().
@@ -184,5 +242,6 @@ public class AdamSystemTest {
         int statusCode = response.getStatusCode();
         assertEquals(200, statusCode);
     }
+
 
 }
