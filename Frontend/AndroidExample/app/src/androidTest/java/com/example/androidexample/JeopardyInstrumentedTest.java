@@ -13,13 +13,8 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.fail;
 
-import android.app.Activity;
 import android.content.Context;
-import android.content.SharedPreferences;
-import android.widget.EditText;
-import android.widget.TextView;
 
-import androidx.test.core.app.ActivityScenario;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
@@ -36,18 +31,14 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.util.ArrayList;
-import java.util.concurrent.atomic.AtomicReference;
 
 import url.RequestURLs;
 
 @RunWith(AndroidJUnit4.class)
-public class SystemTest1 {
+public class JeopardyInstrumentedTest {
 
     @Rule
     public ActivityScenarioRule<JeopardyActivity> rule = new ActivityScenarioRule<>(JeopardyActivity.class);
-    private static final String VALID_USERNAME = "aloks";
-    private static final String VALID_PASSWORD = "password123";
-    private static final int VALID_USER_ID = 1;
     private ArrayList<Question> questions = new ArrayList<>();
 
     private void getQuestions(Context context) {
@@ -88,18 +79,6 @@ public class SystemTest1 {
     @Before
     public void setup() {
         rule.getScenario().onActivity(activity -> {
-//            SharedPreferences prefs = activity.getSharedPreferences("UserData", Context.MODE_PRIVATE);
-//            if (prefs.getString("USERNAME", "").isEmpty()) {
-//                onView(withId(R.id.login_username_edt)).perform(typeText(VALID_USERNAME), closeSoftKeyboard());
-//                onView(withId(R.id.login_password_edt)).perform(typeText(VALID_PASSWORD), closeSoftKeyboard());
-//                onView(withId(R.id.login_btn)).perform(click());
-//                try {
-//                    Thread.sleep(50000);
-//                } catch (InterruptedException e) {
-//                    throw new RuntimeException(e);
-//                }
-//            }
-
             getQuestions(activity.getApplicationContext());
         });
     }
