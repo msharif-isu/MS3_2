@@ -153,9 +153,6 @@ public class UserController {
     @PostMapping("/setPfp/{id}")
     public String handleFileUpload(@RequestParam("image") MultipartFile imageFile, @PathVariable int id) {
         try {
-            File destinationFile = new File(directory + File.separator + imageFile.getOriginalFilename());
-            imageFile.transferTo(destinationFile);  // save file to disk
-
             User user = userRepository.findById(id);
             String username = user.getUsername();
 
@@ -170,12 +167,12 @@ public class UserController {
             imageFile.transferTo(destinationFile);
             user.setFilePath(destinationFile.getAbsolutePath());
             userRepository.save(user);
-
             return "File uploaded successfully: " + destinationFile.getAbsolutePath();
         } catch (IOException e) {
             return "Failed to upload file: " + e.getMessage();
         }
     }
+
 
 
 }

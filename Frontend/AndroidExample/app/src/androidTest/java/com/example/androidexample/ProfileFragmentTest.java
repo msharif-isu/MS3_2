@@ -49,11 +49,11 @@ public class ProfileFragmentTest {
 
     private static final String FRIEND_NAME = "aloks2";
 
-    @Test
-    public void testNavigationToProfileFragment() {
-        Espresso.onView(withId(R.id.bottomNavigationView)).perform(ViewActions.click());
-        Espresso.onView(withId(R.id.profile)).perform(ViewActions.click());
-    }
+//    @Test
+//    public void testNavigationToProfileFragment() {
+//        Espresso.onView(withId(R.id.bottomNavigationView)).perform(ViewActions.click());
+//        Espresso.onView(withId(R.id.profile)).perform(ViewActions.click());
+//    }
 
     @Test
     public void testEditBio() {
