@@ -89,12 +89,26 @@ public class Question {
         return used;
     }
 
-
     /**
      * Returns if this question is user-created
      * @return userCreated - if this question is user created
      */
     public boolean isUserCreated() {
         return userCreated;
+    }
+
+    /**
+     * Returns this question as its respective <code>JSONObject</code>
+     * @return <code>JSONObject</code> representation of this question
+     * @throws JSONException
+     */
+    public JSONObject toJSON() throws JSONException {
+        return new JSONObject() {{
+            put("question", question);
+            put("answer", answer);
+            put("questionType", questionType);
+            put("used", used);
+            put("userCreated", userCreated);
+        }};
     }
 }

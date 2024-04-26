@@ -47,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
             if (itemId == R.id.play) {
                 replaceFragment(new PlayFragment());
             } else if (itemId == R.id.edit) {
-                replaceFragment(new EditFragment());
+                replaceFragment(new QueryFragment());
             } else if (itemId == R.id.leaderboard) {
                 replaceFragment(new LeaderboardFragment());
             } else if (itemId == R.id.profile) {
@@ -57,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void replaceFragment(Fragment fragment) {
+    public void replaceFragment(Fragment fragment) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.fragmentContainerView, fragment);
