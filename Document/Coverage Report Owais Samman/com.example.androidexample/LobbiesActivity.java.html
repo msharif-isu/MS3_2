@@ -1,0 +1,561 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>LobbiesActivity.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=0;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">debug</a> &gt; <a href="index.source.html" class="el_package">com.example.androidexample</a> &gt; <span class="el_source">LobbiesActivity.java</span></div><h1>LobbiesActivity.java</h1><pre class="source lang-java linenums">package com.example.androidexample;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+import com.google.android.material.slider.Slider;
+
+import org.java_websocket.handshake.ServerHandshake;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import android.app.Dialog;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.Spinner;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import url.RequestURLs;
+
+<span class="fc" id="L43">public class LobbiesActivity extends AppCompatActivity implements WebSocketListener {</span>
+
+    //TODO MAKE X BUTTON REMOVE USERS FROM LOBBY, ONLY ACCESSABLE BY HOST
+    private RecyclerView recyclerView;
+    private LobbyAdapter lobbyAdapter;
+    private ArrayList&lt;Lobby&gt; lobbyList;
+    private ArrayList&lt;UserFriend&gt; friendsList;
+    private SwipeRefreshLayout swipeRefreshLayout;
+    private ImageButton createLobbyButton;
+    private String username;
+    private int userId;
+    private LobbyPlayerAdapter adapter;
+    private TextView msgTv;
+
+<span class="fc" id="L57">    private List&lt;String&gt; playerUsernames = new ArrayList&lt;&gt;();</span>
+    private String selectedNewHost;
+    private WebSocketManager webSocketManager;
+
+<span class="fc" id="L61">    private String backendUrl = RequestURLs.SERVER_HTTP_URL + &quot;/&quot;;</span>
+<span class="fc" id="L62">    private boolean isInLobby = false;</span>
+<span class="fc" id="L63">    private boolean joinedLobby = false;</span>
+    private ArrayAdapter&lt;String&gt; playerAdapter;
+
+<span class="fc" id="L66">    private boolean isHost = false;</span>
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+<span class="fc" id="L70">        super.onCreate(savedInstanceState);</span>
+<span class="fc" id="L71">        setContentView(R.layout.activity_lobby);</span>
+
+<span class="fc" id="L73">        SharedPreferences prefs = getSharedPreferences(&quot;UserData&quot;, MODE_PRIVATE);</span>
+<span class="fc" id="L74">        username = prefs.getString(&quot;USERNAME&quot;, &quot;&quot;);</span>
+<span class="fc" id="L75">        userId = prefs.getInt(&quot;USER_ID&quot;, 0);</span>
+
+<span class="fc" id="L77">        recyclerView = findViewById(R.id.lobbyList);</span>
+<span class="fc" id="L78">        swipeRefreshLayout = findViewById(R.id.swipeRefreshLayout);</span>
+<span class="fc" id="L79">        createLobbyButton = findViewById(R.id.createLobbyButton);</span>
+
+<span class="fc" id="L81">        friendsList = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L82">        lobbyList = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L83">        lobbyAdapter = new LobbyAdapter(lobbyList, this);</span>
+
+<span class="fc" id="L85">        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());</span>
+<span class="fc" id="L86">        recyclerView.setLayoutManager(layoutManager);</span>
+<span class="fc" id="L87">        recyclerView.setItemAnimator(new DefaultItemAnimator());</span>
+<span class="fc" id="L88">        recyclerView.setAdapter(lobbyAdapter);</span>
+
+<span class="fc" id="L90">        msgTv = findViewById(R.id.textView9);</span>
+<span class="fc" id="L91">        webSocketManager = new WebSocketManager();</span>
+
+<span class="fc" id="L93">        adapter = new LobbyPlayerAdapter(getApplicationContext(), friendsList, new LobbyPlayerAdapter.OnDeleteClickListener() {</span>
+            @Override
+            public void onDeleteClick(int position) {
+<span class="nc" id="L96">                UserFriend friend = friendsList.get(position);</span>
+<span class="nc" id="L97">                String friendName = friend.getUsername();</span>
+//                getUserIdByUsername(friendName, roomId);
+<span class="nc" id="L99">            }</span>
+        });
+
+<span class="fc" id="L102">        refreshLobbyList();</span>
+
+<span class="fc" id="L104">        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {</span>
+            @Override
+            public void onRefresh() {
+<span class="nc" id="L107">                refreshLobbyList();</span>
+<span class="nc" id="L108">            }</span>
+        });
+
+<span class="fc" id="L111">        createLobbyButton.setOnClickListener(view -&gt; {</span>
+<span class="fc" id="L112">            createLobbyDialog();</span>
+<span class="fc" id="L113">        });</span>
+<span class="fc" id="L114">    }</span>
+
+    void joinLobbyDialog(long roomId) {
+<span class="fc" id="L117">        Dialog dialog = new Dialog(this);</span>
+<span class="fc" id="L118">        dialog.setContentView(R.layout.activity_lobbies);</span>
+<span class="fc" id="L119">        dialog.show();</span>
+<span class="fc" id="L120">        dialog.setCancelable(false);</span>
+<span class="fc" id="L121">        dialog.setCanceledOnTouchOutside(false);</span>
+<span class="fc" id="L122">        getLobbyDetails(roomId);</span>
+
+<span class="fc" id="L124">        SharedPreferences.Editor editor = getSharedPreferences(&quot;roomID&quot;, MODE_PRIVATE).edit();</span>
+<span class="fc" id="L125">        editor.putInt(&quot;ROOM_ID&quot;, (int) roomId);</span>
+<span class="fc" id="L126">        editor.apply();</span>
+
+<span class="fc" id="L128">        Log.e(&quot;Room id&quot;, &quot;Room ID is currently &quot; + roomId);</span>
+
+<span class="fc" id="L130">        Button joinRoom = dialog.findViewById(R.id.buttonJoinRoom);</span>
+<span class="fc" id="L131">        Button leaveRoom = dialog.findViewById(R.id.buttonLeaveRoom);</span>
+<span class="fc" id="L132">        Button startGame = dialog.findViewById(R.id.buttonStartGame);</span>
+<span class="fc" id="L133">        Button changeHost = dialog.findViewById(R.id.buttonChangeHost);</span>
+<span class="fc" id="L134">        Spinner changeHostSpinner = dialog.findViewById(R.id.changeHostSpinner);</span>
+<span class="fc" id="L135">        RecyclerView playerListRecyclerView = dialog.findViewById(R.id.recycleView);</span>
+
+
+        // A little sketchy, but i need a websocket room and i didnt want to make another class.
+<span class="fc" id="L139">        String chatUrl = RequestURLs.SERVER_WEBSOCKET_URL_MULTIPLAYER + &quot;/chat/&quot; + roomId * -1 + &quot;/&quot; + username;</span>
+<span class="fc" id="L140">        WebSocketManager.getInstance().connectWebSocket(chatUrl);</span>
+<span class="fc" id="L141">        WebSocketManager.getInstance().setWebSocketListener(LobbiesActivity.this);</span>
+        //TODO UNCOMMENT
+//        if (isHost) {
+//            startGame.setVisibility(View.VISIBLE);
+//            changeHost.setVisibility(View.VISIBLE);
+//            changeHostSpinner.setVisibility(View.VISIBLE);
+////            leaveRoom.setVisibility(View.GONE);
+//        } else {
+//            startGame.setVisibility(View.GONE);
+//            changeHost.setVisibility(View.GONE);
+//            changeHostSpinner.setVisibility(View.GONE);
+////            leaveRoom.setVisibility(View.VISIBLE);
+//        }
+<span class="fc" id="L154">        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());</span>
+<span class="fc" id="L155">        adapter = new LobbyPlayerAdapter(getApplicationContext(), friendsList, new LobbyPlayerAdapter.OnDeleteClickListener() {</span>
+            @Override
+            public void onDeleteClick(int position) {
+<span class="nc" id="L158">                UserFriend friend = friendsList.get(position);</span>
+<span class="nc" id="L159">                String friendName = friend.getUsername();</span>
+<span class="nc" id="L160">                getUserIdByUsername(friendName, roomId);</span>
+<span class="nc" id="L161">            }</span>
+
+        });
+
+
+<span class="fc" id="L166">        playerListRecyclerView.setLayoutManager(layoutManager);</span>
+<span class="fc" id="L167">        playerListRecyclerView.setItemAnimator(new DefaultItemAnimator());</span>
+<span class="fc" id="L168">        playerListRecyclerView.setAdapter(adapter);</span>
+<span class="fc" id="L169">        changeHostSpinner.setAdapter(getUsernamesInLobby(adapter));</span>
+        // TODO: Start game
+<span class="fc" id="L171">        startGame.setOnClickListener(v -&gt; {</span>
+<span class="nc bnc" id="L172" title="All 4 branches missed.">            if (isInLobby &amp;&amp; joinedLobby) {</span>
+<span class="nc" id="L173">                joinLobby(roomId, userId);</span>
+<span class="nc" id="L174">                getLobbyDetails(roomId);</span>
+<span class="nc" id="L175">                WebSocketManager.getInstance().sendMessage(&quot;lobbyStart!&quot;);</span>
+<span class="nc" id="L176">                WebSocketManager.getInstance().closeWebSocket();</span>
+<span class="nc" id="L177">                beginGame(roomId);</span>
+            } else {
+<span class="nc" id="L179">                Toast.makeText(LobbiesActivity.this, &quot;You must join a lobby first&quot;, Toast.LENGTH_SHORT).show();</span>
+            }
+<span class="nc" id="L181">        });</span>
+<span class="fc" id="L182">        leaveRoom.setOnClickListener(v -&gt; {</span>
+<span class="nc" id="L183">            leaveRoom(roomId, userId);</span>
+<span class="nc" id="L184">            isInLobby = false;</span>
+<span class="nc" id="L185">            isHost = false;</span>
+<span class="nc" id="L186">            WebSocketManager.getInstance().sendMessage(&quot;leftLobby&quot;);</span>
+<span class="nc" id="L187">            WebSocketManager.getInstance().closeWebSocket();</span>
+            //TODO assign random host
+<span class="nc" id="L189">            dialog.dismiss();</span>
+<span class="nc" id="L190">        });</span>
+<span class="fc" id="L191">        joinRoom.setOnClickListener(v -&gt; {</span>
+<span class="nc" id="L192">            joinLobby(roomId, userId);</span>
+<span class="nc" id="L193">            isInLobby = true;</span>
+<span class="nc" id="L194">            getLobbyDetails(roomId);</span>
+<span class="nc" id="L195">            refreshLobbyList();</span>
+<span class="nc" id="L196">            WebSocketManager.getInstance().sendMessage(&quot;joinedLobby&quot;);</span>
+<span class="nc" id="L197">        });</span>
+<span class="fc" id="L198">        changeHost.setOnClickListener(new View.OnClickListener() {</span>
+            @Override
+            public void onClick(View v) {
+<span class="nc bnc" id="L201" title="All 2 branches missed.">                if (selectedNewHost != null) {</span>
+<span class="nc" id="L202">                    changeHost(roomId, selectedNewHost);</span>
+                } else {
+<span class="nc" id="L204">                    Toast.makeText(LobbiesActivity.this, &quot;Please select a player to become the new host&quot;, Toast.LENGTH_SHORT).show();</span>
+                }
+<span class="nc" id="L206">            }</span>
+        });
+<span class="fc" id="L208">        changeHostSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {</span>
+            @Override
+            public void onItemSelected(AdapterView&lt;?&gt; parent, View view, int position, long id) {
+<span class="nc" id="L211">                selectedNewHost = playerUsernames.get(position);</span>
+<span class="nc" id="L212">            }</span>
+            @Override
+            public void onNothingSelected(AdapterView&lt;?&gt; parent) {
+<span class="nc" id="L215">                selectedNewHost = null;</span>
+<span class="nc" id="L216">            }</span>
+        });
+<span class="fc" id="L218">    }</span>
+
+    private ArrayAdapter&lt;String&gt; getUsernamesInLobby(LobbyPlayerAdapter lobbyPlayerAdapter) {
+<span class="fc" id="L221">        playerAdapter = new ArrayAdapter&lt;&gt;(this, android.R.layout.simple_spinner_dropdown_item, playerUsernames);</span>
+<span class="fc" id="L222">        playerUsernames.clear();</span>
+<span class="fc bfc" id="L223" title="All 2 branches covered.">        for (int i = 0; i &lt; lobbyPlayerAdapter.getItemCount(); i++) {</span>
+<span class="fc" id="L224">            String username = lobbyPlayerAdapter.getUsernameByIndex(i);</span>
+<span class="pc bpc" id="L225" title="1 of 2 branches missed.">            if (username != null) {</span>
+<span class="fc" id="L226">                playerUsernames.add(username);</span>
+<span class="fc" id="L227">                Log.d(&quot;Username In lobby&quot;, username);</span>
+            }
+        }
+<span class="fc" id="L230">        playerAdapter.notifyDataSetChanged();</span>
+<span class="fc" id="L231">        return playerAdapter;</span>
+    }
+
+
+
+    private void changeHost(long roomId, String newHostUsername) {
+<span class="nc" id="L237">        String url = backendUrl + &quot;changeHost/&quot; + roomId + &quot;/&quot; + newHostUsername;</span>
+<span class="nc" id="L238">        JsonObjectRequest request = new JsonObjectRequest(Request.Method.PUT, url, null,</span>
+<span class="nc" id="L239">                new Response.Listener&lt;JSONObject&gt;() {</span>
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+<span class="nc" id="L243">                            String message = response.getString(&quot;message&quot;);</span>
+<span class="nc bnc" id="L244" title="All 2 branches missed.">                            if (message.equals(&quot;success&quot;)) {</span>
+<span class="nc" id="L245">                                Toast.makeText(LobbiesActivity.this, &quot;Host changed successfully&quot;, Toast.LENGTH_SHORT).show();</span>
+                            } else {
+<span class="nc" id="L247">                                Toast.makeText(LobbiesActivity.this, &quot;Failed to change host&quot;, Toast.LENGTH_SHORT).show();</span>
+                            }
+<span class="nc" id="L249">                        } catch (JSONException e) {</span>
+<span class="nc" id="L250">                            e.printStackTrace();</span>
+<span class="nc" id="L251">                        }</span>
+<span class="nc" id="L252">                    }</span>
+                },
+<span class="nc" id="L254">                new Response.ErrorListener() {</span>
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+<span class="nc" id="L257">                        Toast.makeText(LobbiesActivity.this, &quot;Failed to change host: &quot; + error.getMessage(), Toast.LENGTH_SHORT).show();</span>
+<span class="nc" id="L258">                    }</span>
+                });
+<span class="nc" id="L260">        Volley.newRequestQueue(this).add(request);</span>
+<span class="nc" id="L261">    }</span>
+
+
+    private void beginGame(long roomId) {
+<span class="nc" id="L265">        Intent intent = new Intent(LobbiesActivity.this, MultiplayerActivity.class);</span>
+<span class="nc" id="L266">        intent.putExtra(&quot;ROOM_ID&quot;, roomId);</span>
+<span class="nc" id="L267">        startActivity(intent);</span>
+<span class="nc" id="L268">    }</span>
+
+    private void leaveRoom(long roomId, int userId) {
+<span class="nc" id="L271">        String url = backendUrl + &quot;leave/&quot; + roomId + &quot;/&quot; + userId;</span>
+<span class="nc" id="L272">        JsonObjectRequest request = new JsonObjectRequest(Request.Method.DELETE, url, null, new Response.Listener&lt;JSONObject&gt;() {</span>
+            @Override
+            public void onResponse(JSONObject response) {
+<span class="nc" id="L275">                Toast.makeText(LobbiesActivity.this, &quot;Left the room successfully&quot;, Toast.LENGTH_SHORT).show();</span>
+<span class="nc" id="L276">            }</span>
+<span class="nc" id="L277">        }, new Response.ErrorListener() {</span>
+            @Override
+            public void onErrorResponse(VolleyError error) {
+<span class="nc" id="L280">                Toast.makeText(LobbiesActivity.this, &quot;Failed to leave the room: &quot; + error.getMessage(), Toast.LENGTH_SHORT).show();</span>
+<span class="nc" id="L281">            }</span>
+        });
+<span class="nc" id="L283">        Volley.newRequestQueue(this).add(request);</span>
+<span class="nc" id="L284">    }</span>
+
+
+    private void getLobbyDetails(long roomId) {
+<span class="fc" id="L288">        String url = backendUrl + &quot;lobbies/&quot; + roomId;</span>
+<span class="fc" id="L289">        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,</span>
+<span class="fc" id="L290">                new Response.Listener&lt;JSONObject&gt;() {</span>
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+<span class="fc" id="L294">                            friendsList.clear();</span>
+<span class="fc" id="L295">                            Lobby lobby = parseLobbyResponse(response);</span>
+
+                            // Parse players from the JSON response
+<span class="fc" id="L298">                            JSONArray playersArray = response.getJSONArray(&quot;players&quot;);</span>
+<span class="fc" id="L299">                            List&lt;UserFriend&gt; players = new ArrayList&lt;&gt;();</span>
+<span class="fc bfc" id="L300" title="All 2 branches covered.">                            for (int i = 0; i &lt; playersArray.length(); i++) {</span>
+<span class="fc" id="L301">                                JSONObject playerObject = playersArray.getJSONObject(i);</span>
+<span class="fc" id="L302">                                String username = playerObject.getString(&quot;username&quot;);</span>
+<span class="fc" id="L303">                                String bio = playerObject.getString(&quot;bio&quot;);</span>
+<span class="fc" id="L304">                                UserFriend player = new UserFriend(username, bio, null);</span>
+<span class="fc" id="L305">                                Log.d(&quot;PlayerInfo&quot;, &quot;Username: &quot; + username + &quot;, Bio: &quot; + bio);</span>
+<span class="fc" id="L306">                                friendsList.add(new UserFriend(username, bio, null));</span>
+<span class="fc" id="L307">                                players.add(player);</span>
+                            }
+
+                            // Set players to the lobby object
+<span class="fc" id="L311">                            lobby.setPlayers(players);</span>
+<span class="fc" id="L312">                            adapter.notifyDataSetChanged(); // Update RecyclerView</span>
+
+                            // Populate spinner after data is fetched
+<span class="fc" id="L315">                            getUsernamesInLobby(adapter); // This also updates the spinner adapter</span>
+<span class="nc" id="L316">                        } catch (JSONException e) {</span>
+<span class="nc" id="L317">                            e.printStackTrace();</span>
+<span class="nc" id="L318">                            Toast.makeText(LobbiesActivity.this, &quot;Failed to parse lobby details&quot;, Toast.LENGTH_SHORT).show();</span>
+<span class="fc" id="L319">                        }</span>
+<span class="fc" id="L320">                        Log.d(&quot;LobbiesActivity&quot;, &quot;Lobby details response: &quot; + response.toString());</span>
+<span class="fc" id="L321">                    }</span>
+                },
+<span class="fc" id="L323">                new Response.ErrorListener() {</span>
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+<span class="nc" id="L326">                        Toast.makeText(LobbiesActivity.this, &quot;Failed to get lobby details: &quot; + error.getMessage(), Toast.LENGTH_SHORT).show();</span>
+<span class="nc" id="L327">                        Log.e(&quot;LobbiesActivity&quot;, &quot;Error getting lobby details: &quot; + error.toString());</span>
+<span class="nc" id="L328">                    }</span>
+                });
+<span class="fc" id="L330">        Volley.newRequestQueue(this).add(request);</span>
+<span class="fc" id="L331">    }</span>
+
+
+    private void joinLobby(long roomId, int userId) {
+<span class="nc" id="L335">        String url = backendUrl + &quot;joinRoom/&quot; + roomId + &quot;/&quot; + userId;</span>
+<span class="nc" id="L336">        JsonObjectRequest request = new JsonObjectRequest(Request.Method.PUT, url, null, new Response.Listener&lt;JSONObject&gt;() {</span>
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+<span class="nc" id="L340">                    Lobby lobby = parseLobbyResponse(response);</span>
+<span class="nc bnc" id="L341" title="All 2 branches missed.">                    if (lobby != null) {</span>
+                        //TODO FIX THIS Toast.makeText(LobbiesActivity.this, &quot;Joined lobby successfully&quot;, Toast.LENGTH_SHORT).show();
+                    } else {
+<span class="nc" id="L344">                        Toast.makeText(LobbiesActivity.this, &quot;Failed to join lobby&quot;, Toast.LENGTH_SHORT).show();</span>
+                    }
+<span class="nc" id="L346">                } catch (JSONException e) {</span>
+<span class="nc" id="L347">                    e.printStackTrace();</span>
+<span class="nc" id="L348">                }</span>
+<span class="nc" id="L349">            }</span>
+<span class="nc" id="L350">        }, new Response.ErrorListener() {</span>
+            @Override
+            public void onErrorResponse(VolleyError error) {
+<span class="nc" id="L353">                Toast.makeText(LobbiesActivity.this, &quot;Failed to join lobby: &quot; + error.getMessage(), Toast.LENGTH_SHORT).show();</span>
+<span class="nc" id="L354">            }</span>
+        });
+<span class="nc" id="L356">        Volley.newRequestQueue(this).add(request);</span>
+<span class="nc" id="L357">        getLobbyDetails(roomId);</span>
+<span class="nc" id="L358">    }</span>
+
+    private void createLobbyDialog() {
+<span class="fc" id="L361">        Dialog dialog = new Dialog(this);</span>
+<span class="fc" id="L362">        dialog.setContentView(R.layout.create_room_dialog);</span>
+<span class="fc" id="L363">        dialog.show();</span>
+
+<span class="fc" id="L365">        Button createLobby = dialog.findViewById(R.id.createLobby);</span>
+<span class="fc" id="L366">        Button cancelButton = dialog.findViewById(R.id.Cancel);</span>
+<span class="fc" id="L367">        TextView lobbySizeTextView = dialog.findViewById(R.id.lobbySize);</span>
+<span class="fc" id="L368">        Slider slider = dialog.findViewById(R.id.slider);</span>
+<span class="fc" id="L369">        lobbySizeTextView.setText(String.valueOf(slider.getValue()));</span>
+<span class="fc" id="L370">        slider.addOnChangeListener(new Slider.OnChangeListener() {</span>
+            @Override
+            public void onValueChange(Slider slider, float value, boolean fromUser) {
+<span class="fc" id="L373">                lobbySizeTextView.setText(String.valueOf((int) value));</span>
+<span class="fc" id="L374">            }</span>
+        });
+<span class="pc" id="L376">        cancelButton.setOnClickListener(v -&gt; dialog.dismiss());</span>
+<span class="fc" id="L377">        createLobby.setOnClickListener(v -&gt; {</span>
+<span class="fc" id="L378">            int lobbySize = (int) slider.getValue();</span>
+<span class="pc bpc" id="L379" title="2 of 4 branches missed.">            if (lobbySize != 0 &amp;&amp; lobbySize != 1) {</span>
+<span class="fc" id="L380">                Toast.makeText(this, &quot;Creating lobby with size: &quot; + lobbySize, Toast.LENGTH_SHORT).show();</span>
+<span class="fc" id="L381">                createLobby(lobbySize, userId);</span>
+<span class="fc" id="L382">                dialog.dismiss();</span>
+            } else {
+<span class="nc" id="L384">                Toast.makeText(this, &quot;Can't create lobby with size 0 or 1&quot;, Toast.LENGTH_SHORT).show();</span>
+            }
+<span class="fc" id="L386">        });</span>
+<span class="fc" id="L387">    }</span>
+
+    private void createLobby(int roomSize, int userId) {
+<span class="fc" id="L390">        String url = backendUrl + &quot;create/&quot; + userId + &quot;/&quot; + roomSize;</span>
+<span class="fc" id="L391">        JSONObject requestBody = new JSONObject();</span>
+<span class="fc" id="L392">        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, requestBody, new Response.Listener&lt;JSONObject&gt;() {</span>
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+<span class="fc" id="L396">                    Lobby lobby = parseLobbyResponse(response);</span>
+<span class="fc" id="L397">                    lobbyList.add(lobby);</span>
+<span class="fc" id="L398">                    lobbyAdapter.notifyDataSetChanged();</span>
+<span class="fc" id="L399">                    Toast.makeText(LobbiesActivity.this, &quot;Lobby created successfully&quot;, Toast.LENGTH_SHORT).show();</span>
+<span class="fc" id="L400">                    joinLobbyDialog(lobby.getId());</span>
+<span class="nc" id="L401">                } catch (JSONException e) {</span>
+<span class="nc" id="L402">                    e.printStackTrace();</span>
+<span class="fc" id="L403">                }</span>
+<span class="fc" id="L404">            }</span>
+<span class="fc" id="L405">        }, new Response.ErrorListener() {</span>
+            @Override
+            public void onErrorResponse(VolleyError error) {
+<span class="nc" id="L408">                Toast.makeText(LobbiesActivity.this, &quot;Failed to create lobby: &quot; + error.getMessage(), Toast.LENGTH_SHORT).show();</span>
+<span class="nc" id="L409">            }</span>
+        });
+<span class="fc" id="L411">        Volley.newRequestQueue(this).add(request);</span>
+<span class="fc" id="L412">        isHost = true;</span>
+<span class="fc" id="L413">    }</span>
+
+    private Lobby parseLobbyResponse(JSONObject response) throws JSONException {
+<span class="fc" id="L416">        String playerUsername = username;</span>
+<span class="fc" id="L417">        int roomSize = response.getInt(&quot;roomSize&quot;);</span>
+<span class="fc" id="L418">        int playerCount = response.getInt(&quot;playerCount&quot;);</span>
+<span class="fc" id="L419">        String host = response.getString(&quot;host&quot;);</span>
+<span class="fc" id="L420">        boolean finished = response.getBoolean(&quot;finished&quot;);</span>
+<span class="fc" id="L421">        long lobbyId = response.getLong(&quot;id&quot;);</span>
+        // Parse players' details
+<span class="fc" id="L423">        List&lt;UserFriend&gt; players = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L424">        JSONArray playersArray = response.getJSONArray(&quot;players&quot;);</span>
+<span class="fc bfc" id="L425" title="All 2 branches covered.">        for (int i = 0; i &lt; playersArray.length(); i++) {</span>
+<span class="fc" id="L426">            JSONObject playerObject = playersArray.getJSONObject(i);</span>
+<span class="fc" id="L427">            String username = playerObject.getString(&quot;username&quot;);</span>
+<span class="fc" id="L428">            String bio = playerObject.getString(&quot;bio&quot;);</span>
+<span class="fc" id="L429">            UserFriend player = new UserFriend(username, bio, null);</span>
+<span class="fc" id="L430">            players.add(player);</span>
+<span class="pc bpc" id="L431" title="1 of 2 branches missed.">            if (player.getUsername().equals(playerUsername)) {</span>
+<span class="fc" id="L432">                joinedLobby = true;</span>
+            }
+        }
+<span class="fc" id="L435">        return new Lobby(host, playerCount, roomSize, lobbyId, players, host);</span>
+    }
+
+
+    private void refreshLobbyList() {
+<span class="fc" id="L440">        swipeRefreshLayout.setRefreshing(true);</span>
+<span class="fc" id="L441">        RequestQueue queue = Volley.newRequestQueue(this);</span>
+<span class="fc" id="L442">        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, backendUrl + &quot;lobbies&quot;, null, new Response.Listener&lt;JSONArray&gt;() {</span>
+            @Override
+            public void onResponse(JSONArray response) {
+<span class="fc" id="L445">                lobbyList.clear();</span>
+<span class="fc bfc" id="L446" title="All 2 branches covered.">                for (int i = 0; i &lt; response.length(); i++) {</span>
+                    try {
+<span class="fc" id="L448">                        JSONObject jsonObject = response.getJSONObject(i);</span>
+<span class="fc" id="L449">                        Log.e(&quot;LobbiesActivity&quot;, &quot;Response: &quot; + jsonObject.toString());</span>
+<span class="fc" id="L450">                        int roomSize = jsonObject.getInt(&quot;roomSize&quot;);</span>
+<span class="fc" id="L451">                        int playerCount = jsonObject.getInt(&quot;playerCount&quot;);</span>
+<span class="fc" id="L452">                        String host = jsonObject.getString(&quot;host&quot;);</span>
+<span class="fc" id="L453">                        boolean finished = jsonObject.getBoolean(&quot;finished&quot;);</span>
+<span class="fc" id="L454">                        long id = jsonObject.getLong(&quot;id&quot;);</span>
+                        //boolean started = jsonObject.getBoolean(&quot;started&quot;);
+<span class="pc bpc" id="L456" title="1 of 2 branches missed.">                        if (finished != true) {</span>
+<span class="fc" id="L457">                            lobbyList.add(new Lobby(host, playerCount, roomSize, id, null, null));</span>
+                        }
+<span class="nc" id="L459">                    } catch (JSONException e) {</span>
+<span class="nc" id="L460">                        e.printStackTrace();</span>
+<span class="fc" id="L461">                    }</span>
+                }
+<span class="fc" id="L463">                lobbyAdapter.notifyDataSetChanged();</span>
+<span class="fc" id="L464">                swipeRefreshLayout.setRefreshing(false);</span>
+<span class="fc" id="L465">            }</span>
+<span class="fc" id="L466">        }, new Response.ErrorListener() {</span>
+            @Override
+            public void onErrorResponse(VolleyError error) {
+<span class="nc" id="L469">                Log.e(&quot;LobbiesActivity&quot;, &quot;Error: &quot; + error.toString());</span>
+<span class="nc" id="L470">                swipeRefreshLayout.setRefreshing(false);</span>
+<span class="nc" id="L471">            }</span>
+        });
+<span class="fc" id="L473">        queue.add(jsonArrayRequest);</span>
+<span class="fc" id="L474">    }</span>
+
+    private void getUserIdByUsername(String username, long roomId) {
+<span class="nc" id="L477">        String url = backendUrl + &quot;users/getIdByUsername/&quot; + username;</span>
+
+<span class="nc" id="L479">        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,</span>
+<span class="nc" id="L480">                new Response.Listener&lt;String&gt;() {</span>
+                    @Override
+                    public void onResponse(String response) {
+<span class="nc" id="L483">                        int userIdToDelete = Integer.parseInt(response);</span>
+<span class="nc" id="L484">                        leaveRoom(roomId, userIdToDelete);</span>
+<span class="nc" id="L485">                    }</span>
+                },
+<span class="nc" id="L487">                new Response.ErrorListener() {</span>
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+<span class="nc" id="L490">                        Toast.makeText(LobbiesActivity.this, &quot;Failed to get user ID: &quot; + error.getMessage(), Toast.LENGTH_SHORT).show();</span>
+<span class="nc" id="L491">                        Log.e(&quot;LobbiesActivity&quot;, &quot;Error getting user ID: &quot; + error.toString());</span>
+<span class="nc" id="L492">                    }</span>
+                });
+<span class="nc" id="L494">        Volley.newRequestQueue(this).add(stringRequest);</span>
+<span class="nc" id="L495">    }</span>
+
+
+    public void onWebSocketMessage(String message) {
+<span class="fc" id="L499">        runOnUiThread(() -&gt; {</span>
+<span class="fc" id="L500">            SharedPreferences sharedPreferences = getSharedPreferences(&quot;roomID&quot;, MODE_PRIVATE);</span>
+<span class="fc" id="L501">            int roomId = sharedPreferences.getInt(&quot;ROOM_ID&quot;, -1);</span>
+<span class="fc" id="L502">            String s = msgTv.getText().toString();</span>
+<span class="fc" id="L503">            msgTv.setText(s + &quot;\n&quot; + message);</span>
+<span class="pc bpc" id="L504" title="1 of 2 branches missed.">            if (message.contains(&quot;lobbyStart!&quot;)) {</span>
+<span class="nc" id="L505">                beginGame(roomId);</span>
+<span class="pc bpc" id="L506" title="1 of 2 branches missed.">            } else if (message.contains(&quot;joinedLobby&quot;)) {</span>
+                try {
+<span class="nc" id="L508">                    Thread.sleep(1000);</span>
+<span class="nc" id="L509">                } catch (InterruptedException e) {</span>
+<span class="nc" id="L510">                    e.printStackTrace();</span>
+<span class="nc" id="L511">                }</span>
+<span class="nc" id="L512">                getLobbyDetails(roomId);</span>
+<span class="pc bpc" id="L513" title="1 of 2 branches missed.">            } else if (message.contains(&quot;leftLobby&quot;)) {</span>
+                try {
+<span class="nc" id="L515">                    Thread.sleep(1000);</span>
+<span class="nc" id="L516">                } catch (InterruptedException e) {</span>
+<span class="nc" id="L517">                    e.printStackTrace();</span>
+<span class="nc" id="L518">                }</span>
+<span class="nc" id="L519">                getLobbyDetails(roomId);</span>
+            }
+<span class="fc" id="L521">        });</span>
+<span class="fc" id="L522">    }</span>
+
+    @Override
+    public void onWebSocketOpen(ServerHandshake handshakedata) {
+        // WebSocket connection opened
+<span class="fc" id="L527">    }</span>
+
+    @Override
+    public void onWebSocketClose(int code, String reason, boolean remote) {
+        // WebSocket connection closed
+<span class="pc bpc" id="L532" title="1 of 2 branches missed.">        String closedBy = remote ? &quot;server&quot; : &quot;local&quot;;</span>
+<span class="fc" id="L533">        runOnUiThread(() -&gt; {</span>
+<span class="fc" id="L534">            String s = msgTv.getText().toString();</span>
+<span class="fc" id="L535">            msgTv.setText(s + &quot;---\nconnection closed by &quot; + closedBy + &quot;\nreason: &quot; + reason);</span>
+<span class="fc" id="L536">        });</span>
+<span class="fc" id="L537">    }</span>
+
+    @Override
+    public void onWebSocketError(Exception ex) {
+        // WebSocket error occurred
+<span class="nc" id="L542">    }</span>
+
+    @Override
+    protected void onDestroy() {
+<span class="fc" id="L546">        super.onDestroy();</span>
+        // Close WebSocket connection
+<span class="pc bpc" id="L548" title="1 of 2 branches missed.">        if (webSocketManager != null) {</span>
+<span class="fc" id="L549">            webSocketManager.closeWebSocket();</span>
+        }
+<span class="fc" id="L551">    }</span>
+
+    public void onBackPressed() {
+<span class="nc" id="L554">        super.onBackPressed();</span>
+        // Close WebSocket connection
+<span class="nc" id="L556">        WebSocketManager.getInstance().closeWebSocket();</span>
+<span class="nc" id="L557">    }</span>
+
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span>Generated by the Android Gradle plugin 8.0.0</div></body></html>

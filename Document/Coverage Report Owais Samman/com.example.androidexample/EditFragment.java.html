@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>EditFragment.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=0;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">debug</a> &gt; <a href="index.source.html" class="el_package">com.example.androidexample</a> &gt; <span class="el_source">EditFragment.java</span></div><h1>EditFragment.java</h1><pre class="source lang-java linenums">package com.example.androidexample;
+
+import android.os.Bundle;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Adapter;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
+import android.widget.EditText;
+import android.widget.Toast;
+
+import androidx.fragment.app.Fragment;
+
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import url.RequestURLs;
+
+
+<span class="nc" id="L33">public class EditFragment extends Fragment {</span>
+    private EditText questionInput;
+    private EditText answerInput;
+    private AutoCompleteTextView questionTypeInput;
+    private FloatingActionButton submitButton;
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+<span class="nc" id="L42">        View view = inflater.inflate(R.layout.fragment_question_submission, container, false);</span>
+
+<span class="nc" id="L44">        questionInput = view.findViewById(R.id.question_submission_question_input);</span>
+<span class="nc" id="L45">        answerInput = view.findViewById(R.id.question_submission_answer_input);</span>
+<span class="nc" id="L46">        questionTypeInput = view.findViewById(R.id.question_submission_question_type_input);</span>
+<span class="nc" id="L47">        submitButton = view.findViewById(R.id.question_submission_submit_button);</span>
+
+<span class="nc" id="L49">        ArrayAdapter&lt;String&gt; questionTypeAdapter = new ArrayAdapter&lt;&gt;(requireContext(), androidx.appcompat.R.layout.support_simple_spinner_dropdown_item);</span>
+<span class="nc" id="L50">        getQuestionTypes(questionTypeAdapter);</span>
+
+<span class="nc" id="L52">        questionTypeInput.setAdapter(questionTypeAdapter);</span>
+
+<span class="nc" id="L54">        submitButton.setOnClickListener(new View.OnClickListener() {</span>
+            @Override
+            public void onClick(View view) {
+<span class="nc" id="L57">                String question = questionInput.getText().toString();</span>
+<span class="nc" id="L58">                String answer = answerInput.getText().toString();</span>
+<span class="nc" id="L59">                String questionType = questionTypeInput.getText().toString();</span>
+
+<span class="nc" id="L61">                Question submission = new Question(-1, question, answer, questionType, false, true);</span>
+
+                try {
+<span class="nc" id="L64">                    submitQuestion(submission);</span>
+<span class="nc" id="L65">                } catch (JSONException e) {</span>
+<span class="nc" id="L66">                    throw new RuntimeException(e);</span>
+<span class="nc" id="L67">                }</span>
+<span class="nc" id="L68">            }</span>
+        });
+
+<span class="nc" id="L71">        return view;</span>
+    }
+
+    private void submitQuestion(Question question) throws JSONException {
+<span class="nc" id="L75">        JsonObjectRequest questionSubmissionRequest = new JsonObjectRequest(</span>
+                Request.Method.POST,
+<span class="nc" id="L77">                String.format(&quot;%s/question&quot;, RequestURLs.SERVER_HTTP_URL),</span>
+<span class="nc" id="L78">                question.toJSON(),</span>
+<span class="nc" id="L79">                new Response.Listener&lt;JSONObject&gt;() {</span>
+                    @Override
+                    public void onResponse(JSONObject jsonObject) {
+<span class="nc" id="L82">                        Toast.makeText(requireContext(), &quot;Question successfully submitted to database&quot;, Toast.LENGTH_SHORT).show();</span>
+<span class="nc" id="L83">                    }</span>
+                },
+<span class="nc" id="L85">                new Response.ErrorListener() {</span>
+                    @Override
+                    public void onErrorResponse(VolleyError volleyError) {
+<span class="nc" id="L88">                        Log.d(&quot;EditFragment&quot;, &quot;Failed to submit question&quot;);</span>
+<span class="nc" id="L89">                        Toast.makeText(requireContext(), &quot;Failed to submit question&quot;, Toast.LENGTH_SHORT).show();</span>
+<span class="nc" id="L90">                    }</span>
+                }
+        );
+
+<span class="nc" id="L94">        VolleySingleton.getInstance(requireContext()).addToRequestQueue(questionSubmissionRequest);</span>
+<span class="nc" id="L95">    }</span>
+
+    private void getQuestionTypes(ArrayAdapter&lt;String&gt; adapter) {
+<span class="nc" id="L98">        JsonArrayRequest questionTypesRequest = new JsonArrayRequest(</span>
+                Request.Method.GET,
+<span class="nc" id="L100">                String.format(&quot;%s/query/topic&quot;, RequestURLs.SERVER_HTTP_URL),</span>
+                null,
+<span class="nc" id="L102">                new Response.Listener&lt;JSONArray&gt;() {</span>
+                    @Override
+                    public void onResponse(JSONArray jsonArray) {
+<span class="nc" id="L105">                        List&lt;String&gt; questionTypes = new ArrayList&lt;&gt;();</span>
+<span class="nc bnc" id="L106" title="All 2 branches missed.">                        for (int i = 0; i &lt; jsonArray.length(); i++) {</span>
+                            try {
+<span class="nc" id="L108">                                questionTypes.add(jsonArray.get(i).toString());</span>
+<span class="nc" id="L109">                            } catch (JSONException e) {</span>
+<span class="nc" id="L110">                                throw new RuntimeException(e);</span>
+<span class="nc" id="L111">                            }</span>
+                        }
+
+<span class="nc" id="L114">                        adapter.addAll(questionTypes);</span>
+<span class="nc" id="L115">                        adapter.notifyDataSetChanged();</span>
+<span class="nc" id="L116">                    }</span>
+                },
+<span class="nc" id="L118">                new Response.ErrorListener() {</span>
+                    @Override
+                    public void onErrorResponse(VolleyError volleyError) {
+
+<span class="nc" id="L122">                    }</span>
+                }
+        );
+
+<span class="nc" id="L126">        VolleySingleton.getInstance(requireContext()).addToRequestQueue(questionTypesRequest);</span>
+<span class="nc" id="L127">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span>Generated by the Android Gradle plugin 8.0.0</div></body></html>

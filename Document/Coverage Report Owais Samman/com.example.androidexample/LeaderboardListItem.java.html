@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>LeaderboardListItem.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=0;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">debug</a> &gt; <a href="index.source.html" class="el_package">com.example.androidexample</a> &gt; <span class="el_source">LeaderboardListItem.java</span></div><h1>LeaderboardListItem.java</h1><pre class="source lang-java linenums">package com.example.androidexample;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Scanner;
+
+/**
+ * A class to represent a user's points in the leaderboard list
+ */
+public class LeaderboardListItem implements Serializable {
+    /**
+     * Username
+     */
+    private String username;
+
+    /**
+     * HashMap representing daily, weekly, monthly, yearly, and lifetime points
+     */
+    private HashMap&lt;LeaderboardTimeFrameEnum, Integer&gt; points;
+
+    /**
+     * Constructs a list item to store user points to display
+     * @param username - user name
+     * @param points - A HashMap of &lt;LeaderboardTimeFrameEnum, Integer&gt; to represent
+     *               daily, weekly, monthly, yearly, and lifetime points
+     */
+<span class="nc" id="L29">    public LeaderboardListItem(String username, HashMap&lt;LeaderboardTimeFrameEnum, Integer&gt; points) {</span>
+<span class="nc" id="L30">        this.username = username;</span>
+<span class="nc" id="L31">        this.points = points;</span>
+<span class="nc" id="L32">    }</span>
+
+    /**
+     * Returns the daily points of this user
+     * @return daily points
+     * @throws NullPointerException - daily points weren't set
+     */
+    public int getDailyPoints() throws NullPointerException{
+<span class="nc" id="L40">        return points.get(LeaderboardTimeFrameEnum.DAILY);</span>
+    }
+
+    /**
+     * Returns the weekly points of this user
+     * @return weekly points
+     * @throws NullPointerException - weekly points weren't set
+     */
+    public int getWeeklyPoints() throws NullPointerException{
+<span class="nc" id="L49">        return points.get(LeaderboardTimeFrameEnum.WEEKLY);</span>
+    }
+
+    /**
+     * Returns the monthly points of this user
+     * @return monthly points
+     * @throws NullPointerException - monthly points weren't set
+     */
+    public int getMonthlyPoints() throws NullPointerException{
+<span class="nc" id="L58">        return points.get(LeaderboardTimeFrameEnum.MONTHLY);</span>
+    }
+
+
+    /**
+     * Returns the yearly points of this user
+     * @return yearly points
+     * @throws NullPointerException - yearly points weren't set
+     */
+    public int getYearlyPoints() throws NullPointerException{
+<span class="nc" id="L68">        return points.get(LeaderboardTimeFrameEnum.YEARLY);</span>
+    }
+
+    /**
+     * Returns the lifetime points of this user
+     * @return yearly points
+     * @throws NullPointerException - lifetime points weren't set
+     */
+    public int getLifetimePoints() throws NullPointerException{
+<span class="nc" id="L77">        return points.get(LeaderboardTimeFrameEnum.LIFETIME);</span>
+    }
+
+    /**
+     * Returns the username of this user
+     * @return user name
+     */
+    public String getUsername() {
+<span class="nc" id="L85">        return username;</span>
+    }
+
+    /**
+     * Parses a WebSocket message into the appropriate list of LeaderboardListItems
+     * @param message - WebSocket message
+     * @return list of LeaderboardListItems
+     */
+    public static List&lt;LeaderboardListItem&gt; parseLeaderboardMessage(String message) {
+<span class="nc" id="L94">        Scanner scnr = new Scanner(message);</span>
+
+<span class="nc" id="L96">        ArrayList&lt;LeaderboardListItem&gt; data = new ArrayList&lt;&gt;();</span>
+
+<span class="nc bnc" id="L98" title="All 2 branches missed.">        while(scnr.hasNextLine()) {</span>
+<span class="nc" id="L99">            String lbString = scnr.nextLine();</span>
+<span class="nc" id="L100">            Scanner parser = new Scanner(lbString);</span>
+
+<span class="nc" id="L102">            String username = parser.next();</span>
+
+<span class="nc" id="L104">            HashMap&lt;LeaderboardTimeFrameEnum, Integer&gt; points = new HashMap&lt;&gt;();</span>
+
+<span class="nc" id="L106">            points.put(LeaderboardTimeFrameEnum.DAILY, Integer.parseInt(parser.next()));</span>
+<span class="nc" id="L107">            points.put(LeaderboardTimeFrameEnum.WEEKLY, Integer.parseInt(parser.next()));</span>
+<span class="nc" id="L108">            points.put(LeaderboardTimeFrameEnum.MONTHLY, Integer.parseInt(parser.next()));</span>
+<span class="nc" id="L109">            points.put(LeaderboardTimeFrameEnum.YEARLY, Integer.parseInt(parser.next()));</span>
+<span class="nc" id="L110">            points.put(LeaderboardTimeFrameEnum.LIFETIME, Integer.parseInt(parser.next()));</span>
+<span class="nc" id="L111">            parser.close();</span>
+
+<span class="nc" id="L113">            LeaderboardListItem item = new LeaderboardListItem(username, points);</span>
+<span class="nc" id="L114">            data.add(item);</span>
+<span class="nc" id="L115">        }</span>
+<span class="nc" id="L116">        scnr.close();</span>
+
+<span class="nc" id="L118">        return data;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span>Generated by the Android Gradle plugin 8.0.0</div></body></html>

@@ -1,0 +1,519 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ProfileFragment.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=0;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">debug</a> &gt; <a href="index.source.html" class="el_package">com.example.androidexample</a> &gt; <span class="el_source">ProfileFragment.java</span></div><h1>ProfileFragment.java</h1><pre class="source lang-java linenums">package com.example.androidexample;
+
+import android.app.Dialog;
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
+import android.net.Uri;
+import android.os.Bundle;
+import android.text.style.TtsSpan;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+//import android.widget.ProgressBar;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.ImageRequest;
+import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
+import com.bumptech.glide.request.RequestOptions;
+import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.transition.Transition;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
+
+import url.RequestURLs;
+
+<span class="fc" id="L62">public class ProfileFragment extends Fragment {</span>
+
+    //TODO removing friends!
+    private ArrayList&lt;UserFriend&gt; friendsList;
+    private RecyclerView recyclerView;
+    ImageView imgView;
+    ImageButton editBioButton, editProfilePictureButton;
+
+    Button signOut, addFriends;
+    //Button addFriend = findViewById(R.id.addFriend);
+    TextView questionsAnswered, achievementsUnlocked, userBiography, usernameText, friendsListText;
+    private String username;
+
+    private int userId;
+<span class="fc" id="L76">    private String backendUrl = RequestURLs.SERVER_HTTP_URL + &quot;/&quot;;</span>
+    private SwipeRefreshLayout swipeRefreshLayout;
+
+<span class="fc" id="L79">    private String UPLOAD_URL = RequestURLs.SERVER_HTTP_URL + &quot;/setPfp/&quot;;</span>
+
+    private Uri mImageUri, selectedUri;
+
+    private ActivityResultLauncher&lt;String&gt; mGetContent;
+
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+<span class="fc" id="L86">        View view = inflater.inflate(R.layout.fragment_profile_new, container, false);</span>
+<span class="fc" id="L87">        SharedPreferences prefs = requireActivity().getSharedPreferences(&quot;UserData&quot;, Context.MODE_PRIVATE);</span>
+<span class="fc" id="L88">        username = prefs.getString(&quot;USERNAME&quot;, &quot;&quot;);</span>
+<span class="fc" id="L89">        userId = prefs.getInt(&quot;USER_ID&quot;, 0);</span>
+<span class="fc" id="L90">        friendsList = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L91">        UPLOAD_URL = UPLOAD_URL + userId;</span>
+
+
+<span class="fc" id="L94">        swipeRefreshLayout = view.findViewById(R.id.swipeRefreshLayout);</span>
+<span class="fc" id="L95">        addFriends = view.findViewById(R.id.addFriends);</span>
+//        questionsAnswered = view.findViewById(R.id.questionsAnswered);
+//        achievementsUnlocked = view.findViewById(R.id.AcheivementsUnlocked);
+<span class="fc" id="L98">        userBiography = view.findViewById(R.id.userBiography);</span>
+<span class="fc" id="L99">        usernameText = view.findViewById(R.id.username);</span>
+<span class="fc" id="L100">        friendsListText = view.findViewById(R.id.freindsListText);</span>
+<span class="fc" id="L101">        recyclerView = view.findViewById(R.id.friendList);</span>
+<span class="fc" id="L102">        editBioButton = view.findViewById(R.id.editBioButton);</span>
+<span class="fc" id="L103">        signOut = view.findViewById(R.id.login_btn);</span>
+
+        //Profile Picture
+<span class="fc" id="L106">        imgView = view.findViewById(R.id.imgView);</span>
+<span class="fc" id="L107">        editProfilePictureButton = view.findViewById(R.id.editProfilePictureButton);</span>
+<span class="fc" id="L108">        getProfilePic();</span>
+
+//        questionsAnswered.setText(&quot;Add Friends&quot;);
+//        achievementsUnlocked.setText(&quot;&quot;);
+<span class="fc" id="L112">        getBio();</span>
+//        userBiography.setText(temp);
+<span class="fc" id="L114">        usernameText.setText(username);</span>
+        //friendsListText.setText(&quot;Friends:&quot;);
+
+
+<span class="fc" id="L118">        mGetContent = registerForActivityResult(new ActivityResultContracts.GetContent(), uri -&gt; {</span>
+<span class="nc bnc" id="L119" title="All 2 branches missed.">            if (uri != null) {</span>
+<span class="nc" id="L120">                selectedUri = uri;</span>
+<span class="nc" id="L121">                ImageView imageView = requireView().findViewById(R.id.imgView);</span>
+<span class="nc" id="L122">                imageView.setImageURI(uri);</span>
+<span class="nc" id="L123">                uploadImage();</span>
+            }
+<span class="nc" id="L125">        });</span>
+
+
+<span class="fc" id="L128">        editProfilePictureButton.setOnClickListener(v -&gt; {</span>
+<span class="nc" id="L129">            editProfilePicture();</span>
+<span class="nc" id="L130">            uploadImage();</span>
+<span class="nc" id="L131">        });</span>
+
+<span class="fc" id="L133">        setFriendInfo();</span>
+<span class="fc" id="L134">        setAdapter();</span>
+
+<span class="fc" id="L136">        addFriends.setOnClickListener(v -&gt; {</span>
+<span class="fc" id="L137">            addFriendsDialog();</span>
+<span class="fc" id="L138">        });</span>
+<span class="fc" id="L139">        editBioButton.setOnClickListener(v -&gt; {</span>
+<span class="fc" id="L140">            editButtonDialog();</span>
+<span class="fc" id="L141">        });</span>
+<span class="fc" id="L142">        signOut.setOnClickListener(v -&gt; {</span>
+<span class="nc" id="L143">            startActivity(new Intent(getActivity(), LoginActivity.class));</span>
+<span class="nc" id="L144">        });</span>
+<span class="fc" id="L145">        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {</span>
+            @Override
+            public void onRefresh() {
+<span class="fc" id="L148">                setFriendInfo();</span>
+<span class="fc" id="L149">                getBio();</span>
+//                getProfilePic();
+<span class="fc" id="L151">                swipeRefreshLayout.setRefreshing(false);</span>
+<span class="fc" id="L152">            }</span>
+        });
+<span class="fc" id="L154">        return view;</span>
+
+    }
+
+    private void editProfilePicture() {
+<span class="nc" id="L159">        mGetContent.launch(&quot;image/*&quot;);</span>
+<span class="nc" id="L160">    }</span>
+
+
+    /**
+     * Uploads an image to a remote server using a multipart Volley request.
+     *
+     * This method creates and executes a multipart request using the Volley library to upload
+     * an image to a predefined server endpoint. The image data is sent as a byte array and the
+     * request is configured to handle multipart/form-data content type. The server is expected
+     * to accept the image with a specific key (&quot;image&quot;) in the request.
+     *
+     */
+    private void uploadImage() {
+<span class="nc bnc" id="L173" title="All 2 branches missed.">        if (selectedUri != null) {</span>
+<span class="nc" id="L174">            byte[] imageData = convertImageUriToBytes(selectedUri);</span>
+<span class="nc bnc" id="L175" title="All 2 branches missed.">            if (imageData != null) {</span>
+<span class="nc" id="L176">                MultipartRequest multipartRequest = new MultipartRequest(</span>
+                        Request.Method.POST,
+                        UPLOAD_URL,
+                        imageData,
+                        response -&gt; {
+                            // Handle response
+<span class="nc bnc" id="L182" title="All 4 branches missed.">                            if (response != null &amp;&amp; !response.isEmpty()) {</span>
+<span class="nc" id="L183">                                Toast.makeText(requireContext(), response, Toast.LENGTH_LONG).show();</span>
+<span class="nc" id="L184">                                getProfilePic();</span>
+                            } else {
+<span class="nc" id="L186">                                Toast.makeText(requireContext(), &quot;Unknown response&quot;, Toast.LENGTH_LONG).show();</span>
+<span class="nc" id="L187">                                Log.e(&quot;Upload&quot;, &quot;Empty response&quot;);</span>
+                            }
+<span class="nc" id="L189">                            Log.d(&quot;Upload&quot;, &quot;Response: &quot; + response);</span>
+<span class="nc" id="L190">                        },</span>
+                        error -&gt; {
+                            // Handle error
+<span class="nc bnc" id="L193" title="All 6 branches missed.">                            if (error != null &amp;&amp; error.getMessage() != null &amp;&amp; !error.getMessage().isEmpty()) {</span>
+<span class="nc" id="L194">                                Toast.makeText(requireContext(), error.getMessage(), Toast.LENGTH_LONG).show();</span>
+                            } else {
+<span class="nc" id="L196">                                Toast.makeText(requireContext(), &quot;Unknown error&quot;, Toast.LENGTH_LONG).show();</span>
+<span class="nc" id="L197">                                Log.e(&quot;Upload&quot;, &quot;Empty error message&quot;);</span>
+                            }
+<span class="nc" id="L199">                            Log.e(&quot;Upload&quot;, &quot;Error: &quot; + error.getMessage());</span>
+<span class="nc" id="L200">                        }</span>
+                );
+<span class="nc" id="L202">                VolleySingleton.getInstance(requireContext()).addToRequestQueue(multipartRequest);</span>
+<span class="nc" id="L203">            } else {</span>
+<span class="nc" id="L204">                Log.e(&quot;ProfileFragment&quot;, &quot;Image data is null&quot;);</span>
+            }
+<span class="nc" id="L206">        } else {</span>
+<span class="nc" id="L207">            Log.e(&quot;ProfileFragment&quot;, &quot;Selected URI is null&quot;);</span>
+        }
+<span class="nc" id="L209">    }</span>
+
+
+    /**
+     * Converts the given image URI to a byte array.
+     *
+     * This method takes a URI pointing to an image and converts it into a byte array. The conversion
+     * involves opening an InputStream from the content resolver using the provided URI, and then
+     * reading the content into a byte array. This byte array represents the binary data of the image,
+     * which can be used for various purposes such as uploading the image to a server.
+     *
+     * @param imageUri The URI of the image to be converted. This should be a content URI that points
+     *                 to an image resource accessible through the content resolver.
+     * @return A byte array representing the image data, or null if the conversion fails.
+     * @throws IOException If an I/O error occurs while reading from the InputStream.
+     */
+    private byte[] convertImageUriToBytes(Uri imageUri) {
+        try {
+<span class="nc" id="L227">            InputStream inputStream = requireContext().getContentResolver().openInputStream(imageUri);</span>
+<span class="nc" id="L228">            ByteArrayOutputStream byteBuffer = new ByteArrayOutputStream();</span>
+
+<span class="nc" id="L230">            int bufferSize = 1024;</span>
+<span class="nc" id="L231">            byte[] buffer = new byte[bufferSize];</span>
+
+            int len;
+<span class="nc bnc" id="L234" title="All 2 branches missed.">            while ((len = inputStream.read(buffer)) != -1) {</span>
+<span class="nc" id="L235">                byteBuffer.write(buffer, 0, len);</span>
+            }
+
+<span class="nc" id="L238">            return byteBuffer.toByteArray();</span>
+<span class="nc" id="L239">        } catch (IOException e) {</span>
+<span class="nc" id="L240">            e.printStackTrace();</span>
+        }
+<span class="nc" id="L242">        return null;</span>
+    }
+
+    private void editButtonDialog() {
+<span class="fc" id="L246">        Dialog dialog = new Dialog(requireContext());</span>
+<span class="fc" id="L247">        dialog.setContentView(R.layout.edit_bio);</span>
+<span class="fc" id="L248">        dialog.show();</span>
+
+<span class="fc" id="L250">        Button save = dialog.findViewById(R.id.save);</span>
+<span class="fc" id="L251">        Button cancelButton = dialog.findViewById(R.id.cancel);</span>
+<span class="fc" id="L252">        EditText bioEdit = dialog.findViewById(R.id.bioEdit);</span>
+
+<span class="pc" id="L254">        cancelButton.setOnClickListener(v -&gt; dialog.dismiss());</span>
+<span class="fc" id="L255">        save.setOnClickListener(v -&gt; {</span>
+<span class="fc bfc" id="L256" title="All 2 branches covered.">            if(bioEdit.getText().toString().equals(&quot;&quot;)) {</span>
+<span class="fc" id="L257">                bioEdit.setError(&quot;Please enter a bio.&quot;);</span>
+<span class="fc" id="L258">                return;</span>
+<span class="fc bfc" id="L259" title="All 2 branches covered.">            } else if (bioEdit.getText().toString().length() &gt; 100) {</span>
+<span class="fc" id="L260">                bioEdit.setError(&quot;Please enter shorter bio. Maximum 100 characters.&quot;);</span>
+<span class="fc" id="L261">                return;</span>
+            }
+<span class="fc" id="L263">            String newBio = bioEdit.getText().toString();</span>
+<span class="fc" id="L264">            editBio(newBio);</span>
+            try {
+<span class="fc" id="L266">                Thread.sleep(500);</span>
+<span class="nc" id="L267">            } catch (InterruptedException e) {</span>
+<span class="nc" id="L268">                e.printStackTrace();</span>
+<span class="fc" id="L269">            }</span>
+<span class="fc" id="L270">            getBio();</span>
+<span class="fc" id="L271">            dialog.dismiss();</span>
+<span class="fc" id="L272">        });</span>
+
+
+<span class="fc" id="L275">    }</span>
+
+    private void editBio(String newBio) {
+<span class="fc" id="L278">        JSONObject requestBody = new JSONObject();</span>
+        try {
+<span class="fc" id="L280">            requestBody.put(&quot;bio&quot;, newBio);</span>
+<span class="nc" id="L281">        } catch (JSONException e) {</span>
+<span class="nc" id="L282">            e.printStackTrace();</span>
+<span class="fc" id="L283">        }</span>
+<span class="fc" id="L284">        RequestQueue queue = Volley.newRequestQueue(requireContext());</span>
+<span class="fc" id="L285">        String url = backendUrl + &quot;editBio/&quot; + username + &quot;/&quot; + newBio;</span>
+<span class="fc" id="L286">        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.PUT, url, requestBody, new Response.Listener&lt;JSONObject&gt;() {</span>
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+<span class="nc" id="L290">                    String message = response.getString(&quot;message&quot;);</span>
+<span class="nc" id="L291">                    userBiography.setText(newBio);</span>
+<span class="nc" id="L292">                    Toast.makeText(requireActivity(), message, Toast.LENGTH_SHORT).show();</span>
+<span class="nc" id="L293">                    Log.e(&quot;ProfileActivity&quot;, &quot;find this:&quot; + newBio);</span>
+<span class="nc" id="L294">                    getBio();</span>
+<span class="fc" id="L295">                } catch (JSONException e) {</span>
+<span class="fc" id="L296">                    e.printStackTrace();</span>
+<span class="fc" id="L297">                    Log.e(&quot;ProfileActivity&quot;, &quot;Error parsing response: &quot; + e.getMessage());</span>
+<span class="nc" id="L298">                }</span>
+<span class="fc" id="L299">            }</span>
+<span class="fc" id="L300">        }, new Response.ErrorListener() {</span>
+            @Override
+            public void onErrorResponse(VolleyError error) {
+<span class="nc" id="L303">                Log.e(&quot;ProfileActivity&quot;, &quot;Error editing bio: &quot; + error.getMessage());</span>
+<span class="nc" id="L304">            }</span>
+        });
+<span class="fc" id="L306">        queue.add(jsonObjectRequest);</span>
+<span class="fc" id="L307">        getBio();</span>
+<span class="fc" id="L308">    }</span>
+
+    private void addFriendsDialog() {
+<span class="fc" id="L311">        Dialog dialog = new Dialog(requireContext());</span>
+<span class="fc" id="L312">        dialog.setContentView(R.layout.add_friend);</span>
+<span class="fc" id="L313">        dialog.show();</span>
+
+<span class="fc" id="L315">        Button addFriend = dialog.findViewById(R.id.addFriend);</span>
+<span class="fc" id="L316">        Button cancelButton = dialog.findViewById(R.id.Cancel);</span>
+<span class="fc" id="L317">        EditText friendUsernameEdit = dialog.findViewById(R.id.friendUsernameEdit);</span>
+
+<span class="pc" id="L319">        cancelButton.setOnClickListener(v -&gt; dialog.dismiss());</span>
+<span class="fc" id="L320">        addFriend.setOnClickListener(v -&gt; {</span>
+
+<span class="fc" id="L322">            String friend = friendUsernameEdit.getText().toString();</span>
+<span class="fc" id="L323">            addFriends(friend, dialog);</span>
+<span class="fc" id="L324">            dialog.dismiss();</span>
+<span class="fc" id="L325">        });</span>
+<span class="fc" id="L326">    }</span>
+
+    private void addFriends(String friendId, Dialog dialog) {
+<span class="pc bpc" id="L329" title="1 of 2 branches missed.">        if (username.equals(friendId)) {</span>
+<span class="nc" id="L330">            Toast.makeText(requireContext(), &quot;You can't friend yourself!&quot;, Toast.LENGTH_SHORT).show();</span>
+        } else {
+<span class="fc" id="L332">            JSONObject requestBody = new JSONObject();</span>
+            try {
+<span class="fc" id="L334">                requestBody.put(&quot;userId&quot;, userId);</span>
+<span class="fc" id="L335">                requestBody.put(&quot;friendId&quot;, friendId);</span>
+<span class="nc" id="L336">            } catch (JSONException e) {</span>
+<span class="nc" id="L337">                e.printStackTrace();</span>
+<span class="fc" id="L338">            }</span>
+<span class="fc" id="L339">            RequestQueue queue = Volley.newRequestQueue(requireContext());</span>
+<span class="fc" id="L340">            String url = backendUrl + userId + &quot;/addFriend/&quot; + friendId;</span>
+<span class="fc" id="L341">            Log.e(&quot;ProfileActivity&quot;, &quot;URL = &quot; + url);</span>
+<span class="fc" id="L342">            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, requestBody, new Response.Listener&lt;JSONObject&gt;() {</span>
+                @Override
+                public void onResponse(JSONObject response) {
+                    try {
+<span class="nc" id="L346">                        String message = response.getString(&quot;message&quot;);</span>
+<span class="nc" id="L347">                        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show();</span>
+<span class="nc" id="L348">                        Toast.makeText(requireContext(), &quot;Friend added&quot;, Toast.LENGTH_SHORT).show();</span>
+<span class="nc" id="L349">                        dialog.dismiss();</span>
+<span class="nc" id="L350">                    } catch (JSONException e) {</span>
+<span class="nc" id="L351">                        e.printStackTrace();</span>
+<span class="nc" id="L352">                        Log.e(&quot;ProfileActivity&quot;, &quot;Error parsing response: &quot; + e.getMessage());</span>
+<span class="nc" id="L353">                    }</span>
+<span class="nc" id="L354">                }</span>
+<span class="fc" id="L355">            }, new Response.ErrorListener() {</span>
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    //    Toast.makeText(ProfileActivity.this, &quot;Error adding friend&quot;, Toast.LENGTH_SHORT).show();
+<span class="fc" id="L359">                    Log.e(&quot;ProfileActivity&quot;, &quot;Error adding friend: &quot; + error.getMessage());</span>
+<span class="fc" id="L360">                }</span>
+            });
+<span class="fc" id="L362">            queue.add(jsonObjectRequest);</span>
+        }
+<span class="fc" id="L364">        setFriendInfo();</span>
+<span class="fc" id="L365">    }</span>
+
+    private FriendsListAdapter adapter;
+
+    private void setAdapter() {
+<span class="fc" id="L370">        adapter = new FriendsListAdapter(requireContext(), friendsList, new FriendsListAdapter.OnDeleteClickListener() {</span>
+            @Override
+            public void onDeleteClick(int position) {
+<span class="fc" id="L373">                UserFriend friend = friendsList.get(position);</span>
+<span class="fc" id="L374">                String friendName = friend.getUsername();</span>
+<span class="fc" id="L375">                friendsList.remove(position);</span>
+<span class="fc" id="L376">                removeFriendFromDatabase(friendName); // Remove friend from database</span>
+<span class="fc" id="L377">                adapter.notifyItemRemoved(position); // Notify adapter of data change</span>
+<span class="fc" id="L378">            }</span>
+        });
+<span class="fc" id="L380">        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(requireContext());</span>
+<span class="fc" id="L381">        recyclerView.setLayoutManager(layoutManager);</span>
+<span class="fc" id="L382">        recyclerView.setItemAnimator(new DefaultItemAnimator());</span>
+<span class="fc" id="L383">        recyclerView.setAdapter(adapter);</span>
+<span class="fc" id="L384">    }</span>
+
+    private void removeFriendFromDatabase(String friendName) {
+<span class="fc" id="L387">        RequestQueue queue = Volley.newRequestQueue(requireContext());</span>
+<span class="fc" id="L388">        String url = backendUrl + userId + &quot;/removeFriend/&quot; + friendName; // Adjust the URL according to your backend API</span>
+<span class="fc" id="L389">        Log.d(&quot;ProfileActivity&quot;, &quot;Removing friend from database: &quot; + url);</span>
+<span class="fc" id="L390">        StringRequest stringRequest = new StringRequest(Request.Method.DELETE, url, new Response.Listener&lt;String&gt;() {</span>
+            @Override
+            public void onResponse(String response) {
+<span class="fc" id="L393">                Log.d(&quot;ProfileActivity&quot;, &quot;Unfriended &quot; + friendName);</span>
+<span class="fc" id="L394">                Toast.makeText(requireContext(), &quot;Unfriended &quot; + friendName, Toast.LENGTH_SHORT).show();</span>
+<span class="fc" id="L395">            }</span>
+<span class="fc" id="L396">        }, new Response.ErrorListener() {</span>
+            @Override
+            public void onErrorResponse(VolleyError error) {
+<span class="nc" id="L399">                Log.e(&quot;ProfileActivity&quot;, &quot;Error removing friend from database: &quot; + error.getMessage());</span>
+<span class="nc" id="L400">            }</span>
+        });
+<span class="fc" id="L402">        queue.add(stringRequest);</span>
+<span class="fc" id="L403">        setFriendInfo();</span>
+<span class="fc" id="L404">    }</span>
+
+    private void setFriendInfo() {
+//        friendsList.add(new UserFriend(&quot;Alok1&quot;, &quot;This is the real alok&quot;, null));
+//        friendsList.add(new UserFriend(&quot;Alok2&quot;, &quot;This is actually the real alok&quot;, null));
+//        friendsList.add(new UserFriend(&quot;Alok3&quot;, &quot;Nah, This is the real alok!&quot;, null));
+//        friendsList.add(new UserFriend(&quot;Mahdi&quot;, &quot;I will give Owais an A on this demo.&quot;, null));
+//        friendsList.add(new UserFriend(&quot;Alok4&quot;, &quot;Nope, its actually me&quot;, null));
+//        friendsList.add(new UserFriend(&quot;Alok5&quot;, &quot;Alok4 is lying.&quot;, null));
+//        friendsList.add(new UserFriend(&quot;Osamson&quot;, &quot;I agree with Alok5&quot;, null));
+//        friendsList.add(new UserFriend(&quot;Aldaco&quot;, &quot;Hello, I am definitly the real Dr. Aldaco&quot;, null));
+//        friendsList.add(new UserFriend(&quot;Alok8&quot;, &quot;I am the real alok&quot;, null));
+//        friendsList.add(new UserFriend(&quot;Alok9&quot;, &quot;Nah.&quot;, null));
+<span class="fc" id="L417">        RequestQueue queue = Volley.newRequestQueue(requireContext());</span>
+<span class="fc" id="L418">        String url = backendUrl + &quot;friends/&quot; + userId;</span>
+<span class="fc" id="L419">        Log.d(&quot;ProfileActivity&quot;, &quot;Fetching friend details: &quot; + url);</span>
+<span class="fc" id="L420">        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener&lt;JSONObject&gt;() {</span>
+            @Override
+            public void onResponse(JSONObject response) {
+<span class="fc" id="L423">                String jsonResponse = response.toString();</span>
+<span class="fc" id="L424">                Log.d(&quot;ProfileActivity&quot;, &quot;Friend Details JSON Response: &quot; + jsonResponse);</span>
+                try {
+                    // Clear the existing data in the friendsList. This avoids duplicate entries.
+<span class="fc" id="L427">                    friendsList.clear();</span>
+<span class="fc" id="L428">                    JSONArray userArray = response.getJSONArray(&quot;user&quot;);</span>
+<span class="fc bfc" id="L429" title="All 2 branches covered.">                    for (int i = 0; i &lt; userArray.length(); i++) {</span>
+<span class="fc" id="L430">                        JSONObject userObject = userArray.getJSONObject(i);</span>
+<span class="fc" id="L431">                        String username = userObject.getString(&quot;username&quot;);</span>
+<span class="pc bpc" id="L432" title="1 of 2 branches missed.">                        String bio = userObject.isNull(&quot;bio&quot;) ? &quot;&quot; : userObject.getString(&quot;bio&quot;);</span>
+<span class="fc" id="L433">                        String filePath = userObject.optString(&quot;filePath&quot;, &quot;&quot;);</span>
+<span class="fc" id="L434">                        Log.d(&quot;ProfileActivity&quot;, &quot;Username: &quot; + username);</span>
+<span class="fc" id="L435">                        Log.d(&quot;ProfileActivity&quot;, &quot;Bio: &quot; + bio);</span>
+<span class="fc" id="L436">                        Log.d(&quot;ProfileActivity&quot;, &quot;File Path: &quot; + filePath);</span>
+
+<span class="fc" id="L438">                        String profilePicUrl = userObject.optString(&quot;profilePicUrl&quot;, &quot;&quot;);</span>
+
+<span class="fc" id="L440">                        friendsList.add(new UserFriend(username, bio, filePath));</span>
+                    }
+
+                    // Notify the adapter that the data has changed
+<span class="fc" id="L444">                    recyclerView.getAdapter().notifyDataSetChanged();</span>
+<span class="nc" id="L445">                } catch (JSONException e) {</span>
+<span class="nc" id="L446">                    e.printStackTrace();</span>
+<span class="nc" id="L447">                    Log.e(&quot;ProfileActivity&quot;, &quot;Error parsing friend details JSON: &quot; + e.getMessage());</span>
+<span class="fc" id="L448">                }</span>
+<span class="fc" id="L449">            }</span>
+<span class="fc" id="L450">        }, new Response.ErrorListener() {</span>
+            @Override
+            public void onErrorResponse(VolleyError error) {
+<span class="nc" id="L453">                Log.e(&quot;ProfileActivity&quot;, &quot;Error fetching friend details: &quot; + error.getMessage());</span>
+<span class="nc" id="L454">            }</span>
+        });
+<span class="fc" id="L456">        queue.add(jsonObjectRequest);</span>
+<span class="fc" id="L457">    }</span>
+
+    private void getBio() {
+<span class="fc" id="L460">        RequestQueue queue = Volley.newRequestQueue(requireContext());</span>
+<span class="fc" id="L461">        String url = backendUrl + &quot;users/getBio/&quot; + username;</span>
+<span class="fc" id="L462">        Log.e(&quot;ProfileActivity&quot;, &quot;Bio url:&quot; + url);</span>
+<span class="fc" id="L463">        StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener&lt;String&gt;() {</span>
+            @Override
+            public void onResponse(String response) {
+<span class="fc" id="L466">                userBiography.setText(response);</span>
+<span class="fc" id="L467">                Log.e(&quot;ProfileActivity&quot;, &quot;Bio received:&quot; + response);</span>
+<span class="fc" id="L468">            }</span>
+<span class="fc" id="L469">        }, new Response.ErrorListener() {</span>
+            @Override
+            public void onErrorResponse(VolleyError error) {
+<span class="nc" id="L472">                Log.e(&quot;ProfileActivity&quot;, &quot;Error fetching bio: &quot; + error.getMessage());</span>
+<span class="nc" id="L473">            }</span>
+        });
+<span class="fc" id="L475">        queue.add(stringRequest);</span>
+<span class="fc" id="L476">    }</span>
+
+    /**
+     * Fetches the user's profile picture from the server.
+     */
+    //backendUrl + &quot;users/&quot; + userId + &quot;/profilePicture&quot;
+    private void getProfilePic() {
+        // Make a request to fetch the profile picture
+<span class="fc" id="L484">        String imageUrl = backendUrl + &quot;images/&quot; + username;</span>
+<span class="fc" id="L485">        RequestOptions requestOptions = new RequestOptions()</span>
+<span class="fc" id="L486">                .transform(new RoundedCorners(100)) // Adjust the corner radius as needed</span>
+<span class="fc" id="L487">                .placeholder(R.drawable.profile); // Placeholder image while loading</span>
+<span class="fc" id="L488">        Glide.with(requireContext())</span>
+<span class="fc" id="L489">                .asBitmap()</span>
+<span class="fc" id="L490">                .load(imageUrl)</span>
+<span class="fc" id="L491">                .apply(requestOptions)</span>
+<span class="fc" id="L492">                .skipMemoryCache(true)  // Disable memory caching</span>
+<span class="fc" id="L493">                .diskCacheStrategy(DiskCacheStrategy.NONE)  // Disable disk caching</span>
+<span class="fc" id="L494">                .into(new SimpleTarget&lt;Bitmap&gt;() {</span>
+                    @Override
+                    public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition&lt;? super Bitmap&gt; transition) {
+                        // Set the retrieved profile picture to the ImageView
+<span class="fc" id="L498">                        imgView.setImageBitmap(resource);</span>
+<span class="fc" id="L499">                    }</span>
+                    @Override
+                    public void onLoadFailed(@Nullable Drawable errorDrawable) {
+                        // Handle the case where image loading fails
+<span class="nc" id="L503">                        imgView.setImageResource(R.drawable.profile);</span>
+<span class="nc" id="L504">                    }</span>
+                });
+<span class="fc" id="L506">    }</span>
+    @Override
+    public void onDestroyView() {
+<span class="fc" id="L509">        super.onDestroyView();</span>
+<span class="pc bpc" id="L510" title="2 of 4 branches missed.">        if (getActivity() != null &amp;&amp; !getActivity().isFinishing()) {</span>
+<span class="nc" id="L511">            Glide.with(this).clear(imgView);</span>
+        }
+<span class="fc" id="L513">    }</span>
+
+
+
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span>Generated by the Android Gradle plugin 8.0.0</div></body></html>
