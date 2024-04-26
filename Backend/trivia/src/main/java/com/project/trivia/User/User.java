@@ -1,5 +1,6 @@
 package com.project.trivia.User;
 
+import com.project.trivia.MatchHistory.MatchHistory;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.project.trivia.FriendsList.Friends;
 import com.project.trivia.Leaderboard.Leaderboard;
@@ -7,6 +8,7 @@ import com.project.trivia.Lobby.Lobby;
 import jakarta.persistence.*;
 
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -37,6 +39,9 @@ public class User {
     @JsonIgnore
     private Lobby lobby;
 
+    @OneToMany(mappedBy = "user")
+    List<MatchHistory> pastMatches;
+
 
     public User(String username, String password, String email) {
         this.username = username;
@@ -44,6 +49,7 @@ public class User {
         this.email = email;
         bio = "";
         points = 0;
+        pastMatches = new ArrayList<>();
     }
 
     public User() {

@@ -1,9 +1,9 @@
-package MatchHistory;
+package com.project.trivia.MatchHistory;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.project.trivia.User.User;
+import jakarta.persistence.*;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
 
 @Entity
 public class MatchHistory {
@@ -17,6 +17,11 @@ public class MatchHistory {
     private String questionSet;
 
     private int pointsEarned;
+
+    @ManyToOne
+    @JoinColumn(name="user_id")
+    @JsonIgnore
+    private User user;
 
     public MatchHistory() {
 

@@ -1,6 +1,5 @@
-package MatchHistory;
+package com.project.trivia.MatchHistory;
 
-import com.project.trivia.User.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.transaction.annotation.Transactional;
 
