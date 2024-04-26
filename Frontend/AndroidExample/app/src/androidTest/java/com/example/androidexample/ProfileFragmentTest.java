@@ -47,7 +47,7 @@ public class ProfileFragmentTest {
 
     private static final String NEW_BIO = "I am the REAL Alok. No other Alok will ever come close to me. I am the one true Alok.";
 
-    private static final String FRIEND_NAME = "aloks1";
+    private static final String FRIEND_NAME = "aloks2";
 
     @Test
     public void testNavigationToProfileFragment() {

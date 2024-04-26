@@ -33,7 +33,6 @@ public class LobbyActivityTest {
 
     @Rule
     public ActivityScenarioRule<LobbiesActivity> activityScenarioRule = new ActivityScenarioRule<>(LobbiesActivity.class);
-
     private static final String VALID_USERNAME = "aloks";
     private static final int VALID_USER_ID = 1;
 
@@ -97,5 +96,3 @@ public class LobbyActivityTest {
     }
 
 }
-
-
