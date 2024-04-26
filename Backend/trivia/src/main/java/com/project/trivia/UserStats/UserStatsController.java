@@ -6,7 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RestController;
 
+@RestController
 public class UserStatsController {
 
     @Autowired
@@ -16,43 +18,102 @@ public class UserStatsController {
     UserRepository userRepo;
 
 
+    @GetMapping(path = "/userStats/{username}")
+    public UserStats getUserStats(@PathVariable String username) {
+        return userRepo.findByUsername(username).getStats();
+    }
+
 
     @GetMapping(path = "/correctRatio/{username}")
-    public double getCorrectRatio(@PathVariable String username) {
-        UserStats stats = statsRepo.findById(1);//TODO implement way to get the user connected to those stats
+    public double getCorrectRatio(@PathVariable String username) throws Exception {
+        User user = userRepo.findByUsername(username);
+        double totalCorrect = user.getStats().getTotalCorrect();
+        double totalAnswered = user.getStats().getTotalAnswered();
 
-        if(stats.getTotalAnswered() == 0){
+        if (user == null){
+            throw new Exception("User not found with username: " + username);
+        }
+
+        if(totalAnswered == 0){
             return 0;
         }
-        return stats.getTotalCorrect() / stats.getTotalAnswered();
+        return (totalCorrect/totalAnswered) * 100;
 
     }
 
     @GetMapping(path = "/incorrectRatio/{username}")
-    public double getIncorrectRatio(@PathVariable String username) {
-        UserStats stats = statsRepo.findById(1);//TODO
+    public double getIncorrectRatio(@PathVariable String username) throws Exception {
+        User user = userRepo.findByUsername(username);
+        double totalIncorrect = user.getStats().getTotalIncorrect();
+        double totalAnswered = user.getStats().getTotalAnswered();
 
-        if(stats.getTotalAnswered() <= 0){
+        if (user == null){
+            throw new Exception("User not found with username: " + username);
+        }
+
+        if(totalAnswered == 0){
             return 0;
         }
-        return stats.getTotalIncorrect() / stats.getTotalAnswered();
+        return (totalIncorrect/totalAnswered) * 100;
+
     }
 
-    @PutMapping(path = "/updateStats/{correct}/{incorrect}/{total}/{username}")
-    public UserStats updateStats(@PathVariable Double correct, @PathVariable Double incorrect,
-                                 @PathVariable Double total, @PathVariable String username) {
+    @PutMapping(path = "/{username}/updateStats/{correct}/{incorrect}/{total}")
+    public UserStats updateGameStats(@PathVariable Double correct, @PathVariable Double incorrect,
+                                     @PathVariable Double total, @PathVariable String username) throws Exception {
        User user = userRepo.findByUsername(username);
+
+        if(user == null){
+            throw new Exception("User not found with username: " + username);
+        }
+
        UserStats stats = user.getStats();
+
+       //updating the Question stats
        stats.setTotalAnswered(stats.getTotalAnswered() + total);
-       stats.setTotalCorrect(stats.getTotalAnswered() + correct);
-       stats.setTotalIncorrect(stats.getTotalAnswered() + incorrect);
+       stats.setTotalCorrect(stats.getTotalCorrect() + correct);
+       stats.setTotalIncorrect(stats.getTotalIncorrect() + incorrect);
+
 
        userRepo.save(user);
-
-        return user.getStats();
+       statsRepo.save(stats);
+       return user.getStats();
     }
 
+    @PutMapping(path = "/{username}/updateWins")
+    public UserStats updateWins(@PathVariable String username) throws Exception {
+        User user = userRepo.findByUsername(username);
+        if(user == null){
+            throw new Exception("User not found with username: " + username);
+        }
 
+        UserStats stats = user.getStats();
 
+        stats.setWins(stats.getLosses() + 1);
+        stats.setWinStreak(stats.getWinStreak() + 1);
+
+        userRepo.save(user);
+        statsRepo.save(stats);
+        return user.getStats();
+
+    }
+
+    @PutMapping(path = "/{username}/updateLoses")
+    public UserStats updateLoses(@PathVariable String username) throws Exception {
+        User user = userRepo.findByUsername(username);
+        if(user == null){
+            throw new Exception("User not found with username: " + username);
+        }
+
+            UserStats stats = user.getStats();
+
+        stats.setLosses(stats.getLosses() + 1);
+        stats.setWinStreak(0);
+
+        userRepo.save(user);
+        statsRepo.save(stats);
+        return user.getStats();
+
+    }
 
 }

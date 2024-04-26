@@ -27,8 +27,20 @@ public class UserStats {
 
     private int gamesPlayed;
 
-    @OneToOne(mappedBy = "stats")
+    @OneToOne(mappedBy = "stats", cascade = CascadeType.ALL)
     private User user;
+
+    public UserStats(User user) {
+        this.user = user;
+        totalAnswered = 0;
+        totalCorrect = 0;
+        totalIncorrect = 0;
+        winStreak = 0;
+        wins = 0;
+        losses = 0;
+        questionsSumbitted = 0;
+        gamesPlayed = 0;
+    }
 
     public UserStats() {
         totalAnswered = 0;

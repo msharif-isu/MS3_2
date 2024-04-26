@@ -34,14 +34,13 @@ public class User {
     private Leaderboard leaderboard;
 
     @ManyToOne
-    @JoinColumn(name="lobby_id")
+    @JoinColumn(name = "lobby_id")
     @JsonIgnore
     private Lobby lobby;
 
 
-
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "statistics_id", referencedColumnName = "id")
+    @JoinColumn(name = "stats_id", referencedColumnName = "id")
     private UserStats stats;
 
 
@@ -123,7 +122,9 @@ public class User {
     }
 
 
-    public Leaderboard getLeaderboard() {return leaderboard;}
+    public Leaderboard getLeaderboard() {
+        return leaderboard;
+    }
 
     public void setLeaderboard(Leaderboard leaderboard) {
         this.leaderboard = leaderboard;
