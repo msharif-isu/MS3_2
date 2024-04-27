@@ -43,6 +43,7 @@ public class User {
     List<MatchHistory> pastMatches;
 
 
+
     public User(String username, String password, String email) {
         this.username = username;
         this.password = password;
@@ -128,13 +129,19 @@ public class User {
         this.leaderboard = leaderboard;
     }
 
-
-
     public Lobby getLobby() {
         return lobby;
     }
     public void setLobby(Lobby lobbyId) {
         this.lobby = lobbyId;
+    }
+
+    public List<MatchHistory> getPastMatches() {
+        return pastMatches;
+    }
+
+    public void setPastMatches(List<MatchHistory> pastMatches) {
+        this.pastMatches = pastMatches;
     }
 
 }

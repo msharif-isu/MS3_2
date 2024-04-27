@@ -12,11 +12,13 @@ public class MatchHistory {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private int placement;
+    private String placement;
 
     private String questionSet;
 
     private int pointsEarned;
+
+    private String username;
 
     @ManyToOne
     @JoinColumn(name="user_id")
@@ -27,10 +29,12 @@ public class MatchHistory {
 
     }
 
-    public MatchHistory(int placement, String questionSet, int pointsEarned) {
+    public MatchHistory(String placement, String questionSet, int pointsEarned, String username, User user) {
         this.placement = placement;
         this.questionSet = questionSet;
         this.pointsEarned = pointsEarned;
+        this.username = username;
+        this.user = user;
     }
 
     public int getPointsEarned() {
@@ -49,11 +53,11 @@ public class MatchHistory {
         this.questionSet = questionSet;
     }
 
-    public int getPlacement() {
+    public String getPlacement() {
         return placement;
     }
 
-    public void setPlacement(int placement) {
+    public void setPlacement(String placement) {
         this.placement = placement;
     }
 
@@ -63,5 +67,21 @@ public class MatchHistory {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 }
