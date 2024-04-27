@@ -33,7 +33,7 @@ public class Question {
             joinColumns = @JoinColumn(name = "multiplayer_id"),
             inverseJoinColumns = @JoinColumn(name = "question_id"))
     @JsonIgnore
-    private List<Multiplayer> multiplayers;
+    private List<Multiplayer> multiplayer;
 
 
     public Question(String question, String answer, String questionType, boolean used, boolean userCreated) {
@@ -98,16 +98,16 @@ public class Question {
 
     public void setUserCreated(boolean userCreated) {this.userCreated = userCreated;}
 
-    public List<Multiplayer> getMultiplayers() {
-        return multiplayers;
+    public List<Multiplayer> getMultiplayer() {
+        return multiplayer;
     }
 
-    public void setMultiplayers(List<Multiplayer> multiplayers) {
-        this.multiplayers = multiplayers;
+    public void setMultiplayer(List<Multiplayer> multiplayer) {
+        this.multiplayer = multiplayer;
     }
 
     public void addMultiplayer(Multiplayer multiplayer) {
-        this.multiplayers.add(multiplayer);
+        this.multiplayer.add(multiplayer);
     }
 
 
