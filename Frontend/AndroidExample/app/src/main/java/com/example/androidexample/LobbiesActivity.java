@@ -63,7 +63,13 @@ public class LobbiesActivity extends AppCompatActivity implements WebSocketListe
     private boolean joinedLobby = false;
     private ArrayAdapter<String> playerAdapter;
 
+    private String currentHostUsername;
+
     private boolean isHost = false;
+
+    private Button startGame, changeHost;
+    private TextView changeHostText;
+    private Spinner changeHostSpinner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -120,7 +126,6 @@ public class LobbiesActivity extends AppCompatActivity implements WebSocketListe
         dialog.setCancelable(false);
         dialog.setCanceledOnTouchOutside(false);
         getLobbyDetails(roomId);
-
         SharedPreferences.Editor editor = getSharedPreferences("roomID", MODE_PRIVATE).edit();
         editor.putInt("ROOM_ID", (int) roomId);
         editor.apply();
@@ -129,28 +134,27 @@ public class LobbiesActivity extends AppCompatActivity implements WebSocketListe
 
         Button joinRoom = dialog.findViewById(R.id.buttonJoinRoom);
         Button leaveRoom = dialog.findViewById(R.id.buttonLeaveRoom);
-        Button startGame = dialog.findViewById(R.id.buttonStartGame);
-        Button changeHost = dialog.findViewById(R.id.buttonChangeHost);
-        Spinner changeHostSpinner = dialog.findViewById(R.id.changeHostSpinner);
+        startGame = dialog.findViewById(R.id.buttonStartGame);
+        changeHost = dialog.findViewById(R.id.buttonChangeHost);
+        changeHostSpinner = dialog.findViewById(R.id.changeHostSpinner);
+        changeHostText = dialog.findViewById(R.id.textView11);
         RecyclerView playerListRecyclerView = dialog.findViewById(R.id.recycleView);
-
 
         // A little sketchy, but i need a websocket room and i didnt want to make another class.
         String chatUrl = RequestURLs.SERVER_WEBSOCKET_URL_MULTIPLAYER + "/chat/" + roomId * -1 + "/" + username;
         WebSocketManager.getInstance().connectWebSocket(chatUrl);
         WebSocketManager.getInstance().setWebSocketListener(LobbiesActivity.this);
-        //TODO UNCOMMENT
-//        if (isHost) {
-//            startGame.setVisibility(View.VISIBLE);
-//            changeHost.setVisibility(View.VISIBLE);
-//            changeHostSpinner.setVisibility(View.VISIBLE);
-////            leaveRoom.setVisibility(View.GONE);
-//        } else {
-//            startGame.setVisibility(View.GONE);
-//            changeHost.setVisibility(View.GONE);
-//            changeHostSpinner.setVisibility(View.GONE);
-////            leaveRoom.setVisibility(View.VISIBLE);
-//        }
+        if (isHost) {
+            startGame.setVisibility(View.VISIBLE);
+            changeHost.setVisibility(View.VISIBLE);
+            changeHostSpinner.setVisibility(View.VISIBLE);
+            changeHostText.setVisibility(View.VISIBLE);
+        } else {
+            startGame.setVisibility(View.GONE);
+            changeHost.setVisibility(View.GONE);
+            changeHostSpinner.setVisibility(View.GONE);
+            changeHostText.setVisibility(View.GONE);
+        }
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
         adapter = new LobbyPlayerAdapter(getApplicationContext(), friendsList, new LobbyPlayerAdapter.OnDeleteClickListener() {
             @Override
@@ -184,22 +188,30 @@ public class LobbiesActivity extends AppCompatActivity implements WebSocketListe
             isInLobby = false;
             isHost = false;
             WebSocketManager.getInstance().sendMessage("leftLobby");
+            if (isHost) {
+                WebSocketManager.getInstance().sendMessage("changeHost");
+                isHost = false;
+            }
             WebSocketManager.getInstance().closeWebSocket();
-            //TODO assign random host
             dialog.dismiss();
         });
         joinRoom.setOnClickListener(v -> {
             joinLobby(roomId, userId);
             isInLobby = true;
             getLobbyDetails(roomId);
-            refreshLobbyList();
             WebSocketManager.getInstance().sendMessage("joinedLobby");
+            refreshLobbyList();
         });
         changeHost.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (selectedNewHost != null) {
                     changeHost(roomId, selectedNewHost);
+                    WebSocketManager.getInstance().sendMessage("changeHost to " + selectedNewHost);
+                    startGame.setVisibility(View.GONE);
+                    changeHost.setVisibility(View.GONE);
+                    changeHostSpinner.setVisibility(View.GONE);
+                    changeHostText.setVisibility(View.GONE);
                 } else {
                     Toast.makeText(LobbiesActivity.this, "Please select a player to become the new host", Toast.LENGTH_SHORT).show();
                 }
@@ -210,6 +222,7 @@ public class LobbiesActivity extends AppCompatActivity implements WebSocketListe
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 selectedNewHost = playerUsernames.get(position);
             }
+
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
                 selectedNewHost = null;
@@ -230,7 +243,6 @@ public class LobbiesActivity extends AppCompatActivity implements WebSocketListe
         playerAdapter.notifyDataSetChanged();
         return playerAdapter;
     }
-
 
 
     private void changeHost(long roomId, String newHostUsername) {
@@ -366,7 +378,7 @@ public class LobbiesActivity extends AppCompatActivity implements WebSocketListe
         Button cancelButton = dialog.findViewById(R.id.Cancel);
         TextView lobbySizeTextView = dialog.findViewById(R.id.lobbySize);
         Slider slider = dialog.findViewById(R.id.slider);
-        lobbySizeTextView.setText(String.valueOf(slider.getValue()));
+        lobbySizeTextView.setText(String.valueOf(2));
         slider.addOnChangeListener(new Slider.OnChangeListener() {
             @Override
             public void onValueChange(Slider slider, float value, boolean fromUser) {
@@ -417,8 +429,13 @@ public class LobbiesActivity extends AppCompatActivity implements WebSocketListe
         int roomSize = response.getInt("roomSize");
         int playerCount = response.getInt("playerCount");
         String host = response.getString("host");
+        currentHostUsername = host;
         boolean finished = response.getBoolean("finished");
         long lobbyId = response.getLong("id");
+        if (username.equals(host)) {
+            WebSocketManager.getInstance().sendMessage("changeHost to " + username);
+            isHost = true;
+        }
         // Parse players' details
         List<UserFriend> players = new ArrayList<>();
         JSONArray playersArray = response.getJSONArray("players");
@@ -510,14 +527,40 @@ public class LobbiesActivity extends AppCompatActivity implements WebSocketListe
                     e.printStackTrace();
                 }
                 getLobbyDetails(roomId);
+                refreshLobbyList();
             } else if (message.contains("leftLobby")) {
                 try {
                     Thread.sleep(1000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
+                if (message.contains(currentHostUsername)) {
+                    if (username.equals(currentHostUsername)) {
+                        startGame.setVisibility(View.VISIBLE);
+                        changeHost.setVisibility(View.VISIBLE);
+                        changeHostSpinner.setVisibility(View.VISIBLE);
+                        changeHostText.setVisibility(View.VISIBLE);
+                        isHost = true;
+                    }
+                }
+
                 getLobbyDetails(roomId);
+                refreshLobbyList();
             }
+
+            else if (message.endsWith("changeHost to " + username)) {
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                startGame.setVisibility(View.VISIBLE);
+                changeHost.setVisibility(View.VISIBLE);
+                changeHostSpinner.setVisibility(View.VISIBLE);
+                changeHostText.setVisibility(View.VISIBLE);
+                isHost = false;
+            }
+
         });
     }
 
