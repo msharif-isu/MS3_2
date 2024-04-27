@@ -1,6 +1,8 @@
 package com.project.trivia.User;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.project.trivia.Achievements.Achievement;
+import com.project.trivia.Achievements.AchievementRepository;
 import com.project.trivia.FriendsList.Friends;
 import com.project.trivia.Leaderboard.Leaderboard;
 import com.project.trivia.Lobby.Lobby;
@@ -36,6 +38,11 @@ public class User {
     @JoinColumn(name="lobby_id")
     @JsonIgnore
     private Lobby lobby;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "achievement")
+    private Achievement achievement;
+
 
 
     public User(String username, String password, String email) {
@@ -131,4 +138,6 @@ public class User {
         this.lobby = lobbyId;
     }
 
+    public Achievement getAchievement() {return achievement;}
+    public void setAchievement(Achievement achievement) {this.achievement = achievement;}
 }
