@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.project.trivia.FriendsList.Friends;
 import com.project.trivia.Leaderboard.Leaderboard;
 import com.project.trivia.Lobby.Lobby;
+import com.project.trivia.UserStats.UserStats;
 import jakarta.persistence.*;
 
 
@@ -35,13 +36,18 @@ public class User {
     private Leaderboard leaderboard;
 
     @ManyToOne
-    @JoinColumn(name="lobby_id")
+    @JoinColumn(name = "lobby_id")
     @JsonIgnore
     private Lobby lobby;
 
     @OneToMany(mappedBy = "user")
     List<MatchHistory> pastMatches;
 
+
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "stats_id", referencedColumnName = "id")
+    private UserStats stats;
 
 
     public User(String username, String password, String email) {
@@ -123,7 +129,9 @@ public class User {
     }
 
 
-    public Leaderboard getLeaderboard() {return leaderboard;}
+    public Leaderboard getLeaderboard() {
+        return leaderboard;
+    }
 
     public void setLeaderboard(Leaderboard leaderboard) {
         this.leaderboard = leaderboard;
@@ -132,6 +140,7 @@ public class User {
     public Lobby getLobby() {
         return lobby;
     }
+
     public void setLobby(Lobby lobbyId) {
         this.lobby = lobbyId;
     }
@@ -142,6 +151,14 @@ public class User {
 
     public void setPastMatches(List<MatchHistory> pastMatches) {
         this.pastMatches = pastMatches;
+    }
+
+    public UserStats getStats() {
+        return stats;
+    }
+
+    public void setStats(UserStats stats) {
+        this.stats = stats;
     }
 
 }
