@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:id="@+id/box"
+        android:layout_width="0dp"
+        android:layout_height="90dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/playerlist_box" />
+
+    <ImageView
+        android:id="@+id/acheivementPic"
+        android:layout_width="75dp"
+        android:layout_height="75dp"
+        android:layout_gravity="center"
+        android:layout_marginStart="10dp"
+        android:scaleType="centerCrop"
+        app:layout_constraintBottom_toBottomOf="@+id/box"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/box"
+        app:srcCompat="@drawable/profile"></ImageView>
+
+    <TextView
+        android:id="@+id/acheivementBio"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:fontFamily="@font/aileron"
+        android:text="TextView"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="@+id/acheivementPic"
+        app:layout_constraintEnd_toStartOf="@+id/removeFriend"
+        app:layout_constraintStart_toEndOf="@+id/acheivementPic"
+        app:layout_constraintTop_toBottomOf="@+id/acheivementName" />
+
+    <TextView
+        android:id="@+id/acheivementName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/aileron_bold"
+        android:text="TextView"
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        app:layout_constraintStart_toEndOf="@+id/acheivementPic"
+        app:layout_constraintTop_toTopOf="@+id/acheivementPic" />
+
+    <ImageButton
+        android:id="@+id/removeFriend"
+        android:layout_width="75dp"
+        android:layout_height="75dp"
+        android:layout_marginEnd="10dp"
+        android:background="#00FFFFFF"
+        android:scaleX="1.5"
+        android:scaleY="1.5"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/box"
+        app:layout_constraintTop_toTopOf="@+id/box"
+        app:srcCompat="@android:drawable/ic_menu_close_clear_cancel"
+        tools:visibility="invisible" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
