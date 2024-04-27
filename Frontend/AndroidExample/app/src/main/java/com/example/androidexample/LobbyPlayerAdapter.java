@@ -33,18 +33,23 @@ public class LobbyPlayerAdapter extends RecyclerView.Adapter<LobbyPlayerAdapter.
     private ArrayList<UserFriend> friendList;
     private Context context;
     private OnDeleteClickListener onDeleteClickListener; // Interface instance
-
     private String backendUrl = RequestURLs.SERVER_HTTP_URL + "/";
+    private boolean isCurrentUserHost;
+
+    public void updateHostStatus(boolean isHost) {
+        isCurrentUserHost = isHost;
+    }
 
     // Interface definition for click events
     public interface OnDeleteClickListener {
         void onDeleteClick(int position);
     }
 
-    public LobbyPlayerAdapter(Context context, ArrayList<UserFriend> friendList, OnDeleteClickListener onDeleteClickListener) {
+    public LobbyPlayerAdapter(Context context, ArrayList<UserFriend> friendList, OnDeleteClickListener onDeleteClickListener, boolean isCurrentUserHost) {
         this.context = context;
         this.friendList = friendList;
         this.onDeleteClickListener = onDeleteClickListener;
+        this.isCurrentUserHost = isCurrentUserHost;
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
@@ -71,7 +76,11 @@ public class LobbyPlayerAdapter extends RecyclerView.Adapter<LobbyPlayerAdapter.
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         UserFriend friend = friendList.get(position);
-
+        if (isCurrentUserHost) {
+            holder.deleteButton.setVisibility(View.VISIBLE);
+        } else {
+            holder.deleteButton.setVisibility(View.GONE);
+        }
         // Set friend username
         String username = friend.getUsername();
         holder.friendUsername.setText(username);

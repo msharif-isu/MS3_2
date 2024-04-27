@@ -103,7 +103,7 @@ public class LobbiesActivity extends AppCompatActivity implements WebSocketListe
                 String friendName = friend.getUsername();
 //                getUserIdByUsername(friendName, roomId);
             }
-        });
+        }, isHost);
 
         refreshLobbyList();
 
@@ -163,8 +163,7 @@ public class LobbiesActivity extends AppCompatActivity implements WebSocketListe
                 String friendName = friend.getUsername();
                 getUserIdByUsername(friendName, roomId);
             }
-
-        });
+        }, isHost);
 
 
         playerListRecyclerView.setLayoutManager(layoutManager);
@@ -187,6 +186,7 @@ public class LobbiesActivity extends AppCompatActivity implements WebSocketListe
             leaveRoom(roomId, userId);
             isInLobby = false;
             isHost = false;
+            adapter.updateHostStatus(isHost);
             WebSocketManager.getInstance().sendMessage("leftLobby");
             if (isHost) {
                 WebSocketManager.getInstance().sendMessage("changeHost");
@@ -202,19 +202,18 @@ public class LobbiesActivity extends AppCompatActivity implements WebSocketListe
             WebSocketManager.getInstance().sendMessage("joinedLobby");
             refreshLobbyList();
         });
-        changeHost.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (selectedNewHost != null) {
-                    changeHost(roomId, selectedNewHost);
-                    WebSocketManager.getInstance().sendMessage("changeHost to " + selectedNewHost);
-                    startGame.setVisibility(View.GONE);
-                    changeHost.setVisibility(View.GONE);
-                    changeHostSpinner.setVisibility(View.GONE);
-                    changeHostText.setVisibility(View.GONE);
-                } else {
-                    Toast.makeText(LobbiesActivity.this, "Please select a player to become the new host", Toast.LENGTH_SHORT).show();
-                }
+        changeHost.setOnClickListener(v -> {
+            if (selectedNewHost != null) {
+                isHost = false;
+                changeHost(roomId, selectedNewHost);
+                WebSocketManager.getInstance().sendMessage("changeHost to " + selectedNewHost);
+                adapter.updateHostStatus(isHost);
+                startGame.setVisibility(View.GONE);
+                changeHost.setVisibility(View.GONE);
+                changeHostSpinner.setVisibility(View.GONE);
+                changeHostText.setVisibility(View.GONE);
+            } else {
+                Toast.makeText(LobbiesActivity.this, "Please select a player to become the new host", Toast.LENGTH_SHORT).show();
             }
         });
         changeHostSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -228,6 +227,7 @@ public class LobbiesActivity extends AppCompatActivity implements WebSocketListe
                 selectedNewHost = null;
             }
         });
+
     }
 
     private ArrayAdapter<String> getUsernamesInLobby(LobbyPlayerAdapter lobbyPlayerAdapter) {
@@ -255,6 +255,8 @@ public class LobbiesActivity extends AppCompatActivity implements WebSocketListe
                             String message = response.getString("message");
                             if (message.equals("success")) {
                                 Toast.makeText(LobbiesActivity.this, "Host changed successfully", Toast.LENGTH_SHORT).show();
+                                isHost = false;
+                                adapter.updateHostStatus(isHost);
                             } else {
                                 Toast.makeText(LobbiesActivity.this, "Failed to change host", Toast.LENGTH_SHORT).show();
                             }
@@ -322,9 +324,12 @@ public class LobbiesActivity extends AppCompatActivity implements WebSocketListe
                             // Set players to the lobby object
                             lobby.setPlayers(players);
                             adapter.notifyDataSetChanged(); // Update RecyclerView
-
                             // Populate spinner after data is fetched
                             getUsernamesInLobby(adapter); // This also updates the spinner adapter
+                            isHost = lobby.getHost().equals(username);
+                            adapter.updateHostStatus(isHost);
+
+
                         } catch (JSONException e) {
                             e.printStackTrace();
                             Toast.makeText(LobbiesActivity.this, "Failed to parse lobby details", Toast.LENGTH_SHORT).show();
@@ -422,6 +427,7 @@ public class LobbiesActivity extends AppCompatActivity implements WebSocketListe
         });
         Volley.newRequestQueue(this).add(request);
         isHost = true;
+
     }
 
     private Lobby parseLobbyResponse(JSONObject response) throws JSONException {
@@ -435,6 +441,7 @@ public class LobbiesActivity extends AppCompatActivity implements WebSocketListe
         if (username.equals(host)) {
             WebSocketManager.getInstance().sendMessage("changeHost to " + username);
             isHost = true;
+            adapter.updateHostStatus(isHost);
         }
         // Parse players' details
         List<UserFriend> players = new ArrayList<>();
@@ -541,14 +548,14 @@ public class LobbiesActivity extends AppCompatActivity implements WebSocketListe
                         changeHostSpinner.setVisibility(View.VISIBLE);
                         changeHostText.setVisibility(View.VISIBLE);
                         isHost = true;
+                        adapter.updateHostStatus(isHost);
+//                        adapter.notifyDataSetChanged();
                     }
                 }
 
                 getLobbyDetails(roomId);
                 refreshLobbyList();
-            }
-
-            else if (message.endsWith("changeHost to " + username)) {
+            } else if (message.endsWith("changeHost to " + username)) {
                 try {
                     Thread.sleep(1000);
                 } catch (InterruptedException e) {
@@ -559,6 +566,8 @@ public class LobbiesActivity extends AppCompatActivity implements WebSocketListe
                 changeHostSpinner.setVisibility(View.VISIBLE);
                 changeHostText.setVisibility(View.VISIBLE);
                 isHost = false;
+                adapter.updateHostStatus(isHost);
+//                adapter.notifyDataSetChanged();
             }
 
         });
