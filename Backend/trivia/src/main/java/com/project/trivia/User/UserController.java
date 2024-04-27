@@ -57,7 +57,7 @@ public class UserController {
     public User updateUser(@PathVariable int id, @RequestBody User request){
         User user = userRepository.findById(id);
         if(user == null)
-            return null;
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         if(request.getUsername() == null || userRepository.existsByUsername(request.getUsername())){
             throw new ResponseStatusException(HttpStatus.I_AM_A_TEAPOT, "Username already Taken");
         }

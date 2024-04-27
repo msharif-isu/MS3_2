@@ -1,6 +1,7 @@
 package com.project.trivia;
 
 
+import com.project.trivia.Lobby.Lobby;
 import com.project.trivia.User.User;
 import com.project.trivia.User.UserRepository;
 import io.restassured.RestAssured;
@@ -18,8 +19,7 @@ import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import static io.restassured.RestAssured.when;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 
@@ -147,28 +147,15 @@ public class AdamSystemTest {
 
     @Test
     public void updatingUserInfoTest(){
-        //User to update bio of
-        String user = "{" +
-                "\"username\":\"TestAlok\", " +
-                "\"password\":\"password456\", " +
-                "\"email\":\"aloks@iastate.edu\"" +
-                "}";
-        //Creates user
-        Response response = RestAssured.given().
-                contentType(ContentType.JSON).
-                body(user).
-                when().
-                post("/users");
-
-        //Status response
-        int statusCode = response.getStatusCode();
-        assertEquals(200, statusCode);
+        //Create new test user to update
+        User user = new User("TestAlok", "password456", "aloks@iastate.edu");
+        userRepo.save(user);
 
         //Id of test user
         int userId = userRepo.findByUsername("TestAlok").getId();
 
         //New username to change
-        String newUsername = "{" +
+        String newUserInfo = "{" +
                 "\"username\":\"alokTest\", " +
                 "\"password\":\"password123\", " +
                 "\"email\":\"osamman@iastate.edu\"" +
@@ -177,13 +164,13 @@ public class AdamSystemTest {
         //http of put test user with id
         String testUserEndpoint = "/users/" + userId;
 
-        response = RestAssured.given().
+        Response response = RestAssured.given().
                 contentType(ContentType.JSON).
-                body(newUsername).
+                body(newUserInfo).
                 when().
                 put(testUserEndpoint);
 
-        statusCode = response.getStatusCode();
+        int statusCode = response.getStatusCode();
         assertEquals(200, statusCode);
 
         String returnString = response.getBody().asString();
@@ -199,9 +186,80 @@ public class AdamSystemTest {
             e.printStackTrace();
         }
 
+
+        //Test To check that you cannot change username to an existing username
+        response = RestAssured.given().
+                contentType(ContentType.JSON).
+                body("{" +
+                        "\"username\":\"alokTest\"" +
+                        "}").
+                when().
+                put(testUserEndpoint);
+
+        //Throws a I_AM_A_TEAPOT reponse since that is what I used to show the error that the username is taken
+        statusCode = response.getStatusCode();
+        assertEquals(418, statusCode);
+
         //Make sure to remove the user from the table because it should be null
         userRepo.deleteById(userRepo.findByUsername("alokTest").getId());
         assertNull(userRepo.findByUsername("TestAlok"));
+
+
+        //Checking that you cannot update a user that doesn't exist
+        response = RestAssured.given().
+                contentType(ContentType.JSON).
+                body("{" +
+                        "\"username\":\"alokTest\"" +
+                        "}").
+                when().
+                put(testUserEndpoint);
+
+        assertEquals(404, response.getStatusCode());
+    }
+
+    @Test
+    public void lobbyCreationTest(){
+        Response response = RestAssured.given().
+                post("/create/1/3");
+
+        int statusCode = response.getStatusCode();
+        assertEquals(200, statusCode);
+
+        String returnString = response.getBody().asString();
+        try {
+            // Parse the response as a JSONObject
+            JSONObject returnObj = new JSONObject(returnString);
+
+            assertEquals("aloks", returnObj.getString("host"));
+            assertEquals(3, returnObj.getInt("roomSize"));
+            assertEquals(1, returnObj.getInt("playerCount"));
+            assertFalse(returnObj.getBoolean("finished"));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        Lobby lobby = userRepo.findById(1).getLobby();
+
+        String testUserEndpoint = "/joinRoom/" + lobby.getId() + "/2";
+
+        //Test to add user to lobby
+        response = RestAssured.given().
+                put("/joinRoom/" + lobby.getId() + "/2");
+
+        statusCode = response.getStatusCode();
+        assertEquals(200, statusCode);
+
+        returnString = response.getBody().asString();
+        try {
+            // Parse the response as a JSONObject
+            JSONObject returnObj = new JSONObject(returnString);
+
+            assertEquals("aloks", returnObj.getString("host"));
+            assertEquals(2, returnObj.getInt("playerCount"));
+            assertEquals(userRepo.findById(2).getLobby().getId(), returnObj.getLong("id"));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
 
     }

@@ -60,10 +60,6 @@ public class User {
         return id;
     }
 
-    public void setId(int id) {
-        this.id = id;
-    }
-
     public String getUsername() {
         return username;
     }
@@ -95,7 +91,6 @@ public class User {
     public void setPoints(int points) {
         this.points = points;
     }
-
 
     public List<Friends> getFriends() {
         return friends;
