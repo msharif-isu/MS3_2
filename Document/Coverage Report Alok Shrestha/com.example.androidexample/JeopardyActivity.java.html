@@ -1,0 +1,305 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>JeopardyActivity.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=0;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">debug</a> &gt; <a href="index.source.html" class="el_package">com.example.androidexample</a> &gt; <span class="el_source">JeopardyActivity.java</span></div><h1>JeopardyActivity.java</h1><pre class="source lang-java linenums">package com.example.androidexample;
+
+import android.app.Dialog;
+import android.content.SharedPreferences;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.JsonObjectRequest;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Random;
+
+import url.RequestURLs;
+
+<span class="fc" id="L33">public class JeopardyActivity extends AppCompatActivity {</span>
+    private List&lt;List&lt;Button&gt;&gt; buttonColumns;
+    private List&lt;Button&gt; questionCategory0Buttons;
+    private List&lt;Button&gt; questionCategory1Buttons;
+    private List&lt;Button&gt; questionCategory2Buttons;
+    private List&lt;TextView&gt; categoryTitles;
+    private TextView pointsText;
+
+    private String username;
+    private int userID;
+    private int points;
+<span class="fc" id="L44">    private boolean attemptedRefresh = false;</span>
+
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+<span class="fc" id="L48">        super.onCreate(savedInstanceState);</span>
+<span class="fc" id="L49">        setContentView(R.layout.activity_jeopardy);</span>
+
+<span class="fc" id="L51">        SharedPreferences prefs = getSharedPreferences(&quot;UserData&quot;, MODE_PRIVATE);</span>
+<span class="fc" id="L52">        username = prefs.getString(&quot;USERNAME&quot;,&quot;&quot;);</span>
+<span class="fc" id="L53">        userID = prefs.getInt(&quot;USER_ID&quot;, 0);</span>
+
+<span class="fc" id="L55">        points = 0;</span>
+<span class="fc" id="L56">        pointsText = findViewById(R.id.jeopardy_point_total_text);</span>
+
+<span class="fc" id="L58">        pointsText.setText(&quot;Total Points: &quot; + points);</span>
+
+<span class="fc" id="L60">        buttonColumns = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L61">        questionCategory0Buttons = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L62">        questionCategory1Buttons = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L63">        questionCategory2Buttons = new ArrayList&lt;&gt;();</span>
+
+<span class="fc" id="L65">        categoryTitles = new ArrayList&lt;&gt;();</span>
+
+<span class="fc" id="L67">        Button questionButton00 = findViewById(R.id.jeopardy_button_00);</span>
+<span class="fc" id="L68">        Button questionButton10 = findViewById(R.id.jeopardy_button_10);</span>
+<span class="fc" id="L69">        Button questionButton20 = findViewById(R.id.jeopardy_button_20);</span>
+<span class="fc" id="L70">        Button questionButton01 = findViewById(R.id.jeopardy_button_01);</span>
+<span class="fc" id="L71">        Button questionButton11 = findViewById(R.id.jeopardy_button_11);</span>
+<span class="fc" id="L72">        Button questionButton21 = findViewById(R.id.jeopardy_button_21);</span>
+<span class="fc" id="L73">        Button questionButton02 = findViewById(R.id.jeopardy_button_02);</span>
+<span class="fc" id="L74">        Button questionButton12 = findViewById(R.id.jeopardy_button_12);</span>
+<span class="fc" id="L75">        Button questionButton22 = findViewById(R.id.jeopardy_button_22);</span>
+
+<span class="fc" id="L77">        questionCategory0Buttons.add(questionButton00);</span>
+<span class="fc" id="L78">        questionCategory0Buttons.add(questionButton10);</span>
+<span class="fc" id="L79">        questionCategory0Buttons.add(questionButton20);</span>
+<span class="fc" id="L80">        questionCategory1Buttons.add(questionButton01);</span>
+<span class="fc" id="L81">        questionCategory1Buttons.add(questionButton11);</span>
+<span class="fc" id="L82">        questionCategory1Buttons.add(questionButton21);</span>
+<span class="fc" id="L83">        questionCategory2Buttons.add(questionButton02);</span>
+<span class="fc" id="L84">        questionCategory2Buttons.add(questionButton12);</span>
+<span class="fc" id="L85">        questionCategory2Buttons.add(questionButton22);</span>
+<span class="fc" id="L86">        buttonColumns.add(questionCategory0Buttons);</span>
+<span class="fc" id="L87">        buttonColumns.add(questionCategory1Buttons);</span>
+<span class="fc" id="L88">        buttonColumns.add(questionCategory2Buttons);</span>
+
+<span class="fc" id="L90">        TextView category0 = findViewById(R.id.jeopardy_category_0);</span>
+<span class="fc" id="L91">        TextView category1 = findViewById(R.id.jeopardy_category_1);</span>
+<span class="fc" id="L92">        TextView category2 = findViewById(R.id.jeopardy_category_2);</span>
+
+<span class="fc" id="L94">        categoryTitles.add(category0);</span>
+<span class="fc" id="L95">        categoryTitles.add(category1);</span>
+<span class="fc" id="L96">        categoryTitles.add(category2);</span>
+
+<span class="fc" id="L98">        Question placeholder = new Question(99, &quot;99?&quot;, &quot;69&quot;, &quot;Number&quot;, false, false);</span>
+
+        // If no questions are loaded yet, show this message
+<span class="fc" id="L101">        buttonColumns.forEach(c -&gt; {</span>
+<span class="fc" id="L102">            c.forEach(q -&gt; {</span>
+<span class="fc" id="L103">                q.setOnClickListener(new View.OnClickListener() {</span>
+                    @Override
+                    public void onClick(View view) {
+<span class="nc" id="L106">                        Toast.makeText(getApplicationContext(), &quot;Question hasn't loaded&quot;, Toast.LENGTH_SHORT).show();</span>
+<span class="nc" id="L107">                        questionDialog(q, placeholder);</span>
+<span class="nc" id="L108">                    }</span>
+                });
+<span class="fc" id="L110">            });</span>
+<span class="fc" id="L111">        });</span>
+
+<span class="fc" id="L113">        requestJeopardyQuestions();</span>
+<span class="fc" id="L114">    }</span>
+
+    /**
+     * Gives the category buttons their corresponding questions
+     */
+    private void requestJeopardyQuestions() {
+<span class="fc" id="L120">        JsonArrayRequest questionRequest = new JsonArrayRequest(</span>
+                Request.Method.GET,
+                RequestURLs.SERVER_HTTP_QUESTION_URL,
+                null,
+<span class="fc" id="L124">                new Response.Listener&lt;JSONArray&gt;() {</span>
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        // Sort questions into different lists based on question type
+<span class="fc" id="L128">                        List&lt;Question&gt; questions = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L129">                        HashSet&lt;String&gt; categories = new HashSet&lt;&gt;();</span>
+
+<span class="fc bfc" id="L131" title="All 2 branches covered.">                        for (int i = 0; i &lt; response.length(); i++) {</span>
+                            try {
+<span class="fc" id="L133">                                Question q = new Question(response.getJSONObject(i));</span>
+<span class="fc" id="L134">                                questions.add(q);</span>
+<span class="fc" id="L135">                                categories.add(q.getQuestionType());</span>
+<span class="nc" id="L136">                            } catch (JSONException e) {</span>
+<span class="nc" id="L137">                                throw new RuntimeException(e);</span>
+<span class="fc" id="L138">                            }</span>
+                        }
+
+<span class="fc" id="L141">                        List&lt;List&lt;Question&gt;&gt; categoryQuestions = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L142">                        List&lt;String&gt; categoryList = new ArrayList&lt;&gt;(categories);</span>
+
+<span class="fc bfc" id="L144" title="All 2 branches covered.">                        for (int i = 0; i &lt; categoryTitles.size(); i++) {</span>
+<span class="fc" id="L145">                            String category = categoryList.get(i);</span>
+<span class="fc" id="L146">                            List&lt;Question&gt; temp = new ArrayList&lt;&gt;(questions);</span>
+<span class="fc bfc" id="L147" title="All 2 branches covered.">                            temp.removeIf(q -&gt; !q.getQuestionType().equals(category));</span>
+<span class="fc" id="L148">                            categoryQuestions.add(temp);</span>
+<span class="fc" id="L149">                            categoryTitles.get(i).setText(category);</span>
+                        }
+
+                        // Set each button to a random question in their category
+<span class="fc" id="L153">                        Random rand = new Random();</span>
+<span class="fc bfc" id="L154" title="All 2 branches covered.">                        for (int col = 0; col &lt; buttonColumns.size(); col++) {</span>
+<span class="fc bfc" id="L155" title="All 2 branches covered.">                            for (Button b : buttonColumns.get(col)) {</span>
+<span class="fc" id="L156">                                int randQuestionIndex = rand.nextInt(categoryQuestions.get(col).size());</span>
+
+<span class="fc" id="L158">                                Question q = categoryQuestions.get(col).get(randQuestionIndex);</span>
+<span class="fc" id="L159">                                b.setOnClickListener(new View.OnClickListener() {</span>
+                                    @Override
+                                    public void onClick(View view) {
+<span class="fc" id="L162">                                        questionDialog(b, q);</span>
+<span class="fc" id="L163">                                    }</span>
+                                });
+<span class="fc" id="L165">                            }</span>
+                        }
+<span class="fc" id="L167">                    }</span>
+                },
+<span class="fc" id="L169">                new Response.ErrorListener() {</span>
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+<span class="nc bnc" id="L172" title="All 2 branches missed.">                        if (!attemptedRefresh) {</span>
+<span class="nc" id="L173">                            Toast.makeText(getApplicationContext(), &quot;Unable to load questions, reattempting to get questions from server&quot;, Toast.LENGTH_LONG).show();</span>
+<span class="nc" id="L174">                            requestJeopardyQuestions();</span>
+<span class="nc" id="L175">                            attemptedRefresh = true;</span>
+                        } else {
+<span class="nc" id="L177">                            Toast.makeText(getApplicationContext(), &quot;Unable to reach server&quot;, Toast.LENGTH_LONG).show();</span>
+                        }
+<span class="nc" id="L179">                    }</span>
+                }
+        );
+
+<span class="fc" id="L183">        VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(questionRequest);</span>
+<span class="fc" id="L184">    }</span>
+
+    /**
+     * Creates a popup dialog to allow users to answer a question
+     * @param question
+     */
+    private void questionDialog(Button button, Question question) {
+<span class="fc" id="L191">        Dialog dialog = new Dialog(this);</span>
+<span class="fc" id="L192">        dialog.setContentView(R.layout.jeopardy_question_dialog);</span>
+<span class="fc" id="L193">        dialog.show();</span>
+
+<span class="fc" id="L195">        TextView questionPoints = dialog.findViewById(R.id.jeopardy_dialog_point_worth);</span>
+<span class="fc" id="L196">        TextView questionDisplay = dialog.findViewById(R.id.jeopardy_dialog_question);</span>
+<span class="fc" id="L197">        EditText answerText = dialog.findViewById(R.id.jeopardy_dialog_answer);</span>
+<span class="fc" id="L198">        Button submitButton = dialog.findViewById(R.id.jeopardy_dialog_submit_button);</span>
+
+<span class="fc" id="L200">        questionPoints.setText(button.getText());</span>
+<span class="fc" id="L201">        questionDisplay.setText(question.getQuestion());</span>
+<span class="fc" id="L202">        submitButton.setOnClickListener(new View.OnClickListener() {</span>
+            @Override
+            public void onClick(View view) {
+<span class="fc" id="L205">                String answer = answerText.getText().toString();</span>
+<span class="fc bfc" id="L206" title="All 2 branches covered.">                if (!answer.trim().isEmpty()) {</span>
+<span class="fc" id="L207">                    checkAnswer(button, dialog, question, answer);</span>
+                } else {
+<span class="fc" id="L209">                    Toast.makeText(getApplicationContext(), &quot;Please enter an answer&quot;, Toast.LENGTH_SHORT).show();</span>
+                }
+<span class="fc" id="L211">            }</span>
+        });
+<span class="fc" id="L213">    }</span>
+
+    /**
+     * Saves the current user's answer to the given question
+     * @param questionID
+     * @param givenAnswer
+     */
+    private void saveUserAnswer(int questionID, String givenAnswer, boolean correct) throws JSONException {
+<span class="fc" id="L221">        JsonObjectRequest saveUserRequest = new JsonObjectRequest(</span>
+                Request.Method.POST,
+<span class="fc" id="L223">                String.format(&quot;%s/%d&quot;, RequestURLs.SERVER_HTTP_CREATE_USER_ANSWER_URL, questionID),</span>
+<span class="fc" id="L224">                new JSONObject() {{</span>
+<span class="fc" id="L225">                    put(&quot;userName&quot;, username);</span>
+<span class="fc" id="L226">                    put(&quot;correct&quot;, correct);</span>
+<span class="fc" id="L227">                    put(&quot;answer&quot;, givenAnswer);</span>
+<span class="fc" id="L228">                }},</span>
+<span class="fc" id="L229">                new Response.Listener&lt;JSONObject&gt;() {</span>
+                    @Override
+                    public void onResponse(JSONObject response) {
+<span class="fc" id="L232">                        Log.d(&quot;JeopardyActivity&quot;, &quot;Successfully added user answer to database&quot;);</span>
+<span class="fc" id="L233">                    }</span>
+                },
+<span class="fc" id="L235">                new Response.ErrorListener() {</span>
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+<span class="nc" id="L238">                        Log.d(&quot;JeopardyActivity&quot;, &quot;Failed to add user answer to database&quot;);</span>
+<span class="nc" id="L239">                    }</span>
+                }
+        );
+
+<span class="fc" id="L243">        VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(saveUserRequest);</span>
+<span class="fc" id="L244">    }</span>
+
+    /**
+     * Checks to see if an answer to a question is correct
+     * @param dialog
+     * @param question
+     * @param givenAnswer
+     */
+    private void checkAnswer(Button button, Dialog dialog, Question question, String givenAnswer) {
+<span class="pc bpc" id="L253" title="1 of 2 branches missed.">        if (givenAnswer.equals(question.getAnswer())) {</span>
+<span class="nc" id="L254">            int pointsToAdd = Integer.parseInt(button.getText().toString());</span>
+<span class="nc" id="L255">            points += pointsToAdd;</span>
+<span class="nc" id="L256">            pointsText.setText(&quot;Total Points: &quot; + points);</span>
+<span class="nc" id="L257">            addUserPoints(pointsToAdd);</span>
+
+<span class="nc" id="L259">            Log.d(&quot;JeopardyActivity&quot;, &quot;Saving correct user answer&quot;);</span>
+            try {
+<span class="nc" id="L261">                saveUserAnswer(question.getId(), givenAnswer, true);</span>
+<span class="nc" id="L262">            } catch (JSONException e) {</span>
+<span class="nc" id="L263">                throw new RuntimeException(e);</span>
+<span class="nc" id="L264">            }</span>
+<span class="nc" id="L265">            dialog.dismiss();</span>
+<span class="nc" id="L266">            button.setEnabled(false);</span>
+<span class="nc" id="L267">        } else {</span>
+<span class="fc" id="L268">            Log.d(&quot;JeopardyActivity&quot;, &quot;Saving incorrect user answer&quot;);</span>
+            try {
+<span class="fc" id="L270">                saveUserAnswer(question.getId(), givenAnswer, false);</span>
+<span class="nc" id="L271">            } catch (JSONException e) {</span>
+<span class="nc" id="L272">                throw new RuntimeException(e);</span>
+<span class="fc" id="L273">            }</span>
+<span class="fc" id="L274">            dialog.dismiss();</span>
+<span class="fc" id="L275">            button.setEnabled(false);</span>
+        }
+<span class="fc" id="L277">    }</span>
+
+    /**
+     * Adds the given points to the current user
+     * @param pointsToAdd
+     */
+    private void addUserPoints(int pointsToAdd) {
+<span class="nc" id="L284">        JsonObjectRequest addUserPointsRequest = new JsonObjectRequest(</span>
+                Request.Method.POST,
+<span class="nc" id="L286">                String.format(&quot;%s/%s/%d&quot;, RequestURLs.SERVER_HTTP_USER_ADD_POINTS_URL, userID, pointsToAdd),</span>
+                null,
+<span class="nc" id="L288">                new Response.Listener&lt;JSONObject&gt;() {</span>
+                    @Override
+                    public void onResponse(JSONObject response) {
+<span class="nc" id="L291">                        Log.d(&quot;JeopardyActivity&quot;, &quot;Successfully added user points&quot;);</span>
+<span class="nc" id="L292">                    }</span>
+                },
+<span class="nc" id="L294">                new Response.ErrorListener() {</span>
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+<span class="nc" id="L297">                        Log.d(&quot;JeopardyActivity&quot;, &quot;Failed to add user points&quot;);</span>
+<span class="nc" id="L298">                    }</span>
+                }
+        );
+
+<span class="nc" id="L302">        VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(addUserPointsRequest);</span>
+<span class="nc" id="L303">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span>Generated by the Android Gradle plugin 8.0.0</div></body></html>

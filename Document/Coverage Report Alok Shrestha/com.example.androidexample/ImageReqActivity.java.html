@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ImageReqActivity.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=0;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">debug</a> &gt; <a href="index.source.html" class="el_package">com.example.androidexample</a> &gt; <span class="el_source">ImageReqActivity.java</span></div><h1>ImageReqActivity.java</h1><pre class="source lang-java linenums">package com.example.androidexample;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import android.graphics.Bitmap;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.Toast;
+
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.ImageRequest;
+import com.android.volley.toolbox.StringRequest;
+
+import java.util.HashMap;
+import java.util.Map;
+
+<span class="nc" id="L22">public class ImageReqActivity extends AppCompatActivity {</span>
+
+    private Button btnImageReq;
+    private ImageView imageView;
+
+    public static final String URL_IMAGE = &quot;https://47de868e-39ce-4710-a979-60d5051a5022.mock.pstmn.io/q1/image&quot;;
+
+<span class="nc" id="L29">    public static String imageURL = &quot;&quot;;</span>
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+<span class="nc" id="L33">        super.onCreate(savedInstanceState);</span>
+<span class="nc" id="L34">        setContentView(R.layout.activity_image_req);</span>
+
+<span class="nc" id="L36">        btnImageReq = (Button) findViewById(R.id.btnImageReq);</span>
+<span class="nc" id="L37">        imageView = (ImageView) findViewById(R.id.imgView);</span>
+
+<span class="nc" id="L39">        btnImageReq.setOnClickListener(new View.OnClickListener() {</span>
+            @Override
+<span class="nc" id="L41">            public void onClick(View v) {getImageURL();}</span>
+        });
+<span class="nc" id="L43">    }</span>
+
+    private void getImageURL() {
+<span class="nc" id="L46">        StringRequest urlRequest = new StringRequest(</span>
+            Request.Method.GET,
+            URL_IMAGE,
+<span class="nc" id="L49">                new Response.Listener&lt;String&gt;() {</span>
+                    @Override
+                    public void onResponse(String response) {
+                        // Handle the successful response here
+<span class="nc" id="L53">                        Log.d(&quot;Volley Response&quot;, response);</span>
+<span class="nc" id="L54">                        System.out.println(&quot;Hi&quot;);</span>
+<span class="nc" id="L55">                        imageURL = response;</span>
+<span class="nc" id="L56">                        makeImageRequest();</span>
+<span class="nc" id="L57">                    }</span>
+                },
+<span class="nc" id="L59">                new Response.ErrorListener() {</span>
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // Handle any errors that occur during the request
+<span class="nc" id="L63">                        Log.e(&quot;Volley Error&quot;, error.toString());</span>
+<span class="nc" id="L64">                    }</span>
+                }
+        );
+
+        // Adding request to request queue
+<span class="nc" id="L69">        VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(urlRequest);</span>
+<span class="nc" id="L70">    }</span>
+
+    /**
+     * Making image request
+     * */
+    private void makeImageRequest() {
+
+<span class="nc" id="L77">        ImageRequest imageRequest = new ImageRequest(</span>
+            imageURL,
+<span class="nc" id="L79">            new Response.Listener&lt;Bitmap&gt;() {</span>
+                @Override
+                public void onResponse(Bitmap response) {
+                    // Display the image in the ImageView
+<span class="nc" id="L83">                    imageView.setImageBitmap(response);</span>
+<span class="nc" id="L84">                }</span>
+            },
+            0, // Width, set to 0 to get the original width
+            0, // Height, set to 0 to get the original height
+            ImageView.ScaleType.FIT_XY, // ScaleType
+            Bitmap.Config.RGB_565, // Bitmap config
+
+<span class="nc" id="L91">            new Response.ErrorListener() {</span>
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                    // Handle errors here
+<span class="nc" id="L95">                    Log.e(&quot;Volley Error&quot;, error.toString());</span>
+<span class="nc" id="L96">                }</span>
+            }
+        );
+
+        // Adding request to request queue
+<span class="nc" id="L101">        VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(imageRequest);</span>
+<span class="nc" id="L102">    }</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span>Generated by the Android Gradle plugin 8.0.0</div></body></html>

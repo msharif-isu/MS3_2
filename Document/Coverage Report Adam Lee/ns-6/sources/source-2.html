@@ -1,0 +1,222 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=windows-1252"> 
+  <title>Coverage Report > PelicanQuestionController</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.project.trivia.PelicanQuestions</a>
+</div>
+
+<h1>Coverage Summary for Class: PelicanQuestionController (com.project.trivia.PelicanQuestions)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">PelicanQuestionController</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    11.1%
+  </span>
+  <span class="absValue">
+    (1/9)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/16)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    6.8%
+  </span>
+  <span class="absValue">
+    (3/44)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.project.trivia.PelicanQuestions;
+&nbsp;
+&nbsp;import com.project.trivia.User.User;
+&nbsp;import org.springframework.beans.factory.annotation.Autowired;
+&nbsp;import org.springframework.web.bind.annotation.*;
+&nbsp;
+&nbsp;import java.util.*;
+&nbsp;
+&nbsp;@RestController
+<b class="fc">&nbsp;public class PelicanQuestionController {</b>
+&nbsp;
+&nbsp;    @Autowired
+&nbsp;    PelicanQuestionRepository pelicanQuestionRepository;
+&nbsp;
+<b class="fc">&nbsp;    private String success = &quot;{\&quot;message\&quot;:\&quot;success\&quot;}&quot;;</b>
+<b class="fc">&nbsp;    private String failure = &quot;{\&quot;message\&quot;:\&quot;failure\&quot;}&quot;;</b>
+&nbsp;
+&nbsp;
+&nbsp;    @GetMapping(path = &quot;/pelican&quot;)
+&nbsp;    List&lt;PelicanQuestion&gt; getAllPelicans() {
+<b class="nc">&nbsp;        return pelicanQuestionRepository.findAll();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @GetMapping(path = &quot;/pelican/{id}&quot;)
+&nbsp;    PelicanQuestion getPuestionById(@PathVariable int id){
+<b class="nc">&nbsp;        return pelicanQuestionRepository.findById(id);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @PostMapping(path = &quot;/puestion&quot;)
+&nbsp;    String createPuestion(@RequestBody PelicanQuestion question){
+<b class="nc">&nbsp;        if (question == null)</b>
+<b class="nc">&nbsp;            return failure;</b>
+<b class="nc">&nbsp;        pelicanQuestionRepository.save(question);</b>
+<b class="nc">&nbsp;        return success;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;
+&nbsp;    @PutMapping(&quot;/puestion/{id}&quot;)
+&nbsp;    public PelicanQuestion updateUser(@PathVariable int id, @RequestBody PelicanQuestion request){
+<b class="nc">&nbsp;        PelicanQuestion user = pelicanQuestionRepository.findById(id);</b>
+<b class="nc">&nbsp;        if(user == null)</b>
+<b class="nc">&nbsp;            return null;</b>
+<b class="nc">&nbsp;        pelicanQuestionRepository.save(request);</b>
+<b class="nc">&nbsp;        return pelicanQuestionRepository.findById(id);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @DeleteMapping(path = &quot;/pelete/{id}&quot;)
+&nbsp;    public String deleteUser(@PathVariable int id){
+<b class="nc">&nbsp;        pelicanQuestionRepository.deleteById(id);</b>
+<b class="nc">&nbsp;        return success;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @GetMapping(path = &quot;/getPuestions&quot;)
+&nbsp;    public int[] threeRandom(){
+<b class="nc">&nbsp;        ArrayList&lt;Integer&gt; e = new ArrayList&lt;&gt;();</b>
+&nbsp;
+<b class="nc">&nbsp;        for (PelicanQuestion pelican: getAllPelicans()) {</b>
+<b class="nc">&nbsp;            e.add(pelican.getId());</b>
+&nbsp;        }
+<b class="nc">&nbsp;        Random rand = new Random();</b>
+<b class="nc">&nbsp;        Set&lt;Integer&gt; pickedIndices = new HashSet&lt;&gt;();</b>
+<b class="nc">&nbsp;        int[] pickedQuestions = new int[3];</b>
+&nbsp;
+<b class="nc">&nbsp;        for (int i = 0; i &lt; 3; i++) {</b>
+<b class="nc">&nbsp;            int randomIndex = rand.nextInt(e.size());</b>
+<b class="nc">&nbsp;            while (pickedIndices.contains(randomIndex)) {</b>
+<b class="nc">&nbsp;                randomIndex = rand.nextInt(randomIndex);</b>
+&nbsp;            }
+<b class="nc">&nbsp;            pickedIndices.add(randomIndex);</b>
+<b class="nc">&nbsp;            pickedQuestions[i] = e.get(randomIndex);</b>
+&nbsp;        }
+&nbsp;
+<b class="nc">&nbsp;        return pickedQuestions;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @PutMapping(path = &quot;/correct/{id}/{loggedInUser}&quot;)
+&nbsp;    public PelicanQuestion placement(@PathVariable int id, @PathVariable String loggedInUser){
+<b class="nc">&nbsp;        PelicanQuestion anwseredQuestion = pelicanQuestionRepository.findById(id);</b>
+<b class="nc">&nbsp;        if(Objects.equals(pelicanQuestionRepository.findById(id).getFirst(), &quot;&quot;)){</b>
+<b class="nc">&nbsp;            pelicanQuestionRepository.findById(id).setFirst(loggedInUser);</b>
+<b class="nc">&nbsp;        }else if (Objects.equals(pelicanQuestionRepository.findById(id).getSecond(), &quot;&quot;)){</b>
+<b class="nc">&nbsp;            pelicanQuestionRepository.findById(id).setSecond(loggedInUser);</b>
+<b class="nc">&nbsp;        }else if (Objects.equals(pelicanQuestionRepository.findById(id).getThird(), &quot;&quot;)){</b>
+<b class="nc">&nbsp;            pelicanQuestionRepository.findById(id).setThird(loggedInUser);</b>
+&nbsp;        }
+&nbsp;
+<b class="nc">&nbsp;        pelicanQuestionRepository.save(anwseredQuestion);</b>
+&nbsp;
+<b class="nc">&nbsp;        return pelicanQuestionRepository.findById(id);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @PutMapping(path = &quot;/reset/{id}&quot;)
+&nbsp;    public PelicanQuestion resetPlacement(@PathVariable int id){
+<b class="nc">&nbsp;        PelicanQuestion anwseredQuestion = pelicanQuestionRepository.findById(id);</b>
+<b class="nc">&nbsp;        pelicanQuestionRepository.findById(id).setFirst(&quot;&quot;);</b>
+<b class="nc">&nbsp;        pelicanQuestionRepository.findById(id).setSecond(&quot;&quot;);</b>
+<b class="nc">&nbsp;        pelicanQuestionRepository.findById(id).setThird(&quot;&quot;);</b>
+&nbsp;
+<b class="nc">&nbsp;        pelicanQuestionRepository.save(anwseredQuestion);</b>
+&nbsp;
+<b class="nc">&nbsp;        return pelicanQuestionRepository.findById(id);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;
+&nbsp;
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-04-26 23:05</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ResultsActivity.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=0;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">debug</a> &gt; <a href="index.source.html" class="el_package">com.example.androidexample</a> &gt; <span class="el_source">ResultsActivity.java</span></div><h1>ResultsActivity.java</h1><pre class="source lang-java linenums">package com.example.androidexample;
+
+import android.content.Intent;
+import android.os.Bundle;
+import androidx.appcompat.app.AppCompatActivity;
+import android.widget.Button;
+import android.widget.TextView;
+import android.widget.Toast;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+/**
+ * ResultsActivity displays the results of the game and allows the user to play again or continue.
+ */
+<span class="nc" id="L21">public class ResultsActivity extends AppCompatActivity {</span>
+
+    private Button playAgainButton, continueButton;
+    //num points is the textbox displaying points, points is the number.
+    private TextView numPoints, usernameMessage;
+    private String username;
+    private int correctAnswers, points, usernameId;
+
+<span class="nc" id="L29">    private String backendUrl = &quot;http://coms-309-034.class.las.iastate.edu:8080/&quot;;</span>
+
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+<span class="nc" id="L34">        super.onCreate(savedInstanceState);</span>
+<span class="nc" id="L35">        setContentView(R.layout.activity_results);</span>
+
+        // Initialize views
+<span class="nc" id="L38">        playAgainButton = findViewById(R.id.button);</span>
+<span class="nc" id="L39">        numPoints = findViewById(R.id.numberOfCorrectQuestions);</span>
+<span class="nc" id="L40">        continueButton = findViewById(R.id.btnContinue);</span>
+<span class="nc" id="L41">        usernameMessage = findViewById(R.id.Username);</span>
+
+        // Set onClickListener for play again button
+<span class="nc" id="L44">        playAgainButton.setOnClickListener(view -&gt; {</span>
+<span class="nc" id="L45">            Intent intent = new Intent(ResultsActivity.this, SinglePlayerQuestionActivity.class);</span>
+<span class="nc" id="L46">            intent.putExtra(&quot;USERNAME&quot;, username);</span>
+<span class="nc" id="L47">            startActivity(intent);</span>
+<span class="nc" id="L48">        });</span>
+
+        // Set onClickListener for continue button
+<span class="nc" id="L51">        continueButton.setOnClickListener(view -&gt; {</span>
+<span class="nc" id="L52">            givePoints(username, points);</span>
+//            Intent intent = new Intent(ResultsActivity.this, MainActivity.class);
+//            intent.putExtra(&quot;USERNAME&quot;, username);
+//            startActivity(intent);
+<span class="nc" id="L56">        });</span>
+
+<span class="nc" id="L58">        Bundle extras = getIntent().getExtras();</span>
+<span class="nc bnc" id="L59" title="All 2 branches missed.">        if (extras != null) {</span>
+<span class="nc" id="L60">            username = extras.getString(&quot;USERNAME&quot;);</span>
+<span class="nc" id="L61">            correctAnswers = extras.getInt(&quot;CORRECTANSWERS&quot;);</span>
+<span class="nc" id="L62">            points = extras.getInt(&quot;POINTS&quot;);</span>
+<span class="nc" id="L63">            usernameId = extras.getInt(&quot;USERID&quot;);</span>
+<span class="nc" id="L64">            numPoints.setText(&quot;Total points: &quot; + points);</span>
+<span class="nc" id="L65">            usernameMessage.setText(&quot;Congrats &quot; + username + &quot;! You got &quot; + correctAnswers + &quot; questions correct!&quot;);</span>
+        } else {
+<span class="nc" id="L67">            usernameMessage.setText(&quot;Not logged in&quot;);</span>
+        }
+
+<span class="nc" id="L70">    }</span>
+
+    /**
+     * Sends the points earned by the user to the backend server.
+     *
+     * @param username The username of the user
+     * @param points   The points earned by the user
+     */
+    private void givePoints(String username, int points) {
+<span class="nc" id="L79">        RequestQueue queue = Volley.newRequestQueue(this);</span>
+<span class="nc" id="L80">        String url = backendUrl + &quot;users/&quot; + username + &quot;/&quot; + points;</span>
+<span class="nc" id="L81">        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.PUT, url, null,</span>
+<span class="nc" id="L82">                new Response.Listener&lt;JSONObject&gt;() {</span>
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        // Points updated successfully
+<span class="nc" id="L86">                        Toast.makeText(ResultsActivity.this, &quot;Points updated successfully!&quot;, Toast.LENGTH_SHORT).show();</span>
+<span class="nc" id="L87">                        Intent intent = new Intent(ResultsActivity.this, MainActivity.class);</span>
+<span class="nc" id="L88">                        intent.putExtra(&quot;USERNAME&quot;, username);</span>
+<span class="nc" id="L89">                        startActivity(intent);</span>
+<span class="nc" id="L90">                    }</span>
+<span class="nc" id="L91">                }, new Response.ErrorListener() {</span>
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                // Failed to update points
+<span class="nc" id="L95">                Toast.makeText(ResultsActivity.this, &quot;Failed to update points&quot;, Toast.LENGTH_SHORT).show();</span>
+<span class="nc" id="L96">            }</span>
+        });
+<span class="nc" id="L98">        queue.add(jsonObjectRequest);</span>
+<span class="nc" id="L99">    }</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span>Generated by the Android Gradle plugin 8.0.0</div></body></html>

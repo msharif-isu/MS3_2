@@ -6,12 +6,165 @@
   <component name="ChangeListManager">
     <list default="true" id="aa247b61-3439-49d8-9853-376a5b7b168c" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+<<<<<<< Updated upstream
       <change beforePath="$PROJECT_DIR$/trivia/src/main/java/com/project/trivia/User/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/trivia/src/main/java/com/project/trivia/User/User.java" afterDir="false" />
+||||||| Stash base
+=======
+      <change beforePath="$PROJECT_DIR$/htmlReport/css/coverage.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/htmlReport/css/idea.min.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/htmlReport/img/arrowDown.gif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/htmlReport/img/arrowUp.gif" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/htmlReport/index.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/htmlReport/index_SORT_BY_BLOCK.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/htmlReport/index_SORT_BY_BLOCK_DESC.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/htmlReport/index_SORT_BY_CLASS.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/htmlReport/index_SORT_BY_CLASS_DESC.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/htmlReport/index_SORT_BY_LINE.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/htmlReport/index_SORT_BY_LINE_DESC.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/htmlReport/index_SORT_BY_METHOD.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/htmlReport/index_SORT_BY_METHOD_DESC.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/htmlReport/index_SORT_BY_NAME_DESC.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/htmlReport/js/highlight.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/htmlReport/js/highlightjs-line-numbers.min.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/htmlReport/ns-1/index.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/htmlReport/ns-1/index_SORT_BY_BLOCK.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/htmlReport/ns-1/index_SORT_BY_BLOCK_DESC.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/htmlReport/ns-1/index_SORT_BY_CLASS.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/htmlReport/ns-1/index_SORT_BY_CLASS_DESC.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/htmlReport/ns-1/index_SORT_BY_LINE.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/htmlReport/ns-1/index_SORT_BY_LINE_DESC.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/htmlReport/ns-1/index_SORT_BY_METHOD.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/htmlReport/ns-1/index_SORT_BY_METHOD_DESC.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/htmlReport/ns-1/index_SORT_BY_NAME_DESC.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/htmlReport/ns-1/sources/source-1.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/htmlReport/ns-2/index.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/htmlReport/ns-2/index_SORT_BY_BLOCK.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/htmlReport/ns-2/index_SORT_BY_BLOCK_DESC.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/htmlReport/ns-2/index_SORT_BY_CLASS.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/htmlReport/ns-2/index_SORT_BY_CLASS_DESC.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/htmlReport/ns-2/index_SORT_BY_LINE.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/htmlReport/ns-2/index_SORT_BY_LINE_DESC.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/htmlReport/ns-2/index_SORT_BY_METHOD.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/htmlReport/ns-2/index_SORT_BY_METHOD_DESC.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/htmlReport/ns-2/index_SORT_BY_NAME_DESC.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/htmlReport/ns-2/sources/source-1.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/htmlReport/ns-2/sources/source-2.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/htmlReport/ns-2/sources/source-3.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/htmlReport/ns-3/index.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/htmlReport/ns-3/index_SORT_BY_BLOCK.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/htmlReport/ns-3/index_SORT_BY_BLOCK_DESC.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/htmlReport/ns-3/index_SORT_BY_CLASS.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/htmlReport/ns-3/index_SORT_BY_CLASS_DESC.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/htmlReport/ns-3/index_SORT_BY_LINE.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/htmlReport/ns-3/index_SORT_BY_LINE_DESC.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/htmlReport/ns-3/index_SORT_BY_METHOD.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/htmlReport/ns-3/index_SORT_BY_METHOD_DESC.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/htmlReport/ns-3/index_SORT_BY_NAME_DESC.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/htmlReport/ns-3/sources/source-1.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/htmlReport/ns-3/sources/source-2.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/htmlReport/ns-3/sources/source-3.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/htmlReport/ns-3/sources/source-4.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/htmlReport/ns-4/index.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/htmlReport/ns-4/index_SORT_BY_BLOCK.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/htmlReport/ns-4/index_SORT_BY_BLOCK_DESC.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/htmlReport/ns-4/index_SORT_BY_CLASS.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/htmlReport/ns-4/index_SORT_BY_CLASS_DESC.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/htmlReport/ns-4/index_SORT_BY_LINE.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/htmlReport/ns-4/index_SORT_BY_LINE_DESC.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/htmlReport/ns-4/index_SORT_BY_METHOD.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/htmlReport/ns-4/index_SORT_BY_METHOD_DESC.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/htmlReport/ns-4/index_SORT_BY_NAME_DESC.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/htmlReport/ns-4/sources/source-1.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/htmlReport/ns-4/sources/source-2.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/htmlReport/ns-4/sources/source-3.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/htmlReport/ns-5/index.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/htmlReport/ns-5/index_SORT_BY_BLOCK.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/htmlReport/ns-5/index_SORT_BY_BLOCK_DESC.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/htmlReport/ns-5/index_SORT_BY_CLASS.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/htmlReport/ns-5/index_SORT_BY_CLASS_DESC.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/htmlReport/ns-5/index_SORT_BY_LINE.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/htmlReport/ns-5/index_SORT_BY_LINE_DESC.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/htmlReport/ns-5/index_SORT_BY_METHOD.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/htmlReport/ns-5/index_SORT_BY_METHOD_DESC.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/htmlReport/ns-5/index_SORT_BY_NAME_DESC.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/htmlReport/ns-5/sources/source-1.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/htmlReport/ns-5/sources/source-2.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/htmlReport/ns-5/sources/source-3.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/htmlReport/ns-5/sources/source-4.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/htmlReport/ns-5/sources/source-5.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/htmlReport/ns-6/index.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/htmlReport/ns-6/index_SORT_BY_BLOCK.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/htmlReport/ns-6/index_SORT_BY_BLOCK_DESC.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/htmlReport/ns-6/index_SORT_BY_CLASS.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/htmlReport/ns-6/index_SORT_BY_CLASS_DESC.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/htmlReport/ns-6/index_SORT_BY_LINE.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/htmlReport/ns-6/index_SORT_BY_LINE_DESC.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/htmlReport/ns-6/index_SORT_BY_METHOD.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/htmlReport/ns-6/index_SORT_BY_METHOD_DESC.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/htmlReport/ns-6/index_SORT_BY_NAME_DESC.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/htmlReport/ns-6/sources/source-1.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/htmlReport/ns-6/sources/source-2.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/htmlReport/ns-6/sources/source-3.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/htmlReport/ns-7/index.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/htmlReport/ns-7/index_SORT_BY_BLOCK.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/htmlReport/ns-7/index_SORT_BY_BLOCK_DESC.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/htmlReport/ns-7/index_SORT_BY_CLASS.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/htmlReport/ns-7/index_SORT_BY_CLASS_DESC.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/htmlReport/ns-7/index_SORT_BY_LINE.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/htmlReport/ns-7/index_SORT_BY_LINE_DESC.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/htmlReport/ns-7/index_SORT_BY_METHOD.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/htmlReport/ns-7/index_SORT_BY_METHOD_DESC.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/htmlReport/ns-7/index_SORT_BY_NAME_DESC.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/htmlReport/ns-7/sources/source-1.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/htmlReport/ns-8/index.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/htmlReport/ns-8/index_SORT_BY_BLOCK.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/htmlReport/ns-8/index_SORT_BY_BLOCK_DESC.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/htmlReport/ns-8/index_SORT_BY_CLASS.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/htmlReport/ns-8/index_SORT_BY_CLASS_DESC.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/htmlReport/ns-8/index_SORT_BY_LINE.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/htmlReport/ns-8/index_SORT_BY_LINE_DESC.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/htmlReport/ns-8/index_SORT_BY_METHOD.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/htmlReport/ns-8/index_SORT_BY_METHOD_DESC.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/htmlReport/ns-8/index_SORT_BY_NAME_DESC.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/htmlReport/ns-8/sources/source-1.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/htmlReport/ns-8/sources/source-2.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/htmlReport/ns-8/sources/source-3.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/htmlReport/ns-9/index.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/htmlReport/ns-9/index_SORT_BY_BLOCK.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/htmlReport/ns-9/index_SORT_BY_BLOCK_DESC.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/htmlReport/ns-9/index_SORT_BY_CLASS.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/htmlReport/ns-9/index_SORT_BY_CLASS_DESC.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/htmlReport/ns-9/index_SORT_BY_LINE.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/htmlReport/ns-9/index_SORT_BY_LINE_DESC.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/htmlReport/ns-9/index_SORT_BY_METHOD.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/htmlReport/ns-9/index_SORT_BY_METHOD_DESC.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/htmlReport/ns-9/index_SORT_BY_NAME_DESC.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/htmlReport/ns-9/sources/source-1.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/htmlReport/ns-9/sources/source-2.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/htmlReport/ns-9/sources/source-3.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/htmlReport/ns-a/index.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/htmlReport/ns-a/index_SORT_BY_BLOCK.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/htmlReport/ns-a/index_SORT_BY_BLOCK_DESC.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/htmlReport/ns-a/index_SORT_BY_CLASS.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/htmlReport/ns-a/index_SORT_BY_CLASS_DESC.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/htmlReport/ns-a/index_SORT_BY_LINE.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/htmlReport/ns-a/index_SORT_BY_LINE_DESC.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/htmlReport/ns-a/index_SORT_BY_METHOD.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/htmlReport/ns-a/index_SORT_BY_METHOD_DESC.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/htmlReport/ns-a/index_SORT_BY_NAME_DESC.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/htmlReport/ns-a/sources/source-1.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/htmlReport/ns-a/sources/source-2.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/trivia/src/main/java/com/project/trivia/Queryboard/Query.java" beforeDir="false" afterPath="$PROJECT_DIR$/trivia/src/main/java/com/project/trivia/Queryboard/Query.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/trivia/src/main/java/com/project/trivia/Questions/Question.java" beforeDir="false" afterPath="$PROJECT_DIR$/trivia/src/main/java/com/project/trivia/Questions/Question.java" afterDir="false" />
+>>>>>>> Stashed changes
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ExportToHTMLSettings">
+    <option name="OUTPUT_DIRECTORY" value="C:\Users\rapra\ms312\ms3_2\Backend\htmlReport" />
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
@@ -27,9 +180,50 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
+<<<<<<< Updated upstream
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
+    &quot;JUnit.trivia in trivia.executor&quot;: &quot;Coverage&quot;,
+    &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
+    &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
+    &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
+    &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;Spring Boot.TriviaApplication.executor&quot;: &quot;Run&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;46-core-feature-1&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/rapra/ms312/ms3_2/Experiment/raphaelb/ex2/SB3/tutorials-springboot_unit2_2_onetomany&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+||||||| Stash base
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;JUnit.trivia in trivia.executor&quot;: &quot;Coverage&quot;,
+    &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
+    &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
+    &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
+    &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;Spring Boot.TriviaApplication.executor&quot;: &quot;Run&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/rapra/ms312/ms3_2/Experiment/raphaelb/ex2/SB3/tutorials-springboot_unit2_2_onetomany&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+=======
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
-    "ASKED_ADD_EXTERNAL_FILES": "true",
     "JUnit.trivia in trivia.executor": "Coverage",
     "RequestMappingsPanelOrder0": "0",
     "RequestMappingsPanelOrder1": "1",
@@ -38,7 +232,7 @@
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "Spring Boot.TriviaApplication.executor": "Run",
-    "git-widget-placeholder": "46-core-feature-1",
+    "git-widget-placeholder": "49-core-feature-2",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "C:/Users/rapra/ms312/ms3_2/Experiment/raphaelb/ex2/SB3/tutorials-springboot_unit2_2_onetomany",
     "node.js.detected.package.eslint": "true",
@@ -47,8 +241,10 @@
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
     "vue.rearranger.settings.migration": "true"
+>>>>>>> Stashed changes
   }
-}]]></component>
+<<<<<<< Updated upstream
+}</component>
   <component name="RunManager" selected="JUnit.java in trivia">
     <configuration name="java in trivia" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="trivia" />
@@ -58,6 +254,13 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+||||||| Stash base
+}</component>
+  <component name="RunManager" selected="JUnit.trivia in trivia">
+=======
+}]]></component>
+  <component name="RunManager" selected="JUnit.trivia in trivia">
+>>>>>>> Stashed changes
     <configuration name="trivia in trivia" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="trivia" />
       <option name="TEST_OBJECT" value="directory" />
@@ -110,5 +313,11 @@
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/Backend$TriviaApplicationTests.ic" NAME="TriviaApplicationTests Coverage Results" MODIFIED="1712864684884" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
+      <FILTER>com.project.trivia.*</FILTER>
+    </SUITE>
+    <SUITE FILE_PATH="coverage/Backend$java_in_trivia.ic" NAME="java in trivia Coverage Results" MODIFIED="1714185915580" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
   </component>
 </project>
