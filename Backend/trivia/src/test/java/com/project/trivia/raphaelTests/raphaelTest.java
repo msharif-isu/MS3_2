@@ -1,52 +1,30 @@
 package com.project.trivia.raphaelTests;
 
+import com.project.trivia.Leaderboard.Leaderboard;
+import com.project.trivia.Leaderboard.LeaderboardController;
+import com.project.trivia.Leaderboard.LeaderboardRepository;
 import com.project.trivia.MPQuestions.Answer;
 import com.project.trivia.MPQuestions.AnswerRepository;
 import com.project.trivia.Questions.Question;
 import com.project.trivia.Questions.QuestionRepository;
 import com.project.trivia.User.User;
-
-import com.project.trivia.Queryboard.Query;
-
 import com.project.trivia.User.UserRepository;
-import com.project.trivia.roomChat.MessageRepository;
-import io.restassured.http.ContentType;
+import io.restassured.RestAssured;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import com.project.trivia.Leaderboard.*;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.test.web.servlet.MockMvc;
-
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-
-import static org.junit.jupiter.api.Assertions.assertArrayEquals;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.springframework.data.util.Predicates.isTrue;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
-import static org.mockito.Mockito.when;
-
-
-import io.restassured.RestAssured;
-import io.restassured.response.Response;
-
-
-import io.restassured.RestAssured;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -71,12 +49,6 @@ class raphaelTest {
 	@Autowired
 	private TestRestTemplate restTemplate;
 
-	@Autowired
-	private LeaderboardController controller;
-
-	//@SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
-	//@Autowired
-	//private MockMvc mockMvc;
 
 
 	@BeforeAll
