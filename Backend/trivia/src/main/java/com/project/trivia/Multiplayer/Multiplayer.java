@@ -37,6 +37,10 @@ public class Multiplayer {
         questions = new ArrayList<>();
     }
 
+    public Multiplayer() {
+
+    }
+
     public Long getId() {
         return id;
     }
