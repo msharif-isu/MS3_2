@@ -67,8 +67,22 @@ public class MultiplayerController {
 
     @PutMapping(path = "/multiplayer/{id}/{lobbyId}/{topic}/{limit}")
     public Multiplayer changeMultiplayer(@PathVariable int id, @PathVariable int  lobbyId, @PathVariable String topic, @PathVariable int limit){
-        Multiplayer temp = multiplayerRepository.findById(id);
+        Lobby lobby = lobbyRepo.findById(lobbyId);
+        Multiplayer mp = multiplayerRepository.findById(id);
 
+        mp.setQuestion(questionRepository.findAll());
+        Query.topicFilter(mp.getQuestion(), topic);
+        Query.limitList(mp.getQuestion(), limit);
+        for(int i=0; i<mp.getQuestion().size(); i++) {
+            Question temp = mp.getQuestion().get(i);
+            temp.addMultiplayer(mp);
+            questionRepository.save(temp);
+        }
+
+        lobbyRepo.save(lobby);
+        multiplayerRepository.save(mp);
+
+        return mp;
     }
 
 }
