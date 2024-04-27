@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Question.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=0;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">debug</a> &gt; <a href="index.source.html" class="el_package">com.example.androidexample</a> &gt; <span class="el_source">Question.java</span></div><h1>Question.java</h1><pre class="source lang-java linenums">package com.example.androidexample;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+/**
+ * A class used to store the data of every user question
+ */
+public class Question {
+    private int id;
+    private String question;
+    private String answer;
+    private String questionType;
+    private boolean used;
+    private boolean userCreated;
+
+    /**
+     * Constructs a container to store question data
+     * @param id - id of question
+     * @param question - question
+     * @param answer - answer to question
+     * @param questionType - category of question
+     * @param used - if this question has been used
+     * @param userCreated - if this question is user created
+     */
+<span class="fc" id="L26">    public Question(int id, String question, String answer, String questionType, boolean used, boolean userCreated) {</span>
+<span class="fc" id="L27">        this.id = id;</span>
+<span class="fc" id="L28">        this.question = question;</span>
+<span class="fc" id="L29">        this.answer = answer;</span>
+<span class="fc" id="L30">        this.questionType = questionType;</span>
+<span class="fc" id="L31">        this.used = used;</span>
+<span class="fc" id="L32">        this.userCreated = userCreated;</span>
+<span class="fc" id="L33">    }</span>
+
+    /**
+     * Constructs a container to store question data from the appropriate &lt;code&gt;JSONObject&lt;/code&gt;
+     * @param jsonBody - &lt;code&gt;JSONObject&lt;/code&gt;
+     */
+    public Question(JSONObject jsonBody) throws JSONException {
+<span class="fc" id="L40">        this(</span>
+<span class="fc" id="L41">                jsonBody.getInt(&quot;id&quot;),</span>
+<span class="fc" id="L42">                jsonBody.getString(&quot;question&quot;),</span>
+<span class="fc" id="L43">                jsonBody.getString(&quot;answer&quot;),</span>
+<span class="fc" id="L44">                jsonBody.getString(&quot;questionType&quot;),</span>
+<span class="fc" id="L45">                jsonBody.getBoolean(&quot;used&quot;),</span>
+                false
+//                jsonBody.getBoolean(&quot;userCreated&quot;)
+        );
+<span class="fc" id="L49">    }</span>
+
+    /**
+     * Returns the id of this question
+     * @return id of this question
+     */
+    public int getId() {
+<span class="fc" id="L56">        return id;</span>
+    }
+
+    /**
+     * Returns this question
+     * @return question
+     */
+    public String getQuestion() {
+<span class="fc" id="L64">        return question;</span>
+    }
+
+    /**
+     * Returns the answer to this question
+     * @return answer - answer to this question
+     */
+    public String getAnswer() {
+<span class="fc" id="L72">        return answer;</span>
+    }
+
+    /**
+     * Returns the questionType of this question
+     * @return questionType - category of question
+     */
+    public String getQuestionType() {
+<span class="fc" id="L80">        return questionType;</span>
+    }
+
+
+    /**
+     * Returns if this question has been used before
+     * @return used - if this question has been used
+     */
+    public boolean isUsed() {
+<span class="nc" id="L89">        return used;</span>
+    }
+
+    /**
+     * Returns if this question is user-created
+     * @return userCreated - if this question is user created
+     */
+    public boolean isUserCreated() {
+<span class="fc" id="L97">        return userCreated;</span>
+    }
+
+    /**
+     * Returns this question as its respective &lt;code&gt;JSONObject&lt;/code&gt;
+     * @return &lt;code&gt;JSONObject&lt;/code&gt; representation of this question
+     * @throws JSONException
+     */
+    public JSONObject toJSON() throws JSONException {
+<span class="fc" id="L106">        return new JSONObject() {{</span>
+<span class="fc" id="L107">            put(&quot;question&quot;, question);</span>
+<span class="fc" id="L108">            put(&quot;answer&quot;, answer);</span>
+<span class="fc" id="L109">            put(&quot;questionType&quot;, questionType);</span>
+<span class="fc" id="L110">            put(&quot;used&quot;, used);</span>
+<span class="fc" id="L111">            put(&quot;userCreated&quot;, userCreated);</span>
+<span class="fc" id="L112">        }};</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span>Generated by the Android Gradle plugin 8.0.0</div></body></html>
