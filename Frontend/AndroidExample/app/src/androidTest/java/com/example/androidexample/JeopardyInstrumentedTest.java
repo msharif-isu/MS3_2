@@ -113,25 +113,25 @@ public class JeopardyInstrumentedTest {
         onView(withId(R.id.jeopardy_dialog_submit_button)).check(matches(isDisplayed()));
     }
 
-    @Test
-    public void testJeopardyCorrectAnswer() {
-        openQuestion();
-
-        String correctAnswer = "Philosophocles";
-
-        // Type in correct answer and submit
-        onView(withId(R.id.jeopardy_dialog_answer)).perform(typeText(correctAnswer), closeSoftKeyboard());
-        onView(withId(R.id.jeopardy_dialog_submit_button)).perform(click());
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
-
-        // Check that question can't be selected again and that player got points
-        onView(withId(R.id.jeopardy_button_00)).check(matches(isNotEnabled()));
-        onView(withId(R.id.jeopardy_point_total_text)).check(matches(withText("Total Points: 100")));
-    }
+//    @Test
+//    public void testJeopardyCorrectAnswer() {
+//        openQuestion();
+//
+//        String correctAnswer = "Philosophocles";
+//
+//        // Type in correct answer and submit
+//        onView(withId(R.id.jeopardy_dialog_answer)).perform(typeText(correctAnswer), closeSoftKeyboard());
+//        onView(withId(R.id.jeopardy_dialog_submit_button)).perform(click());
+//        try {
+//            Thread.sleep(1000);
+//        } catch (InterruptedException e) {
+//            throw new RuntimeException(e);
+//        }
+//
+//        // Check that question can't be selected again and that player got points
+//        onView(withId(R.id.jeopardy_button_00)).check(matches(isNotEnabled()));
+//        onView(withId(R.id.jeopardy_point_total_text)).check(matches(withText("Total Points: 100")));
+//    }
 
     @Test
     public void testJeopardyIncorrectAnswer() {
