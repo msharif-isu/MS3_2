@@ -65,9 +65,9 @@ public class ProfileFragment extends Fragment {
     private ArrayList<UserFriend> friendsList;
     private RecyclerView recyclerView;
     ImageView imgView;
-    ImageButton addFriends, editBioButton, editProfilePictureButton;
+    ImageButton editBioButton, editProfilePictureButton;
 
-    Button signOut;
+    Button signOut, addFriends;
     //Button addFriend = findViewById(R.id.addFriend);
     TextView questionsAnswered, achievementsUnlocked, userBiography, usernameText, friendsListText;
     private String username;
@@ -93,8 +93,8 @@ public class ProfileFragment extends Fragment {
 
         swipeRefreshLayout = view.findViewById(R.id.swipeRefreshLayout);
         addFriends = view.findViewById(R.id.addFriends);
-        questionsAnswered = view.findViewById(R.id.questionsAnswered);
-        achievementsUnlocked = view.findViewById(R.id.AcheivementsUnlocked);
+//        questionsAnswered = view.findViewById(R.id.questionsAnswered);
+//        achievementsUnlocked = view.findViewById(R.id.AcheivementsUnlocked);
         userBiography = view.findViewById(R.id.userBiography);
         usernameText = view.findViewById(R.id.username);
         friendsListText = view.findViewById(R.id.freindsListText);
@@ -107,8 +107,8 @@ public class ProfileFragment extends Fragment {
         editProfilePictureButton = view.findViewById(R.id.editProfilePictureButton);
         getProfilePic();
 
-        questionsAnswered.setText("Add Friends");
-        achievementsUnlocked.setText("");
+//        questionsAnswered.setText("Add Friends");
+//        achievementsUnlocked.setText("");
         getBio();
 //        userBiography.setText(temp);
         usernameText.setText(username);
@@ -209,8 +209,6 @@ public class ProfileFragment extends Fragment {
     }
 
 
-
-
     /**
      * Converts the given image URI to a byte array.
      *
@@ -255,9 +253,21 @@ public class ProfileFragment extends Fragment {
 
         cancelButton.setOnClickListener(v -> dialog.dismiss());
         save.setOnClickListener(v -> {
-
+            if(bioEdit.getText().toString().equals("")) {
+                bioEdit.setError("Please enter a bio.");
+                return;
+            } else if (bioEdit.getText().toString().length() > 100) {
+                bioEdit.setError("Please enter shorter bio. Maximum 100 characters.");
+                return;
+            }
             String newBio = bioEdit.getText().toString();
             editBio(newBio);
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            getBio();
             dialog.dismiss();
         });
 
@@ -294,6 +304,7 @@ public class ProfileFragment extends Fragment {
             }
         });
         queue.add(jsonObjectRequest);
+        getBio();
     }
 
     private void addFriendsDialog() {
@@ -493,6 +504,15 @@ public class ProfileFragment extends Fragment {
                     }
                 });
     }
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        if (getActivity() != null && !getActivity().isFinishing()) {
+            Glide.with(this).clear(imgView);
+        }
+    }
+
+
 
 
 }
