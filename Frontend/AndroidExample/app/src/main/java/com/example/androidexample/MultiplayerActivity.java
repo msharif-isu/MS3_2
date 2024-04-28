@@ -129,7 +129,7 @@ public class MultiplayerActivity extends AppCompatActivity implements WebSocketL
                 String question = message.substring("Question: ".length());
                 questionTextView.setText(question);
             //} else if (message.equals("Correct!")) {
-            } else if (message.equals("Game is now over congrats!")) {
+            } else if (message.equals("Game is now over congrats!") || message.equals("All questions answered!")) {
                 Intent intent = new Intent(MultiplayerActivity.this, ResultsActivity.class);
                 //TODO fix this, it currently stores in username, when it shoudlnt
                 intent.putExtra("USERNAME", "multiplayer");
