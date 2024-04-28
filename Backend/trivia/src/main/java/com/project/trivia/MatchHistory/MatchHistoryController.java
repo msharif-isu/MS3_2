@@ -3,10 +3,7 @@ package com.project.trivia.MatchHistory;
 import com.project.trivia.User.User;
 import com.project.trivia.User.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -20,11 +17,9 @@ public class MatchHistoryController {
     UserRepository userRepo;
 
 
-    @PostMapping(path = "/{username}/saveGame/{placement}/{questionSet}/{points}")
-    public MatchHistory savePastMatch(@PathVariable String username, @PathVariable String placement,
-                                           @PathVariable int points, @PathVariable String questionSet) {
+    @PostMapping(path = "/{username}/saveGame")
+    public MatchHistory savePastMatch(@PathVariable String username, @RequestBody MatchHistory matchHistory) {
         User user = userRepo.findByUsername(username);
-        MatchHistory matchHistory = new MatchHistory(placement, questionSet, points, username, user);
 
         if (user == null) {
             return null;
