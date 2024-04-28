@@ -58,14 +58,14 @@
             app:layout_constraintTop_toBottomOf="@+id/match_history_title" />
 
         <TextView
-            android:id="@+id/unlocked"
+            android:id="@+id/match_history_matches_played"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="4dp"
             android:layout_marginBottom="20dp"
             android:fontFamily="@font/aileron_bold"
             android:maxLines="1"
-            android:text="123"
+            android:text="0"
             android:textColor="@color/black"
             android:textSize="18sp"
             app:autoSizeTextType="uniform"

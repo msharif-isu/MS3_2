@@ -169,12 +169,14 @@ public class ProfileFragment extends Fragment {
         int height = (int) (getResources().getDisplayMetrics().heightPixels * 0.90);
         d.getWindow().setLayout(width, height);
 
+        TextView matchesPlayed = d.findViewById(R.id.match_history_matches_played);
         RecyclerView matchesList = d.findViewById(R.id.match_history_list);
+
         List<MatchHistory> matchesDataset = new ArrayList<>();
         MatchHistoryAdapter adapter = new MatchHistoryAdapter(matchesDataset);
         matchesList.setAdapter(adapter);
 
-        getMatchHistory(matchesDataset, adapter);
+        getMatchHistory(matchesDataset, adapter, matchesPlayed);
 
         d.show();
     }
@@ -529,9 +531,9 @@ public class ProfileFragment extends Fragment {
                 });
     }
 
-    private void getMatchHistory(List<MatchHistory> matchesList, MatchHistoryAdapter adapter) {
+    private void getMatchHistory(List<MatchHistory> matchesList, MatchHistoryAdapter adapter, TextView matchesPlayedText) {
         RequestQueue queue = Volley.newRequestQueue(requireContext());
-        String url = backendUrl + username + "matchHistory";
+        String url = backendUrl + username + "/matchHistory";
         Log.e("ProfileActivity", "Match history url:" + url);
 
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(
@@ -549,13 +551,14 @@ public class ProfileFragment extends Fragment {
                                 throw new RuntimeException(e);
                             }
                         }
+                        matchesPlayedText.setText(Integer.toString(matchesList.size()));
                         adapter.notifyDataSetChanged();
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError volleyError) {
-                        Log.e("MatchHistoryRequest", "onErrorResponse: I'm a teapot");
+                        Log.e("MatchHistoryRequest", "onErrorResponse: " + volleyError.getMessage());
                         Toast.makeText(requireContext(), "I'm a teapot", Toast.LENGTH_SHORT).show();
                     }
                 });
