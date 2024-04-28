@@ -23,7 +23,7 @@
         app:layout_constraintBottom_toTopOf="@+id/createLobbyButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/lobbies">
+        app:layout_constraintTop_toBottomOf="@+id/lobbySearch">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/lobbyList"
@@ -37,8 +37,7 @@
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:background="#00FFFFFF"
-        android:scaleX="3"
-        android:scaleY="3"
+        android:scaleType="fitCenter"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -51,4 +50,15 @@
         android:text="TextView"
         app:layout_constraintStart_toEndOf="@+id/createLobbyButton"
         app:layout_constraintTop_toBottomOf="@+id/createLobbyButton" />
+
+    <EditText
+        android:id="@+id/lobbySearch"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="text"
+        android:hint="Search Lobbies"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/lobbies" />
 </androidx.constraintlayout.widget.ConstraintLayout>

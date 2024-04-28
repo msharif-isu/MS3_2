@@ -2,6 +2,8 @@ package com.project.trivia.User;
 
 import com.project.trivia.MatchHistory.MatchHistory;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.project.trivia.Achievements.Achievement;
+import com.project.trivia.Achievements.AchievementRepository;
 import com.project.trivia.FriendsList.Friends;
 import com.project.trivia.Leaderboard.Leaderboard;
 import com.project.trivia.Lobby.Lobby;
@@ -42,6 +44,11 @@ public class User {
 
     @OneToMany(mappedBy = "user")
     List<MatchHistory> pastMatches;
+
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "achievement")
+    private Achievement achievement;
 
 
 
@@ -161,4 +168,6 @@ public class User {
         this.stats = stats;
     }
 
+    public Achievement getAchievement() {return achievement;}
+    public void setAchievement(Achievement achievement) {this.achievement = achievement;}
 }

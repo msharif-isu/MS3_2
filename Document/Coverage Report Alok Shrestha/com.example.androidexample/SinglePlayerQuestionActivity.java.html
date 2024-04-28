@@ -1,0 +1,292 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>SinglePlayerQuestionActivity.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=0;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">debug</a> &gt; <a href="index.source.html" class="el_package">com.example.androidexample</a> &gt; <span class="el_source">SinglePlayerQuestionActivity.java</span></div><h1>SinglePlayerQuestionActivity.java</h1><pre class="source lang-java linenums">package com.example.androidexample;
+
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.os.Bundle;
+import android.os.CountDownTimer;
+import android.util.Log;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+
+<span class="nc" id="L31">public class SinglePlayerQuestionActivity extends AppCompatActivity {</span>
+
+    private TextView questionTextView, pointsTextView, timeLeftTextView, usernameTextView;
+    private EditText answerBoxEditText;
+    private Button submitButton;
+    private CountDownTimer countDownTimer;
+    private long timeLeftInMillis;
+<span class="nc" id="L38">    private int currentQuestionIndex = 0;</span>
+<span class="nc" id="L39">    private int correctAnswers = 0;</span>
+    private int usernameId;
+
+    //this exists because the server decided to stop working :)
+<span class="nc" id="L43">    private String backendUrl = &quot;http://10.0.2.2:8081/&quot;;</span>
+    private String questionCorrectAnswer;
+
+    private String username;
+<span class="nc" id="L47">    private List&lt;Integer&gt; questionIds = new ArrayList&lt;&gt;();</span>
+    private static final long COUNTDOWN_TIME = 60000; // 60 seconds
+
+    //Timer will keep going without this and screen will randomly change.
+    protected void onPause() {
+<span class="nc" id="L52">        super.onPause();</span>
+<span class="nc bnc" id="L53" title="All 2 branches missed.">        if (countDownTimer != null) {</span>
+<span class="nc" id="L54">            countDownTimer.cancel();</span>
+        }
+<span class="nc" id="L56">    }</span>
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+<span class="nc" id="L60">        super.onCreate(savedInstanceState);</span>
+<span class="nc" id="L61">        setContentView(R.layout.activity_question_singleplayer);</span>
+
+<span class="nc" id="L63">        usernameTextView = findViewById(R.id.usernametext);</span>
+<span class="nc" id="L64">        questionTextView = findViewById(R.id.question);</span>
+<span class="nc" id="L65">        pointsTextView = findViewById(R.id.points);</span>
+<span class="nc" id="L66">        timeLeftTextView = findViewById(R.id.time_left);</span>
+<span class="nc" id="L67">        answerBoxEditText = findViewById(R.id.answer_box);</span>
+<span class="nc" id="L68">        submitButton = findViewById(R.id.submit_button);</span>
+
+<span class="nc" id="L70">        pointsTextView.setText(&quot;Points: 0&quot;);</span>
+
+
+<span class="nc" id="L73">        SharedPreferences prefs = getSharedPreferences(&quot;UserData&quot;, MODE_PRIVATE);</span>
+<span class="nc" id="L74">        username = prefs.getString(&quot;USERNAME&quot;, &quot;&quot;);</span>
+        //Log.d(&quot;MainActivity&quot;, &quot;Username from SharedPreferences: &quot; + username);
+
+
+//        Bundle extras = getIntent().getExtras();
+//        if (extras != null) {
+//            username = extras.getString(&quot;USERNAME&quot;);
+//            usernameId = extras.getInt(&quot;USERID&quot;);
+<span class="nc bnc" id="L82" title="All 2 branches missed.">        if (!Objects.equals(username, &quot;&quot;)) {</span>
+<span class="nc" id="L83">            usernameTextView.setText(username); // this will come from LoginActivity</span>
+        } else {
+<span class="nc" id="L85">            usernameTextView.setText(&quot;Not logged in&quot;);</span>
+        }
+
+        // Fetch question IDs from the backend
+<span class="nc" id="L89">        fetchQuestionIds();</span>
+
+        // Start countdown timer
+<span class="nc" id="L92">        startCountDown();</span>
+
+<span class="nc" id="L94">        submitButton.setOnClickListener(view -&gt; {</span>
+<span class="nc" id="L95">            String userAnswer = answerBoxEditText.getText().toString();</span>
+<span class="nc" id="L96">            handleSubmitButtonClick();</span>
+<span class="nc bnc" id="L97" title="All 2 branches missed.">            if (currentQuestionIndex &lt; questionIds.size()) {</span>
+<span class="nc" id="L98">                showNextQuestion();</span>
+            } else {
+                // Display result and handle end of quiz
+<span class="nc" id="L101">                displayResult();</span>
+            }
+<span class="nc" id="L103">        });</span>
+<span class="nc" id="L104">    }</span>
+
+    private void handleSubmitButtonClick() {
+<span class="nc" id="L107">        String userAnswer = answerBoxEditText.getText().toString();</span>
+        // Check if the user's answer is correct
+<span class="nc bnc" id="L109" title="All 2 branches missed.">        if (userAnswer.equalsIgnoreCase(questionCorrectAnswer)) {</span>
+<span class="nc" id="L110">            correctAnswers++;</span>
+<span class="nc" id="L111">            Toast.makeText(SinglePlayerQuestionActivity.this, &quot;Correct Answer&quot;, Toast.LENGTH_SHORT).show();</span>
+<span class="nc" id="L112">            updatePoints();</span>
+        }
+        // if it isn't correct...
+        else {
+<span class="nc" id="L116">            Toast.makeText(SinglePlayerQuestionActivity.this, &quot;Incorrect Answer&quot;, Toast.LENGTH_SHORT).show();</span>
+        }
+<span class="nc" id="L118">        currentQuestionIndex++;</span>
+<span class="nc bnc" id="L119" title="All 2 branches missed.">        if (currentQuestionIndex &lt; questionIds.size()) {</span>
+<span class="nc" id="L120">            showNextQuestion();</span>
+        } else {
+            // Display result and handle end of quiz
+<span class="nc" id="L123">            displayResult();</span>
+        }
+<span class="nc" id="L125">    }</span>
+
+    /**
+     * Method to fetch question IDs from the backend
+     */
+        private void fetchQuestionIds() {
+<span class="nc" id="L131">            RequestQueue queue = Volley.newRequestQueue(this);</span>
+<span class="nc" id="L132">            String url = backendUrl + &quot;getPuestions&quot;;</span>
+<span class="nc" id="L133">            JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url, null,</span>
+<span class="nc" id="L134">                    new Response.Listener&lt;JSONArray&gt;() {</span>
+                        @Override
+                        public void onResponse(JSONArray response) {
+                            try {
+<span class="nc bnc" id="L138" title="All 2 branches missed.">                                for (int i = 0; i &lt; response.length(); i++) {</span>
+<span class="nc" id="L139">                                    questionIds.add(response.getInt(i));</span>
+                                }
+<span class="nc" id="L141">                                showNextQuestion();</span>
+<span class="nc" id="L142">                            } catch (JSONException e) {</span>
+<span class="nc" id="L143">                                e.printStackTrace();</span>
+<span class="nc" id="L144">                            }</span>
+<span class="nc" id="L145">                        }</span>
+                    },
+<span class="nc" id="L147">                    new Response.ErrorListener() {</span>
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            // Handle error
+<span class="nc" id="L151">                            Toast.makeText(SinglePlayerQuestionActivity.this, &quot;Failed to fetch question IDs&quot;, Toast.LENGTH_SHORT).show();</span>
+<span class="nc" id="L152">                        }</span>
+                    });
+<span class="nc" id="L154">            queue.add(jsonArrayRequest);</span>
+<span class="nc" id="L155">        }</span>
+
+    /**
+     * Method to fetch question details by ID from the backend
+     */
+    private void fetchQuestionDetails(int questionId) {
+<span class="nc" id="L161">        RequestQueue queue = Volley.newRequestQueue(this);</span>
+<span class="nc" id="L162">        String url = backendUrl + &quot;pelican/&quot; + questionId;</span>
+<span class="nc" id="L163">        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null,</span>
+<span class="nc" id="L164">                new Response.Listener&lt;JSONObject&gt;() {</span>
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            // Parse the JSON response to get question details
+<span class="nc" id="L169">                            String question = response.getString(&quot;question&quot;);</span>
+<span class="nc" id="L170">                            questionCorrectAnswer = response.getString(&quot;answer&quot;);</span>
+                            // Display the question
+<span class="nc" id="L172">                            questionTextView.setText(question);</span>
+<span class="nc" id="L173">                        } catch (JSONException e) {</span>
+<span class="nc" id="L174">                            e.printStackTrace();</span>
+<span class="nc" id="L175">                        }</span>
+<span class="nc" id="L176">                    }</span>
+                },
+<span class="nc" id="L178">                new Response.ErrorListener() {</span>
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // Handle error
+<span class="nc" id="L182">                        Toast.makeText(SinglePlayerQuestionActivity.this, &quot;Failed to fetch question details&quot;, Toast.LENGTH_SHORT).show();</span>
+<span class="nc" id="L183">                    }</span>
+                });
+<span class="nc" id="L185">        queue.add(jsonObjectRequest);</span>
+<span class="nc" id="L186">    }</span>
+
+    /**
+     * Method to display the next question. Also clears the textbox.
+     */
+    private void showNextQuestion() {
+<span class="nc" id="L192">        answerBoxEditText.setText(&quot;&quot;);</span>
+<span class="nc" id="L193">        int questionId = questionIds.get(currentQuestionIndex);</span>
+<span class="nc" id="L194">        fetchQuestionDetails(questionId);</span>
+<span class="nc" id="L195">    }</span>
+
+    /**
+     * Method to display result and handle end of quiz
+     */
+    private void displayResult() {
+        // Display result
+<span class="nc" id="L202">        Toast.makeText(getApplicationContext(), &quot;Quiz Finished! Correct Answers: &quot; + correctAnswers, Toast.LENGTH_LONG).show();</span>
+<span class="nc" id="L203">        Intent intent = new Intent(SinglePlayerQuestionActivity.this, ResultsActivity.class);</span>
+<span class="nc" id="L204">        intent.putExtra(&quot;USERNAME&quot;, username);</span>
+<span class="nc" id="L205">        intent.putExtra(&quot;USERID&quot;, usernameId);</span>
+<span class="nc" id="L206">        intent.putExtra(&quot;POINTS&quot;, correctAnswers * 100);</span>
+<span class="nc" id="L207">        intent.putExtra(&quot;CORRECTANSWERS&quot;, correctAnswers);</span>
+<span class="nc" id="L208">        startActivity(intent);</span>
+<span class="nc" id="L209">    }</span>
+
+    /**
+     * Method to start countdown timer
+     */
+    private void startCountDown() {
+<span class="nc" id="L215">        countDownTimer = new CountDownTimer(COUNTDOWN_TIME, 1000) {</span>
+            @Override
+            public void onTick(long millisUntilFinished) {
+<span class="nc" id="L218">                timeLeftInMillis = millisUntilFinished;</span>
+<span class="nc" id="L219">                updateCountDownText();</span>
+<span class="nc" id="L220">            }</span>
+
+            @Override
+            public void onFinish() {
+                // Display a message or handle end of quiz when timer finishes
+<span class="nc" id="L225">                Toast.makeText(getApplicationContext(), &quot;Time's up!&quot;, Toast.LENGTH_SHORT).show();</span>
+<span class="nc" id="L226">                displayResult();</span>
+<span class="nc" id="L227">            }</span>
+<span class="nc" id="L228">        }.start();</span>
+<span class="nc" id="L229">    }</span>
+
+    /**
+     * Method to update countdown text
+     */
+    private void updateCountDownText() {
+<span class="nc" id="L235">        int seconds = (int) (timeLeftInMillis / 1000);</span>
+<span class="nc" id="L236">        String timeLeftFormatted = String.format(&quot;%02d&quot;, seconds);</span>
+<span class="nc" id="L237">        timeLeftTextView.setText(&quot;Time Left: &quot; + timeLeftFormatted);</span>
+<span class="nc" id="L238">    }</span>
+
+    @Override
+    protected void onDestroy() {
+<span class="nc" id="L242">        super.onDestroy();</span>
+<span class="nc bnc" id="L243" title="All 2 branches missed.">        if (countDownTimer != null) {</span>
+<span class="nc" id="L244">            countDownTimer.cancel();</span>
+        }
+<span class="nc" id="L246">    }</span>
+
+    /**
+     * Updates points, as well as question activity for the leaderboard.
+     */
+    private void updatePoints() {
+<span class="nc" id="L252">        sendCorrectAnswer(questionIds.get(currentQuestionIndex), username);</span>
+<span class="nc" id="L253">        int totalPoints = correctAnswers * 100;</span>
+<span class="nc" id="L254">        pointsTextView.setText(&quot;Points: &quot; + totalPoints);</span>
+<span class="nc" id="L255">    }</span>
+
+    /**
+     * Sends the user based on the question that the user got correct.
+     *
+     * @param id       question id
+     * @param username current user's username
+     */
+    private void sendCorrectAnswer(int id, String username) {
+<span class="nc" id="L264">        String url = backendUrl + &quot;correct/&quot; + id + &quot;/&quot; + username;</span>
+<span class="nc" id="L265">        JSONObject requestData = new JSONObject();</span>
+        try {
+<span class="nc" id="L267">            requestData.put(&quot;id&quot;, id);</span>
+<span class="nc" id="L268">            requestData.put(&quot;username&quot;, username);</span>
+<span class="nc" id="L269">        } catch (JSONException e) {</span>
+<span class="nc" id="L270">            e.printStackTrace();</span>
+<span class="nc" id="L271">        }</span>
+        // Create a request
+<span class="nc" id="L273">        JsonObjectRequest request = new JsonObjectRequest(Request.Method.PUT, url, requestData,</span>
+<span class="nc" id="L274">                new Response.Listener&lt;JSONObject&gt;() {</span>
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        // Handle response if needed
+<span class="nc" id="L278">                        Log.d(&quot;Response&quot;, response.toString());</span>
+<span class="nc" id="L279">                    }</span>
+                },
+<span class="nc" id="L281">                new Response.ErrorListener() {</span>
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // Handle error
+<span class="nc" id="L285">                        Log.e(&quot;Error&quot;, &quot;Error occurred: &quot; + error.getMessage());</span>
+<span class="nc" id="L286">                    }</span>
+                });
+<span class="nc" id="L288">        RequestQueue queue = Volley.newRequestQueue(this);</span>
+<span class="nc" id="L289">        queue.add(request);</span>
+<span class="nc" id="L290">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span>Generated by the Android Gradle plugin 8.0.0</div></body></html>

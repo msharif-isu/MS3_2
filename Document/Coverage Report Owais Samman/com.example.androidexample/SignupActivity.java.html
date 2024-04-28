@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>SignupActivity.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=0;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">debug</a> &gt; <a href="index.source.html" class="el_package">com.example.androidexample</a> &gt; <span class="el_source">SignupActivity.java</span></div><h1>SignupActivity.java</h1><pre class="source lang-java linenums">package com.example.androidexample;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
+import android.util.Patterns;
+
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import url.RequestURLs;
+
+<span class="fc" id="L26">public class SignupActivity extends AppCompatActivity {</span>
+
+    private EditText usernameEditText;
+    private EditText passwordEditText;
+    private EditText confirmEditText;
+    private EditText emailEditText;
+    private Button loginButton;
+    private Button signupButton;
+
+<span class="fc" id="L35">    private String backendUrl = RequestURLs.SERVER_HTTP_URL + &quot;/users&quot;;</span>
+    //change to &quot;http://coms-309-034.class.las.iastate.edu:8080/users/&quot;
+    //or to &quot;http://10.0.2.2:8080/users&quot;
+    private RequestQueue requestQueue;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+<span class="fc" id="L42">        super.onCreate(savedInstanceState);</span>
+<span class="fc" id="L43">        setContentView(R.layout.activity_signup_new);</span>
+
+<span class="fc" id="L45">        usernameEditText = findViewById(R.id.signup_username_edt);</span>
+<span class="fc" id="L46">        passwordEditText = findViewById(R.id.signup_password_edt);</span>
+<span class="fc" id="L47">        confirmEditText = findViewById(R.id.signup_confirm_edt);</span>
+<span class="fc" id="L48">        emailEditText = findViewById(R.id.signup_email_edt);</span>
+<span class="fc" id="L49">        loginButton = findViewById(R.id.signup_login_btn);</span>
+<span class="fc" id="L50">        signupButton = findViewById(R.id.signup_signup_btn);</span>
+
+<span class="fc" id="L52">        requestQueue = Volley.newRequestQueue(this);</span>
+
+<span class="fc" id="L54">        loginButton.setOnClickListener(new View.OnClickListener() {</span>
+            @Override
+            public void onClick(View v) {
+<span class="nc" id="L57">                Intent intent = new Intent(SignupActivity.this, LoginActivity.class);</span>
+<span class="nc" id="L58">                startActivity(intent);</span>
+<span class="nc" id="L59">            }</span>
+        });
+
+<span class="fc" id="L62">        signupButton.setOnClickListener(new View.OnClickListener() {</span>
+            @Override
+            public void onClick(View v) {
+<span class="fc" id="L65">                String email = emailEditText.getText().toString();</span>
+<span class="fc" id="L66">                String username = usernameEditText.getText().toString();</span>
+<span class="fc" id="L67">                String password = passwordEditText.getText().toString();</span>
+<span class="fc" id="L68">                String confirm = confirmEditText.getText().toString();</span>
+<span class="fc bfc" id="L69" title="All 2 branches covered.">                if (isValidEmail(email)) {</span>
+<span class="fc" id="L70">                    emailEditText.setError(null);</span>
+<span class="fc bfc" id="L71" title="All 2 branches covered.">                    if (password.equals(confirm)) {</span>
+<span class="fc" id="L72">                        Toast.makeText(getApplicationContext(), &quot;Signing up&quot;, Toast.LENGTH_LONG).show();</span>
+<span class="fc" id="L73">                        sendSignupRequest(username, password, email);</span>
+                    } else {
+<span class="fc" id="L75">                        Toast.makeText(getApplicationContext(), &quot;Passwords don't match&quot;, Toast.LENGTH_LONG).show();</span>
+<span class="fc" id="L76">                        passwordEditText.setError(&quot;Passwords don't match&quot;);</span>
+                    }
+                } else {
+<span class="fc" id="L79">                    emailEditText.setError(&quot;Enter a valid email address&quot;);</span>
+                }
+<span class="fc" id="L81">            }</span>
+        });
+<span class="fc" id="L83">    }</span>
+
+    private boolean isValidEmail(String email) {
+<span class="fc" id="L86">        return Patterns.EMAIL_ADDRESS.matcher(email).matches();</span>
+    }
+
+    private void sendSignupRequest(final String username, final String password, final String email) {
+<span class="fc" id="L90">        String url = backendUrl;</span>
+
+<span class="fc" id="L92">        JSONObject jsonObject = new JSONObject();</span>
+        try {
+<span class="fc" id="L94">            jsonObject.put(&quot;username&quot;, username);</span>
+<span class="fc" id="L95">            jsonObject.put(&quot;password&quot;, password);</span>
+<span class="fc" id="L96">            jsonObject.put(&quot;email&quot;, email);</span>
+<span class="nc" id="L97">        } catch (JSONException e) {</span>
+<span class="nc" id="L98">            e.printStackTrace();</span>
+<span class="fc" id="L99">        }</span>
+
+<span class="fc" id="L101">        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, jsonObject,</span>
+<span class="fc" id="L102">                new Response.Listener&lt;JSONObject&gt;() {</span>
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+<span class="fc" id="L106">                            String message = response.getString(&quot;message&quot;);</span>
+<span class="pc bpc" id="L107" title="1 of 2 branches missed.">                            if (&quot;success&quot;.equals(message)) {</span>
+<span class="fc" id="L108">                                Toast.makeText(getApplicationContext(), &quot;Signup successful&quot;, Toast.LENGTH_SHORT).show();</span>
+<span class="fc" id="L109">                                Intent intent = new Intent(SignupActivity.this, LoginActivity.class);</span>
+<span class="fc" id="L110">                                startActivity(intent);</span>
+<span class="fc" id="L111">                                finish();</span>
+<span class="fc" id="L112">                            } else {</span>
+<span class="nc" id="L113">                                handleErrorResponse(message);</span>
+                            }
+<span class="nc" id="L115">                        } catch (JSONException e) {</span>
+<span class="nc" id="L116">                            e.printStackTrace();</span>
+<span class="nc" id="L117">                            Toast.makeText(getApplicationContext(), &quot;Unexpected response format&quot;, Toast.LENGTH_SHORT).show();</span>
+<span class="fc" id="L118">                        }</span>
+<span class="fc" id="L119">                    }</span>
+                },
+
+<span class="fc" id="L122">                new Response.ErrorListener() {</span>
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // Handle error
+<span class="nc" id="L126">                        Toast.makeText(getApplicationContext(), &quot;Signup failed: &quot; + error.getMessage(), Toast.LENGTH_SHORT).show();</span>
+<span class="nc" id="L127">                        error.printStackTrace();</span>
+<span class="nc" id="L128">                    }</span>
+                });
+<span class="fc" id="L130">        requestQueue.add(request);</span>
+<span class="fc" id="L131">    }</span>
+
+    private void handleErrorResponse(String message) {
+<span class="nc bnc" id="L134" title="All 2 branches missed.">        if (&quot;Username already exists&quot;.equals(message)) {</span>
+<span class="nc" id="L135">            Toast.makeText(getApplicationContext(), &quot;Signup failed: &quot; + message, Toast.LENGTH_SHORT).show();</span>
+<span class="nc" id="L136">            usernameEditText.setError(&quot;Username already exists&quot;);</span>
+        } else {
+<span class="nc" id="L138">            Toast.makeText(getApplicationContext(), &quot;Signup failed: &quot; + message, Toast.LENGTH_SHORT).show();</span>
+        }
+<span class="nc" id="L140">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span>Generated by the Android Gradle plugin 8.0.0</div></body></html>

@@ -52,8 +52,8 @@ public class UserController {
 
         if (user == null)
             return failure;
-        else if (userRepository.existsByUsername(user.getUsername())) {
-            return failure;
+        else if(userRepository.existsByUsername(user.getUsername())){
+            return "Username is already taken.";
         }
         statsRepo.save(stats);
 

@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>LeaderboardAdapter.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=0;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">debug</a> &gt; <a href="index.source.html" class="el_package">com.example.androidexample</a> &gt; <span class="el_source">LeaderboardAdapter.java</span></div><h1>LeaderboardAdapter.java</h1><pre class="source lang-java linenums">package com.example.androidexample;
+
+import android.graphics.Bitmap;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.ImageRequest;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.CircleCrop;
+import com.bumptech.glide.request.RequestOptions;
+
+import java.util.List;
+
+import url.RequestURLs;
+
+/**
+ * The adapter that binds a leaderboard's dataset to its &lt;code&gt;RecyclerView&lt;/code&gt;'s UI elements
+ */
+public class LeaderboardAdapter extends RecyclerView.Adapter&lt;LeaderboardAdapter.ViewHolder&gt; {
+
+    /**
+     * The JSONArray pulled from the database containing the leaderboard data
+     */
+    private List&lt;LeaderboardListItem&gt; leaderboardDataSet;
+    /**
+     * Keeps track of the type of points to display
+     */
+    public LeaderboardTimeFrameEnum time_frame;
+
+    /**
+     * Provide a reference to the type of views that you are using
+     * (custom ViewHolder)
+     */
+    public static class ViewHolder extends RecyclerView.ViewHolder {
+
+        private final TextView userName;
+        private final TextView points;
+        private final ImageView profilePic;
+
+        public ViewHolder(View view) {
+<span class="nc" id="L51">            super(view);</span>
+            // Define click listener for the ViewHolder's View
+<span class="nc" id="L53">            userName = view.findViewById(R.id.userName);</span>
+<span class="nc" id="L54">            points = view.findViewById(R.id.points);</span>
+<span class="nc" id="L55">            profilePic = view.findViewById(R.id.listProfilePic);</span>
+<span class="nc" id="L56">        }</span>
+
+        public TextView getUserNameView() {
+<span class="nc" id="L59">            return userName;</span>
+        }
+
+        public TextView getPointsView() {
+<span class="nc" id="L63">            return points;</span>
+        }
+        public ImageView getProfilePicView() {
+<span class="nc" id="L66">            return profilePic;</span>
+        }
+    }
+
+    /**
+     * Initialize the dataset of the Adapter
+     *
+     * @param dataSet JSONArray containing the data to populate views to be used
+     * by RecyclerView
+     */
+<span class="nc" id="L76">    public LeaderboardAdapter(List&lt;LeaderboardListItem&gt; dataSet, LeaderboardTimeFrameEnum time_frame) {</span>
+<span class="nc" id="L77">        leaderboardDataSet = dataSet;</span>
+<span class="nc" id="L78">        this.time_frame = time_frame;</span>
+<span class="nc" id="L79">    }</span>
+
+    // Create new views (invoked by the layout manager)
+    @NonNull
+    @Override
+    public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
+        // Create a new view, which defines the UI of the list item
+<span class="nc" id="L86">        View view = LayoutInflater.from(viewGroup.getContext())</span>
+<span class="nc" id="L87">                .inflate(R.layout.leaderboard_row_item, viewGroup, false);</span>
+
+<span class="nc" id="L89">        return new ViewHolder(view);</span>
+    }
+
+    // Replace the contents of a view (invoked by the layout manager)
+    @Override
+    public void onBindViewHolder(ViewHolder viewHolder, final int position) {
+<span class="nc" id="L95">        LeaderboardListItem userPointData = leaderboardDataSet.get(position);</span>
+
+<span class="nc" id="L97">        viewHolder.getUserNameView().setText(userPointData.getUsername());</span>
+
+<span class="nc bnc" id="L99" title="All 6 branches missed.">        switch (time_frame) {</span>
+            case DAILY:
+<span class="nc" id="L101">                viewHolder.getPointsView().setText(Integer.toString(userPointData.getDailyPoints()));</span>
+<span class="nc" id="L102">                break;</span>
+            case WEEKLY:
+<span class="nc" id="L104">                viewHolder.getPointsView().setText(Integer.toString(userPointData.getWeeklyPoints()));</span>
+<span class="nc" id="L105">                break;</span>
+            case MONTHLY:
+<span class="nc" id="L107">                viewHolder.getPointsView().setText(Integer.toString(userPointData.getMonthlyPoints()));</span>
+<span class="nc" id="L108">                break;</span>
+            case YEARLY:
+<span class="nc" id="L110">                viewHolder.getPointsView().setText(Integer.toString(userPointData.getYearlyPoints()));</span>
+<span class="nc" id="L111">                break;</span>
+            case LIFETIME:
+<span class="nc" id="L113">                viewHolder.getPointsView().setText(Integer.toString(userPointData.getLifetimePoints()));</span>
+<span class="nc" id="L114">                break;</span>
+            default:
+<span class="nc" id="L116">                return;</span>
+        }
+
+<span class="nc" id="L119">        getProfilePic(userPointData.getUsername(), viewHolder.getProfilePicView());</span>
+<span class="nc" id="L120">    }</span>
+
+    // Return the size of your dataset (invoked by the layout manager)
+    @Override
+    public int getItemCount() {
+<span class="nc" id="L125">        return leaderboardDataSet.size();</span>
+    }
+
+    private void getProfilePic(String username, ImageView profilePic) {
+        // Make a request to fetch the profile picture
+<span class="nc" id="L130">        ImageRequest request = new ImageRequest(</span>
+<span class="nc" id="L131">                String.format(&quot;%s/images/%s&quot;, RequestURLs.SERVER_HTTP_URL, username),</span>
+<span class="nc" id="L132">                new Response.Listener&lt;Bitmap&gt;() {</span>
+                    @Override
+                    public void onResponse(Bitmap response) {
+                        // Apply circular cropping using Glide
+<span class="nc" id="L136">                        Glide.with(profilePic.getContext())</span>
+<span class="nc" id="L137">                                .load(response)</span>
+<span class="nc" id="L138">                                .apply(RequestOptions.bitmapTransform(new CircleCrop()))</span>
+<span class="nc" id="L139">                                .into(profilePic);</span>
+<span class="nc" id="L140">                    }</span>
+                },
+                0,
+                0,
+                ImageView.ScaleType.CENTER_INSIDE,
+                null,
+<span class="nc" id="L146">                new Response.ErrorListener() {</span>
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // Handle error
+<span class="nc" id="L150">                    }</span>
+                });
+        // Add the request to the RequestQueue
+<span class="nc" id="L153">        Volley.newRequestQueue(profilePic.getContext()).add(request);</span>
+<span class="nc" id="L154">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span>Generated by the Android Gradle plugin 8.0.0</div></body></html>
