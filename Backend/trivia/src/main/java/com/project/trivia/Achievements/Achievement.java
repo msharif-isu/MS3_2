@@ -16,10 +16,16 @@ public class Achievement {
     @Lob
     private Long id;
 
+    /*
     @OneToOne(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
     @JsonIgnore
     private User user;
+
+     */
+
+    @Column
+    private String username;
 
     @Column
     private boolean account;
@@ -44,8 +50,8 @@ public class Achievement {
 
     ;
 
-    public Achievement(User user, boolean account, boolean singlePlayer, boolean jeopardy, boolean multiPlayer) {
-        this.user = user;
+    public Achievement(String username, boolean account, boolean singlePlayer, boolean jeopardy, boolean multiPlayer) {
+        this.username = username;
         this.account = account;
         this.singlePlayer = singlePlayer;
         this.jeopardy = jeopardy;
@@ -60,12 +66,12 @@ public class Achievement {
         this.id = id;
     }
 
-    public User getUser() {
-        return user;
+    public String getUsername() {
+        return username;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setUser(String username) {
+        this.username = username;
     }
 
     public boolean isAccount() {
