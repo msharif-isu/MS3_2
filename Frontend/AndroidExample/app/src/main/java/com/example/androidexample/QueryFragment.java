@@ -3,6 +3,7 @@ package com.example.androidexample;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -129,12 +130,14 @@ public class QueryFragment extends Fragment {
                     new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError error) {
-                            if (!attemptedRefresh) {
-                                Toast.makeText(requireContext(), "Leaderboard failed to load, reattempting to get data from server", Toast.LENGTH_LONG).show();
-                                requestQuestions(type, isUserGenerated);
-                                attemptedRefresh = true;
-                            } else {
-                                Toast.makeText(requireContext(), "Unable to reach server", Toast.LENGTH_LONG).show();
+                            if (getContext() != null) {
+                                if (!attemptedRefresh) {
+                                    Toast.makeText(requireContext(), "Leaderboard failed to load, reattempting to get data from server", Toast.LENGTH_LONG).show();
+                                    requestQuestions(type, isUserGenerated);
+                                    attemptedRefresh = true;
+                                } else {
+                                    Toast.makeText(requireContext(), "Unable to reach server", Toast.LENGTH_LONG).show();
+                                }
                             }
                         }
                     }
