@@ -6,6 +6,7 @@ import com.project.trivia.Queryboard.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -29,6 +30,18 @@ public class QuestionController {
     @GetMapping(path = "/question")
     List<Question> getAllQuestion() {
         return questionRepository.findAll();
+    }
+
+    @GetMapping(path = "/question/topics")
+    List<String> getAllTopics() {
+        List<Question> questions = questionRepository.findAll();
+        List<String> topics = new ArrayList<>();
+        for (Question question : questions) {
+            if (!topics.contains(question.getQuestionType())) {
+                topics.add(question.getQuestionType());
+            }
+        }
+        return topics;
     }
 
     @PostMapping(path = "/question")
