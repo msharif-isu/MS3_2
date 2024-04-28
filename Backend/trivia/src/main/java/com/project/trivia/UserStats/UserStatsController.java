@@ -89,7 +89,7 @@ public class UserStatsController {
 
         UserStats stats = user.getStats();
 
-        stats.setWins(stats.getLosses() + 1);
+        stats.setWins(stats.getWins() + 1);
         stats.setWinStreak(stats.getWinStreak() + 1);
 
         userRepo.save(user);
