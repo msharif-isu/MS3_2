@@ -1,5 +1,6 @@
 package com.project.trivia.User;
 
+import com.project.trivia.MatchHistory.MatchHistory;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.project.trivia.Achievements.Achievement;
 import com.project.trivia.Achievements.AchievementRepository;
@@ -10,6 +11,7 @@ import com.project.trivia.UserStats.UserStats;
 import jakarta.persistence.*;
 
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -40,6 +42,10 @@ public class User {
     @JsonIgnore
     private Lobby lobby;
 
+    @OneToMany(mappedBy = "user")
+    List<MatchHistory> pastMatches;
+
+
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "achievement")
     private Achievement achievement;
@@ -57,6 +63,7 @@ public class User {
         this.email = email;
         bio = "";
         points = 0;
+        pastMatches = new ArrayList<>();
     }
 
     public User() {
@@ -143,6 +150,14 @@ public class User {
 
     public void setLobby(Lobby lobbyId) {
         this.lobby = lobbyId;
+    }
+
+    public List<MatchHistory> getPastMatches() {
+        return pastMatches;
+    }
+
+    public void setPastMatches(List<MatchHistory> pastMatches) {
+        this.pastMatches = pastMatches;
     }
 
     public UserStats getStats() {
