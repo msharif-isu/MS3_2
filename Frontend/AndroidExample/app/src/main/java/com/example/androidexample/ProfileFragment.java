@@ -67,7 +67,7 @@ public class ProfileFragment extends Fragment {
     ImageView imgView;
     ImageButton editBioButton, editProfilePictureButton;
 
-    Button signOut, addFriends;
+    Button signOut, addFriends, matchHistory;
     //Button addFriend = findViewById(R.id.addFriend);
     TextView questionsAnswered, achievementsUnlocked, userBiography, usernameText, friendsListText;
     private String username;
@@ -101,6 +101,7 @@ public class ProfileFragment extends Fragment {
         recyclerView = view.findViewById(R.id.friendList);
         editBioButton = view.findViewById(R.id.editBioButton);
         signOut = view.findViewById(R.id.login_btn);
+        matchHistory = view.findViewById(R.id.matchHistory);
 
         //Profile Picture
         imgView = view.findViewById(R.id.imgView);
@@ -142,6 +143,20 @@ public class ProfileFragment extends Fragment {
         signOut.setOnClickListener(v -> {
             startActivity(new Intent(getActivity(), LoginActivity.class));
         });
+        matchHistory.setOnClickListener(v -> {
+            Dialog d = new Dialog(requireContext());
+            d.setContentView(R.layout.dialog_match_history);
+
+            int width = (int)(getResources().getDisplayMetrics().widthPixels*0.90);
+            int height = (int)(getResources().getDisplayMetrics().heightPixels*0.90);
+
+            d.getWindow().setLayout(width, height);
+
+
+
+            d.show();
+        });
+
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
