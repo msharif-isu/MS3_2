@@ -14,7 +14,7 @@ public class MatchHistory {
 
     private String placement;
 
-    private String questionSet;
+    private String questionsPlayedType;
 
     private int pointsEarned;
 
@@ -29,9 +29,9 @@ public class MatchHistory {
 
     }
 
-    public MatchHistory(String placement, String questionSet, int pointsEarned, String username, User user) {
+    public MatchHistory(String placement, String questionsPlayedType, int pointsEarned, String username, User user) {
         this.placement = placement;
-        this.questionSet = questionSet;
+        this.questionsPlayedType = questionsPlayedType;
         this.pointsEarned = pointsEarned;
         this.username = username;
         this.user = user;
@@ -46,11 +46,11 @@ public class MatchHistory {
     }
 
     public String getQuestionSet() {
-        return questionSet;
+        return questionsPlayedType;
     }
 
-    public void setQuestionSet(String questionSet) {
-        this.questionSet = questionSet;
+    public void setQuestionSet(String questionsPlayedType) {
+        this.questionsPlayedType = questionsPlayedType;
     }
 
     public String getPlacement() {

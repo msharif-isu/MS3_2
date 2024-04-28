@@ -4,7 +4,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
- * A class used to store the data of every user question
+ * A class used to store the data of every question
  */
 public class Question {
     private int id;
@@ -97,9 +97,10 @@ public class Question {
         return userCreated;
     }
 
+
     /**
-     * Returns this question as its respective <code>JSONObject</code>
-     * @return <code>JSONObject</code> representation of this question
+     * Returns the appropriate request body to send this <code>Question</code> to the server
+     * @return jsonBody - <code>JSONObject</code>
      * @throws JSONException
      */
     public JSONObject toJSON() throws JSONException {

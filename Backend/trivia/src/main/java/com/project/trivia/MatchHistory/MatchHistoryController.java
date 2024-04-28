@@ -22,9 +22,9 @@ public class MatchHistoryController {
 
     @PostMapping(path = "/{username}/saveGame/{placement}/{questionSet}/{points}")
     public MatchHistory savePastMatch(@PathVariable String username, @PathVariable String placement,
-                                           @PathVariable int points, @PathVariable String questionSet) {
+                                           @PathVariable int points, @PathVariable String questionsPlayedType) {
         User user = userRepo.findByUsername(username);
-        MatchHistory matchHistory = new MatchHistory(placement, questionSet, points, username, user);
+        MatchHistory matchHistory = new MatchHistory(placement, questionsPlayedType, points, username, user);
 
         if (user == null) {
             return null;

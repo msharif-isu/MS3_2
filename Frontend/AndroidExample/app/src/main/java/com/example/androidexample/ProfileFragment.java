@@ -56,6 +56,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.List;
 
 import url.RequestURLs;
 
@@ -144,17 +145,7 @@ public class ProfileFragment extends Fragment {
             startActivity(new Intent(getActivity(), LoginActivity.class));
         });
         matchHistory.setOnClickListener(v -> {
-            Dialog d = new Dialog(requireContext());
-            d.setContentView(R.layout.dialog_match_history);
-
-            int width = (int)(getResources().getDisplayMetrics().widthPixels*0.90);
-            int height = (int)(getResources().getDisplayMetrics().heightPixels*0.90);
-
-            d.getWindow().setLayout(width, height);
-
-
-
-            d.show();
+            createMatchHistoryDialog();
         });
 
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -170,6 +161,24 @@ public class ProfileFragment extends Fragment {
 
     }
 
+    private void createMatchHistoryDialog() {
+        Dialog d = new Dialog(requireContext());
+        d.setContentView(R.layout.dialog_match_history);
+
+        int width = (int) (getResources().getDisplayMetrics().widthPixels * 0.90);
+        int height = (int) (getResources().getDisplayMetrics().heightPixels * 0.90);
+        d.getWindow().setLayout(width, height);
+
+        RecyclerView matchesList = d.findViewById(R.id.match_history_list);
+        List<MatchHistory> matchesDataset = new ArrayList<>();
+        MatchHistoryAdapter adapter = new MatchHistoryAdapter(matchesDataset);
+        matchesList.setAdapter(adapter);
+
+        getMatchHistory(matchesDataset, adapter);
+
+        d.show();
+    }
+
     private void editProfilePicture() {
         mGetContent.launch("image/*");
     }
@@ -177,12 +186,11 @@ public class ProfileFragment extends Fragment {
 
     /**
      * Uploads an image to a remote server using a multipart Volley request.
-     *
+     * <p>
      * This method creates and executes a multipart request using the Volley library to upload
      * an image to a predefined server endpoint. The image data is sent as a byte array and the
      * request is configured to handle multipart/form-data content type. The server is expected
      * to accept the image with a specific key ("image") in the request.
-     *
      */
     private void uploadImage() {
         if (selectedUri != null) {
@@ -226,7 +234,7 @@ public class ProfileFragment extends Fragment {
 
     /**
      * Converts the given image URI to a byte array.
-     *
+     * <p>
      * This method takes a URI pointing to an image and converts it into a byte array. The conversion
      * involves opening an InputStream from the content resolver using the provided URI, and then
      * reading the content into a byte array. This byte array represents the binary data of the image,
@@ -268,7 +276,7 @@ public class ProfileFragment extends Fragment {
 
         cancelButton.setOnClickListener(v -> dialog.dismiss());
         save.setOnClickListener(v -> {
-            if(bioEdit.getText().toString().equals("")) {
+            if (bioEdit.getText().toString().equals("")) {
                 bioEdit.setError("Please enter a bio.");
                 return;
             } else if (bioEdit.getText().toString().length() > 100) {
@@ -512,6 +520,7 @@ public class ProfileFragment extends Fragment {
                         // Set the retrieved profile picture to the ImageView
                         imgView.setImageBitmap(resource);
                     }
+
                     @Override
                     public void onLoadFailed(@Nullable Drawable errorDrawable) {
                         // Handle the case where image loading fails
@@ -519,6 +528,41 @@ public class ProfileFragment extends Fragment {
                     }
                 });
     }
+
+    private void getMatchHistory(List<MatchHistory> matchesList, MatchHistoryAdapter adapter) {
+        RequestQueue queue = Volley.newRequestQueue(requireContext());
+        String url = backendUrl + username + "matchHistory";
+        Log.e("ProfileActivity", "Match history url:" + url);
+
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(
+                Request.Method.GET,
+                url,
+                null,
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray jsonArray) {
+                        matchesList.clear();
+                        for (int i = 0; i < jsonArray.length(); i++) {
+                            try {
+                                matchesList.add(new MatchHistory(jsonArray.getJSONObject(i)));
+                            } catch (JSONException e) {
+                                throw new RuntimeException(e);
+                            }
+                        }
+                        adapter.notifyDataSetChanged();
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError volleyError) {
+                        Log.e("MatchHistoryRequest", "onErrorResponse: I'm a teapot");
+                        Toast.makeText(requireContext(), "I'm a teapot", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+        queue.add(jsonArrayRequest);
+    }
+
     @Override
     public void onDestroyView() {
         super.onDestroyView();
@@ -526,8 +570,6 @@ public class ProfileFragment extends Fragment {
             Glide.with(this).clear(imgView);
         }
     }
-
-
 
 
 }
