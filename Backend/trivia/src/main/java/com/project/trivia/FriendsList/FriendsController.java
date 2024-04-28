@@ -49,11 +49,16 @@ public class FriendsController {
             return "User is already friends with this friend.";
         }
 
+        //updates each users friends stats
+        user1.getStats().setNumberOfFreinds(user1.getStats().getNumberOfFreinds() + 1);
+        user2.getStats().setNumberOfFreinds(user2.getStats().getNumberOfFreinds() + 1);
+
         user1.getFriends().add(friend1);
         userRepo.save(user1);
 
         user2.getFriends().add(friend2);
         userRepo.save(user2);
+
 
         return user1.getUsername() + " is now friends with " + friend1.getUsername();
     }
@@ -73,11 +78,17 @@ public class FriendsController {
             return user1.getUsername() +" is not friends with " + friend1.getUsername();
         }
 
+        //updates each users friends stats
+        user1.getStats().setNumberOfFreinds(user1.getStats().getNumberOfFreinds() - 1);
+        user2.getStats().setNumberOfFreinds(user2.getStats().getNumberOfFreinds() - 1);
+
         user1.getFriends().remove(friend1);
         userRepo.save(user1);
 
         user2.getFriends().remove(friend2);
         userRepo.save(user2);
+
+
 
         return user1.getUsername() + " and " + friend1.getUsername() + " are no longer friends ";
     }
