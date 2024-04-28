@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>PlayFragment.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=0;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">debug</a> &gt; <a href="index.source.html" class="el_package">com.example.androidexample</a> &gt; <span class="el_source">PlayFragment.java</span></div><h1>PlayFragment.java</h1><pre class="source lang-java linenums">package com.example.androidexample;
+
+import android.os.Bundle;
+
+import androidx.fragment.app.Fragment;
+
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageButton;
+import android.content.Intent;
+
+
+/**
+ * A simple {@link Fragment} subclass.
+ * Use the {@link PlayFragment#newInstance} factory method to
+ * create an instance of this fragment.
+ */
+public class PlayFragment extends Fragment implements View.OnClickListener {
+
+    // TODO: Rename parameter arguments, choose names that match
+    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+    private static final String ARG_PARAM1 = &quot;param1&quot;;
+    private static final String ARG_PARAM2 = &quot;param2&quot;;
+
+    private ImageButton singlePlayerButton;
+    private ImageButton multiPlayerButton;
+    private ImageButton jeopardyButton;
+
+    // TODO: Rename and change types of parameters
+    private String mParam1;
+    private String mParam2;
+
+<span class="fc" id="L34">    public PlayFragment() {</span>
+        // Required empty public constructor
+<span class="fc" id="L36">    }</span>
+
+    /**
+     * Use this factory method to create a new instance of
+     * this fragment using the provided parameters.
+     *
+     * @param param1 Parameter 1.
+     * @param param2 Parameter 2.
+     * @return A new instance of fragment PlayFragment.
+     */
+    // TODO: Rename and change types and number of parameters
+    public static PlayFragment newInstance(String param1, String param2) {
+<span class="nc" id="L48">        PlayFragment fragment = new PlayFragment();</span>
+<span class="nc" id="L49">        Bundle args = new Bundle();</span>
+<span class="nc" id="L50">        args.putString(ARG_PARAM1, param1);</span>
+<span class="nc" id="L51">        args.putString(ARG_PARAM2, param2);</span>
+<span class="nc" id="L52">        fragment.setArguments(args);</span>
+<span class="nc" id="L53">        return fragment;</span>
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+<span class="fc" id="L58">        super.onCreate(savedInstanceState);</span>
+<span class="pc bpc" id="L59" title="1 of 2 branches missed.">        if (getArguments() != null) {</span>
+<span class="nc" id="L60">            mParam1 = getArguments().getString(ARG_PARAM1);</span>
+<span class="nc" id="L61">            mParam2 = getArguments().getString(ARG_PARAM2);</span>
+        }
+<span class="fc" id="L63">    }</span>
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+
+<span class="fc" id="L69">        View view = inflater.inflate(R.layout.fragment_play, container, false);</span>
+
+<span class="fc" id="L71">        singlePlayerButton = view.findViewById(R.id.singlePlayerButton);</span>
+<span class="fc" id="L72">        multiPlayerButton = view.findViewById(R.id.multiPlayerButton);</span>
+<span class="fc" id="L73">        jeopardyButton = view.findViewById(R.id.jeopardyButton);</span>
+
+<span class="fc" id="L75">        singlePlayerButton.setOnClickListener(this);</span>
+<span class="fc" id="L76">        multiPlayerButton.setOnClickListener(this);</span>
+<span class="fc" id="L77">        jeopardyButton.setOnClickListener(this);</span>
+
+<span class="fc" id="L79">        return view;</span>
+    }
+
+    public void onClick(View v) {
+<span class="pc bpc" id="L83" title="1 of 2 branches missed.">        if (v.getId() == R.id.singlePlayerButton) {</span>
+<span class="nc" id="L84">            startActivity(new Intent(getActivity(), SinglePlayerQuestionActivity.class));</span>
+<span class="pc bpc" id="L85" title="1 of 2 branches missed.">        } else if (v.getId() == R.id.multiPlayerButton) {</span>
+<span class="nc" id="L86">            startActivity(new Intent(getActivity(), LobbiesActivity.class));</span>
+<span class="pc bpc" id="L87" title="1 of 2 branches missed.">        } else if (v.getId() == R.id.jeopardyButton) {</span>
+<span class="fc" id="L88">            startActivity(new Intent(getActivity(), JeopardyActivity.class));</span>
+        }
+<span class="fc" id="L90">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span>Generated by the Android Gradle plugin 8.0.0</div></body></html>

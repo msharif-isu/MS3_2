@@ -69,6 +69,7 @@ public class QuestionSocket {
         questRepo = repo;
     }
 
+    private static Map<Long, Queue<Integer>> roomQuestionQueues = new HashMap<>();
 
     private static AnswerRepository ansRepo;
 
@@ -123,61 +124,62 @@ public class QuestionSocket {
 //        }
     }
 
-    /**
-     * Handles incoming WebSocket messages from a client.
-     *
-     * @param session The WebSocket session representing the client's connection.
-     * @param message The message received from the client.
-     */
     @OnMessage
     public void onMessage(@PathParam("roomID") Long id, Session session, String message) throws IOException {
         String username = sessionUsernameMap.get(session);
         logger.info("[onMessage] " + username + ": " + message);
-        if (message.contentEquals("/next")) {
-            randomize();
-            showMessageEveryone(id);
-            //} else if (message.contentEquals("/clear")) {
-            //ansRepo.deleteAll();
-        } else if (message.contentEquals("/resetUseValue")) {
-            resetUseValue();
-        } else if (message.startsWith("@")) {
-            String[] split_msg = message.split("\\s+");
-            StringBuilder actualMessageBuilder = new StringBuilder();
-            for (int i = 1; i < split_msg.length; i++) {
-                actualMessageBuilder.append(split_msg[i]).append(" ");
+
+        if (message.startsWith("/question ")) {
+            // Initialize the question queue for the room
+            Queue<Integer> questionQueue = new LinkedList<>();
+            String questionIdsString = message.substring("/question ".length());
+            String[] questionIds = questionIdsString.split("-");
+            for (String questionId : questionIds) {
+                try {
+                    questionQueue.offer(Integer.parseInt(questionId));
+                } catch (NumberFormatException e) {
+                    // Handle invalid question ID format
+                }
             }
-            String destUserName = split_msg[0].substring(1);
-            String actualMessage = actualMessageBuilder.toString();
-            sendMessageToPArticularUser(destUserName, "[DM from " + username + "]: " + actualMessage);
-            sendMessageToPArticularUser(username, "[DM from " + username + "]: " + actualMessage);
+            roomQuestionQueues.put(id, questionQueue);
+            sendNextQuestionInRoom(id);
         } else {
-            broadcastToRoom(id, username + ": " + message);
-            String providedAnswer = message.toLowerCase();
-            String correctAnswer = questRepo.findById(randInt).getAnswer().toLowerCase();
-            if (providedAnswer.equals(correctAnswer)) {
-                Question localQuestRepo = questRepo.findById(randInt);
-                Answer localAnswer = new Answer(username, message, true);
-                localQuestRepo.addAnswer(localAnswer);
-                ansRepo.save(localAnswer);
-                localQuestRepo.setUsed(true);
-                questRepo.save(localQuestRepo);
-                broadcastToRoom(id, "Correct!");
-                if (allQuestionsUsed()) {
-                    broadcastToRoom(id, "Game is now over congrats!");
+            // Check if it's the correct answer to the current question
+            Queue<Integer> questionQueue = roomQuestionQueues.get(id);
+            if (questionQueue != null && !questionQueue.isEmpty()) {
+                int currentQuestionId = questionQueue.peek();
+                Question currentQuestion = questRepo.findById(currentQuestionId);
+                if (currentQuestion != null && message.equalsIgnoreCase(currentQuestion.getAnswer())) {
+                    broadcastToRoom(id, "Correct!");
+                    questionQueue.poll(); // Remove the answered question
+                    sendNextQuestionInRoom(id);
                 } else {
-                    randomize();
-                    showMessageEveryone(id);
+                    broadcastToRoom(id, "Incorrect. Try again!");
                 }
             } else {
-                broadcastToRoom(id, "False!");
-                Answer localAnswer = new Answer(username, message, false);
-                Question localQuestion = questRepo.findById(randInt);
-                localQuestion.addAnswer(localAnswer);
-                questRepo.save(localQuestion);
-                ansRepo.save(localAnswer);
+                // Handle the case where there's no question queue or it's empty
+                broadcastToRoom(id, message);
+
             }
         }
     }
+
+    private void sendNextQuestionInRoom(Long roomId) {
+        Queue<Integer> questionQueue = roomQuestionQueues.get(roomId);
+        if (questionQueue != null && !questionQueue.isEmpty()) {
+            int nextQuestionId = questionQueue.peek();
+            Question nextQuestion = questRepo.findById(nextQuestionId);
+            if (nextQuestion != null) {
+                broadcastToRoom(roomId, "Question: " + nextQuestion.getQuestion());
+            } else {
+                // Handle the case where the question ID is invalid
+            }
+        } else {
+            broadcastToRoom(roomId, "All questions answered!");
+            roomQuestionQueues.remove(roomId); // Remove the queue when done
+        }
+    }
+
 
     /**
      * Handles the closure of a WebSocket connection.
@@ -209,6 +211,8 @@ public class QuestionSocket {
         // send the message to chat
         broadcastToRoom(id, username + " disconnected");
     }
+
+
 
     /**
      * Handles WebSocket errors that occur during the connection.

@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>FriendsListAdapter.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=0;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">debug</a> &gt; <a href="index.source.html" class="el_package">com.example.androidexample</a> &gt; <span class="el_source">FriendsListAdapter.java</span></div><h1>FriendsListAdapter.java</h1><pre class="source lang-java linenums">package com.example.androidexample;
+
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.ImageRequest;
+import com.android.volley.toolbox.Volley;
+
+import java.util.ArrayList;
+
+import url.RequestURLs;
+
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.CircleCrop;
+import com.bumptech.glide.request.RequestOptions;
+
+public class FriendsListAdapter extends RecyclerView.Adapter&lt;FriendsListAdapter.MyViewHolder&gt; {
+
+    private ArrayList&lt;UserFriend&gt; friendList;
+    private Context context;
+    private OnDeleteClickListener onDeleteClickListener; // Interface instance
+
+<span class="fc" id="L37">    private String backendUrl = RequestURLs.SERVER_HTTP_URL + &quot;/&quot;;</span>
+
+    // Interface definition for click events
+    public interface OnDeleteClickListener {
+        void onDeleteClick(int position);
+    }
+
+<span class="fc" id="L44">    public FriendsListAdapter(Context context, ArrayList&lt;UserFriend&gt; friendList, OnDeleteClickListener onDeleteClickListener) {</span>
+<span class="fc" id="L45">        this.context = context;</span>
+<span class="fc" id="L46">        this.friendList = friendList;</span>
+<span class="fc" id="L47">        this.onDeleteClickListener = onDeleteClickListener;</span>
+<span class="fc" id="L48">    }</span>
+
+    public class MyViewHolder extends RecyclerView.ViewHolder {
+        TextView friendUsername, friendBio;
+        ImageButton deleteButton;
+        ImageView profilePic; // Declare as local variable
+
+<span class="fc" id="L55">        public MyViewHolder(View view) {</span>
+<span class="fc" id="L56">            super(view);</span>
+<span class="fc" id="L57">            profilePic = view.findViewById(R.id.profilePic); // Initialize profilePic here</span>
+<span class="fc" id="L58">            friendUsername = view.findViewById(R.id.friendUsername);</span>
+<span class="fc" id="L59">            friendBio = view.findViewById(R.id.friendBio);</span>
+<span class="fc" id="L60">            deleteButton = view.findViewById(R.id.removeFriend);</span>
+<span class="fc" id="L61">        }</span>
+    }
+
+    @NonNull
+    @Override
+    public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+<span class="fc" id="L67">        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.friend_row_item, parent, false);</span>
+<span class="fc" id="L68">        return new MyViewHolder(itemView);</span>
+    }
+
+    @Override
+    public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
+<span class="fc" id="L73">        UserFriend friend = friendList.get(position);</span>
+
+        // Set friend username
+<span class="fc" id="L76">        String username = friend.getUsername();</span>
+<span class="fc" id="L77">        holder.friendUsername.setText(username);</span>
+
+        // Set friend bio
+<span class="fc" id="L80">        String bio = friend.getUserBio();</span>
+<span class="fc" id="L81">        holder.friendBio.setText(bio);</span>
+
+        // Fetch and set profile picture
+<span class="fc" id="L84">        getProfilePic(username, holder.profilePic); // Pass profilePic ImageView to getProfilePic()</span>
+<span class="fc" id="L85">        String profilePicUrl = backendUrl + &quot;images/&quot; + username;</span>
+
+
+        // Set click listener for delete button
+<span class="fc" id="L89">        holder.deleteButton.setOnClickListener(new View.OnClickListener() {</span>
+            @Override
+            public void onClick(View v) {
+<span class="pc bpc" id="L92" title="1 of 2 branches missed.">                if (onDeleteClickListener != null) {</span>
+<span class="fc" id="L93">                    int position = holder.getAdapterPosition();</span>
+<span class="pc bpc" id="L94" title="1 of 2 branches missed.">                    if (position != RecyclerView.NO_POSITION) {</span>
+<span class="fc" id="L95">                        onDeleteClickListener.onDeleteClick(position);</span>
+                    }
+                }
+<span class="fc" id="L98">            }</span>
+        });
+<span class="fc" id="L100">    }</span>
+
+    @Override
+    public int getItemCount() {
+<span class="fc" id="L104">        return friendList.size();</span>
+    }
+
+
+    private void getProfilePic(String username, ImageView profilePic) {
+        // Make a request to fetch the profile picture
+<span class="fc" id="L110">        ImageRequest request = new ImageRequest(</span>
+                backendUrl + &quot;images/&quot; + username,
+<span class="fc" id="L112">                new Response.Listener&lt;Bitmap&gt;() {</span>
+                    @Override
+                    public void onResponse(Bitmap response) {
+                        // Apply circular cropping using Glide
+<span class="fc" id="L116">                        Glide.with(context)</span>
+<span class="fc" id="L117">                                .load(response)</span>
+<span class="fc" id="L118">                                .apply(RequestOptions.bitmapTransform(new CircleCrop()))</span>
+<span class="fc" id="L119">                                .into(profilePic);</span>
+<span class="fc" id="L120">                    }</span>
+                },
+                0,
+                0,
+                ImageView.ScaleType.CENTER_INSIDE,
+                null,
+<span class="fc" id="L126">                new Response.ErrorListener() {</span>
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // Handle error
+<span class="nc" id="L130">                    }</span>
+                });
+        // Add the request to the RequestQueue
+<span class="fc" id="L133">        Volley.newRequestQueue(context).add(request);</span>
+<span class="fc" id="L134">    }</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span>Generated by the Android Gradle plugin 8.0.0</div></body></html>

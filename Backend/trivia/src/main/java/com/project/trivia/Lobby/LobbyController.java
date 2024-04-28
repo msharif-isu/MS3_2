@@ -87,33 +87,24 @@ public class LobbyController {
     }
 
     @DeleteMapping(path = "/leave/{roomId}/{userId}")
-    public Lobby leaveRoom(@PathVariable int userId, @PathVariable int roomId) {
+    public Lobby leaveRoom (@PathVariable int userId, @PathVariable int roomId){
         User user = userRepo.findById(userId);
         Lobby lobby = lobbyRepo.findById(roomId);
-        if (lobby == null || !lobby.getPlayers().contains(user)) {
+        if (lobby == null || !lobby.getPlayers().contains(user)){
             return null;
         }
         // Remove user from lobby only if they are currently in the lobby
         if (lobby.getPlayers().remove(user)) {
-            //Host of lobby if the host leaves
-            if (user.getUsername().equals(lobby.getHost()) && lobby.getPlayerCount() > 1) {
-                List<User> playerList = lobby.getPlayers();
-                Random rand = new Random();
-                User newHost = playerList.get(rand.nextInt(playerList.size()));
-                while (newHost.getId() == user.getId()) {
-                    newHost = playerList.get(rand.nextInt(playerList.size()));
-                }
-
-                lobby.setHost(newHost.getUsername());
-                user.setLobby(null);
-                lobby.setPlayerCount(lobby.getPlayerCount() - 1);
+            user.setLobby(null);
+            lobby.setPlayerCount(lobby.getPlayerCount() - 1);
+            if (user.getUsername().equals(lobby.getHost())) {
+                reassignHost(lobby);
             }
             if (lobby.getPlayerCount() == 0) {
                 // If there are no players left, delete the lobby
                 lobbyRepo.delete(lobby);
                 return null;
             }
-
             if (lobby.getRoomSize() <= 0) {
                 lobby.setFinished(true);
             }
@@ -123,6 +114,15 @@ public class LobbyController {
         return lobby;
     }
 
+    private void reassignHost(Lobby lobby) {
+        List<User> players = lobby.getPlayers();
+        if (players.isEmpty()) {
+            return;
+        }
+        Random random = new Random();
+        User newHost = players.get(random.nextInt(players.size()));
+        lobby.setHost(newHost.getUsername());
+    }
 
     @PutMapping(path = "/changeHost/{roomId}/{username}")
     public Lobby changeHost(@PathVariable int roomId, @PathVariable String username) {

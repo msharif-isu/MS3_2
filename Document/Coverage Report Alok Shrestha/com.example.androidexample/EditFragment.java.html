@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>EditFragment.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=0;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">debug</a> &gt; <a href="index.source.html" class="el_package">com.example.androidexample</a> &gt; <span class="el_source">EditFragment.java</span></div><h1>EditFragment.java</h1><pre class="source lang-java linenums">package com.example.androidexample;
+
+import android.os.Bundle;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Adapter;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
+import android.widget.EditText;
+import android.widget.Toast;
+
+import androidx.fragment.app.Fragment;
+
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import url.RequestURLs;
+
+
+<span class="fc" id="L33">public class EditFragment extends Fragment {</span>
+    private EditText questionInput;
+    private EditText answerInput;
+    private AutoCompleteTextView questionTypeInput;
+    private FloatingActionButton submitButton;
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+<span class="fc" id="L42">        View view = inflater.inflate(R.layout.fragment_question_submission, container, false);</span>
+
+<span class="fc" id="L44">        questionInput = view.findViewById(R.id.question_submission_question_input);</span>
+<span class="fc" id="L45">        answerInput = view.findViewById(R.id.question_submission_answer_input);</span>
+<span class="fc" id="L46">        questionTypeInput = view.findViewById(R.id.question_submission_question_type_input);</span>
+<span class="fc" id="L47">        submitButton = view.findViewById(R.id.question_submission_submit_button);</span>
+
+<span class="fc" id="L49">        ArrayAdapter&lt;String&gt; questionTypeAdapter = new ArrayAdapter&lt;&gt;(requireContext(), androidx.appcompat.R.layout.support_simple_spinner_dropdown_item);</span>
+<span class="fc" id="L50">        getQuestionTypes(questionTypeAdapter);</span>
+
+<span class="fc" id="L52">        questionTypeInput.setAdapter(questionTypeAdapter);</span>
+
+<span class="fc" id="L54">        submitButton.setOnClickListener(new View.OnClickListener() {</span>
+            @Override
+            public void onClick(View view) {
+<span class="fc" id="L57">                String question = questionInput.getText().toString();</span>
+<span class="fc" id="L58">                String answer = answerInput.getText().toString();</span>
+<span class="fc" id="L59">                String questionType = questionTypeInput.getText().toString();</span>
+
+<span class="pc bpc" id="L61" title="2 of 6 branches missed.">                if (question.length() == 0 || answer.length() == 0 || questionType.length() == 0) {</span>
+<span class="fc" id="L62">                    Toast.makeText(requireContext(), &quot;Please fill out all fields&quot;, Toast.LENGTH_SHORT).show();</span>
+                } else {
+<span class="fc" id="L64">                    Question submission = new Question(-1, question, answer, questionType, false, true);</span>
+
+                    try {
+<span class="fc" id="L67">                        questionInput.setText(&quot;&quot;);</span>
+<span class="fc" id="L68">                        answerInput.setText(&quot;&quot;);</span>
+<span class="fc" id="L69">                        questionTypeInput.setText(&quot;&quot;);</span>
+<span class="fc" id="L70">                        submitQuestion(submission);</span>
+<span class="nc" id="L71">                    } catch (JSONException e) {</span>
+<span class="nc" id="L72">                        throw new RuntimeException(e);</span>
+<span class="fc" id="L73">                    }</span>
+                }
+<span class="fc" id="L75">            }</span>
+        });
+
+<span class="fc" id="L78">        return view;</span>
+    }
+
+    private void submitQuestion(Question question) throws JSONException {
+<span class="fc" id="L82">        JsonObjectRequest questionSubmissionRequest = new JsonObjectRequest(</span>
+                Request.Method.POST,
+<span class="fc" id="L84">                String.format(&quot;%s/question&quot;, RequestURLs.SERVER_HTTP_URL),</span>
+<span class="fc" id="L85">                question.toJSON(),</span>
+<span class="fc" id="L86">                new Response.Listener&lt;JSONObject&gt;() {</span>
+                    @Override
+                    public void onResponse(JSONObject jsonObject) {
+<span class="fc" id="L89">                        Toast.makeText(requireContext(), &quot;Question successfully submitted to database&quot;, Toast.LENGTH_SHORT).show();</span>
+<span class="fc" id="L90">                    }</span>
+                },
+<span class="fc" id="L92">                new Response.ErrorListener() {</span>
+                    @Override
+                    public void onErrorResponse(VolleyError volleyError) {
+<span class="nc" id="L95">                        Log.d(&quot;EditFragment&quot;, &quot;Failed to submit question&quot;);</span>
+<span class="nc" id="L96">                        Toast.makeText(requireContext(), &quot;Failed to submit question&quot;, Toast.LENGTH_SHORT).show();</span>
+<span class="nc" id="L97">                    }</span>
+                }
+        );
+
+<span class="fc" id="L101">        VolleySingleton.getInstance(requireContext()).addToRequestQueue(questionSubmissionRequest);</span>
+<span class="fc" id="L102">    }</span>
+
+    private void getQuestionTypes(ArrayAdapter&lt;String&gt; adapter) {
+<span class="fc" id="L105">        JsonArrayRequest questionTypesRequest = new JsonArrayRequest(</span>
+                Request.Method.GET,
+<span class="fc" id="L107">                String.format(&quot;%s/query/topic&quot;, RequestURLs.SERVER_HTTP_URL),</span>
+                null,
+<span class="fc" id="L109">                new Response.Listener&lt;JSONArray&gt;() {</span>
+                    @Override
+                    public void onResponse(JSONArray jsonArray) {
+<span class="fc" id="L112">                        List&lt;String&gt; questionTypes = new ArrayList&lt;&gt;();</span>
+<span class="fc bfc" id="L113" title="All 2 branches covered.">                        for (int i = 0; i &lt; jsonArray.length(); i++) {</span>
+                            try {
+<span class="fc" id="L115">                                questionTypes.add(jsonArray.get(i).toString());</span>
+<span class="nc" id="L116">                            } catch (JSONException e) {</span>
+<span class="nc" id="L117">                                throw new RuntimeException(e);</span>
+<span class="fc" id="L118">                            }</span>
+                        }
+
+<span class="fc" id="L121">                        adapter.addAll(questionTypes);</span>
+<span class="fc" id="L122">                        adapter.notifyDataSetChanged();</span>
+<span class="fc" id="L123">                    }</span>
+                },
+<span class="fc" id="L125">                new Response.ErrorListener() {</span>
+                    @Override
+                    public void onErrorResponse(VolleyError volleyError) {
+
+<span class="nc" id="L129">                    }</span>
+                }
+        );
+
+<span class="fc" id="L133">        VolleySingleton.getInstance(requireContext()).addToRequestQueue(questionTypesRequest);</span>
+<span class="fc" id="L134">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span>Generated by the Android Gradle plugin 8.0.0</div></body></html>

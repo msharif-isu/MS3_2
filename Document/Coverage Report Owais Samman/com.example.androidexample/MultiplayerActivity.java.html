@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>MultiplayerActivity.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=0;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">debug</a> &gt; <a href="index.source.html" class="el_package">com.example.androidexample</a> &gt; <span class="el_source">MultiplayerActivity.java</span></div><h1>MultiplayerActivity.java</h1><pre class="source lang-java linenums">package com.example.androidexample;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.os.Bundle;
+import android.os.CountDownTimer;
+import android.util.Log;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
+
+
+import org.java_websocket.handshake.ServerHandshake;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import url.RequestURLs;
+
+<span class="nc" id="L23">public class MultiplayerActivity extends AppCompatActivity implements WebSocketListener {</span>
+
+    private CountDownTimer countDownTimer;
+    private TextView timeLeftTextView;
+    private long timeLeftInMillis;
+<span class="nc" id="L28">    private int userPoints = 0;</span>
+    private TextView msgTv;
+    TextView pointsTextView;
+
+    //TODO PROPER QUESTION IMPLEMENTAITON FOR MULTIPLAYER
+<span class="nc" id="L33">    private List&lt;Integer&gt; questionIds = new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L34">    private int currentQuestionIndex = 0;</span>
+<span class="nc" id="L35">    private String questionCorrectAnswer = &quot;Joe Biden&quot;;</span>
+    TextView questionTextView;
+
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+<span class="nc" id="L41">        super.onCreate(savedInstanceState);</span>
+<span class="nc" id="L42">        setContentView(R.layout.activity_multiplayer);</span>
+
+        //get username to connect to websocket
+<span class="nc" id="L45">        SharedPreferences sharedPreferences = getSharedPreferences(&quot;UserData&quot;, MODE_PRIVATE);</span>
+<span class="nc" id="L46">        String username = sharedPreferences.getString(&quot;USERNAME&quot;, &quot;&quot;);</span>
+<span class="nc" id="L47">        long roomId = getIntent().getLongExtra(&quot;ROOM_ID&quot;, -1);</span>
+
+//        Log.d(&quot;MainActivity&quot;, &quot;Username from SharedPreferences: &quot; + username);
+//        Toast.makeText(MultiplayerActivity.this, &quot;Welcome &quot; + username, Toast.LENGTH_SHORT).show();
+
+        // Find views by their IDs
+<span class="nc" id="L53">        questionTextView = findViewById(R.id.question);</span>
+<span class="nc" id="L54">        pointsTextView = findViewById(R.id.points);</span>
+<span class="nc" id="L55">        EditText answerEditText = findViewById(R.id.answer_box);</span>
+<span class="nc" id="L56">        Button submitButton = findViewById(R.id.submit_button);</span>
+<span class="nc" id="L57">        timeLeftTextView = findViewById(R.id.time_left);</span>
+<span class="nc" id="L58">        msgTv = findViewById(R.id.friendsList);</span>
+
+        // Set initial time in minutes TODO make customizable?
+<span class="nc" id="L61">        int timeInMinutes = 10;</span>
+<span class="nc" id="L62">        timeLeftInMillis = timeInMinutes * 60 * 1000;</span>
+<span class="nc" id="L63">        startCountDownTimer();</span>
+
+
+        //Todo add question support from database. Also add point support using database for multiple user support
+<span class="nc" id="L67">        questionTextView.setText(&quot;Who is the current president of the United States?&quot;);</span>
+<span class="nc" id="L68">        pointsTextView.setText(&quot;Points: &quot; + userPoints);</span>
+<span class="nc" id="L69">        answerEditText.setHint(&quot;Please Answer Here&quot;);</span>
+<span class="nc" id="L70">        msgTv.setText(&quot;User answers will appear here:\n&quot;);</span>
+
+        //automatically connect to websocket based on username.
+<span class="nc" id="L73">        String chatUrl = RequestURLs.SERVER_WEBSOCKET_URL_MULTIPLAYER + &quot;/chat/&quot; + roomId + &quot;/&quot;;</span>
+        //todo if username is blank, give error.
+<span class="nc" id="L75">        String serverUrl = chatUrl + username;</span>
+
+        // Establish WebSocket connection and set listener
+<span class="nc" id="L78">        WebSocketManager.getInstance().connectWebSocket(serverUrl);</span>
+<span class="nc" id="L79">        WebSocketManager.getInstance().setWebSocketListener(MultiplayerActivity.this);</span>
+
+<span class="nc" id="L81">        submitButton.setOnClickListener(view -&gt; {</span>
+            try {
+                // send message
+<span class="nc" id="L84">                WebSocketManager.getInstance().sendMessage(answerEditText.getText().toString());</span>
+<span class="nc" id="L85">            } catch (Exception e) {</span>
+<span class="nc" id="L86">                Log.d(&quot;ExceptionSendMessage:&quot;, e.getMessage().toString());</span>
+<span class="nc" id="L87">            }</span>
+<span class="nc" id="L88">            answerEditText.setText(&quot;&quot;);</span>
+<span class="nc" id="L89">        });</span>
+<span class="nc" id="L90">    }</span>
+
+    private void startCountDownTimer() {
+<span class="nc" id="L93">        countDownTimer = new CountDownTimer(timeLeftInMillis, 1000) {</span>
+            @Override
+            public void onTick(long millisUntilFinished) {
+<span class="nc" id="L96">                timeLeftInMillis = millisUntilFinished;</span>
+<span class="nc" id="L97">                updateCountDownText();</span>
+<span class="nc" id="L98">            }</span>
+
+            @Override
+            public void onFinish() {
+                //TODO make something happen when time is up
+<span class="nc" id="L103">                timeLeftInMillis = 0;</span>
+<span class="nc" id="L104">                updateCountDownText();</span>
+<span class="nc" id="L105">            }</span>
+<span class="nc" id="L106">        }.start();</span>
+<span class="nc" id="L107">    }</span>
+
+    private void updateCountDownText() {
+<span class="nc" id="L110">        int minutes = (int) (timeLeftInMillis / 1000) / 60;</span>
+<span class="nc" id="L111">        int seconds = (int) (timeLeftInMillis / 1000) % 60;</span>
+<span class="nc" id="L112">        String timeLeftFormatted = String.format(&quot;%02d:%02d&quot;, minutes, seconds);</span>
+<span class="nc" id="L113">        timeLeftTextView.setText(&quot;Time Left: &quot; + timeLeftFormatted);</span>
+<span class="nc" id="L114">    }</span>
+
+    @Override
+    protected void onDestroy() {
+<span class="nc" id="L118">        super.onDestroy();</span>
+<span class="nc bnc" id="L119" title="All 2 branches missed.">        if (countDownTimer != null) {</span>
+<span class="nc" id="L120">            countDownTimer.cancel();</span>
+        }
+<span class="nc" id="L122">    }</span>
+
+    @Override
+    public void onWebSocketMessage(String message) {
+<span class="nc" id="L126">        runOnUiThread(() -&gt; {</span>
+<span class="nc" id="L127">            String s = msgTv.getText().toString();</span>
+<span class="nc bnc" id="L128" title="All 2 branches missed.">            if (message.startsWith(&quot;Question: &quot;)) {</span>
+<span class="nc" id="L129">                String question = message.substring(&quot;Question: &quot;.length());</span>
+<span class="nc" id="L130">                questionTextView.setText(question);</span>
+            //} else if (message.equals(&quot;Correct!&quot;)) {
+<span class="nc bnc" id="L132" title="All 2 branches missed.">            } else if (message.equals(&quot;Game is now over congrats!&quot;)) {</span>
+<span class="nc" id="L133">                Intent intent = new Intent(MultiplayerActivity.this, ResultsActivity.class);</span>
+                //TODO fix this, it currently stores in username, when it shoudlnt
+<span class="nc" id="L135">                intent.putExtra(&quot;USERNAME&quot;, &quot;multiplayer&quot;);</span>
+<span class="nc" id="L136">                startActivity(intent);</span>
+
+<span class="nc" id="L138">            }</span>
+            else {
+<span class="nc" id="L140">                msgTv.setText(s + &quot;\n&quot; + message);</span>
+            }
+
+<span class="nc" id="L143">        });</span>
+<span class="nc" id="L144">    }</span>
+
+    @Override
+    public void onWebSocketOpen(ServerHandshake handshakedata) {
+
+<span class="nc" id="L149">    }</span>
+
+
+    @Override
+    public void onWebSocketClose(int code, String reason, boolean remote) {
+<span class="nc bnc" id="L154" title="All 2 branches missed.">        String closedBy = remote ? &quot;server&quot; : &quot;local&quot;;</span>
+<span class="nc" id="L155">        runOnUiThread(() -&gt; {</span>
+<span class="nc" id="L156">            String s = msgTv.getText().toString();</span>
+<span class="nc" id="L157">            msgTv.setText(s + &quot;---\nconnection closed by &quot; + closedBy + &quot;\nreason: &quot; + reason);</span>
+<span class="nc" id="L158">        });</span>
+<span class="nc" id="L159">    }</span>
+
+    @Override
+    public void onWebSocketError(Exception ex) {
+
+<span class="nc" id="L164">    }</span>
+
+    @Override
+    public void onBackPressed() {
+<span class="nc" id="L168">        super.onBackPressed();</span>
+        // Close WebSocket connection
+<span class="nc" id="L170">        WebSocketManager.getInstance().closeWebSocket();</span>
+<span class="nc" id="L171">    }</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span>Generated by the Android Gradle plugin 8.0.0</div></body></html>

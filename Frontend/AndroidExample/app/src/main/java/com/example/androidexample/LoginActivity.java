@@ -66,6 +66,12 @@
                 public void onClick(View v) {
                     String username = usernameEditText.getText().toString();
                     String password = passwordEditText.getText().toString();
+                    if (username.equals("")) {
+                        usernameEditText.setError("Please type a username.");
+                    }
+                    if (password.equals("")) {
+                        passwordEditText.setError("Please type a password.");
+                    }
                     //For debugging, will remove later.
                     //Toast.makeText(LoginActivity.this, "username: " + username, Toast.LENGTH_SHORT).show();
                     loginRequest(username, password);
@@ -163,6 +169,8 @@
                                     // Show error message.
                                     // In the future, I plan to add more specific error messages based on what error might've occurred.
                                     Toast.makeText(LoginActivity.this, "Invalid username or password", Toast.LENGTH_SHORT).show();
+                                    usernameEditText.setError("Invalid username or password.");
+
                                 }
                             } catch (JSONException e) {
                                 e.printStackTrace();

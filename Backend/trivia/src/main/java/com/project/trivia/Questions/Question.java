@@ -1,6 +1,8 @@
 package com.project.trivia.Questions;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.project.trivia.MPQuestions.Answer;
+import com.project.trivia.Multiplayer.Multiplayer;
 import jakarta.persistence.*;
 import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.Fetch;
@@ -24,6 +26,14 @@ public class Question {
 
     @OneToMany(mappedBy = "question", fetch = FetchType.EAGER)
     private List<Answer> answerList;
+
+    @ManyToMany
+    @JoinTable(
+            name = "multiplayer_questions",
+            joinColumns = @JoinColumn(name = "multiplayer_id"),
+            inverseJoinColumns = @JoinColumn(name = "question_id"))
+    @JsonIgnore
+    private List<Multiplayer> multiplayer;
 
 
     public Question(String question, String answer, String questionType, boolean used, boolean userCreated) {
@@ -88,6 +98,17 @@ public class Question {
 
     public void setUserCreated(boolean userCreated) {this.userCreated = userCreated;}
 
+    public List<Multiplayer> getMultiplayer() {
+        return multiplayer;
+    }
+
+    public void setMultiplayer(List<Multiplayer> multiplayer) {
+        this.multiplayer = multiplayer;
+    }
+
+    public void addMultiplayer(Multiplayer multiplayer) {
+        this.multiplayer.add(multiplayer);
+    }
 
 
 }

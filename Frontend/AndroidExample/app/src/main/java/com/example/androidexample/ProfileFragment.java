@@ -193,6 +193,7 @@ public class ProfileFragment extends Fragment {
      * an image to a predefined server endpoint. The image data is sent as a byte array and the
      * request is configured to handle multipart/form-data content type. The server is expected
      * to accept the image with a specific key ("image") in the request.
+     *
      */
     private void uploadImage() {
         if (selectedUri != null) {
@@ -530,6 +531,7 @@ public class ProfileFragment extends Fragment {
                     }
                 });
     }
+
 
     private void getMatchHistory(List<MatchHistory> matchesList, MatchHistoryAdapter adapter, TextView matchesPlayedText) {
         RequestQueue queue = Volley.newRequestQueue(requireContext());
