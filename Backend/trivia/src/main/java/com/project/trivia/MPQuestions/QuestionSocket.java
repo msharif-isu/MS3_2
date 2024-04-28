@@ -69,7 +69,7 @@ public class QuestionSocket {
         questRepo = repo;
     }
 
-    private Map<Long, Queue<Integer>> roomQuestionQueues = new HashMap<>();
+    private static Map<Long, Queue<Integer>> roomQuestionQueues = new HashMap<>();
 
     private static AnswerRepository ansRepo;
 
@@ -120,7 +120,7 @@ public class QuestionSocket {
         broadcastToRoom(id, "User: " + username + " has Joined room " + id);
 
         // so anyone who joins sees the question
-//        showMessageOne(username);
+        showMessageOne(username);
 //        }
     }
 
@@ -157,7 +157,7 @@ public class QuestionSocket {
                     broadcastToRoom(id, "Incorrect. Try again!");
                 }
             } else {
-                // If there's no question queue or it's empty, it behaves like a normal websocket.
+                // Handle the case where there's no question queue or it's empty
                 broadcastToRoom(id, message);
 
             }
@@ -211,6 +211,8 @@ public class QuestionSocket {
         // send the message to chat
         broadcastToRoom(id, username + " disconnected");
     }
+
+
 
     /**
      * Handles WebSocket errors that occur during the connection.
@@ -275,40 +277,40 @@ public class QuestionSocket {
         broadcastToRoom(roomID, mpQuestion);
     }
 
-//    private void showMessageOne(String username) {
-//        String mpQuestion = "Question: " + questRepo.findById(randInt).getQuestion();
-//        sendMessageToPArticularUser(username, mpQuestion);
-//    }
+    private void showMessageOne(String username) {
+        String mpQuestion = "Question: " + questRepo.findById(randInt).getQuestion();
+        sendMessageToPArticularUser(username, mpQuestion);
+    }
 
-//    private void randomize() {
-//        long amount = questRepo.count();
-//        randInt = (int) ((Math.random() * amount) + 1);
-//        while (questRepo.findById(randInt).getUsed()) {
-//            randomize();
-//
-//        }
-//    }
-//
-//    private void resetUseValue() {
-//        List<Question> allQuestion = questRepo.findAll();
-//        for (int i = 1; i < allQuestion.size() + 1; i++) {
-//            Question localQuestRepo = questRepo.findById(i);
-//            localQuestRepo.setUsed(false);
-//            questRepo.save(localQuestRepo);
-//        }
-//    }
+    private void randomize() {
+        long amount = questRepo.count();
+        randInt = (int) ((Math.random() * amount) + 1);
+        while (questRepo.findById(randInt).getUsed()) {
+            randomize();
 
-//    private boolean allQuestionsUsed() {
-//        List<Question> allQuestion = questRepo.findAll();
-//        boolean allUsed = true;
-//        for (int i = 1; i < allQuestion.size() + 1; i++) {
-//            Question localQuestRepo = questRepo.findById(i);
-//            if (!localQuestRepo.getUsed()) {
-//                allUsed = false;
-//            }
-//        }
-//        return allUsed;
-//    }
+        }
+    }
+
+    private void resetUseValue() {
+        List<Question> allQuestion = questRepo.findAll();
+        for (int i = 1; i < allQuestion.size() + 1; i++) {
+            Question localQuestRepo = questRepo.findById(i);
+            localQuestRepo.setUsed(false);
+            questRepo.save(localQuestRepo);
+        }
+    }
+
+    private boolean allQuestionsUsed() {
+        List<Question> allQuestion = questRepo.findAll();
+        boolean allUsed = true;
+        for (int i = 1; i < allQuestion.size() + 1; i++) {
+            Question localQuestRepo = questRepo.findById(i);
+            if (!localQuestRepo.getUsed()) {
+                allUsed = false;
+            }
+        }
+        return allUsed;
+    }
 
 
 }
