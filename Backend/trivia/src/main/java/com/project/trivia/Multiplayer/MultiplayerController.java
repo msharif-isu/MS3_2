@@ -13,7 +13,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 public class MultiplayerController {
@@ -39,25 +41,25 @@ public class MultiplayerController {
     }
 
     @PostMapping(path = "/multiplayer/{lobbyId}/{topic}/{limit}")
-    public Multiplayer createMultiplayer(@PathVariable int  lobbyId, @PathVariable String topic, @PathVariable int limit){
+    public List<Integer> createMultiplayer(@PathVariable int lobbyId, @PathVariable String topic, @PathVariable int limit) {
         Lobby lobby = lobbyRepo.findById(lobbyId);
         Multiplayer mp = new Multiplayer(lobby);
-
-        mp.setQuestion(questionRepository.findAll());
-        Query.topicFilter(mp.getQuestion(), topic);
-        Query.limitList(mp.getQuestion(), limit);
-        for(int i=0; i<mp.getQuestion().size(); i++) {
-            Question temp = mp.getQuestion().get(i);
-            temp.addMultiplayer(mp);
-            questionRepository.save(temp);
+        List<Question> allQuestions = questionRepository.findAll();
+        Query.topicFilter(allQuestions, topic);
+        Collections.shuffle(allQuestions);
+        List<Question> limitedQuestions = allQuestions.stream()
+                .limit(limit)
+                .collect(Collectors.toList());
+        for (Question question : limitedQuestions) {
+            mp.addQuestion(question);
         }
-
-
         multiplayerRepository.save(mp);
-        lobbyRepo.save(lobby);
-
-        return mp;
+        List<Integer> questionIds = limitedQuestions.stream()
+                .map(Question::getId)
+                .collect(Collectors.toList());
+        return questionIds;
     }
+
 
     @DeleteMapping(path = "/multiplayer/{id}")
     public String deleteMultiplayer(@PathVariable int id) {
@@ -66,14 +68,14 @@ public class MultiplayerController {
     }
 
     @PutMapping(path = "/multiplayer/{id}/{lobbyId}/{topic}/{limit}")
-    public Multiplayer changeMultiplayer(@PathVariable int id, @PathVariable int  lobbyId, @PathVariable String topic, @PathVariable int limit){
+    public Multiplayer changeMultiplayer(@PathVariable int id, @PathVariable int lobbyId, @PathVariable String topic, @PathVariable int limit) {
         Lobby lobby = lobbyRepo.findById(lobbyId);
         Multiplayer mp = multiplayerRepository.findById(id);
 
         mp.setQuestion(questionRepository.findAll());
         Query.topicFilter(mp.getQuestion(), topic);
         Query.limitList(mp.getQuestion(), limit);
-        for(int i=0; i<mp.getQuestion().size(); i++) {
+        for (int i = 0; i < mp.getQuestion().size(); i++) {
             Question temp = mp.getQuestion().get(i);
             temp.addMultiplayer(mp);
             questionRepository.save(temp);
