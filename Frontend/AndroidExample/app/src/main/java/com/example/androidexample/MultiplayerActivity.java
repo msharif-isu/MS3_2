@@ -26,7 +26,7 @@ public class MultiplayerActivity extends AppCompatActivity implements WebSocketL
     private CountDownTimer countDownTimer;
     private TextView timeLeftTextView;
     private long timeLeftInMillis;
-    private int userPoints = 0;
+    private int userPoints = 0, numQuestions = 0;
     private TextView msgTv;
     TextView pointsTextView;
 
@@ -139,11 +139,13 @@ public class MultiplayerActivity extends AppCompatActivity implements WebSocketL
             if (message.startsWith("Question: ")) {
                 String question = message.substring("Question: ".length());
                 questionTextView.setText(question);
+                numQuestions++;
                 //} else if (message.equals("Correct!")) {
             } else if (message.equals("Game is now over congrats!") || message.equals("All questions answered!")) {
                 Intent intent = new Intent(MultiplayerActivity.this, ResultsActivity.class);
                 //TODO fix this, it currently stores in username, when it shoudlnt
                 intent.putExtra("USERNAME", "multiplayer");
+                intent.putExtra("NUM_QUESTIONS", numQuestions);
                 startActivity(intent);
 
             } else {
