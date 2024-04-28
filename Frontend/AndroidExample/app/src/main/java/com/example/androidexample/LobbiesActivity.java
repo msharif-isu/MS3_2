@@ -77,6 +77,7 @@ public class LobbiesActivity extends AppCompatActivity implements WebSocketListe
     EditText enterCategory;
 
     private String questionID;
+    private boolean gameStarted = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -208,10 +209,17 @@ public class LobbiesActivity extends AppCompatActivity implements WebSocketListe
                 if (enterCategory.getText().toString().equals("")) {
                     Toast.makeText(getApplicationContext(), "Please choose a catagory", Toast.LENGTH_SHORT).show();
                 } else {
-                    createMultiplayer(roomId, enterCategory.getText().toString(), numQuestions.getText().toString());
-                    WebSocketManager.getInstance().sendMessage("lobbyStart!" + questionID);
-                    WebSocketManager.getInstance().closeWebSocket();
-                    beginGame(roomId, questionID);
+                    createMultiplayer(roomId, enterCategory.getText().toString(), numQuestions.getText().toString(),
+                            new Response.Listener<String>() {
+                                @Override
+                                public void onResponse(String questionID) {
+                                    Log.e("QuestionIDs in Lobbies", questionID); // Verify questionID
+                                    WebSocketManager.getInstance().sendMessage("lobbyStart!");
+                                    WebSocketManager.getInstance().closeWebSocket();
+                                    beginGame(roomId, questionID); // Start MultiplayerActivity with questionID
+                                    gameStarted = true;
+                                }
+                            });
                 }
             } else {
                 Toast.makeText(LobbiesActivity.this, "You must join a lobby first", Toast.LENGTH_SHORT).show();
@@ -272,7 +280,7 @@ public class LobbiesActivity extends AppCompatActivity implements WebSocketListe
 
     }
 
-    private void createMultiplayer(long roomId, String topic, String numQuestions) {
+    private void createMultiplayer(long roomId, String topic, String numQuestions, Response.Listener<String> questionIdListener) {
         String url = backendUrl + "multiplayer/" + roomId + "/" + topic + "/" + numQuestions;
         JsonArrayRequest request = new JsonArrayRequest(Request.Method.POST, url, null,
                 new Response.Listener<JSONArray>() {
@@ -287,8 +295,8 @@ public class LobbiesActivity extends AppCompatActivity implements WebSocketListe
                                 questionIdsBuilder.append(response.getInt(i));
                             }
                             questionID = questionIdsBuilder.toString();
-                            // Now you can work with the questionIds string
-                            Log.d("Question IDs", questionID);
+                            // Invoke the callback with the retrieved questionID
+                            questionIdListener.onResponse(questionID);
                         } catch (JSONException e) {
                             e.printStackTrace();
                             // Handle JSON parsing error
@@ -356,6 +364,10 @@ public class LobbiesActivity extends AppCompatActivity implements WebSocketListe
         Intent intent = new Intent(LobbiesActivity.this, MultiplayerActivity.class);
         intent.putExtra("ROOM_ID", roomId);
         intent.putExtra("QUESTION_ID", questionID);
+        SharedPreferences.Editor editor = getSharedPreferences("QuestionIds", MODE_PRIVATE).edit();
+        editor.putString("QuestionIds", questionID);
+        editor.apply();
+//        SharedPreferences s
         startActivity(intent);
     }
 
@@ -604,7 +616,9 @@ public class LobbiesActivity extends AppCompatActivity implements WebSocketListe
             String s = msgTv.getText().toString();
             msgTv.setText(s + "\n" + message);
             if (message.contains("lobbyStart!")) {
-                beginGame(roomId, questionID);
+                if (!gameStarted) {
+                    beginGame(roomId, questionID);
+                }
             } else if (message.contains("joinedLobby")) {
                 try {
                     Thread.sleep(1000);

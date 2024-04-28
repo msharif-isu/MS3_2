@@ -3,6 +3,7 @@ package com.example.androidexample;
 import androidx.appcompat.app.AppCompatActivity;
 
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -35,6 +36,7 @@ public class MultiplayerActivity extends AppCompatActivity implements WebSocketL
     private String questionCorrectAnswer = "Joe Biden";
     TextView questionTextView;
 
+    String questions;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,8 +47,12 @@ public class MultiplayerActivity extends AppCompatActivity implements WebSocketL
         SharedPreferences sharedPreferences = getSharedPreferences("UserData", MODE_PRIVATE);
         String username = sharedPreferences.getString("USERNAME", "");
         long roomId = getIntent().getLongExtra("ROOM_ID", -1);
+//        String questions = getIntent().getStringExtra("QUESTION_ID");
+        SharedPreferences prefs = getSharedPreferences("QuestionIds", Context.MODE_PRIVATE);
+        questions = prefs.getString("QuestionIds", "");
 
-//        Log.d("MainActivity", "Username from SharedPreferences: " + username);
+
+        Log.d("QuestionIDs in Multiplayer", "Question ids: " + questions);
 //        Toast.makeText(MultiplayerActivity.this, "Welcome " + username, Toast.LENGTH_SHORT).show();
 
         // Find views by their IDs
@@ -74,9 +80,14 @@ public class MultiplayerActivity extends AppCompatActivity implements WebSocketL
         //todo if username is blank, give error.
         String serverUrl = chatUrl + username;
 
+
         // Establish WebSocket connection and set listener
         WebSocketManager.getInstance().connectWebSocket(serverUrl);
         WebSocketManager.getInstance().setWebSocketListener(MultiplayerActivity.this);
+//        if (!questions.equals("")) {
+//            WebSocketManager.getInstance().sendMessage("/question " + questions);
+//            Log.d("QuestionIDs in Multiplayer", "/question " + questions);
+//        }
 
         submitButton.setOnClickListener(view -> {
             try {
@@ -128,26 +139,29 @@ public class MultiplayerActivity extends AppCompatActivity implements WebSocketL
             if (message.startsWith("Question: ")) {
                 String question = message.substring("Question: ".length());
                 questionTextView.setText(question);
-            //} else if (message.equals("Correct!")) {
+                //} else if (message.equals("Correct!")) {
             } else if (message.equals("Game is now over congrats!") || message.equals("All questions answered!")) {
                 Intent intent = new Intent(MultiplayerActivity.this, ResultsActivity.class);
                 //TODO fix this, it currently stores in username, when it shoudlnt
                 intent.putExtra("USERNAME", "multiplayer");
                 startActivity(intent);
 
-            }
-            else {
+            } else {
                 msgTv.setText(s + "\n" + message);
             }
 
         });
     }
 
+
     @Override
     public void onWebSocketOpen(ServerHandshake handshakedata) {
-
+        // Connection is established, send the /question message
+        if (!questions.equals("")) {
+            WebSocketManager.getInstance().sendMessage("/question " + questions);
+            Log.d("QuestionIDs in Multiplayer", "/question " + questions);
+        }
     }
-
 
     @Override
     public void onWebSocketClose(int code, String reason, boolean remote) {
