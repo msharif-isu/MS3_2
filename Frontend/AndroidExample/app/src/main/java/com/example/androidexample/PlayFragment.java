@@ -85,7 +85,7 @@ public class PlayFragment extends Fragment implements View.OnClickListener {
         } else if (v.getId() == R.id.multiPlayerButton) {
             startActivity(new Intent(getActivity(), LobbiesActivity.class));
         } else if (v.getId() == R.id.jeopardyButton) {
-            startActivity(new Intent(getActivity(), JeopardyActivity.class));
+            startActivity(new Intent(getActivity(), AchievementActivity.class));
         }
     }
 }
