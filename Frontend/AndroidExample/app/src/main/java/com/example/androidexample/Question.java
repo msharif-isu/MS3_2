@@ -43,8 +43,7 @@ public class Question {
                 jsonBody.getString("answer"),
                 jsonBody.getString("questionType"),
                 jsonBody.getBoolean("used"),
-                false
-//                jsonBody.getBoolean("userCreated")
+                jsonBody.getBoolean("userCreated")
         );
     }
 

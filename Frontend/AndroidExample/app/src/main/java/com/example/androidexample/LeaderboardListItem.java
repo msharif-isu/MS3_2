@@ -91,30 +91,27 @@ public class LeaderboardListItem implements Serializable {
      * @return list of LeaderboardListItems
      */
     public static List<LeaderboardListItem> parseLeaderboardMessage(String message) {
-        Scanner scnr = new Scanner(message);
+        String[] leaderboardEntries = message.split("\n");
 
         ArrayList<LeaderboardListItem> data = new ArrayList<>();
 
-        while(scnr.hasNextLine()) {
-            String lbString = scnr.nextLine();
-            Scanner parser = new Scanner(lbString);
+        for (int i = 0; i < leaderboardEntries.length; i++) {
+            String[] leaderboardEntryData = leaderboardEntries[i].split("`,/");
 
-            String username = parser.next();
+            String username = leaderboardEntryData[0];
 
             HashMap<LeaderboardTimeFrameEnum, Integer> points = new HashMap<>();
 
-            points.put(LeaderboardTimeFrameEnum.DAILY, Integer.parseInt(parser.next()));
-            points.put(LeaderboardTimeFrameEnum.WEEKLY, Integer.parseInt(parser.next()));
-            points.put(LeaderboardTimeFrameEnum.MONTHLY, Integer.parseInt(parser.next()));
-            points.put(LeaderboardTimeFrameEnum.YEARLY, Integer.parseInt(parser.next()));
-            points.put(LeaderboardTimeFrameEnum.LIFETIME, Integer.parseInt(parser.next()));
-            parser.close();
+            points.put(LeaderboardTimeFrameEnum.DAILY, Integer.parseInt(leaderboardEntryData[1]));
+            points.put(LeaderboardTimeFrameEnum.WEEKLY, Integer.parseInt(leaderboardEntryData[2]));
+            points.put(LeaderboardTimeFrameEnum.MONTHLY, Integer.parseInt(leaderboardEntryData[3]));
+            points.put(LeaderboardTimeFrameEnum.YEARLY, Integer.parseInt(leaderboardEntryData[4]));
+            points.put(LeaderboardTimeFrameEnum.LIFETIME, Integer.parseInt(leaderboardEntryData[5]));
 
             LeaderboardListItem item = new LeaderboardListItem(username, points);
             data.add(item);
-        }
-        scnr.close();
 
+        }
         return data;
     }
 }
