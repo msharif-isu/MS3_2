@@ -45,6 +45,7 @@ public class LeaderboardAdapter extends RecyclerView.Adapter<LeaderboardAdapter.
 
         private final TextView userName;
         private final TextView points;
+        private final TextView position;
         private final ImageView profilePic;
 
         public ViewHolder(View view) {
@@ -52,15 +53,18 @@ public class LeaderboardAdapter extends RecyclerView.Adapter<LeaderboardAdapter.
             // Define click listener for the ViewHolder's View
             userName = view.findViewById(R.id.userName);
             points = view.findViewById(R.id.points);
+            position = view.findViewById(R.id.leaderboardPosition);
             profilePic = view.findViewById(R.id.listProfilePic);
         }
 
         public TextView getUserNameView() {
             return userName;
         }
-
         public TextView getPointsView() {
             return points;
+        }
+        public TextView getPositionView() {
+            return position;
         }
         public ImageView getProfilePicView() {
             return profilePic;
@@ -95,6 +99,7 @@ public class LeaderboardAdapter extends RecyclerView.Adapter<LeaderboardAdapter.
         LeaderboardListItem userPointData = leaderboardDataSet.get(position);
 
         viewHolder.getUserNameView().setText(userPointData.getUsername());
+        viewHolder.getPositionView().setText(Integer.toString(position+1));
 
         switch (time_frame) {
             case DAILY:

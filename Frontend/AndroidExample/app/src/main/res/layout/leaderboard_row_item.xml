@@ -26,6 +26,18 @@
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/playerlist_box" />
 
+        <TextView
+            android:id="@+id/leaderboardPosition"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:fontFamily="@font/aileron_bold"
+            android:text="1"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
         <ImageView
             android:id="@+id/listProfilePic"
             android:layout_width="@dimen/leaderboard_image_width"
@@ -34,7 +46,7 @@
             android:layout_marginStart="20dp"
             android:scaleType="fitCenter"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/leaderboardPosition"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/profile"></ImageView>
 
@@ -43,12 +55,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
-            android:layout_marginEnd="20dp"
             android:fontFamily="@font/aileron_bold"
             android:text="Mahdi Banishariff"
             android:textSize="20sp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/points"
             app:layout_constraintStart_toEndOf="@+id/listProfilePic"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.538" />
@@ -57,7 +67,7 @@
             android:id="@+id/points"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="50dp"
+            android:layout_marginEnd="40dp"
             android:fontFamily="@font/aileron_bold"
             android:text="10"
             android:textSize="20sp"

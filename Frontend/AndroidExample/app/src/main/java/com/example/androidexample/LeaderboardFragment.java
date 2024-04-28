@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Random;
 
@@ -57,7 +58,11 @@ public class LeaderboardFragment extends Fragment {
                     String message = intent.getStringExtra("message");
                     Log.d("TAG", "onReceive: " + message);
                     displayData.clear();
-                    displayData.addAll(LeaderboardListItem.parseLeaderboardMessage(message));
+                    List<LeaderboardListItem> list = LeaderboardListItem.parseLeaderboardMessage(message);
+
+                    list.sort(Comparator.comparingInt(LeaderboardListItem::getDailyPoints).reversed());
+
+                    displayData.addAll(list);
                     leaderboardAdapter.notifyDataSetChanged();
                 });
             }
