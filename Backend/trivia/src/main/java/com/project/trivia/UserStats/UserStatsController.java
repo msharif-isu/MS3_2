@@ -20,7 +20,18 @@ public class UserStatsController {
 
     @GetMapping(path = "/userStats/{username}")
     public UserStats getUserStats(@PathVariable String username) {
-        return userRepo.findByUsername(username).getStats();
+        UserStats userStats = userRepo.findByUsername(username).getStats();
+
+        if (userStats == null) { //if a user doesn't have any stats gives them stats
+            User user = userRepo.findByUsername(username);
+            userStats = new UserStats(user, username);
+            user.setStats(userStats);
+
+            userRepo.save(user);
+            statsRepo.save(userStats);
+        }
+
+        return userStats;
     }
 
 
