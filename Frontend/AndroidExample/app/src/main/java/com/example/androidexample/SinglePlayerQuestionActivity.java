@@ -28,6 +28,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import url.RequestURLs;
+
 public class SinglePlayerQuestionActivity extends AppCompatActivity {
 
     private TextView questionTextView, pointsTextView, timeLeftTextView, usernameTextView;
@@ -40,7 +42,7 @@ public class SinglePlayerQuestionActivity extends AppCompatActivity {
     private int usernameId;
 
     //this exists because the server decided to stop working :)
-    private String backendUrl = "http://10.0.2.2:8081/";
+    private String backendUrl =  RequestURLs.SERVER_HTTP_URL + "/";
     private String questionCorrectAnswer;
 
     private String username;
