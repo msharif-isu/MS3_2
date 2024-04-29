@@ -1,13 +1,13 @@
 package com.project.trivia;
 
 
+import com.project.trivia.FriendsList.FriendsRepository;
 import com.project.trivia.Lobby.Lobby;
 import com.project.trivia.User.User;
 import com.project.trivia.User.UserRepository;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.Before;
@@ -31,6 +31,9 @@ public class AdamSystemTest {
     @Autowired
     UserRepository userRepo;
 
+    @Autowired
+    FriendsRepository friendsRepo;
+
     @Before
     public void setUp() {
         RestAssured.port = port;
@@ -40,7 +43,7 @@ public class AdamSystemTest {
 
     //Not Trivial Test
     @Test
-    public void addingUserTest(){
+    public void addingUserTest() {
         //user made for testing
         String user = "{" +
                 "\"username\":\"TestAlok\", " +
@@ -82,7 +85,9 @@ public class AdamSystemTest {
 
         //Make sure to remove the user from the table because it should be null
         userRepo.deleteById(userRepo.findByUsername("TestAlok").getId());
+        friendsRepo.deleteById(friendsRepo.findByUsername("TestAlok").getId());
         assertNull(userRepo.findByUsername("TestAlok"));
+        assertNull(friendsRepo.findByUsername("TestAlok"));
 
 
         //Check to make sure you can't add an empty user
@@ -102,7 +107,7 @@ public class AdamSystemTest {
     }
 
     @Test
-    public void updatingUserBioTest(){
+    public void updatingUserBioTest() {
         //User to update bio of
         String user = "{" +
                 "\"username\":\"TestAlok\", " +
@@ -133,7 +138,9 @@ public class AdamSystemTest {
 
         //delete the user from table
         userRepo.deleteById(userRepo.findByUsername("TestAlok").getId());
+        friendsRepo.deleteById(friendsRepo.findByUsername("TestAlok").getId());
         assertNull(userRepo.findByUsername("TestAlok"));
+        assertNull(friendsRepo.findByUsername("TestAlok"));
 
         //Put to make sure that the user is empty and should return null
         response = RestAssured.given().
@@ -146,7 +153,7 @@ public class AdamSystemTest {
     }
 
     @Test
-    public void updatingUserInfoTest(){
+    public void updatingUserInfoTest() {
         //Create new test user to update
         User user = new User("TestAlok", "password456", "aloks@iastate.edu");
         userRepo.save(user);
@@ -218,9 +225,17 @@ public class AdamSystemTest {
     }
 
     @Test
-    public void lobbyCreationTest(){
+    public void lobbyCreationTest() {
+        User user1 = new User("TestAlok", "password123", "aloks@iastate.edu");
+        User user2 = new User("TestAlok2", "password456", "aloks@iastate.edu");
+        userRepo.save(user1);
+        userRepo.save(user2);
+
+        //http of the create lobby
+        String testUserEndpoint = "/create/" + user1.getId() + "/3";
+
         Response response = RestAssured.given().
-                post("/create/1/3");
+                post(testUserEndpoint);
 
         int statusCode = response.getStatusCode();
         assertEquals(200, statusCode);
@@ -230,7 +245,7 @@ public class AdamSystemTest {
             // Parse the response as a JSONObject
             JSONObject returnObj = new JSONObject(returnString);
 
-            assertEquals("aloks", returnObj.getString("host"));
+            assertEquals("TestAlok", returnObj.getString("host"));
             assertEquals(3, returnObj.getInt("roomSize"));
             assertEquals(1, returnObj.getInt("playerCount"));
             assertFalse(returnObj.getBoolean("finished"));
@@ -238,13 +253,13 @@ public class AdamSystemTest {
             e.printStackTrace();
         }
 
-        Lobby lobby = userRepo.findById(1).getLobby();
+        Lobby lobby = userRepo.findById(user1.getId()).getLobby();
 
-        String testUserEndpoint = "/joinRoom/" + lobby.getId() + "/2";
+        testUserEndpoint = "/joinRoom/" + lobby.getId() + "/2";
 
         //Test to add user to lobby
         response = RestAssured.given().
-                put("/joinRoom/" + lobby.getId() + "/2");
+                put("/joinRoom/" + lobby.getId() + "/" + user2.getId());
 
         statusCode = response.getStatusCode();
         assertEquals(200, statusCode);
@@ -254,19 +269,27 @@ public class AdamSystemTest {
             // Parse the response as a JSONObject
             JSONObject returnObj = new JSONObject(returnString);
 
-            assertEquals("aloks", returnObj.getString("host"));
+            assertEquals("TestAlok", returnObj.getString("host"));
             assertEquals(2, returnObj.getInt("playerCount"));
-            assertEquals(userRepo.findById(2).getLobby().getId(), returnObj.getLong("id"));
+            assertEquals(userRepo.findById(user2.getId()).getLobby().getId(), returnObj.getLong("id"));
         } catch (JSONException e) {
             e.printStackTrace();
         }
+
+
+        //Make sure to remove the user from the table because it should be null
+        userRepo.deleteById(user1.getId());
+        userRepo.deleteById(user2.getId());
+
+        assertNull(userRepo.findByUsername(user1.getUsername()));
+        assertNull(userRepo.findByUsername(user2.getUsername()));
 
 
     }
 
     //Trival test
     @Test
-    public void testFindById(){
+    public void testFindById() {
         Response response = RestAssured.given().
                 get("/users/1");
 

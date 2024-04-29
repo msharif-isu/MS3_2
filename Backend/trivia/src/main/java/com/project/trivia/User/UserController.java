@@ -77,7 +77,7 @@ public class UserController {
     @DeleteMapping(path = "/users/{id}")
     public String deleteUser(@PathVariable int id){
         userRepository.deleteById(id);
-        friendRepo.deleteById(id);
+        friendRepo.deleteById(friendRepo.findByUsername(userRepository.findById(id).getUsername()).getId());
         return success;
     }
 
