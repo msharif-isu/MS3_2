@@ -28,7 +28,7 @@ public class AchievementActivity extends AppCompatActivity {
 
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
         adapter.addFragment(new achievementPage1(), "Achievements");
-        adapter.addFragment(new achievementPage2(), "Stats");
+        adapter.addFragment(new achievementPage2(), "Statistics");
 
         viewPager.setAdapter(adapter);
         tabLayout.setupWithViewPager(viewPager);

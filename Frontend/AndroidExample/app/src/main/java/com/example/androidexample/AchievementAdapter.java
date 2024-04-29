@@ -5,8 +5,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
 import java.util.List;
 
 public class AchievementAdapter extends RecyclerView.Adapter<AchievementAdapter.AchievementViewHolder> {
@@ -33,6 +35,12 @@ public class AchievementAdapter extends RecyclerView.Adapter<AchievementAdapter.
     @Override
     public int getItemCount() {
         return achievementList.size();
+    }
+
+    public void updateAchievements(List<Achievement> achievements) {
+        this.achievementList.clear();
+        this.achievementList.addAll(achievements);
+        notifyDataSetChanged();
     }
 
     public static class AchievementViewHolder extends RecyclerView.ViewHolder {
