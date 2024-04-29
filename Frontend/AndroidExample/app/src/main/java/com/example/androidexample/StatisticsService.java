@@ -80,14 +80,15 @@ public class StatisticsService {
 
     private UserStats parseUserStats(JSONObject json) throws JSONException {
         UserStats userStats = new UserStats();
-        userStats.setTotalCorrect(json.getDouble("totalCorrect"));
-        userStats.setTotalIncorrect(json.getDouble("totalIncorrect"));
-        userStats.setTotalAnswered(json.getDouble("totalAnswered"));
+        userStats.setTotalCorrect(json.getInt("totalCorrect"));
+        userStats.setTotalIncorrect(json.getInt("totalIncorrect"));
+        userStats.setTotalAnswered(json.getInt("totalAnswered"));
         userStats.setWins(json.getInt("wins"));
         userStats.setLosses(json.getInt("losses"));
         userStats.setWinStreak(json.getInt("winStreak"));
-        userStats.setQuestionsSumbitted(json.getInt("questionsSubmitted"));
+        userStats.setQuestionsSumbitted(json.getInt("questionsSumbitted"));
         userStats.setGamesPlayed(json.getInt("gamesPlayed"));
+        userStats.setNumberOfFreinds(json.getInt("numberOfFreinds"));
         return userStats;
     }
 
