@@ -36,10 +36,10 @@ public class UserStatsController {
 
 
     @GetMapping(path = "/correctRatio/{username}")
-    public double getCorrectRatio(@PathVariable String username) throws Exception {
+    public int getCorrectRatio(@PathVariable String username) throws Exception {
         User user = userRepo.findByUsername(username);
-        double totalCorrect = user.getStats().getTotalCorrect();
-        double totalAnswered = user.getStats().getTotalAnswered();
+        int totalCorrect = user.getStats().getTotalCorrect();
+        int totalAnswered = user.getStats().getTotalAnswered();
 
         if (user == null){
             throw new Exception("User not found with username: " + username);
@@ -53,10 +53,10 @@ public class UserStatsController {
     }
 
     @GetMapping(path = "/incorrectRatio/{username}")
-    public double getIncorrectRatio(@PathVariable String username) throws Exception {
+    public int getIncorrectRatio(@PathVariable String username) throws Exception {
         User user = userRepo.findByUsername(username);
-        double totalIncorrect = user.getStats().getTotalIncorrect();
-        double totalAnswered = user.getStats().getTotalAnswered();
+        int totalIncorrect = user.getStats().getTotalIncorrect();
+        int totalAnswered = user.getStats().getTotalAnswered();
 
         if (user == null){
             throw new Exception("User not found with username: " + username);
@@ -70,8 +70,8 @@ public class UserStatsController {
     }
 
     @PutMapping(path = "/{username}/updateStats/{correct}/{incorrect}/{total}")
-    public UserStats updateGameStats(@PathVariable Double correct, @PathVariable Double incorrect,
-                                     @PathVariable Double total, @PathVariable String username) throws Exception {
+    public UserStats updateGameStats(@PathVariable int correct, @PathVariable int incorrect,
+                                     @PathVariable int total, @PathVariable String username) throws Exception {
        User user = userRepo.findByUsername(username);
 
         if(user == null){
@@ -126,5 +126,24 @@ public class UserStatsController {
         return user.getStats();
 
     }
+
+    @PutMapping(path = "/{username}/updateGameStats/{gamesPlayed}/{totalAnswered}/{questionsSubmitted}")
+    public UserStats updateGameStats(@PathVariable String username,
+                                     @PathVariable int gamesPlayed,
+                                     @PathVariable int totalAnswered,
+                                     @PathVariable int questionsSubmitted) throws Exception {
+        User user = userRepo.findByUsername(username);
+        if (user == null) {
+            throw new Exception("User not found with username: " + username);
+        }
+        UserStats stats = user.getStats();
+        stats.setGamesPlayed(gamesPlayed);
+        stats.setTotalAnswered(totalAnswered);
+        stats.setQuestionsSubmitted(questionsSubmitted);
+        userRepo.save(user);
+        statsRepo.save(stats);
+        return user.getStats();
+    }
+
 
 }

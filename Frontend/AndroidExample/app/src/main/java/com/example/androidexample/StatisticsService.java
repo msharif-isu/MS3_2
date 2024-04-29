@@ -1,6 +1,7 @@
 package com.example.androidexample;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -78,19 +79,52 @@ public class StatisticsService {
         requestQueue.add(jsonObjectRequest);
     }
 
+    public void updateGameStats(String username, int gamesPlayed, int totalAnswered, int questionsSubmitted, final StatsCallback callback) {
+        String url = BASE_URL + username + "/updateGameStats/" + gamesPlayed + "/" + totalAnswered + "/" + questionsSubmitted;
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.PUT, url, null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.d("Response", response.toString()); // Log the response
+                        try {
+                            UserStats userStats = parseUserStats(response);
+                            callback.onSuccess(userStats);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            callback.onError("Error parsing response.");
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        callback.onError("Error updating game stats.");
+                    }
+                });
+
+        requestQueue.add(jsonObjectRequest);
+    }
+
     private UserStats parseUserStats(JSONObject json) throws JSONException {
         UserStats userStats = new UserStats();
-        userStats.setTotalCorrect(json.getInt("totalCorrect"));
-        userStats.setTotalIncorrect(json.getInt("totalIncorrect"));
-        userStats.setTotalAnswered(json.getInt("totalAnswered"));
-        userStats.setWins(json.getInt("wins"));
-        userStats.setLosses(json.getInt("losses"));
-        userStats.setWinStreak(json.getInt("winStreak"));
-        userStats.setQuestionsSumbitted(json.getInt("questionsSumbitted"));
-        userStats.setGamesPlayed(json.getInt("gamesPlayed"));
-        userStats.setNumberOfFreinds(json.getInt("numberOfFreinds"));
+        try {
+            userStats.setTotalCorrect(json.getInt("totalCorrect"));
+            userStats.setTotalIncorrect(json.getInt("totalIncorrect"));
+            userStats.setTotalAnswered(json.getInt("totalAnswered"));
+            userStats.setWins(json.getInt("wins"));
+            userStats.setLosses(json.getInt("losses"));
+            userStats.setWinStreak(json.getInt("winStreak"));
+            userStats.setQuestionsSubmitted(json.getInt("questionsSubmitted")); // Corrected field name
+            userStats.setGamesPlayed(json.getInt("gamesPlayed"));
+            userStats.setNumberOfFreinds(json.getInt("numberOfFreinds")); // Corrected field name
+        } catch (JSONException e) {
+            e.printStackTrace();
+            throw new JSONException("Error parsing user stats JSON");
+        }
         return userStats;
     }
+
 
     public interface StatsCallback {
         void onSuccess(UserStats userStats);

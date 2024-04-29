@@ -1,5 +1,7 @@
 package com.example.androidexample;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -93,8 +95,6 @@ public class EditFragment extends Fragment {
 
                     }
 
-                    private void incrementQuestionsSubmitted() {
-                    }
                 },
                 new Response.ErrorListener() {
                     @Override
@@ -106,6 +106,16 @@ public class EditFragment extends Fragment {
         );
 
         VolleySingleton.getInstance(requireContext()).addToRequestQueue(questionSubmissionRequest);
+    }
+
+    private void incrementQuestionsSubmitted() {
+        SharedPreferences statsPrefs = requireContext().getSharedPreferences("UserStatistics", Context.MODE_PRIVATE);
+        int questionsSubmitted = statsPrefs.getInt("QUESTIONS_SUBMITTED", 0);
+        questionsSubmitted++;
+        Log.d("QUESTIONSUBMITTED", "incrementQuestionsSubmitted: " + questionsSubmitted);
+        SharedPreferences.Editor editor = statsPrefs.edit();
+        editor.putInt("QUESTIONS_SUBMITTED", questionsSubmitted);
+        editor.apply();
     }
 
     private void getQuestionTypes(ArrayAdapter<String> adapter) {

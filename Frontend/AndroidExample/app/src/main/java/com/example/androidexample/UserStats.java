@@ -90,11 +90,11 @@ public class UserStats {
         this.winStreak = winStreak;
     }
 
-    public int getQuestionsSumbitted() {
+    public int getQuestionsSubmitted() {
         return questionsSumbitted;
     }
 
-    public void setQuestionsSumbitted(int questionsSumbitted) {
+    public void setQuestionsSubmitted(int questionsSumbitted) {
         this.questionsSumbitted = questionsSumbitted;
     }
 

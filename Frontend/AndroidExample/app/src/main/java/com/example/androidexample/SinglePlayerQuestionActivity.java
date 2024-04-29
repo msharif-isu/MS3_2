@@ -205,6 +205,18 @@ public class SinglePlayerQuestionActivity extends AppCompatActivity {
         intent.putExtra("USERID", usernameId);
         intent.putExtra("POINTS", correctAnswers * 100);
         intent.putExtra("CORRECTANSWERS", correctAnswers);
+
+        SharedPreferences statsPrefs = getSharedPreferences("UserStatistics", MODE_PRIVATE);
+        SharedPreferences.Editor editor = statsPrefs.edit();
+        int totalAnswered = statsPrefs.getInt("TOTAL_ANSWERS", 0);
+        int gamesPlayed = statsPrefs.getInt("GAMES_PLAYED", 0);
+        totalAnswered += correctAnswers;
+        gamesPlayed += 1;
+        editor.putInt("TOTAL_ANSWERS", totalAnswered);
+        editor.putInt("GAMES_PLAYED", gamesPlayed);
+        editor.apply();
+
+
         startActivity(intent);
     }
 

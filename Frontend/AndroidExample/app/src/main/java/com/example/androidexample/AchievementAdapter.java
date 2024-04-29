@@ -69,7 +69,7 @@ public class AchievementAdapter extends RecyclerView.Adapter<AchievementAdapter.
                 locked.setVisibility(View.INVISIBLE);
             } else {
                 lock.setVisibility(View.VISIBLE);
-                lock.setVisibility(View.VISIBLE);
+                locked.setVisibility(View.VISIBLE);
             }
         }
     }

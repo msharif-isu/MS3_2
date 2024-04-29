@@ -75,7 +75,7 @@ public class MainActivity extends AppCompatActivity {
         Log.d("UpdateSharedPreferences", "Win Streak: " + userStats.getWinStreak());
         Log.d("UpdateSharedPreferences", "Wins: " + userStats.getWins());
         Log.d("UpdateSharedPreferences", "Losses: " + userStats.getLosses());
-        Log.d("UpdateSharedPreferences", "Questions Submitted: " + userStats.getQuestionsSumbitted());
+        Log.d("UpdateSharedPreferences", "Questions Submitted: " + userStats.getQuestionsSubmitted());
         Log.d("UpdateSharedPreferences", "Games Played: " + userStats.getGamesPlayed());
         Log.d("UpdateSharedPrefrences", "Number of Friends: " + userStats.getNumberOfFreinds());
 
@@ -87,7 +87,7 @@ public class MainActivity extends AppCompatActivity {
         editor.putInt("WIN_STREAK", userStats.getWinStreak());
         editor.putInt("WINS", userStats.getWins());
         editor.putInt("LOSSES", userStats.getLosses());
-        editor.putInt("QUESTIONS_SUBMITTED", userStats.getQuestionsSumbitted());
+        editor.putInt("QUESTIONS_SUBMITTED", userStats.getQuestionsSubmitted());
         editor.putInt("GAMES_PLAYED", userStats.getGamesPlayed());
         editor.putInt("NUMBER_OF_FRIENDS", userStats.getNumberOfFreinds());
         editor.apply();
