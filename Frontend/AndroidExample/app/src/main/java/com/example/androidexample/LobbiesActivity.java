@@ -29,6 +29,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -74,7 +75,7 @@ public class LobbiesActivity extends AppCompatActivity implements WebSocketListe
     Slider numQuestionsSlider;
     TextView numQuestions;
     TextView numQuestionsText, category;
-    EditText enterCategory;
+    AutoCompleteTextView enterCategory;
 
     private String questionID;
     private boolean gameStarted = false;
@@ -278,6 +279,44 @@ public class LobbiesActivity extends AppCompatActivity implements WebSocketListe
             }
         });
 
+        // Add autocomplete to question category
+        enterCategory.setThreshold(0);
+        ArrayAdapter<String> categoryAdapter = new ArrayAdapter<>(getApplicationContext(), androidx.appcompat.R.layout.support_simple_spinner_dropdown_item);
+
+        enterCategory.setAdapter(categoryAdapter);
+        getCategories(categoryAdapter);
+    }
+
+    private void getCategories(ArrayAdapter<String> categoryAdapter) {
+        JsonArrayRequest questionTypesRequest = new JsonArrayRequest(
+                Request.Method.GET,
+                String.format("%s/query/topic", RequestURLs.SERVER_HTTP_URL),
+                null,
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray jsonArray) {
+                        List<String> questionTypes = new ArrayList<>();
+                        for (int i = 0; i < jsonArray.length(); i++) {
+                            try {
+                                questionTypes.add(jsonArray.get(i).toString());
+                            } catch (JSONException e) {
+                                throw new RuntimeException(e);
+                            }
+                        }
+
+                        categoryAdapter.addAll(questionTypes);
+                        categoryAdapter.notifyDataSetChanged();
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError volleyError) {
+
+                    }
+                }
+        );
+
+        VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(questionTypesRequest);
     }
 
     private void createMultiplayer(long roomId, String topic, String numQuestions, Response.Listener<String> questionIdListener) {
