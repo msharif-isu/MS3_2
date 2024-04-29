@@ -93,13 +93,13 @@ public class FriendsController {
         return user1.getUsername() + " and " + friend1.getUsername() + " are no longer friends ";
     }
 
-    @GetMapping(path = "/friendsList/{userId}")
-    List<Friends> friendsOfUser(@PathVariable int userId){
-        User user = userRepo.findById(userId);
+    @GetMapping(path = "/friendsList/{username}")
+    List<User> friendsOfUser(@PathVariable String username){
+        Friends user = friendsRepo.findByUsername(username);
         if(user == null){
             return Collections.emptyList();
         }
-        return user.getFriends();
+        return user.getUser();
     }
 
 
