@@ -13,7 +13,7 @@ public class Query {
 
         return allTopics;
     }
-    public List<Question> Randomize(List<Question> questionList) {
+    public static List<Question> Randomize(List<Question> questionList) {
         Collections.shuffle(questionList);
         return questionList;
     }

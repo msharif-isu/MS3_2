@@ -6,6 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="aa247b61-3439-49d8-9853-376a5b7b168c" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/trivia/src/main/java/com/project/trivia/Queryboard/Query.java" beforeDir="false" afterPath="$PROJECT_DIR$/trivia/src/main/java/com/project/trivia/Queryboard/Query.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/trivia/src/test/java/com/project/trivia/raphaelTests/raphaelTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/trivia/src/test/java/com/project/trivia/raphaelTests/raphaelTest.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -192,7 +193,7 @@
       <workItem from="1713757540193" duration="1111000" />
       <workItem from="1713758675022" duration="10649000" />
       <workItem from="1714018060978" duration="3379000" />
-      <workItem from="1714358287822" duration="5086000" />
+      <workItem from="1714358287822" duration="6815000" />
     </task>
     <servers />
   </component>
@@ -200,7 +201,7 @@
     <option name="version" value="3" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/Backend$java_in_trivia.ic" NAME="java in trivia Coverage Results" MODIFIED="1714362894449" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="true" />
+    <SUITE FILE_PATH="coverage/Backend$java_in_trivia.ic" NAME="java in trivia Coverage Results" MODIFIED="1714363856225" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="true" />
     <SUITE FILE_PATH="coverage/Backend$TriviaApplicationTests.ic" NAME="TriviaApplicationTests Coverage Results" MODIFIED="1712864684884" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
       <FILTER>com.project.trivia.*</FILTER>
     </SUITE>

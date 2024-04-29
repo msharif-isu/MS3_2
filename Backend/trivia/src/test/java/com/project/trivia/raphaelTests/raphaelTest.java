@@ -5,6 +5,7 @@ import com.project.trivia.Leaderboard.LeaderboardController;
 import com.project.trivia.Leaderboard.LeaderboardRepository;
 import com.project.trivia.MPQuestions.Answer;
 import com.project.trivia.MPQuestions.AnswerRepository;
+import com.project.trivia.Queryboard.Query;
 import com.project.trivia.Questions.Question;
 import com.project.trivia.Questions.QuestionRepository;
 import com.project.trivia.User.User;
@@ -144,6 +145,11 @@ class raphaelTest {
 		assertThat(questTest3.getBody().length).isEqualTo(questRepo.findById(1).getAnswers().size());
 
 		questRepo.findById(1).setAnswerList(Arrays.stream(questTest3.getBody()).toList());
+		List<Question> questions1 = Query.QueryTopic(questRepo.findAll(), "Philosophy");
+		List<Question> questions2 = Query.QueryTopic(questRepo.findAll(), "Mythology");
+		List<Question> questions3 = Query.joinList(questions1, questions2);
+		Query.limitList(questions3, 10);
+		Query.Randomize(questions3);
 		//assertArrayEquals(questTest3.getBody(), questRepo.findById(1).getAnswers().toArray());
 		//assertArrayEquals(questTest3.getBody(), questRepo.findById(1).getAnswers().toArray());
 		//assertArrayEquals(questRepo.findById(1).getAnswers().toArray(), questArray[0].getAnswers().toArray());
