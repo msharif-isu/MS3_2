@@ -175,7 +175,7 @@ public class ProfileFragment extends Fragment {
         List<MatchHistory> matchesDataset = new ArrayList<>();
         MatchHistoryAdapter adapter = new MatchHistoryAdapter(matchesDataset);
         matchesList.setAdapter(adapter);
-
+        matchesList.setLayoutManager(new LinearLayoutManager(requireContext()));
         getMatchHistory(matchesDataset, adapter, matchesPlayed);
 
         d.show();

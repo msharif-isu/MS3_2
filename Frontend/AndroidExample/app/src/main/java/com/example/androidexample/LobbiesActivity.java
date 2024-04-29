@@ -405,6 +405,7 @@ public class LobbiesActivity extends AppCompatActivity implements WebSocketListe
         intent.putExtra("QUESTION_ID", questionID);
         SharedPreferences.Editor editor = getSharedPreferences("QuestionIds", MODE_PRIVATE).edit();
         editor.putString("QuestionIds", questionID);
+        editor.putString("questionsPlayedType", enterCategory.getText().toString());
         editor.apply();
 //        SharedPreferences s
         startActivity(intent);

@@ -8,7 +8,7 @@ import org.json.JSONObject;
  */
 public class MatchHistory {
     private String placement;
-    private String questionsPlayedType;
+    private String questionPlayedType;
     private int pointsEarned;
     private String username;
 
@@ -16,13 +16,13 @@ public class MatchHistory {
      * Constructs a container to store match history data
      *
      * @param placement           - the placement that the user came in
-     * @param questionsPlayedType - the type of questions used in the match
+     * @param questionPlayedType - the type of questions used in the match
      * @param pointsEarned        - the amount of points the user earned in the match
      * @param username            - the username of the user
      */
-    public MatchHistory(String placement, String questionsPlayedType, int pointsEarned, String username) {
+    public MatchHistory(String placement, String questionPlayedType, int pointsEarned, String username) {
         this.placement = placement;
-        this.questionsPlayedType = questionsPlayedType;
+        this.questionPlayedType = questionPlayedType;
         this.pointsEarned = pointsEarned;
         this.username = username;
     }
@@ -35,7 +35,7 @@ public class MatchHistory {
     public MatchHistory(JSONObject jsonBody) throws JSONException {
         this(
                 jsonBody.getString("placement"),
-                jsonBody.getString("questionsPlayedType"),
+                jsonBody.getString("questionPlayedType"),
                 jsonBody.getInt("pointsEarned"),
                 jsonBody.getString("username")
         );
@@ -57,7 +57,7 @@ public class MatchHistory {
      * @return question type
      */
     public String getQuestionSet() {
-        return questionsPlayedType;
+        return questionPlayedType;
     }
 
 
@@ -86,7 +86,7 @@ public class MatchHistory {
 
         return new JSONObject() {{
             put("placement", placement);
-            put("questionsPlayedType", questionsPlayedType);
+            put("questionPlayedType", questionPlayedType);
             put("pointsEarned", pointsEarned);
             put("username", username);
         }};

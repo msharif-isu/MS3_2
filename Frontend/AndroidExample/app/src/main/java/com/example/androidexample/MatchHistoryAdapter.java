@@ -31,8 +31,8 @@ public class MatchHistoryAdapter extends RecyclerView.Adapter<MatchHistoryAdapte
             super(view);
             // Define click listener for the ViewHolder's View
 
-            position = view.findViewById(R.id.leaderboardPosition);
-            points = view.findViewById(R.id.points);
+            position = view.findViewById(R.id.match_history_row_item_placement);
+            points = view.findViewById(R.id.match_history_row_item_points_earned);
             questionType = view.findViewById(R.id.match_history_row_item_question_type);
         }
         public TextView getPointsView() {
@@ -72,7 +72,7 @@ public class MatchHistoryAdapter extends RecyclerView.Adapter<MatchHistoryAdapte
     public void onBindViewHolder(ViewHolder viewHolder, final int position) {
         MatchHistory mh = matchesList.get(position);
         viewHolder.getPointsView().setText(Integer.toString(mh.getPointsEarned()));
-        viewHolder.getPositionView().setText(mh.getPlacement());
+        viewHolder.getPositionView().setText("#" + mh.getPlacement());
         viewHolder.getQuestionTypeView().setText(mh.getQuestionSet());
     }
 
