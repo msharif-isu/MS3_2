@@ -31,10 +31,19 @@ public class AnswerController {
     }
 
     @PostMapping(path = "/answer")
-    String createAnswer(@RequestBody Answer answer){
-        if (answer == null)
-            return failure;
+    Answer createAnswer(@RequestBody Answer answer){
         answerRepository.save(answer);
+        return answer;
+    }
+
+    @PutMapping(path = "/answer/{id}")
+    String createAnswer(@PathVariable int id, @RequestBody Answer answer){
+        Answer newAnswer = answerRepository.findById(id);
+        newAnswer.setQuestion(answer.getQuestion());
+        newAnswer.setUserName(answer.getUserName());
+        newAnswer.setAnswer(answer.getAnswer());
+
+        answerRepository.save(newAnswer);
         return success;
     }
 
