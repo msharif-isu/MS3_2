@@ -5,26 +5,39 @@ import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static androidx.test.espresso.action.ViewActions.swipeDown;
 import static androidx.test.espresso.action.ViewActions.typeText;
+import static androidx.test.espresso.matcher.ViewMatchers.hasDescendant;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
 import static org.hamcrest.Matchers.not;
 
+import android.view.View;
+
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.test.espresso.Espresso;
+import androidx.test.espresso.PerformException;
+import androidx.test.espresso.contrib.RecyclerViewActions;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
+import org.hamcrest.Description;
+import org.hamcrest.Matcher;
+import org.hamcrest.TypeSafeMatcher;
 import org.junit.Before;
+import org.junit.FixMethodOrder;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.junit.runners.MethodSorters;
 
 @RunWith(AndroidJUnit4.class)
+@FixMethodOrder(MethodSorters.JVM)
 public class MultiplayerActivityTest {
 
     @Rule
     public ActivityScenarioRule<LoginActivity> activityScenarioRule = new ActivityScenarioRule<>(LoginActivity.class);
-    private static final String VALID_USERNAME = "aloks";
+    private static final String VALID_USERNAME = "test";
     private static final String VALID_PASSWORD = "password123";
 
     @Before
@@ -39,8 +52,8 @@ public class MultiplayerActivityTest {
         }
     }
 
-    @Test
-    public void deletingEmptyRoom() {
+    @Test(expected = PerformException.class)
+    public void testDeletingEmptyRoom() {
         onView(withId(R.id.multiPlayerButton)).perform(click());
         try {
             Thread.sleep(1000);
@@ -61,13 +74,17 @@ public class MultiplayerActivityTest {
             throw new RuntimeException(e);
         }
 
-        onView(withId(R.id.buttonLeaveRoom)).perform();
+        onView(withId(R.id.buttonLeaveRoom)).perform(click());
         onView(withId(R.id.swipeRefreshLayout)).perform(swipeDown());
         try {
-            Thread.sleep(1000);
+            Thread.sleep(2000);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
+
+        // Check to see if lobby was destroyed
+        onView(withId(R.id.lobbyList))
+                .perform(RecyclerViewActions.scrollTo(hasDescendant((withText(VALID_USERNAME)))));
     }
 
     @Test
@@ -94,7 +111,7 @@ public class MultiplayerActivityTest {
         onView(withId(R.id.editQuestionCatagory)).perform(typeText("DEBUG"),closeSoftKeyboard());
         onView(withId(R.id.buttonStartGame)).perform(click());
         try {
-            Thread.sleep(10000);
+            Thread.sleep(7000);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }

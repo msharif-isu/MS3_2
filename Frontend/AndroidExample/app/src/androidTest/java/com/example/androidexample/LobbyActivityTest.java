@@ -87,12 +87,12 @@ public class LobbyActivityTest {
         onView(withId(R.id.recycleView)).check(matches(isDisplayed()));
     }
 
-    @Test
-    public void testLeaveLobby() {
-    }
-
-    @Test
-    public void testStartGame() {
-    }
+//    @Test
+//    public void testLeaveLobby() {
+//    }
+//
+//    @Test
+//    public void testStartGame() {
+//    }
 
 }
