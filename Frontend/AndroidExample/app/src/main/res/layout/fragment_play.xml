@@ -117,7 +117,6 @@
             android:id="@+id/singlePlayerButton"
             android:layout_width="0dp"
             android:layout_height="135dp"
-            android:layout_marginStart="-50dp"
             android:layout_marginTop="24dp"
             android:layout_marginEnd="24dp"
             android:background="@android:color/transparent"
@@ -130,7 +129,6 @@
             android:id="@+id/multiPlayerButton"
             android:layout_width="0dp"
             android:layout_height="135dp"
-            android:layout_marginStart="-50dp"
             android:layout_marginTop="24dp"
             android:layout_marginEnd="24dp"
             android:background="@android:color/transparent"
@@ -141,10 +139,9 @@
             app:layout_constraintTop_toBottomOf="@+id/singlePlayerButton" />
 
         <ImageButton
-            android:id="@+id/jeopardyButton"
+            android:id="@+id/achievementButton"
             android:layout_width="0dp"
             android:layout_height="135dp"
-            android:layout_marginStart="-50dp"
             android:layout_marginTop="24dp"
             android:layout_marginEnd="24dp"
             android:background="@android:color/transparent"
@@ -181,9 +178,9 @@
             android:scaleX="0.8"
             android:scaleY="0.8"
             android:src="@drawable/medal"
-            app:layout_constraintBottom_toBottomOf="@+id/jeopardyButton"
+            app:layout_constraintBottom_toBottomOf="@+id/achievementButton"
             app:layout_constraintEnd_toEndOf="@+id/singleplayer"
-            app:layout_constraintTop_toTopOf="@+id/jeopardyButton"
+            app:layout_constraintTop_toTopOf="@+id/achievementButton"
             app:tint="@color/grey" />
 
         <TextView
@@ -220,9 +217,9 @@
             android:text="Achievements"
             android:textColor="#1C2120"
             android:textSize="24sp"
-            app:layout_constraintBottom_toBottomOf="@+id/jeopardyButton"
+            app:layout_constraintBottom_toBottomOf="@+id/achievementButton"
             app:layout_constraintStart_toStartOf="@+id/singleplayertext"
-            app:layout_constraintTop_toTopOf="@+id/jeopardyButton" />
+            app:layout_constraintTop_toTopOf="@+id/achievementButton" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </FrameLayout>

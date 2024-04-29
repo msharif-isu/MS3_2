@@ -25,7 +25,7 @@ public class PlayFragment extends Fragment implements View.OnClickListener {
 
     private ImageButton singlePlayerButton;
     private ImageButton multiPlayerButton;
-    private ImageButton jeopardyButton;
+    private ImageButton achievementButton;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -70,21 +70,21 @@ public class PlayFragment extends Fragment implements View.OnClickListener {
 
         singlePlayerButton = view.findViewById(R.id.singlePlayerButton);
         multiPlayerButton = view.findViewById(R.id.multiPlayerButton);
-        jeopardyButton = view.findViewById(R.id.jeopardyButton);
+        achievementButton = view.findViewById(R.id.achievementButton);
 
         singlePlayerButton.setOnClickListener(this);
         multiPlayerButton.setOnClickListener(this);
-        jeopardyButton.setOnClickListener(this);
+        achievementButton.setOnClickListener(this);
 
         return view;
     }
 
     public void onClick(View v) {
         if (v.getId() == R.id.singlePlayerButton) {
-            startActivity(new Intent(getActivity(), SinglePlayerQuestionActivity.class));
+            ((MainActivity) requireActivity()).replaceFragment(new SelectModeFragment());
         } else if (v.getId() == R.id.multiPlayerButton) {
             startActivity(new Intent(getActivity(), LobbiesActivity.class));
-        } else if (v.getId() == R.id.jeopardyButton) {
+        } else if (v.getId() == R.id.achievementButton) {
             startActivity(new Intent(getActivity(), AchievementActivity.class));
         }
     }
