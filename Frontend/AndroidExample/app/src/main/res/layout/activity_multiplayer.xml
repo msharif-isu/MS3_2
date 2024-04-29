@@ -5,25 +5,30 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/question"
-        android:layout_width="347dp"
-        android:layout_height="213dp"
-        android:text="TextView"
-        android:textSize="34sp"
+    <ImageView
+        android:id="@+id/imageView9"
+        android:layout_width="0dp"
+        android:layout_height="275dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="-50dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/time_left" />
+        app:layout_constraintTop_toBottomOf="@+id/time_left"
+        app:srcCompat="@drawable/rectangle" />
 
     <TextView
-        android:id="@+id/points"
-        android:layout_width="127dp"
-        android:layout_height="33dp"
+        android:id="@+id/question"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="50dp"
+        android:fontFamily="@font/aileron"
         android:text="TextView"
-        android:textSize="20sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/question" />
+        android:textColor="#FFFFFF"
+        android:textSize="34sp"
+        app:layout_constraintBottom_toTopOf="@+id/answer_box"
+        app:layout_constraintEnd_toEndOf="@+id/scrollView2"
+        app:layout_constraintStart_toStartOf="@+id/imageView9"
+        app:layout_constraintTop_toBottomOf="@+id/time_left" />
 
     <EditText
         android:id="@+id/answer_box"
@@ -35,18 +40,19 @@
         app:layout_constraintEnd_toStartOf="@+id/submit_button"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/points" />
+        app:layout_constraintTop_toBottomOf="@+id/imageView9" />
 
     <Button
         android:id="@+id/submit_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:backgroundTint="@color/purple"
         android:text="Submit"
         app:layout_constraintBottom_toBottomOf="@+id/answer_box"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/answer_box"
-        app:layout_constraintTop_toBottomOf="@+id/points" />
+        app:layout_constraintTop_toTopOf="@+id/answer_box" />
 
     <TextView
         android:id="@+id/time_left"
@@ -64,6 +70,7 @@
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/answer_box">
 

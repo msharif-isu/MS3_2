@@ -28,6 +28,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import url.RequestURLs;
+
 public class SinglePlayerQuestionActivity extends AppCompatActivity {
 
     private TextView questionTextView, pointsTextView, timeLeftTextView, usernameTextView;
@@ -40,7 +42,7 @@ public class SinglePlayerQuestionActivity extends AppCompatActivity {
     private int usernameId;
 
     //this exists because the server decided to stop working :)
-    private String backendUrl = "http://10.0.2.2:8081/";
+    private String backendUrl =  RequestURLs.SERVER_HTTP_URL + "/";
     private String questionCorrectAnswer;
 
     private String username;
@@ -120,7 +122,7 @@ public class SinglePlayerQuestionActivity extends AppCompatActivity {
             showNextQuestion();
         } else {
             // Display result and handle end of quiz
-            displayResult();
+//            displayResult();
         }
     }
 
@@ -205,7 +207,30 @@ public class SinglePlayerQuestionActivity extends AppCompatActivity {
         intent.putExtra("USERID", usernameId);
         intent.putExtra("POINTS", correctAnswers * 100);
         intent.putExtra("CORRECTANSWERS", correctAnswers);
+        SharedPreferences statsPrefs = getSharedPreferences("UserStatistics", MODE_PRIVATE);
+        SharedPreferences.Editor editor = statsPrefs.edit();
+        int totalAnswered = statsPrefs.getInt("TOTAL_ANSWERS", 0);
+        int gamesPlayed = statsPrefs.getInt("GAMES_PLAYED", 0);
+        Log.d("Singleplayer", "Games played and total answered" + gamesPlayed +  totalAnswered);
+        totalAnswered += 3;
+        gamesPlayed += 1;
+        updateServerWithStats(gamesPlayed, totalAnswered, statsPrefs.getInt("QUESTIONS_SUBMITTED", 0));
+        Log.d("Singleplayer", "Games played and total answered" + gamesPlayed + " " +   totalAnswered);
         startActivity(intent);
+    }
+
+    private void updateServerWithStats(int gamesPlayed, int totalAnswered, int questionsSubmitted) {
+        StatisticsService statsService = new StatisticsService(this);
+        statsService.updateGameStats(username, gamesPlayed, totalAnswered, questionsSubmitted, new StatisticsService.StatsCallback() {
+            @Override
+            public void onSuccess(UserStats userStats) {
+                Log.d("StatsUpdate", "Stats updated successfully");
+            }
+            @Override
+            public void onError(String errorMessage) {
+                Log.e("StatsUpdate", "Error updating stats: " + errorMessage);
+            }
+        });
     }
 
     /**

@@ -3,6 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
     <application
         android:allowBackup="true"
@@ -16,18 +18,6 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
-            android:name=".JsonArrReqActivity"
-            android:exported="false" />
-        <activity
-            android:name=".JsonObjReqActivity"
-            android:exported="false" />
-        <activity
-            android:name=".ImageReqActivity"
-            android:exported="false" />
-        <activity
-            android:name=".StringReqActivity"
-            android:exported="false" />
-        <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
@@ -40,9 +30,8 @@
             android:name=".SinglePlayerQuestionActivity"
             android:exported="false" />
         <activity
-            android:name=".UserQuestionActivity"
-            android:exported="false">
-        </activity>
+            android:name=".AchievementActivity"
+            android:exported="false" />
         <activity
             android:name=".LoginActivity"
             android:exported="false" />
@@ -56,19 +45,10 @@
             android:name=".MultiplayerActivity"
             android:exported="false" />
         <activity
-            android:name=".ProfileActivity"
-            android:exported="false" />
-        <activity
             android:name=".LobbiesActivity"
             android:exported="false" />
         <activity
-            android:name=".QueryActivity"
-            android:exported="false" />
-        <activity
             android:name=".JeopardyActivity"
-            android:exported="false" />
-        <activity
-            android:name=".LeaderboardActivity"
             android:exported="false" />
 
         <service

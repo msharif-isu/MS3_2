@@ -37,7 +37,12 @@ public class Query {
         combinedList.addAll(questionList2);
 
         return combinedList;
-
-
     }
+
+    public static List<Question> topicFilter(List<Question> questionList1, String topic) {
+        questionList1.removeIf(n -> (!n.getQuestionType().equals(topic)));
+
+        return questionList1;
     }
+
+}

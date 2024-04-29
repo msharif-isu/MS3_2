@@ -139,11 +139,11 @@ public class LeaderboardServer {
         StringBuilder sb = new StringBuilder();
         if(!leaderboardData.isEmpty()) {
             for (Leaderboard lb : leaderboardData) {
-                sb.append(lb.getId() + " " +
-                        lb.getUserPoints() + " " +
-                        lb.getWeeklyPoints() + " " +
-                        lb.getMonthlyPoints() + " " +
-                        lb.getYearlyPoints() + " " +
+                sb.append(lb.getName() + "`,/" +
+                        lb.getUserPoints() + "`,/" +
+                        lb.getWeeklyPoints() + "`,/" +
+                        lb.getMonthlyPoints() + "`,/" +
+                        lb.getYearlyPoints() + "`,/" +
                         lb.getLifetimePoints()+"\n");
             }
         }

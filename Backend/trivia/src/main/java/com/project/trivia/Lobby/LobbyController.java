@@ -9,6 +9,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 @RestController
 public class LobbyController {
@@ -24,8 +25,8 @@ public class LobbyController {
     @GetMapping(path = "/lobbies")
     List<Lobby> getCurrentLobbies() {
         List<Lobby> currentLobbies = new ArrayList<>();
-        for (Lobby lobby : getAllLobbies()){
-            if (!lobby.getFinished()){
+        for (Lobby lobby : getAllLobbies()) {
+            if (!lobby.getFinished()) {
                 currentLobbies.add(lobby);
             }
         }
@@ -38,14 +39,14 @@ public class LobbyController {
     }
 
     @GetMapping(path = "/lobbies/{id}")
-    public Lobby getLobbyById(@PathVariable int id){
+    public Lobby getLobbyById(@PathVariable int id) {
         Lobby lobby = lobbyRepo.findById(id);
         lobby.setPlayers(lobby.getPlayers()); // Assuming lobby has a list of players
         return lobby;
     }
 
     @PostMapping(path = "/create/{userId}/{roomSize}")
-    public Lobby createRoom(@PathVariable int  userId, @PathVariable int roomSize){
+    public Lobby createRoom(@PathVariable int userId, @PathVariable int roomSize) {
         User host = userRepo.findById(userId);
         Lobby lobby = new Lobby(roomSize, host.getUsername());
 
@@ -57,19 +58,19 @@ public class LobbyController {
     }
 
     @PutMapping(path = "/joinRoom/{roomId}/{userId}")
-    public Lobby joinRoom(@PathVariable int userId, @PathVariable int roomId){
+    public Lobby joinRoom(@PathVariable int userId, @PathVariable int roomId) {
         User user = userRepo.findById(userId);
         Lobby lobby = lobbyRepo.findById(roomId);
 
-        if (lobby == null){
+        if (lobby == null) {
             return null;
         }
-        if(lobby.getPlayerCount() >= lobby.getRoomSize()){
+        if (lobby.getPlayerCount() >= lobby.getRoomSize()) {
             throw new ResponseStatusException(HttpStatus.I_AM_A_TEAPOT, "full");
         }
 
-        if(lobby.getFinished()){
-            throw new ResponseStatusException(HttpStatus.GONE,"Game has ended no longer able to join");
+        if (lobby.getFinished()) {
+            throw new ResponseStatusException(HttpStatus.GONE, "Game has ended no longer able to join");
         }
 
         // Check if the user is already in the lobby
@@ -96,6 +97,9 @@ public class LobbyController {
         if (lobby.getPlayers().remove(user)) {
             user.setLobby(null);
             lobby.setPlayerCount(lobby.getPlayerCount() - 1);
+            if (user.getUsername().equals(lobby.getHost())) {
+                reassignHost(lobby);
+            }
             if (lobby.getPlayerCount() == 0) {
                 // If there are no players left, delete the lobby
                 lobbyRepo.delete(lobby);
@@ -110,16 +114,24 @@ public class LobbyController {
         return lobby;
     }
 
-
+    private void reassignHost(Lobby lobby) {
+        List<User> players = lobby.getPlayers();
+        if (players.isEmpty()) {
+            return;
+        }
+        Random random = new Random();
+        User newHost = players.get(random.nextInt(players.size()));
+        lobby.setHost(newHost.getUsername());
+    }
 
     @PutMapping(path = "/changeHost/{roomId}/{username}")
-    public Lobby changeHost(@PathVariable int roomId, @PathVariable String username){
+    public Lobby changeHost(@PathVariable int roomId, @PathVariable String username) {
         Lobby lobby = lobbyRepo.findById(roomId);
         User newHost = userRepo.findByUsername(username);
 
-        if(newHost == null){
+        if (newHost == null) {
             throw new ResponseStatusException(HttpStatus.I_AM_A_TEAPOT, "player doesn't exist");
-        } else if(lobby.getFinished()){
+        } else if (lobby.getFinished()) {
             throw new ResponseStatusException(HttpStatus.GONE, "lobby isn't real");
         }
 
@@ -131,9 +143,9 @@ public class LobbyController {
 
 
     @PutMapping(path = "/gameStatus/{status}/{roomId}")
-    public Lobby setStatus(@PathVariable int status, @PathVariable int roomId){
+    public Lobby setStatus(@PathVariable int status, @PathVariable int roomId) {
         Lobby lobby = lobbyRepo.findById(roomId);
-        switch (status){
+        switch (status) {
             case 0:
                 lobby.setFinished(false);
             case 1:
@@ -147,7 +159,7 @@ public class LobbyController {
     }
 
     @GetMapping(path = "/inRoom/{id}")
-    public List<User> getInRoom(@PathVariable int id){
+    public List<User> getInRoom(@PathVariable int id) {
         return lobbyRepo.findById(id).getPlayers();
     }
 

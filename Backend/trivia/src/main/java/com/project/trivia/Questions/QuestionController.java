@@ -6,6 +6,8 @@ import com.project.trivia.Queryboard.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 @RestController
@@ -50,6 +52,18 @@ public class QuestionController {
         return questionRepository.findById(id);
     }
 
+    @GetMapping("/query/topic")
+    List<String> getAllTopics(){
+        List<Question> questions = questionRepository.findAll();
+        HashSet<String> topics = new HashSet<>();
+
+        questions.forEach(question ->
+            topics.add(question.getQuestionType())
+        );
+
+        return new ArrayList<>(topics);
+    }
+
     @GetMapping("/query/topic/{topic}")
     List<Question> getTopics(@PathVariable String topic){
         List<Question> allTopics = questionRepository.findAll();
@@ -69,8 +83,7 @@ public class QuestionController {
     @GetMapping("/query/multiple/{topic}/{userCreated}")
     List<Question> getMultipleFilters(@PathVariable String topic, @PathVariable Boolean userCreated) {
         List<Question> allTopics = questionRepository.findAll();
-        allTopics.removeIf(n -> ((!n.getQuestionType().equals(topic)) && (n.getUserCreated() == userCreated)));
-        allTopics.removeIf(n -> ((!n.getQuestionType().equals(topic)) && (n.getUserCreated() != userCreated)));
+        allTopics.removeIf(n -> ((!n.getQuestionType().equals(topic)) || (n.getUserCreated() != userCreated)));
         return allTopics;
     }
 
