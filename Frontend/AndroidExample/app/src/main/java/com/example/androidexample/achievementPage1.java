@@ -23,7 +23,7 @@ public class achievementPage1 extends Fragment {
     TextView achievementsUnlocked;
     String username;
 
-    int totalAnswered, totalCorrect, totalIncorrect, winStreak, wins, losses, questionsSubmitted, gamesPlayed, numberOfFriends;
+    int totalAnswered, totalCorrect, totalIncorrect, winStreak, wins, losses, questionsSubmitted, gamesPlayed, numberOfFriends, unlockedCount;
 
     public achievementPage1() {
     }
@@ -87,6 +87,7 @@ public class achievementPage1 extends Fragment {
     }
 
     private void updateAchievements(List<Achievement> achievements) {
+        unlockedCount = 0;
         for (Achievement achievement : achievements) {
             switch (achievement.getId()) {
                 case 2: // Newcomer
@@ -161,7 +162,12 @@ public class achievementPage1 extends Fragment {
                 default:
                     // Handle other cases if needed
             }
+            if (achievement.isUnlocked()) {
+                unlockedCount++;
+            }
         }
+        achievementsUnlocked.setText(unlockedCount + "/" + achievements.size());
+
     }
 
     private void updateServerWithStats() {

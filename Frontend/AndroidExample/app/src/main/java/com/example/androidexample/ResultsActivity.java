@@ -3,6 +3,8 @@ package com.example.androidexample;
 import android.content.Intent;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -39,10 +41,13 @@ public class ResultsActivity extends AppCompatActivity {
         numPoints = findViewById(R.id.numberOfCorrectQuestions);
         continueButton = findViewById(R.id.btnContinue);
         usernameMessage = findViewById(R.id.Username);
+        playAgainButton.setText("Main Menu");
+        continueButton.setVisibility(View.GONE);
+        usernameMessage.setVisibility(View.GONE);
 
         // Set onClickListener for play again button
         playAgainButton.setOnClickListener(view -> {
-            Intent intent = new Intent(ResultsActivity.this, SinglePlayerQuestionActivity.class);
+            Intent intent = new Intent(ResultsActivity.this, MainActivity.class);
             intent.putExtra("USERNAME", username);
             startActivity(intent);
         });

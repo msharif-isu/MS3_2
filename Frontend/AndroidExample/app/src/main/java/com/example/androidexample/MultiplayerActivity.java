@@ -37,7 +37,7 @@ public class MultiplayerActivity extends AppCompatActivity implements WebSocketL
     private CountDownTimer countDownTimer;
     private TextView timeLeftTextView;
     private long timeLeftInMillis;
-    private int userPoints = 0, numQuestions = 0;
+    private int userPoints = 0, numQuestions = -1;
     private TextView msgTv;
 
 
@@ -156,6 +156,7 @@ public class MultiplayerActivity extends AppCompatActivity implements WebSocketL
                 //TODO fix this, it currently stores in username, when it shoudlnt
                 intent.putExtra("USERNAME", "multiplayer");
                 intent.putExtra("NUM_QUESTIONS", numQuestions);
+                intent.putExtra("POINTS", numQuestions * 100);
                 try {
                     sentMatchHistory();
                 } catch (JSONException e) {

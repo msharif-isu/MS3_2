@@ -79,11 +79,11 @@ public class achievementPage2 extends Fragment {
             achievements.add(new Achievement("Number of Friends", String.valueOf(userStats.getNumberOfFreinds()), 2, true));
             achievements.add(new Achievement("Questions Submitted", String.valueOf(userStats.getQuestionsSubmitted()), 3, true));
             achievements.add(new Achievement("Total answered", String.valueOf(userStats.getTotalAnswered()), 4, true));
-            achievements.add(new Achievement("Total Correct", String.valueOf(userStats.getTotalCorrect()), 5, true)); // Changed position to 5
-            achievements.add(new Achievement("Total Incorrect", String.valueOf(userStats.getTotalIncorrect()), 6, true)); // Changed position to 6
-            achievements.add(new Achievement("Win Streak", String.valueOf(userStats.getWinStreak()), 7, true)); // Changed position to 7
-            achievements.add(new Achievement("Losses", String.valueOf(userStats.getLosses()), 8, true)); // Changed position to 8
-            achievements.add(new Achievement("Wins", String.valueOf(userStats.getWins()), 9, true)); // Changed position to 9
+//            achievements.add(new Achievement("Total Correct", String.valueOf(userStats.getTotalCorrect()), 5, true)); // Changed position to 5
+//            achievements.add(new Achievement("Total Incorrect", String.valueOf(userStats.getTotalIncorrect()), 6, true)); // Changed position to 6
+//            achievements.add(new Achievement("Win Streak", String.valueOf(userStats.getWinStreak()), 7, true)); // Changed position to 7
+//            achievements.add(new Achievement("Losses", String.valueOf(userStats.getLosses()), 8, true)); // Changed position to 8
+//            achievements.add(new Achievement("Wins", String.valueOf(userStats.getWins()), 9, true)); // Changed position to 9
         } else {
             Log.d("AchievementPage2", "User Stats is null");
         }
