@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -30,11 +31,16 @@ public class LeaderboardFragment extends Fragment {
     private RecyclerView leaderboardListUI;
     private LeaderboardAdapter leaderboardAdapter;
     private List<LeaderboardListItem> displayData;
+    private int userId;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_leaderboard, container, false);
+
+        SharedPreferences prefs = requireActivity().getSharedPreferences("UserData", Context.MODE_PRIVATE);
+        userId = prefs.getInt("USER_ID", 0);
+        Log.d(TAG, "userId: " + userId);
 
         // Set up leaderboard ui
         leaderboardListUI = view.findViewById(R.id.leaderboard_list);
@@ -81,7 +87,7 @@ public class LeaderboardFragment extends Fragment {
                 .getInstance(requireActivity())
                 .registerReceiver(messageReceiver, new IntentFilter("WebSocketMessageReceived"));
 
-        String websocketURL = RequestURLs.SERVER_WEBSOCKET_LEADERBOARD_URL + "/" + new Random().nextFloat();
+        String websocketURL = RequestURLs.SERVER_WEBSOCKET_LEADERBOARD_URL + "/" + userId;
         serviceIntent.putExtra("url", websocketURL);
         requireActivity().startService(serviceIntent);
     }
