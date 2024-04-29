@@ -4,7 +4,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
- * A class used to store the data of every user question
+ * A class used to store the data of every question
  */
 public class Question {
     private int id;
@@ -43,8 +43,7 @@ public class Question {
                 jsonBody.getString("answer"),
                 jsonBody.getString("questionType"),
                 jsonBody.getBoolean("used"),
-                false
-//                jsonBody.getBoolean("userCreated")
+                jsonBody.getBoolean("userCreated")
         );
     }
 
@@ -89,12 +88,27 @@ public class Question {
         return used;
     }
 
-
     /**
      * Returns if this question is user-created
      * @return userCreated - if this question is user created
      */
     public boolean isUserCreated() {
         return userCreated;
+    }
+
+
+    /**
+     * Returns the appropriate request body to send this <code>Question</code> to the server
+     * @return jsonBody - <code>JSONObject</code>
+     * @throws JSONException
+     */
+    public JSONObject toJSON() throws JSONException {
+        return new JSONObject() {{
+            put("question", question);
+            put("answer", answer);
+            put("questionType", questionType);
+            put("used", used);
+            put("userCreated", userCreated);
+        }};
     }
 }

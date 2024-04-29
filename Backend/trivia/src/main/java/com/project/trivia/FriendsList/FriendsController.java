@@ -39,7 +39,7 @@ public class FriendsController {
         User user1 = userRepo.findById(userId);
         User user2 = userRepo.findByUsername(friendName);
         Friends friend1 = friendsRepo.findByUsername(friendName);
-        Friends friend2 = friendsRepo.findById(userId);
+        Friends friend2 = friendsRepo.findByUsername(user1.getUsername());
 
         if (user1 == null || friend1 == null) {
             return "User or friend not found.";
@@ -49,11 +49,16 @@ public class FriendsController {
             return "User is already friends with this friend.";
         }
 
+        //updates each users friends stats
+        user1.getStats().setNumberOfFreinds(user1.getStats().getNumberOfFreinds() + 1);
+        user2.getStats().setNumberOfFreinds(user2.getStats().getNumberOfFreinds() + 1);
+//
         user1.getFriends().add(friend1);
         userRepo.save(user1);
 
         user2.getFriends().add(friend2);
         userRepo.save(user2);
+
 
         return user1.getUsername() + " is now friends with " + friend1.getUsername();
     }
@@ -64,7 +69,7 @@ public class FriendsController {
         User user1 = userRepo.findById(userId);
         User user2 = userRepo.findByUsername(friendName);
         Friends friend1 = friendsRepo.findByUsername(friendName);
-        Friends friend2 = friendsRepo.findById(userId);
+        Friends friend2 = friendsRepo.findByUsername(user1.getUsername());
 
         if (user1 == null || friend1 == null) {
             return "User or friend not found.";
@@ -73,22 +78,28 @@ public class FriendsController {
             return user1.getUsername() +" is not friends with " + friend1.getUsername();
         }
 
+        //updates each users friends stats
+        user1.getStats().setNumberOfFreinds(user1.getStats().getNumberOfFreinds() - 1);
+        user2.getStats().setNumberOfFreinds(user2.getStats().getNumberOfFreinds() - 1);
+
         user1.getFriends().remove(friend1);
         userRepo.save(user1);
 
         user2.getFriends().remove(friend2);
         userRepo.save(user2);
 
+
+
         return user1.getUsername() + " and " + friend1.getUsername() + " are no longer friends ";
     }
 
-    @GetMapping(path = "/friendsList/{userId}")
-    List<Friends> friendsOfUser(@PathVariable int userId){
-        User user = userRepo.findById(userId);
+    @GetMapping(path = "/friendsList/{username}")
+    List<User> friendsOfUser(@PathVariable String username){
+        Friends user = friendsRepo.findByUsername(username);
         if(user == null){
             return Collections.emptyList();
         }
-        return user.getFriends();
+        return user.getUser();
     }
 
 

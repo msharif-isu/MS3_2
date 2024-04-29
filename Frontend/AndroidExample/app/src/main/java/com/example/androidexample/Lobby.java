@@ -9,15 +9,25 @@ public class Lobby {
     private int playerCount;
     private int roomSize;
     private boolean finished;
+    private String host;
     private List<UserFriend> players; // List of players in the lobby
 
-    public Lobby(String lobbyName, int playerCount, int roomSize, long id, List<UserFriend> players) {
+    public String getHost() {
+        return host;
+    }
+
+    public void setHost(String host) {
+        this.host = host;
+    }
+
+    public Lobby(String lobbyName, int playerCount, int roomSize, long id, List<UserFriend> players, String host) {
         this.id = id;
         this.lobbyName = lobbyName;
         this.playerCount = playerCount;
         this.roomSize = roomSize;
         this.finished = false;
         this.players = players;
+        this.host = host;
     }
 
     public long getId() {
@@ -63,4 +73,7 @@ public class Lobby {
     public void setPlayers(List<UserFriend> players) {
         this.players = players;
     }
+
+
+
 }

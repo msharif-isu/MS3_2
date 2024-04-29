@@ -5,6 +5,7 @@
     android:id="@+id/relativeLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#F1F1F1"
     android:padding="16dp">
 
     <ImageView
@@ -21,7 +22,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
-        android:text="Lobby Title"
+        android:text="Lobby"
         android:textSize="24sp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
@@ -29,52 +30,151 @@
 
     <Button
         android:id="@+id/buttonJoinRoom"
-        android:layout_width="wrap_content"
+        android:layout_width="135dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
+        android:backgroundTint="@color/purple"
+
         android:text="Join Room"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/lobbyTitle" />
+        app:layout_constraintEnd_toStartOf="@+id/buttonLeaveRoom"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/lobbyTitle" />
 
     <Button
         android:id="@+id/buttonLeaveRoom"
-        android:layout_width="wrap_content"
+        android:layout_width="135dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:backgroundTint="@color/purple"
         android:text="Leave Room"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/buttonJoinRoom" />
+        app:layout_constraintBottom_toBottomOf="@+id/buttonJoinRoom"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/buttonJoinRoom"
+        app:layout_constraintTop_toTopOf="@+id/buttonJoinRoom" />
 
     <Button
         android:id="@+id/buttonChangeHost"
-        android:layout_width="wrap_content"
+        android:layout_width="135dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
+
+        android:backgroundTint="@color/purple"
         android:text="Change Host"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/buttonLeaveRoom" />
+        app:layout_constraintEnd_toEndOf="@+id/buttonJoinRoom"
+        app:layout_constraintStart_toStartOf="@+id/buttonJoinRoom"
+        app:layout_constraintTop_toBottomOf="@+id/buttonJoinRoom" />
 
     <Button
         android:id="@+id/buttonStartGame"
-        android:layout_width="wrap_content"
+        android:layout_width="135dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:backgroundTint="@color/purple"
         android:text="Start Game"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/buttonChangeHost" />
+        app:layout_constraintBottom_toBottomOf="@+id/buttonChangeHost"
+        app:layout_constraintEnd_toEndOf="@+id/buttonLeaveRoom"
+        app:layout_constraintStart_toStartOf="@+id/buttonLeaveRoom"
+        app:layout_constraintTop_toTopOf="@+id/buttonChangeHost" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycleView"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginEnd="32dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/imageView4"
         app:layout_constraintStart_toStartOf="@+id/imageView4"
+        app:layout_constraintTop_toBottomOf="@+id/editQuestionCatagory" />
+
+    <Spinner
+        android:id="@+id/changeHostSpinner"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:textAlignment="viewStart"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/textView11"
         app:layout_constraintTop_toBottomOf="@+id/buttonStartGame" />
+
+    <TextView
+        android:id="@+id/textView11"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/aileron_bold"
+        android:text="Change Host:"
+        android:textAlignment="textEnd"
+        app:layout_constraintBottom_toBottomOf="@+id/changeHostSpinner"
+        app:layout_constraintEnd_toStartOf="@+id/changeHostSpinner"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/changeHostSpinner" />
+
+    <com.google.android.material.slider.Slider
+        android:id="@+id/numQuestionsSlider"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"
+        android:stepSize="1"
+        android:valueFrom="3"
+        android:valueTo="20"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView11" />
+
+    <TextView
+        android:id="@+id/numQuestions"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/m_plus_rounded_1c_bold"
+        android:text="10"
+        android:textSize="34sp"
+        app:layout_constraintEnd_toStartOf="@+id/imageView4"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/numQuestionsText"
+        app:layout_constraintTop_toBottomOf="@+id/numQuestionsSlider" />
+
+    <AutoCompleteTextView
+        android:id="@+id/editQuestionCatagory"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:fontFamily="@font/aileron_semibold"
+        android:hint="Enter Question Catagory"
+        android:inputType="text"
+        android:text=""
+        app:layout_constraintEnd_toEndOf="@+id/changeHostSpinner"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/textView8"
+        app:layout_constraintTop_toBottomOf="@+id/numQuestions" />
+
+    <TextView
+        android:id="@+id/textView8"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/aileron_bold"
+        android:text="Catagory:"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="@+id/editQuestionCatagory"
+        app:layout_constraintEnd_toStartOf="@+id/editQuestionCatagory"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="@+id/textView11"
+        app:layout_constraintTop_toTopOf="@+id/editQuestionCatagory" />
+
+    <TextView
+        android:id="@+id/numQuestionsText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/m_plus_rounded_1c_bold"
+        android:text="Questions:  "
+        android:textSize="34sp"
+        app:layout_constraintEnd_toStartOf="@+id/numQuestions"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/imageView4"
+        app:layout_constraintTop_toBottomOf="@+id/numQuestionsSlider" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

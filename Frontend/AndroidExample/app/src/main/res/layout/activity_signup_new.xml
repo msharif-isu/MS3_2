@@ -1,0 +1,286 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="400dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="-50dp"
+        android:layout_marginTop="-50dp"
+        android:layout_marginBottom="-50dp"
+        app:layout_constraintBottom_toBottomOf="@+id/signupImageButton"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/rectangle" />
+
+    <ImageButton
+        android:id="@+id/passwordSquare"
+        style="?android:attr/borderlessButtonStyle"
+        android:layout_width="320dp"
+        android:layout_height="80dp"
+        android:alpha="0.4"
+        app:layout_constraintEnd_toEndOf="@+id/loginImageButton"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="@+id/loginImageButton"
+        app:layout_constraintTop_toBottomOf="@+id/textView13"
+        app:srcCompat="@drawable/loginsignuptextboxaccent" />
+
+    <EditText
+        android:id="@+id/signup_password_edt"
+        android:layout_width="290dp"
+        android:layout_height="50dp"
+        android:background="@null"
+        android:fontFamily="@font/aileron_bold"
+        android:hint="Enter Password Here"
+        android:inputType="textPassword"
+        android:textColor="#1C2120"
+        android:textSize="22sp"
+        app:layout_constraintBottom_toBottomOf="@+id/passwordSquare"
+        app:layout_constraintEnd_toEndOf="@id/passwordSquare"
+        app:layout_constraintStart_toStartOf="@+id/passwordSquare"
+        app:layout_constraintTop_toTopOf="@+id/passwordSquare"></EditText>
+
+    <ImageButton
+        android:id="@+id/confirmPasswordSquare"
+        style="?android:attr/borderlessButtonStyle"
+        android:layout_width="320dp"
+        android:layout_height="80dp"
+        android:alpha="0.4"
+        android:contentDescription="Enter Password Here"
+        app:layout_constraintEnd_toEndOf="@+id/loginImageButton"
+        app:layout_constraintTop_toBottomOf="@+id/textView16"
+        app:srcCompat="@drawable/loginsignuptextboxaccent" />
+
+    <TextView
+        android:id="@+id/textView16"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/aileron_bold"
+        android:text="CONFIRM PASSWORD"
+        android:textColor="#FFFFFF"
+        android:textSize="12sp"
+        app:layout_constraintStart_toStartOf="@+id/signup_confirm_edt"
+        app:layout_constraintTop_toBottomOf="@+id/passwordSquare"></TextView>
+
+    <TextView
+        android:id="@+id/Logintext"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="64dp"
+        android:fontFamily="@font/aileron_bold"
+        android:text="Sign Up"
+        android:textColor="#FFFFFF"
+        android:textSize="40sp"
+        app:layout_constraintStart_toStartOf="@+id/signup_email_edt"
+        app:layout_constraintTop_toTopOf="parent"></TextView>
+
+    <TextView
+        android:id="@+id/textView14"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/aileron_bold"
+        android:text="USERNAME"
+        android:textColor="#FFFFFF"
+        android:textSize="12sp"
+        app:layout_constraintStart_toStartOf="@+id/signup_username_edt"
+        app:layout_constraintTop_toBottomOf="@+id/emailSquare"></TextView>
+
+    <ImageView
+        android:id="@+id/usernameSquare"
+        style="?android:attr/borderlessButtonStyle"
+        android:layout_width="320dp"
+        android:layout_height="80dp"
+        android:alpha="0.4"
+        android:contentDescription="usernamesquare"
+        app:layout_constraintEnd_toEndOf="@+id/loginImageButton"
+        app:layout_constraintStart_toStartOf="@+id/loginImageButton"
+        app:layout_constraintTop_toBottomOf="@+id/textView14"
+        app:srcCompat="@drawable/loginsignuptextboxaccent" />
+
+    <EditText
+        android:id="@+id/signup_confirm_edt"
+        android:layout_width="290dp"
+        android:layout_height="50dp"
+        android:background="@null"
+        android:fontFamily="@font/aileron_bold"
+        android:hint="Confirm Password Here"
+        android:inputType="textPassword"
+        android:textColor="#1C2120"
+        android:textSize="22sp"
+        app:layout_constraintBottom_toBottomOf="@+id/confirmPasswordSquare"
+        app:layout_constraintEnd_toEndOf="@+id/confirmPasswordSquare"
+        app:layout_constraintStart_toStartOf="@+id/confirmPasswordSquare"
+        app:layout_constraintTop_toTopOf="@+id/confirmPasswordSquare"></EditText>
+
+    <TextView
+        android:id="@+id/textView13"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/aileron_bold"
+        android:text="PASSWORD"
+        android:textColor="#FFFFFF"
+        android:textSize="12sp"
+        app:layout_constraintStart_toStartOf="@+id/signup_password_edt"
+        app:layout_constraintTop_toBottomOf="@+id/usernameSquare"></TextView>
+
+    <EditText
+        android:id="@+id/signup_username_edt"
+        android:layout_width="290dp"
+        android:layout_height="50dp"
+        android:background="@null"
+        android:fontFamily="@font/aileron_bold"
+        android:hint="Enter Username Here"
+        android:textColor="#1C2120"
+        android:textSize="22sp"
+        app:layout_constraintBottom_toBottomOf="@+id/usernameSquare"
+        app:layout_constraintEnd_toEndOf="@id/usernameSquare"
+        app:layout_constraintStart_toStartOf="@+id/usernameSquare"
+        app:layout_constraintTop_toTopOf="@+id/usernameSquare"></EditText>
+
+    <ImageView
+        android:id="@+id/loginImageButton"
+        style="?android:attr/borderlessButtonStyle"
+        android:layout_width="320dp"
+        android:layout_height="80dp"
+        android:contentDescription="login"
+        app:layout_constraintEnd_toEndOf="@+id/imageView2"
+        app:layout_constraintHorizontal_bias="0.483"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/confirmPasswordSquare"
+        app:srcCompat="@drawable/loginbox" />
+
+    <ImageView
+        android:id="@+id/signupImageButton"
+        style="?android:attr/borderlessButtonStyle"
+        android:layout_width="320dp"
+        android:layout_height="80dp"
+        android:contentDescription="sign up"
+        app:layout_constraintEnd_toEndOf="@+id/loginImageButton"
+        app:layout_constraintStart_toStartOf="@+id/loginImageButton"
+        app:layout_constraintTop_toBottomOf="@+id/loginImageButton"
+        app:srcCompat="@drawable/loginbox" />
+
+    <Button
+        android:id="@+id/signup_login_btn"
+        style="?android:attr/borderlessButtonStyle"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:fontFamily="@font/aileron_bold"
+        android:text="Back to login"
+        android:textColor="#ffffff"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="@+id/signupImageButton"
+        app:layout_constraintEnd_toEndOf="@+id/signupImageButton"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/signupImageButton"
+        app:layout_constraintTop_toTopOf="@+id/signupImageButton"
+        app:layout_constraintVertical_bias="1.0"></Button>
+
+    <Button
+        android:id="@+id/signup_signup_btn"
+        style="?android:attr/borderlessButtonStyle"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:fontFamily="@font/aileron_bold"
+        android:text="create account"
+        android:textColor="#ffffff"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="@+id/loginImageButton"
+        app:layout_constraintEnd_toEndOf="@+id/loginImageButton"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/loginImageButton"
+        app:layout_constraintTop_toTopOf="@+id/loginImageButton"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <TextView
+        android:id="@+id/orcreateaccounttext"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/aileron_bold"
+        android:text="Create a new account"
+        android:textColor="#FFFFFF"
+        android:textSize="15sp"
+        app:layout_constraintStart_toStartOf="@+id/Logintext"
+        app:layout_constraintTop_toBottomOf="@+id/Logintext"></TextView>
+
+    <TextView
+        android:id="@+id/email"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:fontFamily="@font/aileron_bold"
+        android:text="EMAIL"
+        android:textColor="#FFFFFF"
+        android:textSize="12sp"
+        app:layout_constraintStart_toStartOf="@+id/signup_email_edt"
+        app:layout_constraintTop_toBottomOf="@+id/orcreateaccounttext"></TextView>
+
+    <ImageView
+        android:id="@+id/emailSquare"
+        style="?android:attr/borderlessButtonStyle"
+        android:layout_width="320dp"
+        android:layout_height="80dp"
+        android:alpha="0.4"
+        android:contentDescription="usernamesquare"
+        app:layout_constraintEnd_toEndOf="@+id/imageView2"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/email"
+        app:srcCompat="@drawable/loginsignuptextboxaccent" />
+
+    <EditText
+        android:id="@+id/signup_email_edt"
+        android:layout_width="290dp"
+        android:layout_height="50dp"
+        android:background="@null"
+        android:fontFamily="@font/aileron_bold"
+        android:hint="Enter Email Here"
+        android:textColor="#1C2120"
+        android:textSize="22sp"
+        app:layout_constraintBottom_toBottomOf="@+id/emailSquare"
+        app:layout_constraintEnd_toEndOf="@+id/emailSquare"
+        app:layout_constraintStart_toStartOf="@+id/emailSquare"
+        app:layout_constraintTop_toTopOf="@+id/emailSquare"></EditText>
+
+    <ImageView
+        android:id="@+id/imageView6"
+        android:layout_width="0dp"
+        android:layout_height="20dp"
+        android:layout_marginEnd="20dp"
+        app:layout_constraintBottom_toBottomOf="@+id/ortext"
+        app:layout_constraintEnd_toStartOf="@+id/ortext"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="@+id/signup_confirm_edt"
+        app:layout_constraintTop_toTopOf="@+id/ortext"
+        app:srcCompat="@drawable/img" />
+
+    <TextView
+        android:id="@+id/ortext"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/m_plus_rounded_1c_bold"
+        android:text="or"
+        android:textColor="#FFFFFF"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="@+id/loginImageButton"
+        app:layout_constraintEnd_toStartOf="@+id/imageView7"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/imageView6"
+        app:layout_constraintTop_toBottomOf="@+id/loginImageButton" />
+
+    <ImageView
+        android:id="@+id/imageView7"
+        android:layout_width="0dp"
+        android:layout_height="20dp"
+        android:layout_marginStart="20dp"
+        app:layout_constraintBottom_toBottomOf="@+id/ortext"
+        app:layout_constraintEnd_toEndOf="@+id/signup_confirm_edt"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/ortext"
+        app:layout_constraintTop_toTopOf="@+id/ortext"
+        app:srcCompat="@drawable/img" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

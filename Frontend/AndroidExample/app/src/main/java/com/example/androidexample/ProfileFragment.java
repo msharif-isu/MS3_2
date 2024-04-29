@@ -2,7 +2,11 @@ package com.example.androidexample;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.style.TtsSpan;
 import android.util.Log;
@@ -13,9 +17,14 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+//import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DefaultItemAnimator;
@@ -27,16 +36,27 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.ImageRequest;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
+import com.bumptech.glide.request.RequestOptions;
+import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.transition.Transition;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.List;
 
 import url.RequestURLs;
 
@@ -46,17 +66,22 @@ public class ProfileFragment extends Fragment {
     private ArrayList<UserFriend> friendsList;
     private RecyclerView recyclerView;
     ImageView imgView;
-    ImageButton addFriends, editBioButton;
+    ImageButton editBioButton, editProfilePictureButton;
+
+    Button signOut, addFriends, matchHistory;
     //Button addFriend = findViewById(R.id.addFriend);
     TextView questionsAnswered, achievementsUnlocked, userBiography, usernameText, friendsListText;
     private String username;
 
     private int userId;
     private String backendUrl = RequestURLs.SERVER_HTTP_URL + "/";
-    //"http://localhost:8080/";
-    //RequestURLs.SERVER_HTTP_URL;
     private SwipeRefreshLayout swipeRefreshLayout;
 
+    private String UPLOAD_URL = RequestURLs.SERVER_HTTP_URL + "/setPfp/";
+
+    private Uri mImageUri, selectedUri;
+
+    private ActivityResultLauncher<String> mGetContent;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
@@ -64,25 +89,48 @@ public class ProfileFragment extends Fragment {
         username = prefs.getString("USERNAME", "");
         userId = prefs.getInt("USER_ID", 0);
         friendsList = new ArrayList<>();
+        UPLOAD_URL = UPLOAD_URL + userId;
+
 
         swipeRefreshLayout = view.findViewById(R.id.swipeRefreshLayout);
-        imgView = view.findViewById(R.id.imgView);
         addFriends = view.findViewById(R.id.addFriends);
-        questionsAnswered = view.findViewById(R.id.questionsAnswered);
-        achievementsUnlocked = view.findViewById(R.id.AcheivementsUnlocked);
+//        questionsAnswered = view.findViewById(R.id.questionsAnswered);
+//        achievementsUnlocked = view.findViewById(R.id.AcheivementsUnlocked);
         userBiography = view.findViewById(R.id.userBiography);
         usernameText = view.findViewById(R.id.username);
         friendsListText = view.findViewById(R.id.freindsListText);
         recyclerView = view.findViewById(R.id.friendList);
         editBioButton = view.findViewById(R.id.editBioButton);
+        signOut = view.findViewById(R.id.login_btn);
+        matchHistory = view.findViewById(R.id.matchHistory);
 
-        questionsAnswered.setText("Add Friends");
-        achievementsUnlocked.setText("");
+        //Profile Picture
+        imgView = view.findViewById(R.id.imgView);
+        editProfilePictureButton = view.findViewById(R.id.editProfilePictureButton);
+        getProfilePic();
+
+//        questionsAnswered.setText("Add Friends");
+//        achievementsUnlocked.setText("");
         getBio();
 //        userBiography.setText(temp);
         usernameText.setText(username);
         //friendsListText.setText("Friends:");
 
+
+        mGetContent = registerForActivityResult(new ActivityResultContracts.GetContent(), uri -> {
+            if (uri != null) {
+                selectedUri = uri;
+                ImageView imageView = requireView().findViewById(R.id.imgView);
+                imageView.setImageURI(uri);
+                uploadImage();
+            }
+        });
+
+
+        editProfilePictureButton.setOnClickListener(v -> {
+            editProfilePicture();
+            uploadImage();
+        });
 
         setFriendInfo();
         setAdapter();
@@ -93,16 +141,132 @@ public class ProfileFragment extends Fragment {
         editBioButton.setOnClickListener(v -> {
             editButtonDialog();
         });
+        signOut.setOnClickListener(v -> {
+            startActivity(new Intent(getActivity(), LoginActivity.class));
+        });
+        matchHistory.setOnClickListener(v -> {
+            createMatchHistoryDialog();
+        });
+
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 setFriendInfo();
+                getBio();
+//                getProfilePic();
                 swipeRefreshLayout.setRefreshing(false);
             }
         });
         return view;
+
     }
 
+    private void createMatchHistoryDialog() {
+        Dialog d = new Dialog(requireContext());
+        d.setContentView(R.layout.dialog_match_history);
+
+        int width = (int) (getResources().getDisplayMetrics().widthPixels * 0.90);
+        int height = (int) (getResources().getDisplayMetrics().heightPixels * 0.90);
+        d.getWindow().setLayout(width, height);
+
+        TextView matchesPlayed = d.findViewById(R.id.match_history_matches_played);
+        RecyclerView matchesList = d.findViewById(R.id.match_history_list);
+
+        List<MatchHistory> matchesDataset = new ArrayList<>();
+        MatchHistoryAdapter adapter = new MatchHistoryAdapter(matchesDataset);
+        matchesList.setAdapter(adapter);
+        matchesList.setLayoutManager(new LinearLayoutManager(requireContext()));
+        getMatchHistory(matchesDataset, adapter, matchesPlayed);
+
+        d.show();
+    }
+
+    private void editProfilePicture() {
+        mGetContent.launch("image/*");
+    }
+
+
+    /**
+     * Uploads an image to a remote server using a multipart Volley request.
+     * <p>
+     * This method creates and executes a multipart request using the Volley library to upload
+     * an image to a predefined server endpoint. The image data is sent as a byte array and the
+     * request is configured to handle multipart/form-data content type. The server is expected
+     * to accept the image with a specific key ("image") in the request.
+     *
+     */
+    private void uploadImage() {
+        if (selectedUri != null) {
+            byte[] imageData = convertImageUriToBytes(selectedUri);
+            if (imageData != null) {
+                MultipartRequest multipartRequest = new MultipartRequest(
+                        Request.Method.POST,
+                        UPLOAD_URL,
+                        imageData,
+                        response -> {
+                            // Handle response
+                            if (response != null && !response.isEmpty()) {
+                                Toast.makeText(requireContext(), response, Toast.LENGTH_LONG).show();
+                                getProfilePic();
+                            } else {
+                                Toast.makeText(requireContext(), "Unknown response", Toast.LENGTH_LONG).show();
+                                Log.e("Upload", "Empty response");
+                            }
+                            Log.d("Upload", "Response: " + response);
+                        },
+                        error -> {
+                            // Handle error
+                            if (error != null && error.getMessage() != null && !error.getMessage().isEmpty()) {
+                                Toast.makeText(requireContext(), error.getMessage(), Toast.LENGTH_LONG).show();
+                            } else {
+                                Toast.makeText(requireContext(), "Unknown error", Toast.LENGTH_LONG).show();
+                                Log.e("Upload", "Empty error message");
+                            }
+                            Log.e("Upload", "Error: " + error.getMessage());
+                        }
+                );
+                VolleySingleton.getInstance(requireContext()).addToRequestQueue(multipartRequest);
+            } else {
+                Log.e("ProfileFragment", "Image data is null");
+            }
+        } else {
+            Log.e("ProfileFragment", "Selected URI is null");
+        }
+    }
+
+
+    /**
+     * Converts the given image URI to a byte array.
+     * <p>
+     * This method takes a URI pointing to an image and converts it into a byte array. The conversion
+     * involves opening an InputStream from the content resolver using the provided URI, and then
+     * reading the content into a byte array. This byte array represents the binary data of the image,
+     * which can be used for various purposes such as uploading the image to a server.
+     *
+     * @param imageUri The URI of the image to be converted. This should be a content URI that points
+     *                 to an image resource accessible through the content resolver.
+     * @return A byte array representing the image data, or null if the conversion fails.
+     * @throws IOException If an I/O error occurs while reading from the InputStream.
+     */
+    private byte[] convertImageUriToBytes(Uri imageUri) {
+        try {
+            InputStream inputStream = requireContext().getContentResolver().openInputStream(imageUri);
+            ByteArrayOutputStream byteBuffer = new ByteArrayOutputStream();
+
+            int bufferSize = 1024;
+            byte[] buffer = new byte[bufferSize];
+
+            int len;
+            while ((len = inputStream.read(buffer)) != -1) {
+                byteBuffer.write(buffer, 0, len);
+            }
+
+            return byteBuffer.toByteArray();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 
     private void editButtonDialog() {
         Dialog dialog = new Dialog(requireContext());
@@ -115,9 +279,21 @@ public class ProfileFragment extends Fragment {
 
         cancelButton.setOnClickListener(v -> dialog.dismiss());
         save.setOnClickListener(v -> {
-
+            if (bioEdit.getText().toString().equals("")) {
+                bioEdit.setError("Please enter a bio.");
+                return;
+            } else if (bioEdit.getText().toString().length() > 100) {
+                bioEdit.setError("Please enter shorter bio. Maximum 100 characters.");
+                return;
+            }
             String newBio = bioEdit.getText().toString();
             editBio(newBio);
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            getBio();
             dialog.dismiss();
         });
 
@@ -141,6 +317,7 @@ public class ProfileFragment extends Fragment {
                     userBiography.setText(newBio);
                     Toast.makeText(requireActivity(), message, Toast.LENGTH_SHORT).show();
                     Log.e("ProfileActivity", "find this:" + newBio);
+                    getBio();
                 } catch (JSONException e) {
                     e.printStackTrace();
                     Log.e("ProfileActivity", "Error parsing response: " + e.getMessage());
@@ -153,6 +330,7 @@ public class ProfileFragment extends Fragment {
             }
         });
         queue.add(jsonObjectRequest);
+        getBio();
     }
 
     private void addFriendsDialog() {
@@ -209,20 +387,20 @@ public class ProfileFragment extends Fragment {
             });
             queue.add(jsonObjectRequest);
         }
+        setFriendInfo();
     }
 
     private FriendsListAdapter adapter;
 
     private void setAdapter() {
-        adapter = new FriendsListAdapter(friendsList, new FriendsListAdapter.OnDeleteClickListener() {
+        adapter = new FriendsListAdapter(requireContext(), friendsList, new FriendsListAdapter.OnDeleteClickListener() {
             @Override
             public void onDeleteClick(int position) {
                 UserFriend friend = friendsList.get(position);
                 String friendName = friend.getUsername();
                 friendsList.remove(position);
-
-                removeFriendFromDatabase(friendName);
-                adapter.notifyItemRemoved(position);
+                removeFriendFromDatabase(friendName); // Remove friend from database
+                adapter.notifyItemRemoved(position); // Notify adapter of data change
             }
         });
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(requireContext());
@@ -248,40 +426,33 @@ public class ProfileFragment extends Fragment {
             }
         });
         queue.add(stringRequest);
+        setFriendInfo();
     }
 
-
     private void setFriendInfo() {
-//        friendsList.add(new UserFriend("Alok1", "This is the real alok", null));
-//        friendsList.add(new UserFriend("Alok2", "This is actually the real alok", null));
-//        friendsList.add(new UserFriend("Alok3", "Nah, This is the real alok!", null));
-//        friendsList.add(new UserFriend("Mahdi", "I will give Owais an A on this demo.", null));
-//        friendsList.add(new UserFriend("Alok4", "Nope, its actually me", null));
-//        friendsList.add(new UserFriend("Alok5", "Alok4 is lying.", null));
-//        friendsList.add(new UserFriend("Osamson", "I agree with Alok5", null));
-//        friendsList.add(new UserFriend("Aldaco", "Hello, I am definitly the real Dr. Aldaco", null));
-//        friendsList.add(new UserFriend("Alok8", "I am the real alok", null));
-//        friendsList.add(new UserFriend("Alok9", "Nah.", null));
         RequestQueue queue = Volley.newRequestQueue(requireContext());
-        String url = backendUrl + "friends/" + userId;
+        String url = backendUrl + "friendsList/" + username;
         Log.d("ProfileActivity", "Fetching friend details: " + url);
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
             @Override
-            public void onResponse(JSONObject response) {
+            public void onResponse(JSONArray response) {
                 String jsonResponse = response.toString();
                 Log.d("ProfileActivity", "Friend Details JSON Response: " + jsonResponse);
                 try {
                     // Clear the existing data in the friendsList. This avoids duplicate entries.
                     friendsList.clear();
-                    JSONArray userArray = response.getJSONArray("user");
-                    for (int i = 0; i < userArray.length(); i++) {
-                        JSONObject userObject = userArray.getJSONObject(i);
+
+                    for (int i = 0; i < response.length(); i++) {
+                        JSONObject userObject = response.getJSONObject(i);
                         String username = userObject.getString("username");
                         String bio = userObject.isNull("bio") ? "" : userObject.getString("bio");
                         String filePath = userObject.optString("filePath", "");
                         Log.d("ProfileActivity", "Username: " + username);
                         Log.d("ProfileActivity", "Bio: " + bio);
                         Log.d("ProfileActivity", "File Path: " + filePath);
+
+                        String profilePicUrl = userObject.optString("profilePicUrl", "");
+
                         friendsList.add(new UserFriend(username, bio, filePath));
                     }
 
@@ -298,7 +469,7 @@ public class ProfileFragment extends Fragment {
                 Log.e("ProfileActivity", "Error fetching friend details: " + error.getMessage());
             }
         });
-        queue.add(jsonObjectRequest);
+        queue.add(jsonArrayRequest);
     }
 
     private void getBio() {
@@ -319,5 +490,81 @@ public class ProfileFragment extends Fragment {
         });
         queue.add(stringRequest);
     }
+
+    /**
+     * Fetches the user's profile picture from the server.
+     */
+    //backendUrl + "users/" + userId + "/profilePicture"
+    private void getProfilePic() {
+        // Make a request to fetch the profile picture
+        String imageUrl = backendUrl + "images/" + username;
+        RequestOptions requestOptions = new RequestOptions()
+                .transform(new RoundedCorners(100)) // Adjust the corner radius as needed
+                .placeholder(R.drawable.profile); // Placeholder image while loading
+        Glide.with(requireContext())
+                .asBitmap()
+                .load(imageUrl)
+                .apply(requestOptions)
+                .skipMemoryCache(true)  // Disable memory caching
+                .diskCacheStrategy(DiskCacheStrategy.NONE)  // Disable disk caching
+                .into(new SimpleTarget<Bitmap>() {
+                    @Override
+                    public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
+                        // Set the retrieved profile picture to the ImageView
+                        imgView.setImageBitmap(resource);
+                    }
+
+                    @Override
+                    public void onLoadFailed(@Nullable Drawable errorDrawable) {
+                        // Handle the case where image loading fails
+                        imgView.setImageResource(R.drawable.profile);
+                    }
+                });
+    }
+
+
+    private void getMatchHistory(List<MatchHistory> matchesList, MatchHistoryAdapter adapter, TextView matchesPlayedText) {
+        RequestQueue queue = Volley.newRequestQueue(requireContext());
+        String url = backendUrl + username + "/matchHistory";
+        Log.e("ProfileActivity", "Match history url:" + url);
+
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(
+                Request.Method.GET,
+                url,
+                null,
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray jsonArray) {
+                        matchesList.clear();
+                        for (int i = 0; i < jsonArray.length(); i++) {
+                            try {
+                                matchesList.add(new MatchHistory(jsonArray.getJSONObject(i)));
+                            } catch (JSONException e) {
+                                throw new RuntimeException(e);
+                            }
+                        }
+                        matchesPlayedText.setText(Integer.toString(matchesList.size()));
+                        adapter.notifyDataSetChanged();
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError volleyError) {
+                        Log.e("MatchHistoryRequest", "onErrorResponse: " + volleyError.getMessage());
+                        Toast.makeText(requireContext(), "I'm a teapot", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+        queue.add(jsonArrayRequest);
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        if (getActivity() != null && !getActivity().isFinishing()) {
+            Glide.with(this).clear(imgView);
+        }
+    }
+
 
 }

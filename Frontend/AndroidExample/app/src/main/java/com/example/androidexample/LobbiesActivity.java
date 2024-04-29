@@ -26,8 +26,14 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -47,23 +53,37 @@ public class LobbiesActivity extends AppCompatActivity implements WebSocketListe
     private ImageButton createLobbyButton;
     private String username;
     private int userId;
-    private FriendsListAdapter adapter;
+    private LobbyPlayerAdapter adapter;
     private TextView msgTv;
 
+    private List<String> playerUsernames = new ArrayList<>();
+    private String selectedNewHost;
     private WebSocketManager webSocketManager;
 
     private String backendUrl = RequestURLs.SERVER_HTTP_URL + "/";
-
     private boolean isInLobby = false;
     private boolean joinedLobby = false;
+    private ArrayAdapter<String> playerAdapter;
+
+    private String currentHostUsername;
+
+    private boolean isHost = false;
+
+    private Button startGame, changeHost;
+    private TextView changeHostText;
+    private Spinner changeHostSpinner;
+    Slider numQuestionsSlider;
+    TextView numQuestions;
+    TextView numQuestionsText, category;
+    AutoCompleteTextView enterCategory;
+
+    private String questionID;
+    private boolean gameStarted = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lobby);
-
-        webSocketManager = WebSocketManager.getInstance();
-
 
         SharedPreferences prefs = getSharedPreferences("UserData", MODE_PRIVATE);
         username = prefs.getString("USERNAME", "");
@@ -83,7 +103,16 @@ public class LobbiesActivity extends AppCompatActivity implements WebSocketListe
         recyclerView.setAdapter(lobbyAdapter);
 
         msgTv = findViewById(R.id.textView9);
+        webSocketManager = new WebSocketManager();
 
+        adapter = new LobbyPlayerAdapter(getApplicationContext(), friendsList, new LobbyPlayerAdapter.OnDeleteClickListener() {
+            @Override
+            public void onDeleteClick(int position) {
+                UserFriend friend = friendsList.get(position);
+                String friendName = friend.getUsername();
+//                getUserIdByUsername(friendName, roomId);
+            }
+        }, isHost);
 
         refreshLobbyList();
 
@@ -96,6 +125,7 @@ public class LobbiesActivity extends AppCompatActivity implements WebSocketListe
 
         createLobbyButton.setOnClickListener(view -> {
             createLobbyDialog();
+            isInLobby = true;
         });
     }
 
@@ -103,70 +133,282 @@ public class LobbiesActivity extends AppCompatActivity implements WebSocketListe
         Dialog dialog = new Dialog(this);
         dialog.setContentView(R.layout.activity_lobbies);
         dialog.show();
-
+        dialog.setCancelable(false);
+        dialog.setCanceledOnTouchOutside(false);
         getLobbyDetails(roomId);
-
-
         SharedPreferences.Editor editor = getSharedPreferences("roomID", MODE_PRIVATE).edit();
         editor.putInt("ROOM_ID", (int) roomId);
         editor.apply();
 
+        Log.e("Room id", "Room ID is currently " + roomId);
+
         Button joinRoom = dialog.findViewById(R.id.buttonJoinRoom);
         Button leaveRoom = dialog.findViewById(R.id.buttonLeaveRoom);
-        Button startGame = dialog.findViewById(R.id.buttonStartGame);
+        startGame = dialog.findViewById(R.id.buttonStartGame);
+        changeHost = dialog.findViewById(R.id.buttonChangeHost);
+        changeHostSpinner = dialog.findViewById(R.id.changeHostSpinner);
+        changeHostText = dialog.findViewById(R.id.textView11);
         RecyclerView playerListRecyclerView = dialog.findViewById(R.id.recycleView);
+        numQuestionsSlider = dialog.findViewById(R.id.numQuestionsSlider);
+        numQuestions = dialog.findViewById(R.id.numQuestions);
+        numQuestionsText = dialog.findViewById(R.id.numQuestionsText);
+        category = dialog.findViewById(R.id.textView8);
+        enterCategory = dialog.findViewById(R.id.editQuestionCatagory);
+        numQuestions.setText(String.valueOf(3));
+        numQuestionsSlider.addOnChangeListener(new Slider.OnChangeListener() {
+            @Override
+            public void onValueChange(Slider slider, float value, boolean fromUser) {
+                numQuestions.setText(String.valueOf((int) value));
+            }
+        });
+
 
         // A little sketchy, but i need a websocket room and i didnt want to make another class.
         String chatUrl = RequestURLs.SERVER_WEBSOCKET_URL_MULTIPLAYER + "/chat/" + roomId * -1 + "/" + username;
         WebSocketManager.getInstance().connectWebSocket(chatUrl);
         WebSocketManager.getInstance().setWebSocketListener(LobbiesActivity.this);
-
-
+        if (isHost) {
+            startGame.setVisibility(View.VISIBLE);
+            changeHost.setVisibility(View.VISIBLE);
+            changeHostSpinner.setVisibility(View.VISIBLE);
+            changeHostText.setVisibility(View.VISIBLE);
+            numQuestionsSlider.setVisibility(View.VISIBLE);
+            numQuestionsText.setVisibility(View.VISIBLE);
+            numQuestions.setVisibility(View.VISIBLE);
+            enterCategory.setVisibility(View.VISIBLE);
+            category.setVisibility(View.VISIBLE);
+        } else {
+            startGame.setVisibility(View.GONE);
+            changeHost.setVisibility(View.GONE);
+            changeHostSpinner.setVisibility(View.GONE);
+            changeHostText.setVisibility(View.GONE);
+            numQuestionsSlider.setVisibility(View.GONE);
+            numQuestionsText.setVisibility(View.GONE);
+            numQuestions.setVisibility(View.GONE);
+            enterCategory.setVisibility(View.GONE);
+            category.setVisibility(View.GONE);
+        }
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
-        adapter = new FriendsListAdapter(friendsList, new FriendsListAdapter.OnDeleteClickListener() {
+        adapter = new LobbyPlayerAdapter(getApplicationContext(), friendsList, new LobbyPlayerAdapter.OnDeleteClickListener() {
             @Override
             public void onDeleteClick(int position) {
                 UserFriend friend = friendsList.get(position);
                 String friendName = friend.getUsername();
-                getUserIdByUsername(friendName, roomId); // Pass roomId to the method
+                getUserIdByUsername(friendName, roomId);
             }
+        }, isHost);
 
-        });
 
         playerListRecyclerView.setLayoutManager(layoutManager);
         playerListRecyclerView.setItemAnimator(new DefaultItemAnimator());
         playerListRecyclerView.setAdapter(adapter);
-
+        changeHostSpinner.setAdapter(getUsernamesInLobby(adapter));
         // TODO: Start game
         startGame.setOnClickListener(v -> {
             if (isInLobby && joinedLobby) {
                 joinLobby(roomId, userId);
                 getLobbyDetails(roomId);
-                WebSocketManager.getInstance().sendMessage("lobbyStart!");
-                beginGame(roomId);
+                if (enterCategory.getText().toString().equals("")) {
+                    Toast.makeText(getApplicationContext(), "Please choose a catagory", Toast.LENGTH_SHORT).show();
+                } else {
+                    createMultiplayer(roomId, enterCategory.getText().toString(), numQuestions.getText().toString(),
+                            new Response.Listener<String>() {
+                                @Override
+                                public void onResponse(String questionID) {
+                                    Log.e("QuestionIDs in Lobbies", questionID); // Verify questionID
+                                    WebSocketManager.getInstance().sendMessage("lobbyStart!");
+                                    WebSocketManager.getInstance().closeWebSocket();
+                                    beginGame(roomId, questionID); // Start MultiplayerActivity with questionID
+                                    gameStarted = true;
+                                }
+                            });
+                }
             } else {
                 Toast.makeText(LobbiesActivity.this, "You must join a lobby first", Toast.LENGTH_SHORT).show();
-            }//            beginGame(roomId);
+            }
         });
         leaveRoom.setOnClickListener(v -> {
             leaveRoom(roomId, userId);
-            WebSocketManager.getInstance().closeWebSocket();
             isInLobby = false;
+            isHost = false;
+            adapter.updateHostStatus(isHost);
+            WebSocketManager.getInstance().sendMessage("leftLobby");
+            if (isHost) {
+                WebSocketManager.getInstance().sendMessage("changeHost");
+                isHost = false;
+            }
+            WebSocketManager.getInstance().closeWebSocket();
             dialog.dismiss();
         });
         joinRoom.setOnClickListener(v -> {
             joinLobby(roomId, userId);
             isInLobby = true;
             getLobbyDetails(roomId);
-            //dialog.dismiss();
+            WebSocketManager.getInstance().sendMessage("joinedLobby");
+            refreshLobbyList();
+        });
+        changeHost.setOnClickListener(v -> {
+            if (selectedNewHost != null) {
+                isHost = false;
+                changeHost(roomId, selectedNewHost);
+                WebSocketManager.getInstance().sendMessage("changeHost to " + selectedNewHost);
+                adapter.updateHostStatus(isHost);
+                startGame.setVisibility(View.GONE);
+                changeHost.setVisibility(View.GONE);
+                changeHostSpinner.setVisibility(View.GONE);
+                changeHostText.setVisibility(View.GONE);
+                numQuestionsSlider.setVisibility(View.GONE);
+                numQuestionsText.setVisibility(View.GONE);
+                numQuestions.setVisibility(View.GONE);
+                enterCategory.setVisibility(View.GONE);
+                category.setVisibility(View.GONE);
+            } else {
+                Toast.makeText(LobbiesActivity.this, "Please select a player to become the new host", Toast.LENGTH_SHORT).show();
+            }
+        });
+        changeHostSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                selectedNewHost = playerUsernames.get(position);
+                Log.e("Bruh", "onItemSelected: " + selectedNewHost);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                selectedNewHost = null;
+                Log.e("Bruh", "BRUHAHUHSUHRAUSHRUHSALFASKLJF");
+            }
         });
 
+        // Add autocomplete to question category
+        enterCategory.setThreshold(0);
+        ArrayAdapter<String> categoryAdapter = new ArrayAdapter<>(getApplicationContext(), androidx.appcompat.R.layout.support_simple_spinner_dropdown_item);
 
+        enterCategory.setAdapter(categoryAdapter);
+        getCategories(categoryAdapter);
     }
 
-    private void beginGame(long roomId) {
+    private void getCategories(ArrayAdapter<String> categoryAdapter) {
+        JsonArrayRequest questionTypesRequest = new JsonArrayRequest(
+                Request.Method.GET,
+                String.format("%s/query/topic", RequestURLs.SERVER_HTTP_URL),
+                null,
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray jsonArray) {
+                        List<String> questionTypes = new ArrayList<>();
+                        for (int i = 0; i < jsonArray.length(); i++) {
+                            try {
+                                questionTypes.add(jsonArray.get(i).toString());
+                            } catch (JSONException e) {
+                                throw new RuntimeException(e);
+                            }
+                        }
+
+                        categoryAdapter.addAll(questionTypes);
+                        categoryAdapter.notifyDataSetChanged();
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError volleyError) {
+
+                    }
+                }
+        );
+
+        VolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(questionTypesRequest);
+    }
+
+    private void createMultiplayer(long roomId, String topic, String numQuestions, Response.Listener<String> questionIdListener) {
+        String url = backendUrl + "multiplayer/" + roomId + "/" + topic + "/" + numQuestions;
+        JsonArrayRequest request = new JsonArrayRequest(Request.Method.POST, url, null,
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        try {
+                            StringBuilder questionIdsBuilder = new StringBuilder();
+                            for (int i = 0; i < response.length(); i++) {
+                                if (i > 0) {
+                                    questionIdsBuilder.append("-");
+                                }
+                                questionIdsBuilder.append(response.getInt(i));
+                            }
+                            questionID = questionIdsBuilder.toString();
+                            // Invoke the callback with the retrieved questionID
+                            questionIdListener.onResponse(questionID);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            // Handle JSON parsing error
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // Handle error
+                        Toast.makeText(LobbiesActivity.this, "Failed to create multiplayer: " + error.getMessage() + url, Toast.LENGTH_SHORT).show();
+                        Log.d("Multiplayer", url);
+                    }
+                });
+        // Add the request to the RequestQueue
+        Volley.newRequestQueue(this).add(request);
+    }
+
+    private ArrayAdapter<String> getUsernamesInLobby(LobbyPlayerAdapter lobbyPlayerAdapter) {
+        playerAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, playerUsernames);
+        playerUsernames.clear();
+        for (int i = 0; i < lobbyPlayerAdapter.getItemCount(); i++) {
+            String username = lobbyPlayerAdapter.getUsernameByIndex(i);
+            if (username != null) {
+                playerUsernames.add(username);
+                Log.d("Username In lobby", username);
+            }
+        }
+        playerAdapter.notifyDataSetChanged();
+        return playerAdapter;
+    }
+
+
+    private void changeHost(long roomId, String newHostUsername) {
+        String url = backendUrl + "changeHost/" + roomId + "/" + newHostUsername;
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.PUT, url, null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            String message = response.getString("message");
+                            if (message.equals("success")) {
+                                Toast.makeText(LobbiesActivity.this, "Host changed successfully", Toast.LENGTH_SHORT).show();
+                                isHost = false;
+                                adapter.updateHostStatus(isHost);
+                            } else {
+                                Toast.makeText(LobbiesActivity.this, "Failed to change host", Toast.LENGTH_SHORT).show();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(LobbiesActivity.this, "Failed to change host: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                });
+        Volley.newRequestQueue(this).add(request);
+    }
+
+
+    private void beginGame(long roomId, String questionID) {
         Intent intent = new Intent(LobbiesActivity.this, MultiplayerActivity.class);
         intent.putExtra("ROOM_ID", roomId);
+        intent.putExtra("QUESTION_ID", questionID);
+        SharedPreferences.Editor editor = getSharedPreferences("QuestionIds", MODE_PRIVATE).edit();
+        editor.putString("QuestionIds", questionID);
+        editor.putString("questionsPlayedType", enterCategory.getText().toString());
+        editor.apply();
+//        SharedPreferences s
         startActivity(intent);
     }
 
@@ -189,7 +431,6 @@ public class LobbiesActivity extends AppCompatActivity implements WebSocketListe
 
     private void getLobbyDetails(long roomId) {
         String url = backendUrl + "lobbies/" + roomId;
-
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
                 new Response.Listener<JSONObject>() {
                     @Override
@@ -213,7 +454,13 @@ public class LobbiesActivity extends AppCompatActivity implements WebSocketListe
 
                             // Set players to the lobby object
                             lobby.setPlayers(players);
-                            adapter.notifyDataSetChanged();
+                            adapter.notifyDataSetChanged(); // Update RecyclerView
+                            // Populate spinner after data is fetched
+                            getUsernamesInLobby(adapter); // This also updates the spinner adapter
+                            isHost = lobby.getHost().equals(username);
+                            adapter.updateHostStatus(isHost);
+
+
                         } catch (JSONException e) {
                             e.printStackTrace();
                             Toast.makeText(LobbiesActivity.this, "Failed to parse lobby details", Toast.LENGTH_SHORT).show();
@@ -228,7 +475,6 @@ public class LobbiesActivity extends AppCompatActivity implements WebSocketListe
                         Log.e("LobbiesActivity", "Error getting lobby details: " + error.toString());
                     }
                 });
-
         Volley.newRequestQueue(this).add(request);
     }
 
@@ -242,7 +488,6 @@ public class LobbiesActivity extends AppCompatActivity implements WebSocketListe
                     Lobby lobby = parseLobbyResponse(response);
                     if (lobby != null) {
                         //TODO FIX THIS Toast.makeText(LobbiesActivity.this, "Joined lobby successfully", Toast.LENGTH_SHORT).show();
-
                     } else {
                         Toast.makeText(LobbiesActivity.this, "Failed to join lobby", Toast.LENGTH_SHORT).show();
                     }
@@ -257,6 +502,7 @@ public class LobbiesActivity extends AppCompatActivity implements WebSocketListe
             }
         });
         Volley.newRequestQueue(this).add(request);
+        getLobbyDetails(roomId);
     }
 
     private void createLobbyDialog() {
@@ -268,7 +514,7 @@ public class LobbiesActivity extends AppCompatActivity implements WebSocketListe
         Button cancelButton = dialog.findViewById(R.id.Cancel);
         TextView lobbySizeTextView = dialog.findViewById(R.id.lobbySize);
         Slider slider = dialog.findViewById(R.id.slider);
-        lobbySizeTextView.setText(String.valueOf(slider.getValue()));
+        lobbySizeTextView.setText(String.valueOf(2));
         slider.addOnChangeListener(new Slider.OnChangeListener() {
             @Override
             public void onValueChange(Slider slider, float value, boolean fromUser) {
@@ -311,6 +557,8 @@ public class LobbiesActivity extends AppCompatActivity implements WebSocketListe
             }
         });
         Volley.newRequestQueue(this).add(request);
+        isHost = true;
+
     }
 
     private Lobby parseLobbyResponse(JSONObject response) throws JSONException {
@@ -318,8 +566,14 @@ public class LobbiesActivity extends AppCompatActivity implements WebSocketListe
         int roomSize = response.getInt("roomSize");
         int playerCount = response.getInt("playerCount");
         String host = response.getString("host");
+        currentHostUsername = host;
         boolean finished = response.getBoolean("finished");
         long lobbyId = response.getLong("id");
+        if (username.equals(host)) {
+            WebSocketManager.getInstance().sendMessage("changeHost to " + username);
+            isHost = true;
+            adapter.updateHostStatus(isHost);
+        }
         // Parse players' details
         List<UserFriend> players = new ArrayList<>();
         JSONArray playersArray = response.getJSONArray("players");
@@ -333,7 +587,7 @@ public class LobbiesActivity extends AppCompatActivity implements WebSocketListe
                 joinedLobby = true;
             }
         }
-        return new Lobby(host, playerCount, roomSize, lobbyId, players);
+        return new Lobby(host, playerCount, roomSize, lobbyId, players, host);
     }
 
 
@@ -355,7 +609,7 @@ public class LobbiesActivity extends AppCompatActivity implements WebSocketListe
                         long id = jsonObject.getLong("id");
                         //boolean started = jsonObject.getBoolean("started");
                         if (finished != true) {
-                            lobbyList.add(new Lobby(host, playerCount, roomSize, id, null));
+                            lobbyList.add(new Lobby(host, playerCount, roomSize, id, null, null));
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -398,13 +652,67 @@ public class LobbiesActivity extends AppCompatActivity implements WebSocketListe
 
     public void onWebSocketMessage(String message) {
         runOnUiThread(() -> {
+            SharedPreferences sharedPreferences = getSharedPreferences("roomID", MODE_PRIVATE);
+            int roomId = sharedPreferences.getInt("ROOM_ID", -1);
             String s = msgTv.getText().toString();
             msgTv.setText(s + "\n" + message);
             if (message.contains("lobbyStart!")) {
-                SharedPreferences sharedPreferences = getSharedPreferences("roomID", MODE_PRIVATE);
-                int roomId = sharedPreferences.getInt("ROOM_ID", -1);
-                beginGame(roomId);
+                if (!gameStarted) {
+                    beginGame(roomId, questionID);
+                }
+            } else if (message.contains("joinedLobby")) {
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                getLobbyDetails(roomId);
+                refreshLobbyList();
+            } else if (message.contains("leftLobby")) {
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                if (message.contains(currentHostUsername)) {
+                    if (username.equals(currentHostUsername)) {
+                        startGame.setVisibility(View.VISIBLE);
+                        changeHost.setVisibility(View.VISIBLE);
+                        changeHostSpinner.setVisibility(View.VISIBLE);
+                        changeHostText.setVisibility(View.VISIBLE);
+                        numQuestionsSlider.setVisibility(View.VISIBLE);
+                        numQuestionsText.setVisibility(View.VISIBLE);
+                        numQuestions.setVisibility(View.VISIBLE);
+                        enterCategory.setVisibility(View.VISIBLE);
+                        category.setVisibility(View.VISIBLE);
+                        isHost = true;
+                        adapter.updateHostStatus(isHost);
+//                        adapter.notifyDataSetChanged();
+                    }
+                }
+
+                getLobbyDetails(roomId);
+                refreshLobbyList();
+            } else if (message.endsWith("changeHost to " + username)) {
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                startGame.setVisibility(View.VISIBLE);
+                changeHost.setVisibility(View.VISIBLE);
+                changeHostSpinner.setVisibility(View.VISIBLE);
+                changeHostText.setVisibility(View.VISIBLE);
+                enterCategory.setVisibility(View.VISIBLE);
+                category.setVisibility(View.VISIBLE);
+                numQuestionsSlider.setVisibility(View.VISIBLE);
+                numQuestionsText.setVisibility(View.VISIBLE);
+                numQuestions.setVisibility(View.VISIBLE);
+                isHost = false;
+                adapter.updateHostStatus(isHost);
+//                adapter.notifyDataSetChanged();
             }
+
         });
     }
 
@@ -432,24 +740,16 @@ public class LobbiesActivity extends AppCompatActivity implements WebSocketListe
     protected void onDestroy() {
         super.onDestroy();
         // Close WebSocket connection
-        webSocketManager.closeWebSocket();
-    }
-
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        Log.d("LobbiesActivity", "Back button pressed");
-        // Close WebSocket connection
-        WebSocketManager webSocketManager = WebSocketManager.getInstance();
         if (webSocketManager != null) {
             webSocketManager.closeWebSocket();
-            Log.d("LobbiesActivity", "WebSocket connection closed");
-        } else {
-            Log.e("LobbiesActivity", "WebSocketManager is null");
         }
     }
 
-
+    public void onBackPressed() {
+        super.onBackPressed();
+        // Close WebSocket connection
+        WebSocketManager.getInstance().closeWebSocket();
+    }
 
 
 }

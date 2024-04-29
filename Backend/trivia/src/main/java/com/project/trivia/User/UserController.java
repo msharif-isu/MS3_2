@@ -3,8 +3,12 @@ package com.project.trivia.User;
 import com.project.trivia.FriendsList.Friends;
 import com.project.trivia.FriendsList.FriendsRepository;
 import com.project.trivia.Leaderboard.Leaderboard;
+import com.project.trivia.UserStats.UserStats;
+import com.project.trivia.UserStats.UserStatsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -23,6 +27,9 @@ public class UserController {
     @Autowired
     FriendsRepository friendRepo;
 
+    @Autowired
+    UserStatsRepository statsRepo;
+
     private static String directory = System.getProperty("user.dir");
 
     private String success = "{\"message\":\"success\"}";
@@ -34,34 +41,41 @@ public class UserController {
     }
 
     @GetMapping(path = "/users/{id}")
-    public User getUserById( @PathVariable int id){
+    public User getUserById(@PathVariable int id) {
         return userRepository.findById(id);
     }
 
     @PostMapping(path = "/users")
-    public String createUser(@RequestBody User user){
+    public String createUser(@RequestBody User user) {
         Friends temp = new Friends(user.getUsername());
+        UserStats stats = new UserStats(user, user.getUsername());
+        Leaderboard leaderboard = new Leaderboard(0, 0, 0, 0, 0, user.getUsername(), user);
+
         if (user == null)
             return failure;
         else if(userRepository.existsByUsername(user.getUsername())){
-            return failure;
+            return "Username is already taken.";
         }
+        statsRepo.save(stats);
+
+        user.setStats(stats);
+        user.setLeaderboard(leaderboard);
         userRepository.save(user);
         friendRepo.save(temp);
         return success;
     }
 
     @PutMapping("/users/{id}")
-    public User updateUser(@PathVariable int id, @RequestBody User request){
+    public User updateUser(@PathVariable int id, @RequestBody User request) {
         User user = userRepository.findById(id);
-        if(user == null)
+        if (user == null)
             return null;
         userRepository.save(request);
         return userRepository.findById(id);
     }
 
     @DeleteMapping(path = "/users/{id}")
-    public String deleteUser(@PathVariable int id){
+    public String deleteUser(@PathVariable int id) {
         userRepository.deleteById(id);
         friendRepo.deleteById(id);
         return success;
@@ -70,9 +84,9 @@ public class UserController {
 
     //Gives user points
     @PutMapping(path = "/users/{username}/{points}")
-    public User givePoints(@PathVariable String username , @PathVariable int points){
+    public User givePoints(@PathVariable String username, @PathVariable int points) {
         User user = userRepository.findByUsername(username);
-        if(user == null)
+        if (user == null)
             return null;
         user.setPoints((int) (user.getPoints() + points));
         userRepository.save(user);
@@ -80,9 +94,9 @@ public class UserController {
     }
 
     @PutMapping(path = "/editBio/{username}/{bio}")
-    public User editBio(@PathVariable String username, @PathVariable String bio){
+    public User editBio(@PathVariable String username, @PathVariable String bio) {
         User user = userRepository.findByUsername(username);
-        if(user == null)
+        if (user == null)
             return null;
         user.setBio(bio);
         userRepository.save(user);
@@ -92,7 +106,6 @@ public class UserController {
 
 
     //Temp way to get id of username passowrd
-
     @GetMapping(path = "/users/getIdByUsername/{username}")
     public int getIdByUsername(@PathVariable String username) {
         User user = userRepository.findByUsername(username);
@@ -132,29 +145,36 @@ public class UserController {
     }
 
 
-    @GetMapping(value = "/images/{id}", produces = MediaType.IMAGE_JPEG_VALUE)
-    byte[] getImageById(@PathVariable int id) throws IOException {
-        User user = userRepository.findById(id);
+    @GetMapping(value = "/images/{username}", produces = MediaType.IMAGE_JPEG_VALUE)
+    byte[] getImageById(@PathVariable String username) throws IOException {
+        User user = userRepository.findByUsername(username);
         File imageFile = new File(user.getFilePath());
         return Files.readAllBytes(imageFile.toPath());
     }
 
     @PostMapping("/setPfp/{id}")
-    public String handleFileUpload(@RequestParam("image") MultipartFile imageFile, @PathVariable int id)  {
-
+    public String handleFileUpload(@RequestParam("image") MultipartFile imageFile, @PathVariable int id) {
         try {
-            File destinationFile = new File(directory + File.separator + imageFile.getOriginalFilename());
-            imageFile.transferTo(destinationFile);  // save file to disk
-
             User user = userRepository.findById(id);
+            String username = user.getUsername();
+
+            // Create a directory for profile pictures if it doesn't exist
+            String profilePicturesDirectory = directory + File.separator + "profile_pictures";
+            File profilePicturesDir = new File(profilePicturesDirectory);
+            if (!profilePicturesDir.exists()) {
+                profilePicturesDir.mkdirs();
+            }
+            String imageFileName = id + "_" + username + ".jpg";
+            File destinationFile = new File(profilePicturesDirectory + File.separator + imageFileName);
+            imageFile.transferTo(destinationFile);
             user.setFilePath(destinationFile.getAbsolutePath());
             userRepository.save(user);
-
             return "File uploaded successfully: " + destinationFile.getAbsolutePath();
         } catch (IOException e) {
             return "Failed to upload file: " + e.getMessage();
         }
     }
+
 
 
 }
