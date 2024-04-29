@@ -1,6 +1,7 @@
 package com.project.trivia.Leaderboard;
 import java.util.List;
 
+import com.project.trivia.Achievements.Achievement;
 import com.project.trivia.Questions.Question;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -60,15 +61,13 @@ public class LeaderboardController {
     @PutMapping(path = "/leaderboard/{id}")
     Leaderboard changePoints(@PathVariable int id, @RequestBody Leaderboard request) {
         Leaderboard lb = leaderboardRepository.findById(id);
-        if (lb == null)
+        if (lb == null){
             return null;
-        lb.setName(request.getName());
-        lb.setUserPoints(request.getUserPoints());
-        lb.setWeeklyPoints(request.getWeeklyPoints());
-        lb.setMonthlyPoints(request.getMonthlyPoints());
-        lb.setYearlyPoints(request.getYearlyPoints());
-        lb.setLifetimePoints(request.getLifetimePoints());
+        }
+
+        leaderboardRepository.save(lb);
         return leaderboardRepository.findById(id);
+
     }
 
 }

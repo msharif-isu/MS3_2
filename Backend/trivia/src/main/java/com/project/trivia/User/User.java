@@ -45,12 +45,13 @@ public class User {
 
 
 
-    public User(String username, String password, String email) {
+    public User(String username, String password, String email, Leaderboard leaderboard) {
         this.username = username;
         this.password = password;
         this.email = email;
         bio = "";
         points = 0;
+        this.leaderboard = leaderboard;
     }
 
     public User() {
