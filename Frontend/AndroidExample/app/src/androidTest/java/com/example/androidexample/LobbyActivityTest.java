@@ -17,9 +17,11 @@ import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import org.junit.Before;
+import org.junit.FixMethodOrder;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.junit.runners.MethodSorters;
 
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.scrollTo;
@@ -29,6 +31,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
 @RunWith(AndroidJUnit4.class)
+@FixMethodOrder(MethodSorters.JVM)
 public class LobbyActivityTest {
 
     @Rule
@@ -75,7 +78,7 @@ public class LobbyActivityTest {
     }
 
     @Test
-    public void testJoinLobby() {
+    public void testJoiningAndLeavingLobby() {
         onView(withId(R.id.lobbyList)).perform(
                 RecyclerViewActions.actionOnItemAtPosition(
                         0, RecycleViewAction.clickChildViewWithId(R.id.button2)));
@@ -84,7 +87,19 @@ public class LobbyActivityTest {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+        onView(withId(R.id.buttonJoinRoom)).perform(click());
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         onView(withId(R.id.recycleView)).check(matches(isDisplayed()));
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        onView(withId(R.id.buttonLeaveRoom)).perform(click());
     }
 
 //    @Test
