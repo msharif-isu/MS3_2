@@ -21,6 +21,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
@@ -71,6 +72,8 @@ class raphaelTest {
 	@Test
 	void userLeaderboardTest() {
 		//lbRepo.save(lbInit);
+		userInit.setBio("BIO");
+		userInit.setUsername("Alok");
 		userRepo.save(userInit);
 		//lbRepo.findById(1).setUser(userRepo.findById(1));
 		//lbRepo.save(lbInit);
@@ -84,6 +87,20 @@ class raphaelTest {
 		assertThat(lb1.getStatusCode()).isEqualTo(HttpStatus.OK);
 		assertThat(lb1.getBody().getUser()).isEqualTo(lbRepo.findById(1).getUser());
 		assertThat(userInit.getLeaderboard()).isEqualTo(lb1.getBody());
+		assertThat(userInit.getUsername()).isEqualTo("Alok");
+		assertThat(userInit.getBio()).isEqualTo("BIO");
+
+		ResponseEntity<Leaderboard[]> lb2 = restTemplate.getForEntity("/leaderboard", Leaderboard[].class);
+		assertThat(lb2.getBody().length).isEqualTo(lbRepo.findAll().toArray().length);
+
+
+		ResponseEntity<Leaderboard> lb4 = restTemplate.postForEntity("/leaderboard/addpoints/1/100", lbInit, Leaderboard.class);
+
+
+		ResponseEntity<Leaderboard> lb3 = restTemplate.getForEntity("/leaderboard/1", Leaderboard.class);
+		assertThat(lb3.getBody().getName()).isEqualTo(lbRepo.findById(1).getName());
+		assertThat(lb3.getBody().getUserPoints()).isEqualTo(lbRepo.findById(1).getUserPoints());
+		
 	}
 
 	@Test
@@ -119,6 +136,16 @@ class raphaelTest {
 		ResponseEntity<Question[]> questTest = restTemplate.getForEntity("/query/topic/Philosophy", Question[].class);
 		assertThat(questTest.getStatusCode()).isEqualTo(HttpStatus.OK);
 		assertArrayEquals(questTest.getBody(), questArray);
+
+		ResponseEntity<Question> questTest2 = restTemplate.getForEntity("/question/1", Question.class);
+		assertThat(questTest2.getBody().getQuestion()).isEqualTo(questRepo.findById(1).getQuestion());
+
+		ResponseEntity<Answer[]> questTest3 = restTemplate.getForEntity("/question/answers/1", Answer[].class);
+		assertThat(questTest3.getBody().length).isEqualTo(questRepo.findById(1).getAnswers().size());
+
+		questRepo.findById(1).setAnswerList(Arrays.stream(questTest3.getBody()).toList());
+		//assertArrayEquals(questTest3.getBody(), questRepo.findById(1).getAnswers().toArray());
+		//assertArrayEquals(questTest3.getBody(), questRepo.findById(1).getAnswers().toArray());
 		//assertArrayEquals(questRepo.findById(1).getAnswers().toArray(), questArray[0].getAnswers().toArray());
 	}
 
@@ -135,6 +162,10 @@ class raphaelTest {
 		assertThat(ansTest.getBody().getQuestion()).isEqualTo(questRepo.findById(1));
 		assertThat(q1.getAnswers().get(ansId-1)).isEqualTo(ansTest.getBody());
 		q1.getAnswers().remove(ansId-1);
+
+		ResponseEntity<Answer> ansTest2 = restTemplate.getForEntity("/answer/1", Answer.class);
+		assertThat(ansTest2.getStatusCode()).isEqualTo(HttpStatus.OK);
+		assertThat(ansTest2.getBody().getAnswer()).isEqualTo("Thales of Miletusss");
 	}
 
 	@Test
@@ -151,6 +182,7 @@ class raphaelTest {
 		assertThat(ansTest.getStatusCode()).isEqualTo(HttpStatus.OK);
 		assertThat(ogAnswer).isEqualTo(ansTest.getBody());
 	}
+
 
 
 

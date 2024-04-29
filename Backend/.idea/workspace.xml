@@ -35,6 +35,7 @@
     "JUnit.leadboardTest.executor": "Run",
     "JUnit.leaderboardTest.executor": "Run",
     "JUnit.raphaelTest.executor": "Run",
+    "JUnit.raphaelTest.userLeaderboardTest.executor": "Run",
     "JUnit.trivia in trivia.executor": "Run",
     "Maven.trivia [package].executor": "Run",
     "RequestMappingsPanelOrder0": "0",
@@ -112,10 +113,33 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="trivia in trivia" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="raphaelTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="trivia" />
-      <option name="TEST_OBJECT" value="directory" />
-      <dir value="$PROJECT_DIR$/trivia/src/test/java/com/project/trivia" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.project.trivia.raphaelTests.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.project.trivia.raphaelTests" />
+      <option name="MAIN_CLASS_NAME" value="com.project.trivia.raphaelTests.raphaelTest" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="raphaelTest.userLeaderboardTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="trivia" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.project.trivia.raphaelTests.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.project.trivia.raphaelTests" />
+      <option name="MAIN_CLASS_NAME" value="com.project.trivia.raphaelTests.raphaelTest" />
+      <option name="METHOD_NAME" value="userLeaderboardTest" />
+      <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -130,17 +154,18 @@
     <recent_temporary>
       <list>
         <item itemvalue="JUnit.java in trivia" />
+        <item itemvalue="JUnit.raphaelTest" />
+        <item itemvalue="JUnit.raphaelTest.userLeaderboardTest" />
         <item itemvalue="JUnit.TriviaApplicationTests" />
         <item itemvalue="JUnit.TriviaApplicationTests.contextLoads" />
-        <item itemvalue="JUnit.trivia in trivia" />
       </list>
     </recent_temporary>
   </component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="jdk-17.0.9-jbr-17.0.9-4caba194b151-51f1b679" />
-        <option value="jdk-21.0.2-openjdk-21.0.2-4caba194b151-4f524021" />
+        <option value="bundled-jdk-9f38398b9061-18abd8497189-intellij.indexing.shared.core-IU-241.14494.240" />
+        <option value="bundled-js-predefined-1d06a55b98c1-74d2a5396914-JavaScript-IU-241.14494.240" />
       </set>
     </attachedChunks>
   </component>
@@ -167,6 +192,7 @@
       <workItem from="1713757540193" duration="1111000" />
       <workItem from="1713758675022" duration="10649000" />
       <workItem from="1714018060978" duration="3379000" />
+      <workItem from="1714358287822" duration="5086000" />
     </task>
     <servers />
   </component>
@@ -174,9 +200,15 @@
     <option name="version" value="3" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/Backend$java_in_trivia.ic" NAME="java in trivia Coverage Results" MODIFIED="1714362894449" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="true" />
     <SUITE FILE_PATH="coverage/Backend$TriviaApplicationTests.ic" NAME="TriviaApplicationTests Coverage Results" MODIFIED="1712864684884" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
       <FILTER>com.project.trivia.*</FILTER>
     </SUITE>
-    <SUITE FILE_PATH="coverage/Backend$java_in_trivia.ic" NAME="java in trivia Coverage Results" MODIFIED="1714027169425" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
+    <SUITE FILE_PATH="coverage/Backend$raphaelTest.ic" NAME="raphaelTest Coverage Results" MODIFIED="1714360174954" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="true">
+      <FILTER>com.project.trivia.raphaelTests.*</FILTER>
+    </SUITE>
+    <SUITE FILE_PATH="coverage/Backend$raphaelTest_userLeaderboardTest.ic" NAME="raphaelTest.userLeaderboardTest Coverage Results" MODIFIED="1714359381248" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="true">
+      <FILTER>com.project.trivia.raphaelTests.*</FILTER>
+    </SUITE>
   </component>
 </project>
