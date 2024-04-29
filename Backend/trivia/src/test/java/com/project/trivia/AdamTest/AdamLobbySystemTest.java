@@ -95,7 +95,6 @@ public class AdamLobbySystemTest {
         assertNull(userRepo.findByUsername(user1.getUsername()));
         assertNull(userRepo.findByUsername(user2.getUsername()));
 
-
     }
 
 }

@@ -50,6 +50,7 @@ public class UserController {
         if (user.getUsername() == null)
             return failure;
         Friends temp = new Friends(user.getUsername());
+        UserStats stats = new UserStats();
         if(userRepository.existsByUsername(user.getUsername())){
             return failure;
         }
@@ -79,9 +80,6 @@ public class UserController {
             user.setEmail(request.getEmail());
         }
         userRepository.save(user);
-        if (user == null)
-            return null;
-        userRepository.save(request);
         return userRepository.findById(id);
     }
 

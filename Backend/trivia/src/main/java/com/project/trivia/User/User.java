@@ -40,7 +40,7 @@ public class User {
     @JsonIgnore
     private Lobby lobby;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
     List<MatchHistory> pastMatches;
 
 
@@ -65,6 +65,7 @@ public class User {
         bio = "";
         points = 0;
         friends = new ArrayList<>();
+        pastMatches = new ArrayList<>();
         lobby = null;
     }
 
