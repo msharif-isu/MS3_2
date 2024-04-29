@@ -1,12 +1,15 @@
 package com.project.trivia.User;
 
+import com.project.trivia.MatchHistory.MatchHistory;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.project.trivia.FriendsList.Friends;
 import com.project.trivia.Leaderboard.Leaderboard;
 import com.project.trivia.Lobby.Lobby;
+import com.project.trivia.UserStats.UserStats;
 import jakarta.persistence.*;
 
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -33,9 +36,18 @@ public class User {
     private Leaderboard leaderboard;
 
     @ManyToOne
-    @JoinColumn(name="lobby_id")
+    @JoinColumn(name = "lobby_id")
     @JsonIgnore
     private Lobby lobby;
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
+    List<MatchHistory> pastMatches;
+
+
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "stats_id", referencedColumnName = "id")
+    private UserStats stats;
 
 
     public User(String username, String password, String email) {
@@ -44,18 +56,21 @@ public class User {
         this.email = email;
         bio = "";
         points = 0;
+        pastMatches = new ArrayList<>();
+        friends = new ArrayList<>();
+        lobby = null;
     }
 
     public User() {
-
+        bio = "";
+        points = 0;
+        friends = new ArrayList<>();
+        pastMatches = new ArrayList<>();
+        lobby = null;
     }
 
     public int getId() {
         return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public String getUsername() {
@@ -90,7 +105,6 @@ public class User {
         this.points = points;
     }
 
-
     public List<Friends> getFriends() {
         return friends;
     }
@@ -116,20 +130,36 @@ public class User {
     }
 
 
-    public Leaderboard getLeaderboard() {return leaderboard;}
+    public Leaderboard getLeaderboard() {
+        return leaderboard;
+    }
 
     public void setLeaderboard(Leaderboard leaderboard) {
         this.leaderboard = leaderboard;
     }
 
-
-
     public Lobby getLobby() {
         return lobby;
     }
+
     public void setLobby(Lobby lobbyId) {
         this.lobby = lobbyId;
     }
+
+    public List<MatchHistory> getPastMatches() {
+        return pastMatches;
+    }
+
+    public void setPastMatches(List<MatchHistory> pastMatches) {
+        this.pastMatches = pastMatches;
+    }
+
+    public UserStats getStats() {
+        return stats;
+    }
+
+    public void setStats(UserStats stats) {
+        this.stats = stats;
 
     @Override
     public boolean equals(Object o) {
@@ -140,7 +170,6 @@ public class User {
         if ((this.password == null) ? (other.password != null) : !this.password.equals(other.password)) {return false;}
         if ((this.email == null) ? (other.email != null) : !this.email.equals(other.email)) {return false;}
         return true;
-
     }
 
 }
