@@ -38,7 +38,7 @@ public class User {
     private Leaderboard leaderboard;
 
     @ManyToOne
-    @JoinColumn(name = "lobby_id")
+    @JoinColumn(name="lobby_id")
     @JsonIgnore
     private Lobby lobby;
 
@@ -57,13 +57,14 @@ public class User {
     private UserStats stats;
 
 
-    public User(String username, String password, String email) {
+    public User(String username, String password, String email, Leaderboard leaderboard) {
         this.username = username;
         this.password = password;
         this.email = email;
         bio = "";
         points = 0;
         pastMatches = new ArrayList<>();
+        this.leaderboard = leaderboard;
     }
 
     public User() {

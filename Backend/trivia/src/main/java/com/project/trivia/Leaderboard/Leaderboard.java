@@ -20,13 +20,14 @@ public class Leaderboard {
     @JsonIgnore
     private User user;
 
-    public Leaderboard(int userPoints, int weeklyPoints, int monthlyPoints, int yearlyPoints, int lifetimePoints, String name) {
+    public Leaderboard(int userPoints, int weeklyPoints, int monthlyPoints, int yearlyPoints, int lifetimePoints, String name, User user) {
         this.userPoints = userPoints;
         this.weeklyPoints = weeklyPoints;
         this.monthlyPoints = monthlyPoints;
         this.yearlyPoints = yearlyPoints;
         this.lifetimePoints = lifetimePoints;
         this.name = name;
+        this.user = user;
     }
     public Leaderboard() {};
 
