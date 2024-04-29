@@ -125,6 +125,7 @@ public class LobbiesActivity extends AppCompatActivity implements WebSocketListe
 
         createLobbyButton.setOnClickListener(view -> {
             createLobbyDialog();
+            isInLobby = true;
         });
     }
 

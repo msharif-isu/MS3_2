@@ -268,4 +268,30 @@ public class ProfileFragmentTest {
         Espresso.onView(withText(FRIEND_NAME)).check(ViewAssertions.doesNotExist());
     }
 
+    @Test
+    public void testMatchHistory() {
+        ActivityScenario<MainActivity> scenario = activityScenarioRule.getScenario();
+        scenario.onActivity(activity -> {
+            Context context = activity.getApplicationContext();
+            SharedPreferences prefs = context.getSharedPreferences("UserData", Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = prefs.edit();
+            editor.putString("USERNAME", VALID_USERNAME);
+            editor.putInt("USER_ID", VALID_USER_ID);
+            editor.apply();
+        });
+        Espresso.onView(withId(R.id.bottomNavigationView)).perform(ViewActions.click());
+        Espresso.onView(withId(R.id.profile)).perform(ViewActions.click());
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        Espresso.onView(withId(R.id.matchHistory)).perform(ViewActions.click());
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
 }

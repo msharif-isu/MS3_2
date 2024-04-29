@@ -68,7 +68,7 @@ public class AlokSystemTest {
         }
         onView(withId(R.id.jeopardyButton)).perform(click());
         try {
-            Thread.sleep(500);
+            Thread.sleep(1000);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
@@ -174,5 +174,7 @@ public class AlokSystemTest {
         onView(withId(R.id.question_submission_answer_input)).check(matches(withText("")));
         onView(withId(R.id.question_submission_question_type_input)).check(matches(withText("")));
     }
+
+    //TODO click on more menu buttons (achievements, singleplayer)
 }
 

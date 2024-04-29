@@ -56,22 +56,22 @@ public class OwaisSystemTest {
         Espresso.onView(withId(R.id.signup_email_edt)).check(matches(hasErrorText("Enter a valid email address")));
     }
 
-    //TODO uncomment for actual test. Commented for now because I do not want to keep making new users.
-    @Test
-    public void testValidSignup() {
-        Espresso.onView(withId(R.id.signup_username_edt)).perform(ViewActions.typeText(VALID_USERNAME));
-        Espresso.onView(withId(R.id.signup_password_edt)).perform(ViewActions.typeText(VALID_PASSWORD));
-        Espresso.onView(withId(R.id.signup_confirm_edt)).perform(ViewActions.typeText(VALID_PASSWORD));
-        Espresso.onView(withId(R.id.signup_email_edt)).perform(ViewActions.typeText(VALID_EMAIL));
-        Espresso.closeSoftKeyboard();
-        Espresso.onView(withId(R.id.signup_signup_btn)).perform(ViewActions.click());
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        Espresso.onView(withId(R.id.login_btn)).check(matches(isDisplayed()));
-    }
+//    //TODO uncomment for actual test. Commented for now because I do not want to keep making new users.
+//    @Test
+//    public void testValidSignup() {
+//        Espresso.onView(withId(R.id.signup_username_edt)).perform(ViewActions.typeText(VALID_USERNAME));
+//        Espresso.onView(withId(R.id.signup_password_edt)).perform(ViewActions.typeText(VALID_PASSWORD));
+//        Espresso.onView(withId(R.id.signup_confirm_edt)).perform(ViewActions.typeText(VALID_PASSWORD));
+//        Espresso.onView(withId(R.id.signup_email_edt)).perform(ViewActions.typeText(VALID_EMAIL));
+//        Espresso.closeSoftKeyboard();
+//        Espresso.onView(withId(R.id.signup_signup_btn)).perform(ViewActions.click());
+//        try {
+//            Thread.sleep(1000);
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
+//        Espresso.onView(withId(R.id.login_btn)).check(matches(isDisplayed()));
+//    }
 
 
 
