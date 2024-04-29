@@ -161,6 +161,17 @@ public class MultiplayerActivity extends AppCompatActivity implements WebSocketL
                 } catch (JSONException e) {
                     throw new RuntimeException(e);
                 }
+
+                SharedPreferences statsPrefs = getSharedPreferences("UserStatistics", MODE_PRIVATE);
+                SharedPreferences.Editor editor = statsPrefs.edit();
+                int totalAnswered = statsPrefs.getInt("TOTAL_ANSWERS", 0);
+                int gamesPlayed = statsPrefs.getInt("GAMES_PLAYED", 0);
+                totalAnswered += numQuestions;
+                gamesPlayed += 1;
+                editor.putInt("TOTAL_ANSWERS", totalAnswered);
+                editor.putInt("GAMES_PLAYED", gamesPlayed);
+                editor.apply();
+
                 startActivity(intent);
 
             } else {

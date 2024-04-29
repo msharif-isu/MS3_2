@@ -18,7 +18,7 @@ public class UserStats {
 
     private int questionsSumbitted;
 
-    private int numberOfFreinds;
+    private int numberOfFriends;
 
     private int gamesPlayed;
 
@@ -35,6 +35,7 @@ public class UserStats {
         losses = 0;
         questionsSumbitted = 0;
         gamesPlayed = 0;
+        numberOfFriends = 0;
     }
 
     public UserStats() {
@@ -46,6 +47,7 @@ public class UserStats {
         losses = 0;
         questionsSumbitted = 0;
         gamesPlayed = 0;
+        numberOfFriends = 0;
     }
 
     public int getId() {
@@ -97,11 +99,11 @@ public class UserStats {
     }
 
     public int getNumberOfFreinds() {
-        return numberOfFreinds;
+        return numberOfFriends;
     }
 
     public void setNumberOfFreinds(int numberOfFreinds) {
-        this.numberOfFreinds = numberOfFreinds;
+        this.numberOfFriends = numberOfFreinds;
     }
 
     public int getGamesPlayed() {

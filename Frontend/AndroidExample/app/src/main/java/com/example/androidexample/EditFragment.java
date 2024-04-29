@@ -89,6 +89,11 @@ public class EditFragment extends Fragment {
                     @Override
                     public void onResponse(JSONObject jsonObject) {
                         Toast.makeText(requireContext(), "Question successfully submitted to database", Toast.LENGTH_SHORT).show();
+                        incrementQuestionsSubmitted();
+
+                    }
+
+                    private void incrementQuestionsSubmitted() {
                     }
                 },
                 new Response.ErrorListener() {
