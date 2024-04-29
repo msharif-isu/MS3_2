@@ -161,6 +161,11 @@ public class User {
     }
 
     public UserStats getStats() {
+
+        //if a user doesn't have any stats gives them stats
+        if (stats == null) {
+            stats = new UserStats(this, username);
+        }
         return stats;
     }
 
