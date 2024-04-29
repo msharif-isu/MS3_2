@@ -9,19 +9,19 @@ public class UserStats {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    private double totalAnswered;
+    private int totalAnswered;
 
-    private double totalCorrect;
+    private int totalCorrect;
 
-    private double totalIncorrect;
+    private int totalIncorrect;
 
     private int winStreak;
 
-    private double wins;
+    private int wins;
 
-    private double losses;
+    private int losses;
 
-    private int questionsSumbitted;
+    private int questionsSubmitted;
 
     private int numberOfFreinds;
 
@@ -41,7 +41,7 @@ public class UserStats {
         winStreak = 0;
         wins = 0;
         losses = 0;
-        questionsSumbitted = 0;
+        questionsSubmitted = 0;
         gamesPlayed = 0;
     }
 
@@ -52,7 +52,7 @@ public class UserStats {
         winStreak = 0;
         wins = 0;
         losses = 0;
-        questionsSumbitted = 0;
+        questionsSubmitted = 0;
         gamesPlayed = 0;
     }
 
@@ -64,27 +64,27 @@ public class UserStats {
         this.id = id;
     }
 
-    public double getTotalAnswered() {
+    public int getTotalAnswered() {
         return totalAnswered;
     }
 
-    public void setTotalAnswered(double totalAnswered) {
+    public void setTotalAnswered(int totalAnswered) {
         this.totalAnswered = totalAnswered;
     }
 
-    public double getTotalCorrect() {
+    public int getTotalCorrect() {
         return totalCorrect;
     }
 
-    public void setTotalCorrect(double totalCorrect) {
+    public void setTotalCorrect(int totalCorrect) {
         this.totalCorrect = totalCorrect;
     }
 
-    public double getTotalIncorrect() {
+    public int getTotalIncorrect() {
         return totalIncorrect;
     }
 
-    public void setTotalIncorrect(double totalIncorrect) {
+    public void setTotalIncorrect(int totalIncorrect) {
         this.totalIncorrect = totalIncorrect;
     }
 
@@ -96,12 +96,12 @@ public class UserStats {
         this.winStreak = winStreak;
     }
 
-    public int getQuestionsSumbitted() {
-        return questionsSumbitted;
+    public int getQuestionsSubmitted() {
+        return questionsSubmitted;
     }
 
-    public void setQuestionsSumbitted(int questionsSumbitted) {
-        this.questionsSumbitted = questionsSumbitted;
+    public void setQuestionsSubmitted(int questionsSubmitted) {
+        this.questionsSubmitted = questionsSubmitted;
     }
 
     public int getNumberOfFreinds() {
@@ -120,19 +120,19 @@ public class UserStats {
         this.gamesPlayed = gamesPlayed;
     }
 
-    public double getLosses() {
+    public int getLosses() {
         return losses;
     }
 
-    public void setLosses(double losses) {
+    public void setLosses(int losses) {
         this.losses = losses;
     }
 
-    public double getWins() {
+    public int getWins() {
         return wins;
     }
 
-    public void setWins(double wins) {
+    public void setWins(int wins) {
         this.wins = wins;
     }
 }
