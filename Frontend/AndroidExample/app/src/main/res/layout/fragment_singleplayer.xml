@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".PlayFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/linearLayoutCompat"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".MainActivity">
+
+        <ImageView
+            android:id="@+id/imageView2"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="-50dp"
+            android:layout_marginTop="-24dp"
+            android:layout_marginEnd="48dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/imageView4"
+            app:srcCompat="@drawable/rectangle" />
+
+
+        <ImageView
+            android:id="@+id/imageView4"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="-50dp"
+            android:layout_marginTop="-24dp"
+            android:layout_marginEnd="24dp"
+            android:layout_marginBottom="24dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/imageView2"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/singlePlayerButton"
+            app:srcCompat="@drawable/button" />
+
+        <ImageView
+            android:id="@+id/imageView1"
+            android:layout_width="250dp"
+            android:layout_height="69dp"
+            android:layout_marginEnd="-50dp"
+            app:layout_constraintBottom_toTopOf="@+id/imageView2"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView14"
+            app:layout_constraintVertical_bias="0.571"
+            app:srcCompat="@drawable/logobox" />
+
+        <ImageView
+            android:id="@+id/vector_image"
+            android:layout_width="66dp"
+            android:layout_height="69dp"
+            android:layout_margin="16dp"
+            android:src="@drawable/baseline_play_circle_outline_24"
+            app:layout_constraintBottom_toBottomOf="@+id/imageView1"
+            app:layout_constraintStart_toStartOf="@+id/imageView1"
+            app:layout_constraintTop_toTopOf="@+id/imageView1"
+            app:tint="@color/purple" />
+
+        <TextView
+            android:id="@+id/textView12"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/aileron_bold"
+            android:maxLines="2"
+            android:text="Select"
+            android:textColor="#FFFFFF"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toTopOf="@+id/textView13"
+            app:layout_constraintStart_toEndOf="@+id/vector_image"
+            app:layout_constraintTop_toTopOf="@+id/imageView1" />
+
+        <TextView
+            android:id="@+id/textView13"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/aileron_bold"
+            android:maxLines="2"
+            android:text="Mode"
+            android:textColor="#FFFFFF"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toBottomOf="@+id/imageView1"
+            app:layout_constraintStart_toStartOf="@+id/textView12"
+            app:layout_constraintTop_toBottomOf="@+id/textView12" />
+
+        <TextView
+            android:id="@+id/textView14"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="-16dp"
+            android:fontFamily="@font/aileron_bold"
+            android:maxLines="2"
+            android:text="JeoparCY"
+            android:textColor="#1C2120"
+            android:textSize="34sp"
+            app:layout_constraintBottom_toBottomOf="@+id/logo"
+            app:layout_constraintStart_toEndOf="@+id/logo"
+            app:layout_constraintTop_toTopOf="@+id/logo" />
+
+        <ImageView
+            android:id="@+id/logo"
+            android:layout_width="110dp"
+            android:layout_height="110dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:src="@drawable/logo_placeholder"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="@color/grey" />
+
+        <ImageButton
+            android:id="@+id/singlePlayerButton"
+            android:layout_width="0dp"
+            android:layout_height="135dp"
+            android:layout_marginStart="-50dp"
+            android:layout_marginEnd="24dp"
+            android:layout_marginBottom="24dp"
+            android:background="@android:color/transparent"
+            android:src="@drawable/button"
+            app:layout_constraintBottom_toTopOf="@+id/jeopardyButton"
+            app:layout_constraintEnd_toEndOf="@+id/imageView4"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <ImageButton
+            android:id="@+id/jeopardyButton"
+            android:layout_width="0dp"
+            android:layout_height="135dp"
+            android:layout_marginStart="-50dp"
+            android:layout_marginEnd="24dp"
+            android:layout_marginBottom="48dp"
+            android:background="@android:color/transparent"
+            android:src="@drawable/button"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/imageView4"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <ImageView
+            android:id="@+id/singleplayer"
+            android:layout_width="110dp"
+            android:layout_height="110dp"
+            android:layout_marginEnd="16dp"
+            android:src="@drawable/singleplayer"
+            app:layout_constraintBottom_toBottomOf="@+id/singlePlayerButton"
+            app:layout_constraintEnd_toEndOf="@+id/singlePlayerButton"
+            app:layout_constraintTop_toTopOf="@+id/singlePlayerButton"
+            app:tint="@color/grey" />
+
+        <ImageView
+            android:id="@+id/jeopardy"
+            android:layout_width="110dp"
+            android:layout_height="110dp"
+            android:src="@drawable/singleplayer"
+            app:layout_constraintBottom_toBottomOf="@+id/jeopardyButton"
+            app:layout_constraintEnd_toEndOf="@+id/singleplayer"
+            app:layout_constraintTop_toTopOf="@+id/jeopardyButton"
+            app:tint="@color/grey" />
+
+        <TextView
+            android:id="@+id/singleplayertext"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:fontFamily="@font/aileron_bold"
+            android:text="Singleplayer"
+            android:textColor="#1C2120"
+            android:textSize="24sp"
+            app:layout_constraintBottom_toBottomOf="@+id/singlePlayerButton"
+            app:layout_constraintEnd_toStartOf="@+id/singleplayer"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/singlePlayerButton" />
+
+        <TextView
+            android:id="@+id/jeopardyplayertext"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/aileron_bold"
+            android:text="Jeopardy"
+            android:textColor="#1C2120"
+            android:textSize="24sp"
+            app:layout_constraintBottom_toBottomOf="@+id/jeopardyButton"
+            app:layout_constraintStart_toStartOf="@+id/singleplayertext"
+            app:layout_constraintTop_toTopOf="@+id/jeopardyButton" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</FrameLayout>

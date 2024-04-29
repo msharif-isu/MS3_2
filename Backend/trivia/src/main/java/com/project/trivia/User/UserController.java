@@ -48,7 +48,7 @@ public class UserController {
     @PostMapping(path = "/users")
     public String createUser(@RequestBody User user) {
         Friends temp = new Friends(user.getUsername());
-        UserStats stats = new UserStats(user);
+        UserStats stats = new UserStats(user, user.getUsername());
 
         if (user == null)
             return failure;
@@ -104,7 +104,6 @@ public class UserController {
 
 
     //Temp way to get id of username passowrd
-
     @GetMapping(path = "/users/getIdByUsername/{username}")
     public int getIdByUsername(@PathVariable String username) {
         User user = userRepository.findByUsername(username);

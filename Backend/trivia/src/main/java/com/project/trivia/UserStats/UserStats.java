@@ -27,11 +27,14 @@ public class UserStats {
 
     private int gamesPlayed;
 
+    private String username;
+
     @OneToOne(mappedBy = "stats", cascade = CascadeType.ALL)
     private User user;
 
-    public UserStats(User user) {
+    public UserStats(User user, String username) {
         this.user = user;
+        this.username = username;
         totalAnswered = 0;
         totalCorrect = 0;
         totalIncorrect = 0;
