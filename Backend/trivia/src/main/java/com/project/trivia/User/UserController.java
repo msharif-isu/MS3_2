@@ -3,10 +3,14 @@ package com.project.trivia.User;
 import com.project.trivia.FriendsList.Friends;
 import com.project.trivia.FriendsList.FriendsRepository;
 import com.project.trivia.Leaderboard.Leaderboard;
+import com.project.trivia.UserStats.UserStats;
+import com.project.trivia.UserStats.UserStatsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.io.File;
 import java.io.IOException;
@@ -23,56 +27,76 @@ public class UserController {
     @Autowired
     FriendsRepository friendRepo;
 
+    @Autowired
+    UserStatsRepository statsRepo;
+
     private static String directory = System.getProperty("user.dir");
 
     private String success = "{\"message\":\"success\"}";
     private String failure = "{\"message\":\"failure\"}";
 
     @GetMapping(path = "/users")
-    List<User> getAllUser() {
+    public List<User> getAllUser() {
         return userRepository.findAll();
     }
 
     @GetMapping(path = "/users/{id}")
-    public User getUserById( @PathVariable int id){
+    public User getUserById(@PathVariable int id) {
         return userRepository.findById(id);
     }
 
     @PostMapping(path = "/users")
-    public String createUser(@RequestBody User user){
-        Friends temp = new Friends(user.getUsername());
-        if (user == null)
+    public String createUser(@RequestBody User user) {
+        if (user.getUsername() == null)
             return failure;
-        else if(userRepository.existsByUsername(user.getUsername())){
+        Friends temp = new Friends(user.getUsername());
+        UserStats stats = new UserStats();
+        if(userRepository.existsByUsername(user.getUsername())){
             return failure;
         }
+        statsRepo.save(stats);
+
+        user.setStats(stats);
         userRepository.save(user);
         friendRepo.save(temp);
         return success;
     }
 
     @PutMapping("/users/{id}")
-    public User updateUser(@PathVariable int id, @RequestBody User request){
+    public User updateUser(@PathVariable int id, @RequestBody User request) {
         User user = userRepository.findById(id);
         if(user == null)
-            return null;
-        userRepository.save(request);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        if(request.getUsername() == null || userRepository.existsByUsername(request.getUsername())){
+            throw new ResponseStatusException(HttpStatus.I_AM_A_TEAPOT, "Username already Taken");
+        }
+        if(request.getUsername() != null) {
+            user.setUsername(request.getUsername());
+        }
+        if(request.getPassword() != null) {
+            user.setPassword(request.getPassword());
+        }
+        if(request.getEmail() != null) {
+            user.setEmail(request.getEmail());
+        }
+        userRepository.save(user);
         return userRepository.findById(id);
     }
 
     @DeleteMapping(path = "/users/{id}")
-    public String deleteUser(@PathVariable int id){
+    public String deleteUser(@PathVariable int id) {
+        Friends temp = friendRepo.findByUsername((userRepository.findById(id).getUsername()));
+        friendRepo.deleteById(temp.getId());
         userRepository.deleteById(id);
-        friendRepo.deleteById(id);
         return success;
     }
 
 
     //Gives user points
     @PutMapping(path = "/users/{username}/{points}")
-    public User givePoints(@PathVariable String username , @PathVariable int points){
+    public User givePoints(@PathVariable String username, @PathVariable int points) {
         User user = userRepository.findByUsername(username);
-        if(user == null)
+        if (user == null)
             return null;
         user.setPoints((int) (user.getPoints() + points));
         userRepository.save(user);
@@ -80,9 +104,9 @@ public class UserController {
     }
 
     @PutMapping(path = "/editBio/{username}/{bio}")
-    public User editBio(@PathVariable String username, @PathVariable String bio){
+    public User editBio(@PathVariable String username, @PathVariable String bio) {
         User user = userRepository.findByUsername(username);
-        if(user == null)
+        if (user == null)
             return null;
         user.setBio(bio);
         userRepository.save(user);
@@ -90,9 +114,7 @@ public class UserController {
     }
 
 
-
     //Temp way to get id of username passowrd
-
     @GetMapping(path = "/users/getIdByUsername/{username}")
     public int getIdByUsername(@PathVariable String username) {
         User user = userRepository.findByUsername(username);
@@ -102,7 +124,6 @@ public class UserController {
             return -1;
         }
     }
-
 
     @GetMapping(path = "/users/getIdByPassword/{password}")
     public ArrayList<Integer> getIdByPassword(@PathVariable String password) {
@@ -118,15 +139,14 @@ public class UserController {
     @GetMapping(path = "/users/getBio/{username}")
     public String getBioByUsername(@PathVariable String username) {
         User user = userRepository.findByUsername(username);
-        if (user != null) {
-            return user.getBio();
-        } else {
+        if (user == null) {
             return "User not found";
         }
+        return user.getBio();
     }
 
-    @GetMapping(path="/users/getPoints/{id}")
-    Leaderboard lb (@PathVariable int id) {
+    @GetMapping(path = "/users/getPoints/{id}")
+    Leaderboard lb(@PathVariable int id) {
         User user = userRepository.findById(id);
         return user.getLeaderboard();
     }
@@ -140,7 +160,7 @@ public class UserController {
     }
 
     @PostMapping("/setPfp/{id}")
-    public String handleFileUpload(@RequestParam("image") MultipartFile imageFile, @PathVariable int id)  {
+    public String handleFileUpload(@RequestParam("image") MultipartFile imageFile, @PathVariable int id) {
 
         try {
             File destinationFile = new File(directory + File.separator + imageFile.getOriginalFilename());
