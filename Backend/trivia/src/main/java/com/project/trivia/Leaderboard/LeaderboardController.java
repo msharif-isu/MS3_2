@@ -50,9 +50,11 @@ public class LeaderboardController {
     }
 
     @PostMapping(path = "/leaderboard")
-    Leaderboard createLeaderboardUser(@RequestBody Leaderboard lb){
+    String createLeaderboardUser(@RequestBody Leaderboard lb){
+        if (lb == null)
+            return failure;
         leaderboardRepository.save(lb);
-        return lb;
+        return success;
     }
 
     @PutMapping(path = "/leaderboard/{id}")
@@ -66,7 +68,6 @@ public class LeaderboardController {
         lb.setMonthlyPoints(request.getMonthlyPoints());
         lb.setYearlyPoints(request.getYearlyPoints());
         lb.setLifetimePoints(request.getLifetimePoints());
-        leaderboardRepository.save(lb);
         return leaderboardRepository.findById(id);
     }
 
