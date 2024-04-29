@@ -32,11 +32,17 @@ public class LeaderboardFragment extends Fragment {
     private LeaderboardAdapter leaderboardAdapter;
     private List<LeaderboardListItem> displayData;
     private int userId;
+    private Intent serviceIntent;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_leaderboard, container, false);
+
+        serviceIntent = new Intent(requireActivity(), LeaderboardWebSocketService.class) {{
+            setAction("CONNECT");
+            putExtra("key", "leaderboard");
+        }};
 
         SharedPreferences prefs = requireActivity().getSharedPreferences("UserData", Context.MODE_PRIVATE);
         userId = prefs.getInt("USER_ID", 0);
@@ -78,10 +84,7 @@ public class LeaderboardFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        Intent serviceIntent = new Intent(requireActivity(), LeaderboardWebSocketService.class) {{
-            setAction("CONNECT");
-            putExtra("key", "leaderboard");
-        }};
+
 
         LocalBroadcastManager
                 .getInstance(requireActivity())
@@ -98,5 +101,6 @@ public class LeaderboardFragment extends Fragment {
         LocalBroadcastManager
                 .getInstance(requireActivity())
                 .unregisterReceiver(messageReceiver);
+        requireActivity().stopService(serviceIntent);
     }
 }
