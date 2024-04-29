@@ -8,12 +8,7 @@ import java.util.List;
 
 public class Query {
 
-    public static List<Question> QueryTopic(List<Question> allTopics, String topic) {
-        allTopics.removeIf(n -> (!n.getQuestionType().equals(topic)));
-
-        return allTopics;
-    }
-    public static List<Question> Randomize(List<Question> questionList) {
+    public List<Question> Randomize(List<Question> questionList) {
         Collections.shuffle(questionList);
         return questionList;
     }
