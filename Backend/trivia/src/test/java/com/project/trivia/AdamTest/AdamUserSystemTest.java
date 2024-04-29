@@ -1,4 +1,4 @@
-package com.project.trivia;
+package com.project.trivia.AdamTest;
 
 
 import com.project.trivia.FriendsList.FriendsRepository;
@@ -8,6 +8,7 @@ import com.project.trivia.User.UserRepository;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.Before;
@@ -18,13 +19,12 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import static io.restassured.RestAssured.when;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 
 @RunWith(SpringRunner.class)
-public class AdamSystemTest {
+public class AdamUserSystemTest {
     @LocalServerPort
     int port;
 
@@ -79,13 +79,20 @@ public class AdamSystemTest {
         statusCode = response.getStatusCode();
         assertEquals(200, statusCode);
 
-        //Shouuld fail since alok is already in the table
+        //Should fail since alok is already in the table
         returnString = response.getBody().asString();
         assertEquals("{\"message\":\"failure\"}", returnString);
 
         //Make sure to remove the user from the table because it should be null
-        userRepo.deleteById(userRepo.findByUsername("TestAlok").getId());
-        friendsRepo.deleteById(friendsRepo.findByUsername("TestAlok").getId());
+        response = RestAssured.given().
+                delete("/users/" + userRepo.findByUsername("TestAlok").getId());
+
+        statusCode = response.getStatusCode();
+        assertEquals(200, statusCode);
+
+        returnString = response.getBody().asString();
+        assertEquals("{\"message\":\"success\"}", returnString);
+
         assertNull(userRepo.findByUsername("TestAlok"));
         assertNull(friendsRepo.findByUsername("TestAlok"));
 
@@ -151,6 +158,37 @@ public class AdamSystemTest {
         assertNull(userRepo.findByUsername("TestAlok"));
 
     }
+
+    @Test
+    public void getBioTest(){
+        //Test to make sure if a user doesn't exist
+        Response response = RestAssured.given().
+                get("/users/getBio/AOFjosdjofh");
+
+        int statusCode = response.getStatusCode();
+        assertEquals(200, statusCode);
+
+        String ReturnString = response.getBody().asString();
+        assertEquals("User not found", ReturnString);
+
+        //To check if bios match
+        User user = new User("TestAlok", "password123","aloks@iastate.edu");
+        user.setBio("this is a test Alok");
+        userRepo.save(user);
+
+        response = RestAssured.given().
+                get("/users/getBio/TestAlok");
+
+        statusCode = response.getStatusCode();
+        assertEquals(200, statusCode);
+
+        ReturnString = response.getBody().asString();
+        assertEquals("this is a test Alok", ReturnString);
+
+        userRepo.deleteById(userRepo.findByUsername("TestAlok").getId());
+        assertNull(userRepo.findByUsername("TestAlok"));
+    }
+
 
     @Test
     public void updatingUserInfoTest() {
@@ -225,73 +263,78 @@ public class AdamSystemTest {
     }
 
     @Test
-    public void lobbyCreationTest() {
-        User user1 = new User("TestAlok", "password123", "aloks@iastate.edu");
-        User user2 = new User("TestAlok2", "password456", "aloks@iastate.edu");
+    public void loginTest() {
+        User user = new User("TestAlok", "password123", "aloks@iastate.edu");
+        userRepo.save(user);
+
+        //2 user with the sames password as above
+        User user1 = new User("alokTest1", "password123", "aloks@iastate.edu");
         userRepo.save(user1);
+        User user2 = new User("alokTest2", "password123", "aloks@iastate.edu");
         userRepo.save(user2);
 
-        //http of the create lobby
-        String testUserEndpoint = "/create/" + user1.getId() + "/3";
 
-        Response response = RestAssured.given().
-                post(testUserEndpoint);
+        //reponse to get username and passwords id
+        Response usernameResponse = RestAssured.given().
+                get("users/getIdByUsername/TestAlok");
 
-        int statusCode = response.getStatusCode();
+        int statusCode = usernameResponse.getStatusCode();
         assertEquals(200, statusCode);
 
-        String returnString = response.getBody().asString();
-        try {
-            // Parse the response as a JSONObject
-            JSONObject returnObj = new JSONObject(returnString);
+        Response passwordReponse = RestAssured.given().
+                get("users/getIdByPassword/password123");
 
-            assertEquals("TestAlok", returnObj.getString("host"));
-            assertEquals(3, returnObj.getInt("roomSize"));
-            assertEquals(1, returnObj.getInt("playerCount"));
-            assertFalse(returnObj.getBoolean("finished"));
+        statusCode = passwordReponse.getStatusCode();
+        assertEquals(200, statusCode);
+
+        String usernameId = usernameResponse.getBody().asString();
+        String passwordIds = passwordReponse.getBody().asString();
+
+        try {
+            JSONArray passwords = new JSONArray(passwordIds);
+            boolean idFound = false;
+            for (int i = 0; i < passwords.length(); i++) {
+                int id = passwords.getInt(i);
+                if (id == user.getId()) {
+                    idFound = true;
+                    break;
+                }
+            }
+            assertTrue(idFound, "ID found in passwordIds");
+            assertEquals(user.getId(), Integer.valueOf(usernameId));
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
-        Lobby lobby = userRepo.findById(user1.getId()).getLobby();
-
-        testUserEndpoint = "/joinRoom/" + lobby.getId() + "/2";
-
-        //Test to add user to lobby
-        response = RestAssured.given().
-                put("/joinRoom/" + lobby.getId() + "/" + user2.getId());
-
-        statusCode = response.getStatusCode();
-        assertEquals(200, statusCode);
-
-        returnString = response.getBody().asString();
-        try {
-            // Parse the response as a JSONObject
-            JSONObject returnObj = new JSONObject(returnString);
-
-            assertEquals("TestAlok", returnObj.getString("host"));
-            assertEquals(2, returnObj.getInt("playerCount"));
-            assertEquals(userRepo.findById(user2.getId()).getLobby().getId(), returnObj.getLong("id"));
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-
-        //Make sure to remove the user from the table because it should be null
+        userRepo.deleteById(user.getId());
         userRepo.deleteById(user1.getId());
         userRepo.deleteById(user2.getId());
 
+        assertNull(userRepo.findByUsername(user.getUsername()));
         assertNull(userRepo.findByUsername(user1.getUsername()));
         assertNull(userRepo.findByUsername(user2.getUsername()));
 
+        //Check that if user doesn't exist the id is -1
+        usernameResponse = RestAssured.given().
+                get("users/getIdByUsername/TestAlok");
 
+        statusCode = usernameResponse.getStatusCode();
+        assertEquals(200, statusCode);
+
+        usernameId = usernameResponse.getBody().asString();
+
+        assertEquals(-1, Integer.valueOf(usernameId));
     }
+
 
     //Trival test
     @Test
     public void testFindById() {
+        User user = new User("TestAlok", "password123", "aloks@iastate.edu");
+        userRepo.save(user);
+
         Response response = RestAssured.given().
-                get("/users/1");
+                get("/users/" + user.getId());
 
         // Check status code
         int statusCode = response.getStatusCode();
@@ -303,10 +346,15 @@ public class AdamSystemTest {
             JSONObject returnObj = new JSONObject(returnString);
 
             // Access the username directly from the JSONObject
-            assertEquals(userRepo.findById(1).getUsername(), returnObj.get("username"));
+            assertEquals(userRepo.findById(user.getId()).getUsername(), returnObj.get("username"));
+            assertEquals(userRepo.findById(user.getId()).getPassword(), returnObj.get("password"));
+            assertEquals(userRepo.findById(user.getId()).getEmail(), returnObj.get("email"));
         } catch (JSONException e) {
             e.printStackTrace();
         }
+
+        userRepo.deleteById(user.getId());
+        assertNull(userRepo.findByUsername("TestALok"));
     }
 
     @Test
@@ -322,6 +370,44 @@ public class AdamSystemTest {
         // Check status code
         int statusCode = response.getStatusCode();
         assertEquals(200, statusCode);
+    }
+
+    @Test
+    public void givePointsTest(){
+        User user = new User("TestAlok", "password123", "aloks@iastate.edu");
+        userRepo.save(user);
+
+        Response response = RestAssured.given().
+                put("/users/TestAlok/12");
+
+        int statusCode = response.getStatusCode();
+        assertEquals(200, statusCode);
+
+        String returnString = response.getBody().asString();
+        try {
+            // Parse the response as a JSONObject
+            JSONObject returnObj = new JSONObject(returnString);
+
+            // Access the username directly from the JSONObject
+            assertEquals(userRepo.findById(user.getId()).getUsername(), returnObj.get("username"));
+            assertEquals(12, returnObj.get("points"));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        userRepo.deleteById(user.getId());
+        assertNull(userRepo.findByUsername("TestALok"));
+
+
+        //Retunr null if the user doesn't exist
+        response = RestAssured.given().
+                put("/users/afdiohsfih/12");
+
+        statusCode = response.getStatusCode();
+        assertEquals(200, statusCode);
+
+        returnString = response.getBody().asString();
+        assertEquals("", returnString);
     }
 
 

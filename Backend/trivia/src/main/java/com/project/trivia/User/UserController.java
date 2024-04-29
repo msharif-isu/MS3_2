@@ -76,8 +76,9 @@ public class UserController {
 
     @DeleteMapping(path = "/users/{id}")
     public String deleteUser(@PathVariable int id){
+        Friends temp = friendRepo.findByUsername((userRepository.findById(id).getUsername()));
+        friendRepo.deleteById(temp.getId());
         userRepository.deleteById(id);
-        friendRepo.deleteById(friendRepo.findByUsername(userRepository.findById(id).getUsername()).getId());
         return success;
     }
 
@@ -103,10 +104,7 @@ public class UserController {
         return user;
     }
 
-
-
     //Temp way to get id of username passowrd
-
     @GetMapping(path = "/users/getIdByUsername/{username}")
     public int getIdByUsername(@PathVariable String username) {
         User user = userRepository.findByUsername(username);
@@ -116,7 +114,6 @@ public class UserController {
             return -1;
         }
     }
-
 
     @GetMapping(path = "/users/getIdByPassword/{password}")
     public ArrayList<Integer> getIdByPassword(@PathVariable String password) {
@@ -132,11 +129,10 @@ public class UserController {
     @GetMapping(path = "/users/getBio/{username}")
     public String getBioByUsername(@PathVariable String username) {
         User user = userRepository.findByUsername(username);
-        if (user != null) {
-            return user.getBio();
-        } else {
+        if (user == null) {
             return "User not found";
         }
+        return user.getBio();
     }
 
     @GetMapping(path="/users/getPoints/{id}")
