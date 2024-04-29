@@ -1,4 +1,4 @@
-package com.project.trivia.MPQuestions;
+package com.project.trivia.Websocket;
 
 import java.io.IOException;
 import java.util.*;
@@ -8,6 +8,7 @@ import com.project.trivia.Questions.Question;
 import com.project.trivia.Questions.QuestionRepository;
 import com.project.trivia.User.User;
 import com.project.trivia.User.UserRepository;
+import com.project.trivia.MPQuestions.*;
 import com.project.trivia.roomChat.MessageRepository;
 import jakarta.websocket.OnClose;
 import jakarta.websocket.OnError;

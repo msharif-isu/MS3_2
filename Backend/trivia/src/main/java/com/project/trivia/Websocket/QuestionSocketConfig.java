@@ -1,4 +1,4 @@
-package com.project.trivia.MPQuestions;
+package com.project.trivia.Websocket;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

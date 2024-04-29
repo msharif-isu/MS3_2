@@ -6,8 +6,12 @@
   <component name="ChangeListManager">
     <list default="true" id="aa247b61-3439-49d8-9853-376a5b7b168c" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/trivia/src/main/java/com/project/trivia/Queryboard/Query.java" beforeDir="false" afterPath="$PROJECT_DIR$/trivia/src/main/java/com/project/trivia/Queryboard/Query.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/trivia/src/test/java/com/project/trivia/raphaelTests/raphaelTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/trivia/src/test/java/com/project/trivia/raphaelTests/raphaelTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/trivia/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/trivia/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/trivia/src/main/java/com/project/trivia/MPQuestions/QuestionSocket.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/trivia/src/main/java/com/project/trivia/MPQuestions/QuestionSocketConfig.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/trivia/src/main/java/com/project/trivia/User/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/trivia/src/main/java/com/project/trivia/User/User.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/trivia/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/trivia/src/main/resources/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/trivia/target/classes/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/trivia/target/classes/application.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -201,7 +205,7 @@
     <option name="version" value="3" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/Backend$java_in_trivia.ic" NAME="java in trivia Coverage Results" MODIFIED="1714363856225" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="true" />
+    <SUITE FILE_PATH="coverage/Backend$java_in_trivia.ic" NAME="java in trivia Coverage Results" MODIFIED="1714416872362" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="true" />
     <SUITE FILE_PATH="coverage/Backend$TriviaApplicationTests.ic" NAME="TriviaApplicationTests Coverage Results" MODIFIED="1712864684884" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
       <FILTER>com.project.trivia.*</FILTER>
     </SUITE>
