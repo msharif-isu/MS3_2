@@ -52,7 +52,7 @@ public class FriendsController {
         //updates each users friends stats
         user1.getStats().setNumberOfFreinds(user1.getStats().getNumberOfFreinds() + 1);
         user2.getStats().setNumberOfFreinds(user2.getStats().getNumberOfFreinds() + 1);
-
+//
         user1.getFriends().add(friend1);
         userRepo.save(user1);
 

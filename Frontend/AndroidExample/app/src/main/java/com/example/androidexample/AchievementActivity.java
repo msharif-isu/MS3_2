@@ -9,34 +9,28 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AchievementActivity extends AppCompatActivity {
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.viewpager.widget.ViewPager;
+import android.os.Bundle;
 
-    TextView achievementsUnlocked;
+import com.google.android.material.tabs.TabLayout;
+
+public class AchievementActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_achievement);
-        achievementsUnlocked = findViewById(R.id.unlocked);
+        setContentView(R.layout.achievement_pages);
 
-        List<Achievement> achievementList = new ArrayList<>();
-        achievementList.add(new Achievement("Create Account", "Create an account", 1, true));
-        achievementList.add(new Achievement("Very Lonely", "Play a game of singleplayer", 2, false));
-        achievementList.add(new Achievement("Jeopardy? Nah, JeoparCY!", "Play a game of Jeopardy", 3, false));
-        achievementList.add(new Achievement("Multiplayer Maverick", "Show off your skills in multiplayer mode!", 4, false));
+        ViewPager viewPager = findViewById(R.id.viewPager);
+        TabLayout tabLayout = findViewById(R.id.tabs);
 
-        int unlockedCount = 0;
-        for (Achievement achievement : achievementList) {
-            if (achievement.isUnlocked()) {
-                unlockedCount++;
-            }
-        }
-        int totalAchievements = achievementList.size();
-        achievementsUnlocked.setText(unlockedCount + "/" + totalAchievements);
+        ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
+        adapter.addFragment(new achievementPage1(), "Achievements");
+        adapter.addFragment(new achievementPage2(), "Stats");
 
-        RecyclerView recyclerView = findViewById(R.id.recyclerview);
-        AchievementAdapter adapter = new AchievementAdapter(achievementList);
-        recyclerView.setAdapter(adapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        viewPager.setAdapter(adapter);
+        tabLayout.setupWithViewPager(viewPager);
     }
 }
