@@ -46,7 +46,12 @@ public class AchievementController {
         Achievement ach = achievementRepository.findById(id);
         if (ach == null)
             return null;
-        achievementRepository.save(achievement);
+        ach.setUser(achievement.getUsername());
+        ach.setAccount(achievement.isAccount());
+        ach.setSinglePlayer(achievement.isSinglePlayer());
+        ach.setJeopardy(achievement.isJeopardy());
+        ach.setMultiPlayer(achievement.isMultiPlayer());
+        achievementRepository.save(ach);
         return achievementRepository.findById(id);
     }
 
