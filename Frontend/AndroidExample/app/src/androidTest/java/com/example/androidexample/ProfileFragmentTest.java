@@ -234,6 +234,11 @@ public class ProfileFragmentTest {
         Espresso.onView(withId(R.id.friendList))
                 .perform(RecyclerViewActions.scrollTo(hasDescendant(withText(FRIEND_NAME))))
                 .check(matches(hasDescendant(withText(FRIEND_NAME))));
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Test
