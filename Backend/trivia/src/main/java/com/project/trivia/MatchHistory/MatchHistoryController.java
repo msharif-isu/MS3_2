@@ -29,7 +29,7 @@ public class MatchHistoryController {
         matchHistory.setUser(user);
 
         //updates number of games the under played
-        user.getStats().setNumberOfFreinds(user.getStats().getGamesPlayed() + 1);
+        user.getStats().setGamesPlayed(user.getStats().getGamesPlayed() + 1);
 
         matchHistoryRepo.save(matchHistory);
         userRepo.save(user);
