@@ -73,6 +73,7 @@ public class achievementPage1 extends Fragment {
             questionsSubmitted = statsPrefs.getInt("QUESTIONS_SUBMITTED", 0);
             gamesPlayed = statsPrefs.getInt("GAMES_PLAYED", 0);
             numberOfFriends = statsPrefs.getInt("NUMBER_OF_FRIENDS", 0);
+            Log.d("Updated stats", "Games played and total answered" + gamesPlayed + " " +   totalAnswered);
 
             updateAchievements(achievementList);
             updateServerWithStats();

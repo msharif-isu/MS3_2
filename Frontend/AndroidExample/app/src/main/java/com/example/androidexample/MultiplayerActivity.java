@@ -163,15 +163,27 @@ public class MultiplayerActivity extends AppCompatActivity implements WebSocketL
                     throw new RuntimeException(e);
                 }
 
+//                SharedPreferences statsPrefs = getSharedPreferences("UserStatistics", MODE_PRIVATE);
+//                SharedPreferences.Editor editor = statsPrefs.edit();
+//                int totalAnswered = statsPrefs.getInt("TOTAL_ANSWERS", 0);
+//                int gamesPlayed = statsPrefs.getInt("GAMES_PLAYED", 0);
+//                totalAnswered += numQuestions;
+//                gamesPlayed += 1;
+//                editor.putInt("TOTAL_ANSWERS", totalAnswered);
+//                editor.putInt("GAMES_PLAYED", gamesPlayed);
+//                editor.apply();
+//
                 SharedPreferences statsPrefs = getSharedPreferences("UserStatistics", MODE_PRIVATE);
                 SharedPreferences.Editor editor = statsPrefs.edit();
                 int totalAnswered = statsPrefs.getInt("TOTAL_ANSWERS", 0);
                 int gamesPlayed = statsPrefs.getInt("GAMES_PLAYED", 0);
+                Log.d("Singleplayer", "Games played and total answered" + gamesPlayed +  totalAnswered);
                 totalAnswered += numQuestions;
                 gamesPlayed += 1;
-                editor.putInt("TOTAL_ANSWERS", totalAnswered);
-                editor.putInt("GAMES_PLAYED", gamesPlayed);
-                editor.apply();
+                updateServerWithStats(gamesPlayed, totalAnswered, statsPrefs.getInt("QUESTIONS_SUBMITTED", 0));
+                Log.d("Singleplayer", "Games played and total answered" + gamesPlayed + " " +   totalAnswered);
+                startActivity(intent);
+
 
                 startActivity(intent);
 
@@ -181,6 +193,20 @@ public class MultiplayerActivity extends AppCompatActivity implements WebSocketL
 
         });
     }
+    private void updateServerWithStats(int gamesPlayed, int totalAnswered, int questionsSubmitted) {
+        StatisticsService statsService = new StatisticsService(this);
+        statsService.updateGameStats(username, gamesPlayed, totalAnswered, questionsSubmitted, new StatisticsService.StatsCallback() {
+            @Override
+            public void onSuccess(UserStats userStats) {
+                Log.d("StatsUpdate", "Stats updated successfully");
+            }
+            @Override
+            public void onError(String errorMessage) {
+                Log.e("StatsUpdate", "Error updating stats: " + errorMessage);
+            }
+        });
+    }
+
 
     private void sentMatchHistory() throws JSONException {
         String url = RequestURLs.SERVER_HTTP_URL + "/" + username + "/saveGame";
