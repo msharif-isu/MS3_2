@@ -3,6 +3,7 @@ package com.project.trivia.AdamTest;
 
 import com.project.trivia.FriendsList.FriendsRepository;
 import com.project.trivia.Lobby.Lobby;
+import com.project.trivia.Lobby.LobbyRepository;
 import com.project.trivia.User.User;
 import com.project.trivia.User.UserRepository;
 import io.restassured.RestAssured;
@@ -30,6 +31,9 @@ public class AdamLobbySystemTest {
 
     @Autowired
     UserRepository userRepo;
+
+    @Autowired
+    LobbyRepository lobbyRepo;
 
     @Before
     public void setUp() {
@@ -95,6 +99,73 @@ public class AdamLobbySystemTest {
         assertNull(userRepo.findByUsername(user1.getUsername()));
         assertNull(userRepo.findByUsername(user2.getUsername()));
 
+    }
+
+    @Test
+    public void leaveTest(){
+        User user1 = new User("TestAlok", "password123", "aloks@iastate.edu");
+        User user2 = new User("TestAlok2", "password456", "aloks@iastate.edu");
+        userRepo.save(user1);
+        userRepo.save(user2);
+
+
+        Response response = RestAssured.given().delete("/leave/1/"+ user1.getId());
+
+
+        int statusCode = response.getStatusCode();
+        assertEquals(200, statusCode);
+
+        userRepo.deleteById(user1.getId());
+        userRepo.deleteById(user2.getId());
+
+        assertNull(userRepo.findByUsername(user1.getUsername()));
+        assertNull(userRepo.findByUsername(user2.getUsername()));
+    }
+
+    @Test
+    public void changeHostTest(){
+        User user1 = new User("TestAlok", "password123", "aloks@iastate.edu");
+        User user2 = new User("TestAlok2", "password456", "aloks@iastate.edu");
+        userRepo.save(user1);
+        userRepo.save(user2);
+
+        //http of the create lobby
+        String testUserEndpoint = "/create/" + user1.getId() + "/3";
+
+        Response response = RestAssured.given().post(testUserEndpoint);
+
+        int statusCode = response.getStatusCode();
+        assertEquals(200, statusCode);
+
+        Lobby lobby = userRepo.findById(user1.getId()).getLobby();
+
+        response = RestAssured.given().put("/changeHost/"+ lobby.getId() + "/" + user2.getUsername());
+
+        statusCode = response.getStatusCode();
+        assertEquals(200, statusCode);
+
+        userRepo.deleteById(user1.getId());
+        userRepo.deleteById(user2.getId());
+
+        assertNull(userRepo.findByUsername(user1.getUsername()));
+        assertNull(userRepo.findByUsername(user2.getUsername()));
+    }
+
+
+    @Test
+    public void lobbyStatusTest(){
+        Lobby lobby = new Lobby(4, "TestAlok");
+        lobbyRepo.save(lobby);
+
+        Response response = RestAssured.given().put("/gameStatus/1/" + lobby.getId());
+
+        lobby.getRoomSize();
+        int statusCode = response.getStatusCode();
+        assertEquals(200, statusCode);
+
+        response = RestAssured.given().put("/gameStatus/1/" + lobby.getId());
+
+        lobbyRepo.delete(lobby);
     }
 
 }

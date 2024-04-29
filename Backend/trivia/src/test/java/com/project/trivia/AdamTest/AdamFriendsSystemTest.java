@@ -173,5 +173,49 @@ public class AdamFriendsSystemTest {
         friendsRepo.deleteById(friendsRepo.findByUsername("TestAlok2").getId());
     }
 
+    @Test
+    public void friendsListRepo() {
+        String user1 = "{" +
+                "\"username\":\"TestAlok\", " +
+                "\"password\":\"password456\", " +
+                "\"email\":\"aloks@iastate.edu\"" +
+                "}";
+
+        Response response = RestAssured.given().
+                contentType(ContentType.JSON).
+                body(user1).
+                when().
+                post("/users");
+
+        int statusCode = response.getStatusCode();
+        assertEquals(200, statusCode);
+
+        response = RestAssured.given().
+                get("/friendsList/" + userRepo.findByUsername("TestAlok").getId());
+
+
+        statusCode = response.getStatusCode();
+        assertEquals(200, statusCode);
+
+        response = RestAssured.given().
+                get("/friends/" + userRepo.findByUsername("TestAlok").getId());
+
+        statusCode = response.getStatusCode();
+        assertEquals(200, statusCode);
+
+        response = RestAssured.given().
+                get("/allPeople");
+        statusCode = response.getStatusCode();
+        assertEquals(200, statusCode);
+
+
+
+
+        userRepo.deleteById(userRepo.findByUsername("TestAlok").getId());
+        friendsRepo.deleteById(friendsRepo.findByUsername("TestAlok").getId());
+
+    }
+
+
 
 }

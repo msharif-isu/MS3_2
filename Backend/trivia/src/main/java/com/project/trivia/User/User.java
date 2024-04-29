@@ -44,7 +44,6 @@ public class User {
     List<MatchHistory> pastMatches;
 
 
-
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "stats_id", referencedColumnName = "id")
     private UserStats stats;
@@ -160,15 +159,26 @@ public class User {
 
     public void setStats(UserStats stats) {
         this.stats = stats;
+    }
 
     @Override
-    public boolean equals(Object o) {
-        if (o == null) {return false;}
-        if (o.getClass() != this.getClass()) {return false;}
+    public boolean equals (Object o){
+        if (o == null) {
+            return false;
+        }
+        if (o.getClass() != this.getClass()) {
+            return false;
+        }
         final User other = (User) o;
-        if ((this.username == null) ? (other.username != null) : !this.username.equals(other.username)) {return false;}
-        if ((this.password == null) ? (other.password != null) : !this.password.equals(other.password)) {return false;}
-        if ((this.email == null) ? (other.email != null) : !this.email.equals(other.email)) {return false;}
+        if ((this.username == null) ? (other.username != null) : !this.username.equals(other.username)) {
+            return false;
+        }
+        if ((this.password == null) ? (other.password != null) : !this.password.equals(other.password)) {
+            return false;
+        }
+        if ((this.email == null) ? (other.email != null) : !this.email.equals(other.email)) {
+            return false;
+        }
         return true;
     }
 

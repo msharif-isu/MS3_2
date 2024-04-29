@@ -360,10 +360,6 @@ public class AdamUserSystemTest {
     @Test
     public void testFindAll() {
         Response response = RestAssured.given().
-                header("Content-Type", "text/plain").
-                header("charset", "utf-8").
-                body("hello").
-                when().
                 get("/users");
 
 
