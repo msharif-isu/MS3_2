@@ -39,7 +39,7 @@ public class FriendsController {
         User user1 = userRepo.findById(userId);
         User user2 = userRepo.findByUsername(friendName);
         Friends friend1 = friendsRepo.findByUsername(friendName);
-        Friends friend2 = friendsRepo.findById(userId);
+        Friends friend2 = friendsRepo.findByUsername(user1.getUsername());
 
         if (user1 == null || friend1 == null) {
             return "User or friend not found.";
@@ -69,7 +69,7 @@ public class FriendsController {
         User user1 = userRepo.findById(userId);
         User user2 = userRepo.findByUsername(friendName);
         Friends friend1 = friendsRepo.findByUsername(friendName);
-        Friends friend2 = friendsRepo.findById(userId);
+        Friends friend2 = friendsRepo.findByUsername(user1.getUsername());
 
         if (user1 == null || friend1 == null) {
             return "User or friend not found.";
