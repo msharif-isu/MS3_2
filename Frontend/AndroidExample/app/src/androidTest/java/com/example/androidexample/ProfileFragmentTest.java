@@ -231,14 +231,14 @@ public class ProfileFragmentTest {
             e.printStackTrace();
         }
         Espresso.onView(withId(R.id.swipeRefreshLayout)).perform(swipeDown());
-        Espresso.onView(withId(R.id.friendList))
-                .perform(RecyclerViewActions.scrollTo(hasDescendant(withText(FRIEND_NAME))))
-                .check(matches(hasDescendant(withText(FRIEND_NAME))));
         try {
             Thread.sleep(1000);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
+        Espresso.onView(withId(R.id.friendList))
+                .perform(RecyclerViewActions.scrollTo(hasDescendant(withText(FRIEND_NAME))))
+                .check(matches(hasDescendant(withText(FRIEND_NAME))));
     }
 
     @Test
