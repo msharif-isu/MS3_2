@@ -57,14 +57,13 @@ public class User {
     private UserStats stats;
 
 
-    public User(String username, String password, String email, Leaderboard leaderboard) {
+    public User(String username, String password, String email) {
         this.username = username;
         this.password = password;
         this.email = email;
         bio = "";
         points = 0;
         pastMatches = new ArrayList<>();
-        this.leaderboard = leaderboard;
     }
 
     public User() {

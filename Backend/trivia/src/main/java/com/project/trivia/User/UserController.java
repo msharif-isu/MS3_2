@@ -49,6 +49,7 @@ public class UserController {
     public String createUser(@RequestBody User user) {
         Friends temp = new Friends(user.getUsername());
         UserStats stats = new UserStats(user, user.getUsername());
+        Leaderboard leaderboard = new Leaderboard(0, 0, 0, 0, 0, user.getUsername(), user);
 
         if (user == null)
             return failure;
@@ -58,6 +59,7 @@ public class UserController {
         statsRepo.save(stats);
 
         user.setStats(stats);
+        user.setLeaderboard(leaderboard);
         userRepository.save(user);
         friendRepo.save(temp);
         return success;
