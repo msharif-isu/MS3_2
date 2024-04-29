@@ -58,13 +58,22 @@ public class EditFragment extends Fragment {
                 String answer = answerInput.getText().toString();
                 String questionType = questionTypeInput.getText().toString();
 
-                Question submission = new Question(-1, question, answer, questionType, false, true);
+                if (question.length() == 0 || answer.length() == 0 || questionType.length() == 0) {
+                    Toast.makeText(requireContext(), "Please fill out all fields", Toast.LENGTH_SHORT).show();
+                } else {
+                    Question submission = new Question(-1, question, answer, questionType, false, true);
 
-                try {
-                    submitQuestion(submission);
-                } catch (JSONException e) {
-                    throw new RuntimeException(e);
+                    questionInput.setText("");
+                    answerInput.setText("");
+                    questionTypeInput.setText("");
+                    try {
+                        submitQuestion(submission);
+                    } catch (JSONException e) {
+                        throw new RuntimeException(e);
+                    }
                 }
+
+
             }
         });
 
