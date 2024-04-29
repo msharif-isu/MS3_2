@@ -430,30 +430,20 @@ public class ProfileFragment extends Fragment {
     }
 
     private void setFriendInfo() {
-//        friendsList.add(new UserFriend("Alok1", "This is the real alok", null));
-//        friendsList.add(new UserFriend("Alok2", "This is actually the real alok", null));
-//        friendsList.add(new UserFriend("Alok3", "Nah, This is the real alok!", null));
-//        friendsList.add(new UserFriend("Mahdi", "I will give Owais an A on this demo.", null));
-//        friendsList.add(new UserFriend("Alok4", "Nope, its actually me", null));
-//        friendsList.add(new UserFriend("Alok5", "Alok4 is lying.", null));
-//        friendsList.add(new UserFriend("Osamson", "I agree with Alok5", null));
-//        friendsList.add(new UserFriend("Aldaco", "Hello, I am definitly the real Dr. Aldaco", null));
-//        friendsList.add(new UserFriend("Alok8", "I am the real alok", null));
-//        friendsList.add(new UserFriend("Alok9", "Nah.", null));
         RequestQueue queue = Volley.newRequestQueue(requireContext());
-        String url = backendUrl + "friends/" + userId;
+        String url = backendUrl + "friendsList/" + username;
         Log.d("ProfileActivity", "Fetching friend details: " + url);
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
             @Override
-            public void onResponse(JSONObject response) {
+            public void onResponse(JSONArray response) {
                 String jsonResponse = response.toString();
                 Log.d("ProfileActivity", "Friend Details JSON Response: " + jsonResponse);
                 try {
                     // Clear the existing data in the friendsList. This avoids duplicate entries.
                     friendsList.clear();
-                    JSONArray userArray = response.getJSONArray("user");
-                    for (int i = 0; i < userArray.length(); i++) {
-                        JSONObject userObject = userArray.getJSONObject(i);
+
+                    for (int i = 0; i < response.length(); i++) {
+                        JSONObject userObject = response.getJSONObject(i);
                         String username = userObject.getString("username");
                         String bio = userObject.isNull("bio") ? "" : userObject.getString("bio");
                         String filePath = userObject.optString("filePath", "");
@@ -479,7 +469,7 @@ public class ProfileFragment extends Fragment {
                 Log.e("ProfileActivity", "Error fetching friend details: " + error.getMessage());
             }
         });
-        queue.add(jsonObjectRequest);
+        queue.add(jsonArrayRequest);
     }
 
     private void getBio() {
