@@ -10,9 +10,8 @@
 
     <!-- TODO: Update blank fragment layout -->
 
-
     <ImageView
-        android:id="@+id/userInfoBox"
+        android:id="@+id/greyuserInfoBox"
         android:layout_width="0dp"
         android:layout_height="310dp"
         android:layout_marginStart="24dp"
@@ -22,6 +21,21 @@
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/greyaccent" />
+
+    <ImageView
+        android:id="@+id/userInfoBox"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="3dp"
+        android:layout_marginTop="3dp"
+        android:layout_marginEnd="3dp"
+        android:layout_marginBottom="3dp"
+        app:layout_constraintBottom_toBottomOf="@+id/greyuserInfoBox"
+        app:layout_constraintEnd_toEndOf="@id/greyuserInfoBox"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="@id/greyuserInfoBox"
+        app:layout_constraintTop_toTopOf="@id/greyuserInfoBox"
         app:srcCompat="@drawable/playerlist_box" />
 
     <ImageView
