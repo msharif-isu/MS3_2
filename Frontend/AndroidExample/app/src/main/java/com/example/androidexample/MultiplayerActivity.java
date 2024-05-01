@@ -157,11 +157,7 @@ public class MultiplayerActivity extends AppCompatActivity implements WebSocketL
                 intent.putExtra("USERNAME", "multiplayer");
                 intent.putExtra("NUM_QUESTIONS", numQuestions);
                 intent.putExtra("POINTS", numQuestions * 100);
-                try {
-                    sentMatchHistory();
-                } catch (JSONException e) {
-                    throw new RuntimeException(e);
-                }
+
 
 //                SharedPreferences statsPrefs = getSharedPreferences("UserStatistics", MODE_PRIVATE);
 //                SharedPreferences.Editor editor = statsPrefs.edit();
@@ -182,9 +178,11 @@ public class MultiplayerActivity extends AppCompatActivity implements WebSocketL
                 gamesPlayed += 1;
                 updateServerWithStats(gamesPlayed, totalAnswered, statsPrefs.getInt("QUESTIONS_SUBMITTED", 0));
                 Log.d("Singleplayer", "Games played and total answered" + gamesPlayed + " " +   totalAnswered);
-                startActivity(intent);
-
-
+                try {
+                    sentMatchHistory();
+                } catch (JSONException e) {
+                    throw new RuntimeException(e);
+                }
                 startActivity(intent);
 
             } else {
