@@ -8,8 +8,8 @@ public class RequestURLs {
      * The URL to be used to refer to any HTTP requests made to the VM server.
      * Change only this to switch to server from localhost.
      */
-//    private static final String SERVER_BASE_URL = "://coms-309-034.class.las.iastate.edu:8080";
-    private static final String SERVER_BASE_URL = "://10.0.2.2:8080";
+    private static final String SERVER_BASE_URL = "://coms-309-034.class.las.iastate.edu:8080";
+//    private static final String SERVER_BASE_URL = "://10.0.2.2:8080";
     public static final String SERVER_HTTP_URL = "http" + SERVER_BASE_URL;
     public static final String SERVER_HTTP_USER_QUESTION_URL = SERVER_HTTP_URL + "/question";
     public static final String SERVER_HTTP_QUESTION_URL = SERVER_HTTP_URL + "/question";

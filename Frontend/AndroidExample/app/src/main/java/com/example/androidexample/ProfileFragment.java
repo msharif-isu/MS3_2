@@ -142,6 +142,7 @@ public class ProfileFragment extends Fragment {
             editButtonDialog();
         });
         signOut.setOnClickListener(v -> {
+            prefs.edit().clear().commit();
             startActivity(new Intent(getActivity(), LoginActivity.class));
         });
         matchHistory.setOnClickListener(v -> {

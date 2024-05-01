@@ -52,12 +52,15 @@
             loginButton = findViewById(R.id.login_btn);
             signupButton = findViewById(R.id.signup_btn);
 
-            sharedPreferences = getSharedPreferences("loginPrefs", Context.MODE_PRIVATE);
-            username = sharedPreferences.getString("username", "");
+            sharedPreferences = getSharedPreferences("UserData", Context.MODE_PRIVATE);
+            username = sharedPreferences.getString("USERNAME", "");
             userId = sharedPreferences.getInt("USER_ID", 0);
 
+            Log.d("LoginActivity", "username: " + username);
+            Log.d("LoginActivity", "userId: " + userId);
+
             // Check if user already logged in
-            if (sharedPreferences.contains("username")) {
+            if (sharedPreferences.contains("USERNAME")) {
                 proceedToNextActivity(username, userId);
             }
 
@@ -194,8 +197,10 @@
             SharedPreferences.Editor editor = prefs.edit();
             editor.putString("USERNAME", username);
             editor.putInt("USER_ID", userId);
-            //Toast.makeText(LoginActivity.this, "username: " + username, Toast.LENGTH_SHORT).show();
             editor.commit();
+
+            Log.d("LoginActivity", "username: " + username);
+            Log.d("LoginActivity", "userId: " + userId);
 
             // Redirects to MainActivity and pass the username as an extra
             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
