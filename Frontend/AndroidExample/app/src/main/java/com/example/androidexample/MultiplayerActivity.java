@@ -208,7 +208,7 @@ public class MultiplayerActivity extends AppCompatActivity implements WebSocketL
 
     private void sentMatchHistory() throws JSONException {
         String url = RequestURLs.SERVER_HTTP_URL + "/" + username + "/saveGame";
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, new MatchHistory("0", questionsPlayedType, numQuestions * 100, username).toJSON(),
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, new MatchHistory("#1", questionsPlayedType, numQuestions * 100, username).toJSON(),
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
