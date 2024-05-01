@@ -28,6 +28,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:fontFamily="@font/aileron_bold"
                 android:text="TextView"
                 android:textAlignment="center"
                 android:textSize="24sp" />
@@ -68,6 +69,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:fontFamily="@font/aileron_bold"
                 android:text="TextView"
                 android:textAlignment="center"
                 android:textSize="24sp" />
@@ -108,6 +110,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:fontFamily="@font/aileron_bold"
                 android:text="TextView"
                 android:textAlignment="center"
                 android:textSize="24sp" />
@@ -144,6 +147,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="50dp"
+        android:fontFamily="@font/aileron_bold"
         android:text="Total Points:"
         android:textSize="34sp"
         app:layout_constraintEnd_toEndOf="parent"

@@ -1,6 +1,7 @@
 package com.example.androidexample;
 
 import android.app.Dialog;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
@@ -41,6 +42,8 @@ public class JeopardyActivity extends AppCompatActivity {
     private String username;
     private int userID;
     private int points;
+    private int questionsAnswered;
+    private static final int totalQuestions = 9;
     private boolean attemptedRefresh = false;
 
     @Override
@@ -53,6 +56,7 @@ public class JeopardyActivity extends AppCompatActivity {
         userID = prefs.getInt("USER_ID", 0);
 
         points = 0;
+        questionsAnswered = 0;
         pointsText = findViewById(R.id.jeopardy_point_total_text);
 
         pointsText.setText("Total Points: " + points);
@@ -214,12 +218,57 @@ public class JeopardyActivity extends AppCompatActivity {
 
                 String answer = answerText.getText().toString();
                 if (!answer.trim().isEmpty()) {
-                    checkAnswer(button, dialog, question, answer);
+                    int earnedPoints = Integer.parseInt(button.getText().toString());
+                    checkAnswer(earnedPoints, question, answer);
+
+                    questionsAnswered++;
+                    button.setEnabled(false);
+
+                    Log.d("JeopardyActivity", "Questions Answered: " + questionsAnswered);
+                    if (questionsAnswered == totalQuestions) {
+                        Log.d("JeopardyActivity", "END OF THE GAME");
+                        endScreenDialog();
+                    }
+
+                    dialog.dismiss();
                 } else {
                     Toast.makeText(getApplicationContext(), "Please enter an answer", Toast.LENGTH_SHORT).show();
                 }
             }
         });
+    }
+
+    /**
+     * Creates the end screen dialog after all questions are answered
+     */
+    private void endScreenDialog() {
+        Dialog dialog = new Dialog(this);
+        dialog.setCancelable(false);
+        dialog.setCanceledOnTouchOutside(false);
+
+        dialog.setContentView(R.layout.dialog_jeopardy_end_screen);
+
+        TextView pointsText = dialog.findViewById(R.id.dialog_jeopardy_end_screen_points_earned);
+        Button playAgain = dialog.findViewById(R.id.dialog_jeopardy_end_screen_play_again_button);
+        Button mainMenu = dialog.findViewById(R.id.dialog_jeopardy_end_screen_main_menu_button);
+
+        pointsText.setText("Points Earned: " + points);
+        playAgain.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(JeopardyActivity.this, JeopardyActivity.class));
+                finish();
+            }
+        });
+        mainMenu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(JeopardyActivity.this, MainActivity.class));
+                finish();
+            }
+        });
+
+        dialog.show();
     }
 
     /**
@@ -255,13 +304,11 @@ public class JeopardyActivity extends AppCompatActivity {
 
     /**
      * Checks to see if an answer to a question is correct
-     * @param dialog
      * @param question
      * @param givenAnswer
      */
-    private void checkAnswer(Button button, Dialog dialog, Question question, String givenAnswer) {
+    private void checkAnswer(int pointsToAdd, Question question, String givenAnswer) {
         if (givenAnswer.equals(question.getAnswer())) {
-            int pointsToAdd = Integer.parseInt(button.getText().toString());
             points += pointsToAdd;
             pointsText.setText("Total Points: " + points);
             addUserPoints(pointsToAdd);
@@ -272,8 +319,6 @@ public class JeopardyActivity extends AppCompatActivity {
             } catch (JSONException e) {
                 throw new RuntimeException(e);
             }
-            dialog.dismiss();
-            button.setEnabled(false);
         } else {
             Log.d("JeopardyActivity", "Saving incorrect user answer");
             try {
@@ -281,8 +326,6 @@ public class JeopardyActivity extends AppCompatActivity {
             } catch (JSONException e) {
                 throw new RuntimeException(e);
             }
-            dialog.dismiss();
-            button.setEnabled(false);
         }
     }
 
