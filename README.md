@@ -11,9 +11,8 @@ Let us answer trivia in a fun easy to understand format along with multiplayer a
 <p>
   <img src="" width="630" alt="MS2_1 Team"/>
 </p>
-![MS3_2 Team](https://github.com/msharif-isu/MS3_2/assets/169219030/ee54b295-3507-413a-9a24-264392ec5626)
 
-<a href="https://www.youtube.com/watch?v=ILtfLlNfoOA&list=PL6BdlkdKLEB9h28E61p7hHIJW62bzfRjM&index=24" target="_blank">Watch the Video on YouTube!</a>
+<a href="https://github.com/msharif-isu/MS3_2/assets/169219030/ee54b295-3507-413a-9a24-264392ec5626" target="_blank">Watch the Video on YouTube!</a>
 
 
 ## Language/Platform/Libraries
