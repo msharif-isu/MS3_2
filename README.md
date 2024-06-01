@@ -32,7 +32,6 @@ Let us answer trivia in a fun easy to understand format along with multiplayer a
     <td align="center" style="word-wrap: break-word; width: 150px; height: 150px">
         <a href="https://github.com/Rap926">
           <img src="https://github.com/msharif-isu/MS3_2/assets/169219030/3fa56401-9d88-4f91-860b-a54d0de82fca" width="100" style="border-radius:50%; align-items:center; justify-content:center; overflow:hidden; padding-top:10px" alt=""/>
-         
           <br />
           <sub style="font-size:14px"><b>Raphael Bruce</b></sub>
         </a>
@@ -40,7 +39,6 @@ Let us answer trivia in a fun easy to understand format along with multiplayer a
     <td align="center" style="word-wrap: break-word; width: 150px; height: 150px">
         <a href="https://github.com/AdamT-TLee">
           <img src="https://github.com/msharif-isu/MS3_2/assets/169219030/d3987e0a-c3f7-4230-a7a8-dbbe7aae9938" width="100" style="border-radius:50%; align-items:center; justify-content:center; overflow:hidden; padding-top:10px" alt=""/>
-         
           <br />
           <sub style="font-size:14px"><b>Adam Lee</b></sub>
         </a>
@@ -48,7 +46,6 @@ Let us answer trivia in a fun easy to understand format along with multiplayer a
     <td align="center" style="word-wrap: break-word; width: 150px; height: 150px">
         <a href="#">
           <img src="https://github.com/msharif-isu/MS3_2/assets/169219030/ecc4b92b-8e7c-41a3-830d-9d84dd92f7e0" width="100" style="border-radius:50%; align-items:center; justify-content:center; overflow:hidden; padding-top:10px" alt=""/>
-          
           <br />
           <sub style="font-size:14px"><b>Owais Samman</b></sub>
         </a>
@@ -56,7 +53,6 @@ Let us answer trivia in a fun easy to understand format along with multiplayer a
     <td align="center" style="word-wrap: break-word; width: 150px; height: 150px">
         <a href="#">
           <img src="https://github.com/msharif-isu/MS3_2/assets/169219030/c7d4f4b7-bc0e-4cd2-92e4-c43e1fdb170d" width="100" style="border-radius:50%; align-items:center; justify-content:center; overflow:hidden; padding-top:10px" alt=""/>
-        
           <br />
           <sub style="font-size:14px"><b>Alok Shrestha</b></sub>
         </a>
